@@ -14,6 +14,7 @@ import {
   MenuContent,
   MenuItem,
   NamedLink,
+  ExternalLink
 } from '../../../components';
 
 import TopbarSearchForm from '../TopbarSearchForm/TopbarSearchForm';
@@ -145,6 +146,11 @@ const TopbarDesktop = props => {
         alt={intl.formatMessage({ id: 'TopbarDesktop.logo' }, { marketplaceName })}
       />
       {search}
+      <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
+        <span className={css.createListing}>
+          <FormattedMessage id="TopbarDesktop.blog" />
+        </span>
+      </ExternalLink>
       <NamedLink className={css.createListingLink} name="NewListingPage">
         <span className={css.createListing}>
           <FormattedMessage id="TopbarDesktop.createListing" />
