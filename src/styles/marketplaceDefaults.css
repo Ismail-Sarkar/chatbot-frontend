@@ -22,9 +22,9 @@
    * In the future, we are planning to bring more --marketplace* CSS Properties
    * from hosted assets, which means that they could be managed through Console.
    */
-  --marketplaceColor: #5d2bc0; /* hsl(260, 63%, 46%) */
-  --marketplaceColorLight: #7748d5; /* hsl(260, 63%, 56%), +10L from marketplaceColor */
-  --marketplaceColorDark: #492296; /* hsl(260, 63%, 26%), -10L from marketplaceColor */
+  --marketplaceColor: #fd3550; /* hsl(260, 63%, 46%) */
+  --marketplaceColorLight: #f7697c; /* hsl(260, 63%, 56%), +10L from marketplaceColor */
+  --marketplaceColorDark: #b6142c; /* hsl(260, 63%, 26%), -10L from marketplaceColor */
 
   /* Colors used for different functions (like error texts) */
 
@@ -556,7 +556,7 @@ textarea {
 /* ================ Plain global CSS glasses ================ */
 
 /**
- * Note: even though these reflect element styles, 
+ * Note: even though these reflect element styles,
  * these are below element styles to allow overwrites using classes.
  */
 
@@ -925,7 +925,7 @@ textarea {
  * For actual buttons, use components: <Button>, <PrimaryButton>, <SecondaryButton>
  *
  * To create button look-and-feel for links, etc. combine button classes in CSS Modules:
- * 
+ *
  * <Button>:
  *   composes: buttonDefault from global;
  * <PrimaryButton>:
