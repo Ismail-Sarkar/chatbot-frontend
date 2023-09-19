@@ -14,7 +14,7 @@
   composes: buttonDefault from global;
 
   padding: 0;
-  border-radius: 8px;
+  border-radius: 0px;
   height: 100px;
 }
 

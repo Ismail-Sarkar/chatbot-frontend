@@ -138,7 +138,7 @@
   padding: 8px 20px;
   font-size: 15px;
   background-color: var(--marketplaceColor);
-  border-radius: 4px;
+  border-radius: 0px;
   color: white;
   text-decoration: none;
   box-shadow: 0 8px 16px 0 rgb(0 0 0 / 20%);
@@ -152,7 +152,7 @@
 }
 
 /**
- * Theme: dark 
+ * Theme: dark
  * These styles are at the bottom of the file so that they overwrite rules for default "light" theme.
  */
 .darkTheme h1,

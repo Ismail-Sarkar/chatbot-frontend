@@ -107,8 +107,8 @@
 
   /* ================ Border radius ================ */
 
-  --borderRadius: 2px;
-  --borderRadiusMedium: 4px;
+  --borderRadius: 0px;
+  --borderRadiusMedium: 0px;
 
   /* ================ Transition styles ================ */
 
