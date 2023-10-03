@@ -53,16 +53,19 @@ const CustomFieldMultiEnum = props => {
   const validateMaybe = isRequired
     ? { validate: nonEmptyArray(requiredMessage || defaultRequiredMessage) }
     : {};
-
+  console.log(645, fieldConfig, isRequired, requiredMessage);
   return enumOptions ? (
-    <FieldCheckboxGroup
-      className={css.customField}
-      id={name}
-      name={name}
-      label={label}
-      options={createFilterOptions(enumOptions)}
-      {...validateMaybe}
-    />
+    <>
+      <FieldCheckboxGroup
+        className={css.customField}
+        id={name}
+        name={name}
+        label={label}
+        options={createFilterOptions(enumOptions)}
+        {...validateMaybe}
+      />
+      {/* <div>{name}</div> */}
+    </>
   ) : null;
 };
 

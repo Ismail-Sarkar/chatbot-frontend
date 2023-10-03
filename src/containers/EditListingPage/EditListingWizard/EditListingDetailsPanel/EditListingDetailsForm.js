@@ -16,7 +16,7 @@ import { Form, Button, FieldSelect, FieldTextInput, Heading } from '../../../../
 import CustomExtendedDataField from '../CustomExtendedDataField';
 import css from './EditListingDetailsForm.module.css';
 
-const TITLE_MAX_LENGTH = 60;
+const TITLE_MAX_LENGTH = 120;
 
 // Show various error messages
 const ErrorMessage = props => {
@@ -117,7 +117,6 @@ const AddListingFields = props => {
   const fields = listingFieldsConfig.reduce((pickedFields, fieldConfig) => {
     const { key, includeForListingTypes, schemaType, scope } = fieldConfig || {};
     const namespacedKey = scope === 'public' ? `pub_${key}` : `priv_${key}`;
-
     const isKnownSchemaType = EXTENDED_DATA_SCHEMA_TYPES.includes(schemaType);
     const isTargetProcessAlias =
       includeForListingTypes == null || includeForListingTypes.includes(listingType);
@@ -186,8 +185,13 @@ const EditListingDetailsFormComponent = props => (
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
-      const submitDisabled = invalid || disabled || submitInProgress;
-
+      const submitDisabled =
+        invalid ||
+        disabled ||
+        submitInProgress ||
+        values.pub_amenities === undefined ||
+        values.pub_amenities.length === 0;
+      console.log(78, values.pub_amenities);
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           <ErrorMessage fetchErrors={fetchErrors} />

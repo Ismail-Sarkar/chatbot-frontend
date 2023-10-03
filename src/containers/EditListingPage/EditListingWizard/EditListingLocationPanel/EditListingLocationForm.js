@@ -99,6 +99,17 @@ export const EditListingLocationFormComponent = props => (
               autocompletePlaceSelected(addressNotRecognizedMessage)
             )}
           />
+          {console.log(56, values.location)}
+          {/* <span className={css.check}>Tick if address is not recognizable</span>
+          <input
+            type="checkbox"
+            id="manualAddress"
+            name="manualAddress"
+            // onChange={check}
+            // value={f}
+            // defaultChecked={defaultCheck(f)}
+            // disabled={defaultDisabled(f)}
+          /> */}
 
           <FieldTextInput
             className={css.building}
@@ -109,6 +120,34 @@ export const EditListingLocationFormComponent = props => (
             placeholder={intl.formatMessage({
               id: 'EditListingLocationForm.buildingPlaceholder',
             })}
+          />
+          <span className={css.manualAddress}>
+            {' '}
+            Manually enter the address for your remote work day pass
+          </span>
+          <FieldTextInput
+            className={css.building}
+            type="text"
+            name="street"
+            id="street"
+            label="Street Address"
+            placeholder="Street"
+          />
+          <FieldTextInput
+            className={css.building}
+            type="text"
+            name="cityStateCountry"
+            id="cityStateCountry"
+            label="City State and Country"
+            placeholder="City State and Country"
+          />
+          <FieldTextInput
+            className={css.building}
+            type="text"
+            name="zip"
+            id="zip"
+            label="Zipcode"
+            placeholder="Zipcode"
           />
 
           <Button
