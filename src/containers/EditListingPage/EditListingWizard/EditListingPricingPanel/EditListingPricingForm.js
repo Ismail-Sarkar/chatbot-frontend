@@ -165,7 +165,7 @@ export const EditListingPricingFormComponent = props => (
               <FieldCurrencyInput
                 id="perkNameOnePrice"
                 name="perkNameOnePrice"
-                placeholder="Price"
+                placeholder={values.perkNameOne !== undefined ? 'Price*' : 'price'}
                 currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
                 disabled={values.perkNameOne ? false : true}
                 validate={perkPriceValidators(values.perkNameOne)}
@@ -182,7 +182,7 @@ export const EditListingPricingFormComponent = props => (
               <FieldCurrencyInput
                 id="perkNameTwoPrice"
                 name="perkNameTwoPrice"
-                placeholder="Price"
+                placeholder={values.perkNameTwo !== undefined ? 'Price*' : 'Price'}
                 currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
                 disabled={values.perkNameTwo ? false : true}
                 validate={perkPriceValidators(values.perkNameTwo)}
@@ -199,7 +199,7 @@ export const EditListingPricingFormComponent = props => (
               <FieldCurrencyInput
                 id="perkNameThreePrice"
                 name="perkNameThreePrice"
-                placeholder="Price"
+                placeholder={values.perkNameThree !== undefined ? 'Price*' : 'Price'}
                 currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
                 disabled={values.perkNameThree ? false : true}
                 validate={perkPriceValidators(values.perkNameThree)}

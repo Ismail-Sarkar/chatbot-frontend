@@ -53,7 +53,6 @@ const CustomFieldMultiEnum = props => {
   const validateMaybe = isRequired
     ? { validate: nonEmptyArray(requiredMessage || defaultRequiredMessage) }
     : {};
-  console.log(645, fieldConfig, isRequired, requiredMessage);
   return enumOptions ? (
     <>
       <FieldCheckboxGroup
