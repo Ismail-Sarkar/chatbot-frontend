@@ -119,11 +119,9 @@ ENV REACT_APP_DEFAULT_SEARCHES_ENABLED=true
 ENV REACT_APP_DEV_API_SERVER_PORT=3500
 
 ENV SKIP_PREFLIGHT_CHECK=true
+EXPOSE 4000
 
 RUN yarn run build
 USER node
 CMD ["yarn", "start"]
-EXPOSE 4000
-RUN yarn run build
-USER node
-CMD ["yarn", "start"]
+
