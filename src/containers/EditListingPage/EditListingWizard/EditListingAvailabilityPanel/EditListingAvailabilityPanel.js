@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { arrayOf, bool, func, object, string } from 'prop-types';
 import classNames from 'classnames';
 
@@ -15,12 +15,14 @@ import { Button, H3, InlineTextButton, ListingLink, Modal } from '../../../../co
 import EditListingAvailabilityPlanForm from './EditListingAvailabilityPlanForm';
 import EditListingAvailabilityExceptionForm from './EditListingAvailabilityExceptionForm';
 import WeeklyCalendar from './WeeklyCalendar/WeeklyCalendar';
-
+import Select from 'react-select';
 import css from './EditListingAvailabilityPanel.module.css';
+import { createInstance, types as sdkTypes } from '../../../../util/sdkLoader';
 
 // This is the order of days as JavaScript understands them
 // The number returned by "new Date().getDay()" refers to day of week starting from sunday.
 const WEEKDAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+const { UUID } = sdkTypes;
 
 // This is the order of days as JavaScript understands them
 // The number returned by "new Date().getDay()" refers to day of week starting from sunday.
@@ -130,7 +132,65 @@ const EditListingAvailabilityPanel = props => {
   const [isEditPlanModalOpen, setIsEditPlanModalOpen] = useState(false);
   const [isEditExceptionsModalOpen, setIsEditExceptionsModalOpen] = useState(false);
   const [valuesFromLastSubmit, setValuesFromLastSubmit] = useState(null);
+  const [entryRules, setEntryRules] = useState(listing.attributes.publicData.entryRules || null);
+  const [startTime, setStartTime] = useState(
+    listing.attributes.publicData.availableStartTime || null
+  );
+  const [endTime, setEndTime] = useState(listing.attributes.publicData.availableEndTime || null);
+  const [sdk, setSdk] = useState(null);
+  useEffect(() => {
+    setSdk(createInstance({ clientId: process.env.REACT_APP_SHARETRIBE_SDK_CLIENT_ID }));
+  }, []);
 
+  const timeOptions = [];
+  const endTimeOptions = [];
+
+  for (let hour = 0; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 60) {
+      if (hour < 13) {
+        const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}am`;
+        timeOptions.push({ value: time, label: time });
+      } else {
+        const newHour = hour - 12;
+        const time = `${newHour.toString().padStart(2, '0')}:${minute
+          .toString()
+          .padStart(2, '0')}pm`;
+        timeOptions.push({ value: time, label: time });
+      }
+    }
+  }
+  const changeStartTime = startTime => {
+    setStartTime(startTime);
+  };
+  const changeEndTime = endTime => {
+    setEndTime(endTime);
+  };
+  const updateAndNextTab = () => {
+    sdk &&
+      sdk.ownListings
+        .update({
+          id: new UUID(listing.id.uuid),
+          publicData: {
+            availableStartTime: startTime ?? '',
+            availableEndTime: endTime ?? '',
+            entryRules: entryRules ?? '',
+          },
+        })
+        .then(res => {
+          onNextTab();
+        });
+  };
+
+  const handleEntryRules = e => {
+    setEntryRules(e.target.value);
+  };
+
+  // for (let hour = 0; hour < 24; hour++) {
+  //   for (let minute = 30; minute < 60; minute += 30) {
+  //     const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+  //     endTimeOptions.push({ value: time, label: time });
+  //   }
+  // }
   const firstDayOfWeek = config.localization.firstDayOfWeek;
   const classes = classNames(rootClassName || css.root, className);
   const listingAttributes = listing?.attributes;
@@ -270,6 +330,50 @@ const EditListingAvailabilityPanel = props => {
               <FormattedMessage id="EditListingAvailabilityPanel.addException" />
             </InlineTextButton>
           </section>
+          <div className={css.startEndTimeTitle}>
+            Add a start & finish time for your remote work day pass
+          </div>
+          <section className={css.time}>
+            <div className={css.startEndTime}>
+              <div>Start Time</div>
+              <Select
+                id="startTime"
+                name="startTime"
+                options={timeOptions}
+                onChange={changeStartTime}
+                value={startTime}
+                isSearchable={false}
+                // menuIsOpen={true}
+              />
+            </div>
+            <div className={css.startEndTime}>
+              <div>End Time</div>
+              <Select
+                id="endTime"
+                name="endTime"
+                options={timeOptions}
+                onChange={changeEndTime}
+                value={endTime}
+                isSearchable={false}
+              />
+            </div>
+          </section>
+          <section className={css.entryRulesSection}>
+            <div className={css.entryRulesTitle}>
+              Optional: Enter any rules for guests to follow during use of their remote work day
+              pass
+            </div>
+            <textarea
+              className={css.entryRulesInput}
+              id="entryRules"
+              name="entryRules"
+              rows={4}
+              cols={50}
+              placeholder="Ex: No work phone calls/laptop calls permitted."
+              value={entryRules}
+              onChange={e => handleEntryRules(e)}
+            />
+          </section>
         </>
       ) : null}
 
@@ -282,7 +386,10 @@ const EditListingAvailabilityPanel = props => {
       {!isPublished ? (
         <Button
           className={css.goToNextTabButton}
-          onClick={onNextTab}
+          // onClick={onNextTab}
+          onClick={() => {
+            updateAndNextTab();
+          }}
           disabled={!hasAvailabilityPlan}
         >
           {submitButtonText}

@@ -38,3 +38,29 @@
     margin-top: 100px;
   }
 }
+.perksField {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  & div:nth-child(1) {
+    flex-basis: 50%;
+  }
+  & div:nth-child(2) {
+    flex-basis: 40%;
+  }
+}
+.optionalPerkFee {
+  font-size: 28px;
+  line-height: 40px;
+  padding: 1px 0 7px 0;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+.guests {
+  margin-bottom: 15px;
+  & input {
+    width: 100%;
+    max-width: 30%;
+  }
+}

@@ -84,3 +84,36 @@
 .error {
   color: var(--colorFail);
 }
+.time {
+  margin-bottom: 20px;
+  width: 100%;
+  /* max-width: 40%; */
+}
+.startEndTime {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+
+  & div:nth-child(1) {
+    /* margin-right: 25px; */
+    flex-basis: 15%;
+  }
+}
+.startEndTimeTitle {
+  margin-bottom: 20px;
+  font-size: 28px;
+  line-height: 40px;
+  font-weight: 700;
+}
+.entryRulesInput {
+  border-radius: 20px;
+}
+.entryRulesSection {
+  margin-bottom: 20px;
+}
+.entryRulesTitle {
+  font-size: 28px;
+  line-height: 40px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}

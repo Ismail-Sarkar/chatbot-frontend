@@ -206,7 +206,12 @@ const tabCompleted = (tab, listing, config) => {
     case DELIVERY:
       return !!deliveryOptionPicked;
     case LOCATION:
-      return !!(geolocation && publicData?.location?.address);
+      return geolocation && publicData?.location?.address
+        ? !!(geolocation && publicData?.location?.address)
+        : publicData?.manualAddress &&
+            publicData?.fullManualAddress?.street &&
+            publicData?.fullManualAddress?.cityStateCountry &&
+            publicData?.fullManualAddress?.zip;
     case AVAILABILITY:
       return !!availabilityPlan;
     case PHOTOS:

@@ -13,14 +13,41 @@ import { H3, ListingLink } from '../../../../components';
 // Import modules from this directory
 import EditListingPricingForm from './EditListingPricingForm';
 import css from './EditListingPricingPanel.module.css';
+import { convertUnitToSubUnit, unitDivisor } from '../../../../util/currency';
 
 const { Money } = sdkTypes;
 
 const getInitialValues = params => {
   const { listing } = params;
   const { price } = listing?.attributes || {};
+  const {
+    perkNameOne,
+    perkNameOnePrice,
+    perkNameTwo,
+    perkNameTwoPrice,
+    perkNameThree,
+    perkNameThreePrice,
+    guests,
+    reserVations,
+  } = listing?.attributes?.publicData;
 
-  return { price };
+  return {
+    price,
+    perkNameOne,
+    perkNameOnePrice: perkNameOnePrice?.amount
+      ? new Money(perkNameOnePrice?.amount, perkNameOnePrice?.currency)
+      : null,
+    perkNameTwo,
+    perkNameTwoPrice: perkNameTwoPrice?.amount
+      ? new Money(perkNameTwoPrice?.amount, perkNameTwoPrice?.currency)
+      : null,
+    perkNameThree,
+    perkNameThreePrice: perkNameThreePrice?.amount
+      ? new Money(perkNameThreePrice?.amount, perkNameThreePrice?.currency)
+      : null,
+    guests,
+    reserVations,
+  };
 };
 
 const EditListingPricingPanel = props => {
@@ -68,12 +95,43 @@ const EditListingPricingPanel = props => {
           className={css.form}
           initialValues={initialValues}
           onSubmit={values => {
-            const { price } = values;
+            const {
+              price,
+              perkNameOnePrice,
+              perkNameOne,
+              perkNameTwo,
+              perkNameTwoPrice,
+              perkNameThree,
+              perkNameThreePrice,
+              guests,
+              reserVations,
+            } = values;
 
             // New values for listing attributes
             const updateValues = {
               price,
+              publicData: {
+                listingPrice: {
+                  amount: price.amount,
+                  currency: price.currency,
+                },
+                perkNameOne: perkNameOne ? perkNameOne : null,
+                perkNameOnePrice: perkNameOnePrice
+                  ? { amount: perkNameOnePrice.amount, currency: perkNameOnePrice.currency }
+                  : null,
+                perkNameTwo: perkNameTwo ? perkNameTwo : null,
+                perkNameTwoPrice: perkNameTwoPrice
+                  ? { amount: perkNameTwoPrice.amount, currency: perkNameTwoPrice.currency }
+                  : null,
+                perkNameThree: perkNameThree ? perkNameThree : null,
+                perkNameThreePrice: perkNameThreePrice
+                  ? { amount: perkNameThreePrice.amount, currency: perkNameThreePrice.currency }
+                  : null,
+                guests: guests ?? '',
+                reserVations: reserVations ?? '',
+              },
             };
+
             onSubmit(updateValues);
           }}
           marketplaceCurrency={marketplaceCurrency}
