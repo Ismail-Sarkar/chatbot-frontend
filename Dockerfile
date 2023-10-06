@@ -28,16 +28,16 @@ ENV REACT_APP_SHARETRIBE_SDK_CLIENT_ID=41d902b5-a68a-473e-bc72-c5b2f82b2082
 # to test locally: docker run --platform linux/amd64 -ti --rm ${IMAGE_URI}
 # to push gcp artificats: docker push ${IMAGE_URI}
 
-FROM node:16
-WORKDIR /home/node/app
-COPY package.json ./
-COPY yarn.lock ./
-RUN yarn install
-COPY . .
-# ENV PORT=4000
-# ENV NODE_ENV=production
-# ENV REACT_APP_CSP=block
-# EXPOSE 4000
+# FROM node:16
+# WORKDIR /home/node/app
+# COPY package.json ./
+# COPY yarn.lock ./
+# RUN yarn install
+# COPY . .
+# # ENV PORT=4000
+# # ENV NODE_ENV=production
+# # ENV REACT_APP_CSP=block
+# # EXPOSE 4000
 
 
 # development
