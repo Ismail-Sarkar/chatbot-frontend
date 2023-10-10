@@ -18,7 +18,12 @@ import WeeklyCalendar from './WeeklyCalendar/WeeklyCalendar';
 import Select from 'react-select';
 import css from './EditListingAvailabilityPanel.module.css';
 import { createInstance, types as sdkTypes } from '../../../../util/sdkLoader';
-
+import {
+  LISTING_PAGE_PARAM_TYPE_DRAFT,
+  LISTING_PAGE_PARAM_TYPE_EDIT,
+  createSlug,
+} from '../../../../util/urlHelpers';
+import { createResourceLocatorString } from '../../../../util/routes';
 // This is the order of days as JavaScript understands them
 // The number returned by "new Date().getDay()" refers to day of week starting from sunday.
 const WEEKDAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -165,19 +170,34 @@ const EditListingAvailabilityPanel = props => {
   const changeEndTime = endTime => {
     setEndTime(endTime);
   };
-  const updateAndNextTab = () => {
+  const updateAndNextTab = (id, slug, editListingLinkType) => {
     sdk &&
       sdk.ownListings
         .update({
           id: new UUID(listing.id.uuid),
           publicData: {
-            availableStartTime: startTime ?? '',
-            availableEndTime: endTime ?? '',
-            entryRules: entryRules ?? '',
+            availableStartTime: startTime ? startTime : null,
+            availableEndTime: endTime ? endTime : null,
+            entryRules: entryRules ? entryRules : null,
           },
         })
         .then(res => {
-          onNextTab();
+          // console.log(144, editListingLinkType);
+          editListingLinkType === 'edit'
+            ? history.push(
+                createResourceLocatorString(
+                  'EditListingPage',
+                  routeConfiguration,
+                  {
+                    id,
+                    slug,
+                    type: editListingLinkType,
+                    tab: 'availability',
+                  },
+                  {}
+                )
+              )
+            : onNextTab();
         });
   };
 
@@ -194,6 +214,14 @@ const EditListingAvailabilityPanel = props => {
   const firstDayOfWeek = config.localization.firstDayOfWeek;
   const classes = classNames(rootClassName || css.root, className);
   const listingAttributes = listing?.attributes;
+  const id = listing.id.uuid;
+  const { title = '', state } = listing.attributes;
+  const slug = createSlug(title);
+  const isDraft = state === LISTING_STATE_DRAFT;
+  const editListingLinkType = isDraft
+    ? LISTING_PAGE_PARAM_TYPE_DRAFT
+    : LISTING_PAGE_PARAM_TYPE_EDIT;
+
   const unitType = listingAttributes?.publicData?.unitType;
   const useFullDays = isFullDay(unitType);
   const hasAvailabilityPlan = !!listingAttributes?.availabilityPlan;
@@ -383,18 +411,18 @@ const EditListingAvailabilityPanel = props => {
         </p>
       ) : null}
 
-      {!isPublished ? (
-        <Button
-          className={css.goToNextTabButton}
-          // onClick={onNextTab}
-          onClick={() => {
-            updateAndNextTab();
-          }}
-          disabled={!hasAvailabilityPlan}
-        >
-          {submitButtonText}
-        </Button>
-      ) : null}
+      {/* {!isPublished ? ( */}
+      <Button
+        className={css.goToNextTabButton}
+        // onClick={onNextTab}
+        onClick={() => {
+          updateAndNextTab(id, slug, editListingLinkType);
+        }}
+        disabled={!hasAvailabilityPlan}
+      >
+        {submitButtonText}
+      </Button>
+      {/* ) : null} */}
 
       {onManageDisableScrolling && isEditPlanModalOpen ? (
         <Modal

@@ -106,7 +106,7 @@ const EditListingPricingPanel = props => {
               guests,
               reserVations,
             } = values;
-
+            console.log(445, values);
             // New values for listing attributes
             const updateValues = {
               price,
@@ -127,8 +127,8 @@ const EditListingPricingPanel = props => {
                 perkNameThreePrice: perkNameThreePrice
                   ? { amount: perkNameThreePrice.amount, currency: perkNameThreePrice.currency }
                   : null,
-                guests: guests ?? '',
-                reserVations: reserVations ?? '',
+                guests: guests ? guests : null,
+                reserVations: reserVations ? reserVations : null,
               },
             };
 

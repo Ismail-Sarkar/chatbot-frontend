@@ -20,12 +20,14 @@ class LocationAutocompleteInputComponent extends Component {
       tab,
       changeCheckBoxValue,
       manualAddressState,
+
       ...restProps
     } = this.props;
     const { input, label, meta, valueFromForm, ...otherProps } = restProps;
     /* eslint-enable no-unused-vars */
     const value = typeof valueFromForm !== 'undefined' ? valueFromForm : input.value;
     const locationAutocompleteProps = { label, meta, ...otherProps, input: { ...input, value } };
+    console.log(76, locationAutocompleteProps);
     const labelInfo = label ? (
       <label className={labelClassName} htmlFor={input.name}>
         {label}
@@ -71,5 +73,6 @@ LocationAutocompleteInputComponent.propTypes = {
 export default LocationAutocompleteInputImpl;
 
 export const FieldLocationAutocompleteInput = props => {
+  console.log(8877, props);
   return <Field component={LocationAutocompleteInputComponent} {...props} />;
 };

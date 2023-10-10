@@ -73,6 +73,9 @@ import SectionMapMaybe from './SectionMapMaybe';
 import SectionGallery from './SectionGallery';
 
 import css from './ListingPage.module.css';
+import ManualAddress from './ManualAddress';
+import Rules from './Rules';
+import UpperLocation from './UpperLocation';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
@@ -260,7 +263,6 @@ export const ListingPageComponent = props => {
     currentStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
 
   const createFilterOptions = options => options.map(o => ({ key: `${o.option}`, label: o.label }));
-
   return (
     <Page
       title={schemaTitle}
@@ -299,6 +301,7 @@ export const ListingPageComponent = props => {
                 }}
               />
             ) : null}
+            <UpperLocation currentListing={currentListing} publicData={publicData} />
             <SectionGallery
               listing={currentListing}
               variantPrefix={config.layout.listingImage.variantPrefix}
@@ -337,7 +340,9 @@ export const ListingPageComponent = props => {
                   ]
                 : pickedElements;
             }, [])}
-
+            {publicData?.manualAddress && (
+              <ManualAddress publicData={publicData} listingId={currentListing.id} />
+            )}
             <SectionMapMaybe
               geolocation={geolocation}
               publicData={publicData}
@@ -345,6 +350,7 @@ export const ListingPageComponent = props => {
               mapsConfig={config.maps}
             />
             <SectionReviews reviews={reviews} fetchReviewsError={fetchReviewsError} />
+            {publicData.entryRules && <Rules publicData={publicData} />}
             <SectionAuthorMaybe
               title={title}
               listing={currentListing}

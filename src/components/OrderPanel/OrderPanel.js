@@ -119,12 +119,20 @@ const PriceMaybe = props => {
   }
 
   return (
-    <div className={css.priceContainer}>
-      <p className={css.price}>{formatMoney(intl, price)}</p>
-      <div className={css.perUnit}>
-        <FormattedMessage id="OrderPanel.perUnit" values={{ unitType }} />
+    <>
+      <div className={css.priceContainer}>
+        <p className={css.price}>{formatMoney(intl, price)}</p>
+        {/* <div className={css.perUnit}>
+          <FormattedMessage id="OrderPanel.perUnit" values={{ unitType }} />
+        </div> */}
       </div>
-    </div>
+
+      <div className={css.timeDuration}>Duration</div>
+
+      <div
+        className={css.timeDuration}
+      >{`${publicData.availableStartTime.label}-${publicData.availableEndTime.label}`}</div>
+    </>
   );
 };
 
@@ -235,6 +243,7 @@ const OrderPanel = props => {
         onManageDisableScrolling={onManageDisableScrolling}
         usePortal
       >
+        <div className={css.bookingMessage}>Book This Remote Work Day Pass</div>
         <div className={css.modalHeading}>
           <H1 className={css.heading}>{title}</H1>
         </div>
@@ -251,7 +260,7 @@ const OrderPanel = props => {
           intl={intl}
         />
 
-        <div className={css.author}>
+        {/* <div className={css.author}>
           <AvatarSmall user={author} className={css.providerAvatar} />
           <span className={css.providerNameLinked}>
             <FormattedMessage id="OrderPanel.author" values={{ name: authorLink }} />
@@ -259,7 +268,7 @@ const OrderPanel = props => {
           <span className={css.providerNamePlain}>
             <FormattedMessage id="OrderPanel.author" values={{ name: authorDisplayName }} />
           </span>
-        </div>
+        </div> */}
 
         {showPriceMissing ? (
           <PriceMissing />

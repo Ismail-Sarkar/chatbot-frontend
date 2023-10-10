@@ -60,7 +60,7 @@
   margin: 0 0 0 24px;
 
   @media (--viewportMedium) {
-    margin: 0;
+    margin: 10px 0;
     padding: 0;
   }
 }
@@ -287,4 +287,15 @@
   @media (--viewportMedium) {
     padding: 0;
   }
+}
+.bookingMessage {
+  font-size: 18px;
+  font-weight: 700;
+  border-bottom: 2px solid black;
+  margin-bottom: 5px;
+}
+.timeDuration {
+  font-size: 17px;
+  font-weight: 600;
+  color: black;
 }

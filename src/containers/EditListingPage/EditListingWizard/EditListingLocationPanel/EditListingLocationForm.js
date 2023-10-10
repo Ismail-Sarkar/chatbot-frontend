@@ -92,6 +92,26 @@ export const EditListingLocationFormComponent = props => (
         const numericValue = value.replace(/[^0-9]/g, '');
         form.change('zip', numericValue);
       };
+      const handlecityStateCountryName = valueFromMap => {
+        const { context } = valueFromMap;
+        const country = context.find(c => {
+          const cId = c.id.split('.')[0];
+          return cId === 'country';
+        });
+        const state = context.find(c => {
+          const cId = c.id.split('.')[0];
+          return cId === 'region';
+        });
+        const district = context.find(c => {
+          const cId = c.id.split('.')[0];
+          return cId === 'district';
+        });
+        form.change('mapLocation', {
+          country: country ? country : null,
+          state: state ? state : null,
+          district: district ? district : null,
+        });
+      };
 
       return (
         <Form
@@ -137,6 +157,7 @@ export const EditListingLocationFormComponent = props => (
             tab={tab}
             changeCheckBoxValue={changeCheckBoxValue}
             manualAddressState={manualAddressState}
+            handlecityStateCountryName={handlecityStateCountryName}
           />
 
           <FieldTextInput

@@ -6,7 +6,7 @@
  */
 import React, { Component } from 'react';
 import { bool, func, instanceOf, oneOf, shape, string } from 'prop-types';
-import { DateRangePicker } from 'react-dates';
+import { DateRangePicker, SingleDatePicker } from 'react-dates';
 import classNames from 'classnames';
 import moment from 'moment';
 
@@ -236,7 +236,6 @@ class DateRangeInputComponent extends Component {
       isOutsideRange,
       ...datePickerProps
     } = this.props;
-
     const initialStartMoment = initialDates ? moment(initialDates.startDate) : null;
     const initialEndMoment = initialDates ? moment(initialDates.endDate) : null;
     const startDate =
