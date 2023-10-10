@@ -22,7 +22,14 @@ import {
 import { LINE_ITEM_DAY, LINE_ITEM_NIGHT, TIME_SLOT_TIME, propTypes } from '../../../util/types';
 import { BOOKING_PROCESS_NAME } from '../../../transactions/transaction';
 
-import { Form, IconArrowHead, PrimaryButton, FieldDateRangeInput, H6 } from '../../../components';
+import {
+  Form,
+  IconArrowHead,
+  PrimaryButton,
+  FieldDateRangeInput,
+  H6,
+  FieldTextInput,
+} from '../../../components';
 
 import EstimatedCustomerBreakdownMaybe from '../EstimatedCustomerBreakdownMaybe';
 
@@ -611,6 +618,16 @@ export const BookingDatesFormComponent = props => {
                 setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
               }
               form={form}
+            />
+
+            <FieldTextInput
+              type="number"
+              name="additionalGuest"
+              id="additionalGuest"
+              label="Additional Guests"
+              placeholder={'Enter additional guests'}
+              validate={required}
+              // className={css.nameFields}
             />
 
             {showEstimatedBreakdown ? (
