@@ -27,6 +27,7 @@ import { Form, IconArrowHead, PrimaryButton, FieldDateRangeInput, H6 } from '../
 import EstimatedCustomerBreakdownMaybe from '../EstimatedCustomerBreakdownMaybe';
 
 import css from './BookingDatesForm.module.css';
+import { SingleDatePicker } from 'react-dates';
 
 const TODAY = new Date();
 
@@ -467,6 +468,7 @@ export const BookingDatesFormComponent = props => {
           lineItems,
           fetchLineItemsError,
           onFetchTimeSlots,
+          form,
         } = fieldRenderProps;
         const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
 
@@ -608,6 +610,7 @@ export const BookingDatesFormComponent = props => {
               onClose={event =>
                 setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
               }
+              form={form}
             />
 
             {showEstimatedBreakdown ? (
