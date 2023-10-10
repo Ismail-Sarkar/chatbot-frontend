@@ -262,7 +262,7 @@ class DateRangeInputComponent extends Component {
 
     return (
       <div className={classes}>
-        {/* <DateRangePicker
+        <DateRangePicker
           {...datePickerProps}
           isDayBlocked={isDayBlocked(this.state.focusedInput)}
           isOutsideRange={isOutsideRange(this.state.focusedInput)}
@@ -275,8 +275,8 @@ class DateRangeInputComponent extends Component {
           startDatePlaceholderText={startDatePlaceholderTxt}
           endDatePlaceholderText={endDatePlaceholderTxt}
           screenReaderInputMessage={screenReaderInputText}
-        /> */}
-        <SingleDatePicker
+        />
+        {/* <SingleDatePicker
           id="startDate"
           date={this.state.date}
           onDateChange={date => {
@@ -290,7 +290,7 @@ class DateRangeInputComponent extends Component {
           onFocusChange={this.onFocusChange}
           isDayBlocked={isDayBlocked(this.state.focusedInput)}
           isOutsideRange={isOutsideRange(this.state.focusedInput)}
-        />
+        /> */}
       </div>
     );
   }
