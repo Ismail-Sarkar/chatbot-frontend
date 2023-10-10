@@ -14,9 +14,9 @@ import {
   MenuContent,
   MenuItem,
   NamedLink,
-  ExternalLink
+  ExternalLink,
 } from '../../../components';
-
+import { LiaSearchSolid } from 'react-icons/lia';
 import TopbarSearchForm from '../TopbarSearchForm/TopbarSearchForm';
 
 import css from './TopbarDesktop.module.css';
@@ -145,7 +145,12 @@ const TopbarDesktop = props => {
         format="desktop"
         alt={intl.formatMessage({ id: 'TopbarDesktop.logo' }, { marketplaceName })}
       />
-      {search}
+      {/* {search} */}
+
+      <NamedLink className={classNames(css.searchLink, css.searchWithIcon)} name="SearchPage">
+        <LiaSearchSolid size={25} />
+        <div className={css.searchTitle}> Search Passes...</div>
+      </NamedLink>
       <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
         <span className={css.createListing}>
           <FormattedMessage id="TopbarDesktop.blog" />

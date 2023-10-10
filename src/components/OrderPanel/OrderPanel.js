@@ -126,12 +126,12 @@ const PriceMaybe = props => {
           <FormattedMessage id="OrderPanel.perUnit" values={{ unitType }} />
         </div> */}
       </div>
-
-      <div className={css.timeDuration}>Duration</div>
-
-      <div
-        className={css.timeDuration}
-      >{`${publicData.availableStartTime.label}-${publicData.availableEndTime.label}`}</div>
+      <div className={css.durationMainDiv}>
+        <div className={css.timeDuration}>Duration</div>
+        <div
+          className={css.timeDuration}
+        >{`${publicData.availableStartTime.label}-${publicData.availableEndTime.label}`}</div>
+      </div>
     </>
   );
 };

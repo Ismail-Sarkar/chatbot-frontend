@@ -399,3 +399,15 @@
     }
   }
 }
+.searchWithIcon {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  &:hover {
+    text-decoration: none;
+  }
+}
+.searchTitle {
+  padding-left: 10px;
+  color: #aba4a4;
+}

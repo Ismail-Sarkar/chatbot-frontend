@@ -506,7 +506,7 @@
 
 .sectionHeadingWithExtraMargin {
   @media (--viewportMedium) {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
   }
 }
 
@@ -706,4 +706,7 @@
     flex-basis: 312px;
     flex-shrink: 0;
   }
+}
+.upperAddress {
+  margin-bottom: 15px;
 }

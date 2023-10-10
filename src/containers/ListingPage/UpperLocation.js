@@ -1,5 +1,5 @@
 import React from 'react';
-
+import css from './ListingPage.module.css';
 function UpperLocation(props) {
   const { publicData, currentListing } = props;
   const { manualAddress, mapLocation, fullManualAddress } = publicData;
@@ -16,7 +16,7 @@ function UpperLocation(props) {
   const zip = manualAddress && fullManualAddress.zip ? `${fullManualAddress.zip}` : '';
 
   return (
-    <div>
+    <div className={css.upperAddress}>
       {manualAddress ? (
         <div>{`${street}${country}${zip}`}</div>
       ) : (

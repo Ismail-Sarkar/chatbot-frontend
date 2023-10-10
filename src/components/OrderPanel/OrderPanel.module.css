@@ -295,7 +295,10 @@
   margin-bottom: 5px;
 }
 .timeDuration {
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 15px;
+  /* font-weight: 600; */
   color: black;
+}
+.durationMainDiv {
+  margin-bottom: 20px;
 }
