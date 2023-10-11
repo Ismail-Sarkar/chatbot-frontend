@@ -35,6 +35,7 @@ import EstimatedCustomerBreakdownMaybe from '../EstimatedCustomerBreakdownMaybe'
 
 import css from './BookingDatesForm.module.css';
 import { SingleDatePicker } from 'react-dates';
+import MuiMultiSelect from '../../MuiMultiSelect/MuiMultiSelect';
 
 const TODAY = new Date();
 
@@ -425,6 +426,18 @@ const Prev = props => {
 export const BookingDatesFormComponent = props => {
   const [focusedInput, setFocusedInput] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(getStartOf(TODAY, 'month', props.timeZone));
+  const [extraPerk, setExtraPerk] = useState([]);
+
+  const handleSetExtraPerk = val => {
+    setExtraPerk(val);
+  };
+
+  // const extraParkValues = findOptionsForSelectFilter('extraParkValues', config.custom.filters);
+  const extraParkValues = [
+    { key: 'Lunch Buffet / $30', label: 'Lunch Buffet / $30', value: 30 },
+    { key: 'Hike equipment helmut / $25', label: 'Hike equipment helmut / $25', value: 25 },
+    { key: 'Photographs of you hiking / $15', label: 'Photographs of you hiking / $15', value: 15 },
+  ];
 
   useEffect(() => {
     // Call onMonthChanged function if it has been passed in among props.
@@ -618,6 +631,14 @@ export const BookingDatesFormComponent = props => {
                 setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
               }
               form={form}
+            />
+
+            <MuiMultiSelect
+              value={extraPerk}
+              setValue={handleSetExtraPerk}
+              datas={extraParkValues}
+              placeholdertext={'Add extra perk'}
+              label={'Add extra perks?'}
             />
 
             <FieldTextInput
