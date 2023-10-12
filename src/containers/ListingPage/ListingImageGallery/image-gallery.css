@@ -158,13 +158,14 @@
 .image-gallery-slides {
   line-height: 0;
   overflow: hidden;
-  /* position: relative; */
+  position: relative;
   white-space: nowrap;
   text-align: center;
+  height: 370px;
 }
 .image-gallery-slide {
   left: 0;
-  /* position: absolute; */
+  position: absolute;
   top: 0;
   width: 100%;
 }
