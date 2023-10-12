@@ -928,14 +928,15 @@ export const BookingDatesFormComponent = props => {
                 setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
               }
             />
-
-            <MuiMultiSelect
-              value={extraPerk}
-              setValue={handleSetExtraPerk}
-              datas={extraParkValues}
-              placeholdertext={'Add extra perk'}
-              label={'Add extra perks?'}
-            />
+            <div className={css.muiselectcontainer}>
+              <MuiMultiSelect
+                value={extraPerk}
+                setValue={handleSetExtraPerk}
+                datas={extraParkValues}
+                placeholdertext={'Add extra perk'}
+                label={'Add extra perks?'}
+              />
+            </div>
 
             <FieldTextInput
               type="number"

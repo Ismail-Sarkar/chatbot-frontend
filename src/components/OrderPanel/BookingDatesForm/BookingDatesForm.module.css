@@ -76,3 +76,18 @@
   stroke: var(--colorWhite);
   fill: var(--colorWhite);
 }
+
+.muiselectcontainer {
+  & > div {
+    width: 100% !important;
+  }
+  & input {
+    &:focus,
+    &:hover {
+      background-color: transparent;
+      box-shadow: none;
+      border: none;
+      transition: none;
+    }
+  }
+}
