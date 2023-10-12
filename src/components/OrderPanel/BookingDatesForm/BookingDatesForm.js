@@ -38,6 +38,7 @@ import EstimatedCustomerBreakdownMaybe from '../EstimatedCustomerBreakdownMaybe'
 import css from './BookingDatesForm.module.css';
 import { SingleDatePicker } from 'react-dates';
 import MuiMultiSelect from '../../MuiMultiSelect/MuiMultiSelect';
+import moment from 'moment';
 
 const TODAY = new Date();
 
@@ -595,22 +596,29 @@ export const BookingDatesFormComponent = props => {
           });
         };
 
-        const singleDateChange = (value, props) => {
-          const { timeZone, intl, formApi } = props;
+        const singleDateChange = (value, form, props) => {
+          const { timeZone, intl } = props;
           console.log(556, value);
-          formApi.batch(() => {
-            formApi.change('bookingDates1', { startDate: value.date });
+          form.batch(() => {
+            form.change('bookingDates', {
+              startDate: value.date,
+              endDate: new Date(
+                moment(value.date)
+                  .add(1, 'days')
+                  .format()
+              ),
+            });
           });
         };
 
         const updatedValues = { ...values, extraPerk };
 
-        console.log(111, updatedValues);
+        console.log(111, values);
 
         return (
           <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
             <FormSpy subscription={{ values: true }} onChange={onFormSpyChange} />
-            <FieldDateRangeInput
+            {/* <FieldDateRangeInput
               className={css.bookingDates}
               name="bookingDates"
               isDaily={lineItemUnitType === LINE_ITEM_DAY}
@@ -684,7 +692,7 @@ export const BookingDatesFormComponent = props => {
                 setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
               }
               form={form}
-            />
+            /> */}
 
             {/* <FieldDateInput
               id={`startDate`}
@@ -860,8 +868,8 @@ export const BookingDatesFormComponent = props => {
             /> */}
 
             <FieldDateInput
-              name="bookingDates1"
-              id="bookingDates1"
+              name="selectedbookingDates"
+              id="selectedbookingDates"
               placeholderText={intl.formatDate(TODAY, dateFormattingOptions)}
               label={selectDateLabel}
               // validate={birthdateValidator}
@@ -869,8 +877,56 @@ export const BookingDatesFormComponent = props => {
               //  errorClassName={errorTextField}
               // isOutsideRange={date => moment().diff(date, 'days') <= 0}
               // isOutsideRange={isOutsideRange}
-              // onChange={value => singleDateChange(value, props)}
+              onChange={value => singleDateChange(value, form, props)}
               displayFormat="DD/MM/YYYY"
+              format={v => {
+                const { startDate, endDate } = v || {};
+                // Format the Final Form field's value for the DateRangeInput
+                // DateRangeInput operates on local time zone, but the form uses listing's time zone
+                const formattedStart = startDate
+                  ? timeOfDayFromTimeZoneToLocal(startDate, timeZone)
+                  : startDate;
+                const formattedEnd = endDate
+                  ? timeOfDayFromTimeZoneToLocal(endDate, timeZone)
+                  : endDate;
+                return v ? { startDate: formattedStart, endDate: formattedEnd } : v;
+              }}
+              parse={v => {
+                const { startDate, endDate } = v || {};
+                // Parse the DateRangeInput's value (local noon) for the Final Form
+                // The form expects listing's time zone and start of day aka 00:00
+                const parsedStart = startDate
+                  ? getStartOf(timeOfDayFromLocalToTimeZone(startDate, timeZone), 'day', timeZone)
+                  : startDate;
+                const parsedEnd = endDate
+                  ? getStartOf(timeOfDayFromLocalToTimeZone(endDate, timeZone), 'day', timeZone)
+                  : endDate;
+                return v ? { startDate: parsedStart, endDate: parsedEnd } : v;
+              }}
+              initialVisibleMonth={initialVisibleMonth(startDate || startOfToday, timeZone)}
+              navNext={
+                <Next
+                  currentMonth={currentMonth}
+                  timeZone={timeZone}
+                  dayCountAvailableForBooking={dayCountAvailableForBooking}
+                />
+              }
+              navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
+              onPrevMonthClick={() => {
+                setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
+                onMonthClick(prevMonthFn);
+              }}
+              onNextMonthClick={() => {
+                setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
+                onMonthClick(nextMonthFn);
+              }}
+              // isDayBlocked={isDayBlocked}
+              // isOutsideRange={isOutsideRange}
+              // isBlockedBetween={isBlockedBetween(monthlyTimeSlots, timeZone)}
+              // disabled={fetchLineItemsInProgress}
+              onClose={event =>
+                setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
+              }
             />
 
             <MuiMultiSelect
