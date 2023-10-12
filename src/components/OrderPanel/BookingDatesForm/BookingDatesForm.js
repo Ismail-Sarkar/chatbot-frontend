@@ -18,6 +18,7 @@ import {
   timeOfDayFromTimeZoneToLocal,
   monthIdString,
   initialVisibleMonth,
+  stringifyDateToISO8601,
 } from '../../../util/dates';
 import { LINE_ITEM_DAY, LINE_ITEM_NIGHT, TIME_SLOT_TIME, propTypes } from '../../../util/types';
 import { BOOKING_PROCESS_NAME } from '../../../transactions/transaction';
@@ -494,6 +495,7 @@ export const BookingDatesFormComponent = props => {
           form,
           userNativeLang,
         } = fieldRenderProps;
+
         const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
 
         const startDateErrorMessage = intl.formatMessage({
@@ -564,7 +566,46 @@ export const BookingDatesFormComponent = props => {
 
         const selectDateLabel = 'Select Date';
 
-        console.log(111, values);
+        const onExceptionStartDateChange = (value, dayCountAvailableForBooking, props) => {
+          const { timeZone, intl, formApi } = props;
+
+          if (!value || !value.date) {
+            formApi.batch(() => {
+              formApi.change('exceptionStartTime', null);
+              formApi.change('exceptionEndDate', { date: null });
+              formApi.change('exceptionEndTime', null);
+            });
+            return;
+          }
+
+          // This callback function is called from react-dates component.
+          // It gets raw value as a param - browser's local time instead of time in listing's timezone.
+          const selectedStartDate = timeOfDayFromLocalToTimeZone(value.date, timeZone);
+          const dayData =
+            dayCountAvailableForBooking[stringifyDateToISO8601(selectedStartDate, timeZone)];
+          console.log(121, selectedStartDate, dayData, dayCountAvailableForBooking);
+          const availableSlots = dayData.slots || [];
+          const params = { intl, timeZone, availableSlots, selectedStartDate };
+          const { startTime, endDate, endTime } = getAllTimeValues(params);
+
+          formApi.batch(() => {
+            formApi.change('exceptionStartTime', startTime);
+            formApi.change('exceptionEndDate', { date: endDate });
+            formApi.change('exceptionEndTime', endTime);
+          });
+        };
+
+        const singleDateChange = (value, props) => {
+          const { timeZone, intl, formApi } = props;
+          console.log(556, value);
+          formApi.batch(() => {
+            formApi.change('bookingDates1', { startDate: value.date });
+          });
+        };
+
+        const updatedValues = { ...values, extraPerk };
+
+        console.log(111, updatedValues);
 
         return (
           <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
@@ -793,7 +834,9 @@ export const BookingDatesFormComponent = props => {
               }}
               // isDayBlocked={isDayBlocked}
               // isOutsideRange={isOutsideRange}
-              onChange={value => onExceptionStartDateChange(value, availableDates, props)}
+              onChange={value =>
+                onExceptionStartDateChange(value, dayCountAvailableForBooking, props)
+              }
               onPrevMonthClick={() => {
                 setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
                 onMonthClick(prevMonthFn);
@@ -815,6 +858,20 @@ export const BookingDatesFormComponent = props => {
               showErrorMessage={false}
               // validate={bookingDateRequired('Required')}
             /> */}
+
+            <FieldDateInput
+              name="bookingDates1"
+              id="bookingDates1"
+              placeholderText={intl.formatDate(TODAY, dateFormattingOptions)}
+              label={selectDateLabel}
+              // validate={birthdateValidator}
+              //  className={classNames(textfield, css.dateInputDiv)}
+              //  errorClassName={errorTextField}
+              // isOutsideRange={date => moment().diff(date, 'days') <= 0}
+              // isOutsideRange={isOutsideRange}
+              // onChange={value => singleDateChange(value, props)}
+              displayFormat="DD/MM/YYYY"
+            />
 
             <MuiMultiSelect
               value={extraPerk}
