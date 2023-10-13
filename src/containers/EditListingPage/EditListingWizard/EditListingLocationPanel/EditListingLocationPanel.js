@@ -12,6 +12,11 @@ import { H3, ListingLink } from '../../../../components';
 // Import modules from this directory
 import EditListingLocationForm from './EditListingLocationForm';
 import css from './EditListingLocationPanel.module.css';
+import {
+  LISTING_PAGE_PARAM_TYPE_DRAFT,
+  LISTING_PAGE_PARAM_TYPE_EDIT,
+  createSlug,
+} from '../../../../util/urlHelpers';
 
 const getInitialValues = props => {
   const { listing } = props;
@@ -56,9 +61,17 @@ const EditListingLocationPanel = props => {
     updateInProgress,
     errors,
     tab,
+    history,
   } = props;
   const classes = classNames(rootClassName || css.root, className);
   const isPublished = listing?.id && listing?.attributes.state !== LISTING_STATE_DRAFT;
+  // const isDraft = listing?.attributes.state === LISTING_STATE_DRAFT;
+  // const id = listing.id.uuid;
+  const { title = '' } = listing.attributes;
+  // const slug = createSlug(title);
+  // const editListingLinkType = isDraft
+  //   ? LISTING_PAGE_PARAM_TYPE_DRAFT
+  //   : LISTING_PAGE_PARAM_TYPE_EDIT;
   return (
     <div className={classes}>
       <H3 as="h1">
@@ -162,6 +175,8 @@ const EditListingLocationPanel = props => {
         fetchErrors={errors}
         tab={tab}
         autoFocus
+        // id={id}
+        // slug={slug}
       />
     </div>
   );
