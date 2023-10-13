@@ -7,6 +7,7 @@ import { obfuscatedCoordinates } from '../../util/maps';
 import { Heading, Map } from '../../components';
 
 import css from './ListingPage.module.css';
+import ManualAddress from './ManualAddress';
 
 class SectionMapMaybe extends Component {
   constructor(props) {
@@ -35,6 +36,9 @@ class SectionMapMaybe extends Component {
         <Heading as="h2" rootClassName={css.sectionHeadingWithExtraMargin}>
           <FormattedMessage id="ListingPage.locationTitle" />
         </Heading>
+        {publicData?.manualAddress && (
+          <ManualAddress publicData={publicData} listingId={listingId} />
+        )}
         {publicData.location ? <div>{publicData.location.address}</div> : null}
 
         {this.state.isStatic ? (

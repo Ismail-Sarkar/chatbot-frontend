@@ -14,6 +14,10 @@ import { H3, ListingLink } from '../../../../components';
 import EditListingPricingForm from './EditListingPricingForm';
 import css from './EditListingPricingPanel.module.css';
 import { convertUnitToSubUnit, unitDivisor } from '../../../../util/currency';
+import {
+  LISTING_PAGE_PARAM_TYPE_DRAFT,
+  LISTING_PAGE_PARAM_TYPE_EDIT,
+} from '../../../../util/urlHelpers';
 
 const { Money } = sdkTypes;
 
@@ -69,6 +73,10 @@ const EditListingPricingPanel = props => {
   const classes = classNames(rootClassName || css.root, className);
   const initialValues = getInitialValues(props);
   const isPublished = listing?.id && listing?.attributes?.state !== LISTING_STATE_DRAFT;
+  const isDraft = listing?.attributes?.state === LISTING_STATE_DRAFT;
+  const editListingLinkType = isDraft
+    ? LISTING_PAGE_PARAM_TYPE_DRAFT
+    : LISTING_PAGE_PARAM_TYPE_EDIT;
   const priceCurrencyValid =
     initialValues.price instanceof Money
       ? initialValues.price.currency === marketplaceCurrency
@@ -143,6 +151,7 @@ const EditListingPricingPanel = props => {
           updated={panelUpdated}
           updateInProgress={updateInProgress}
           fetchErrors={errors}
+          editListingLinkType={editListingLinkType}
         />
       ) : (
         <div className={css.priceCurrencyInvalid}>

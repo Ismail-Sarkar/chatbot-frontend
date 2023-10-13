@@ -79,8 +79,8 @@ import UpperLocation from './UpperLocation';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
-const { UUID } = sdkTypes;
-
+const { UUID, LatLng } = sdkTypes;
+const defaultLocation = new LatLng(37.0902, -95.7129);
 export const ListingPageComponent = props => {
   const [inquiryModalOpen, setInquiryModalOpen] = useState(
     props.inquiryModalOpenForListingId === props.params.id
@@ -340,17 +340,19 @@ export const ListingPageComponent = props => {
                   ]
                 : pickedElements;
             }, [])}
-            {publicData?.manualAddress && (
+            {/* {publicData?.manualAddress && (
               <ManualAddress publicData={publicData} listingId={currentListing.id} />
-            )}
+            )} */}
+
             <SectionMapMaybe
-              geolocation={geolocation}
+              geolocation={publicData?.manualAddress ? defaultLocation : geolocation}
               publicData={publicData}
               listingId={currentListing.id}
               mapsConfig={config.maps}
             />
-            <SectionReviews reviews={reviews} fetchReviewsError={fetchReviewsError} />
             {publicData.entryRules && <Rules publicData={publicData} />}
+
+            <SectionReviews reviews={reviews} fetchReviewsError={fetchReviewsError} />
             <SectionAuthorMaybe
               title={title}
               listing={currentListing}
