@@ -23,6 +23,7 @@ const BookingPeriod = props => {
   const dateFormatOptions = {
     month: 'short',
     day: 'numeric',
+    year: 'numeric',
   };
 
   return (
@@ -30,17 +31,18 @@ const BookingPeriod = props => {
       <div className={css.bookingPeriod}>
         <div className={css.bookingPeriodSectionLeft}>
           <div className={css.dayLabel}>
-            <FormattedMessage id="OrderBreakdown.bookingStart" />
+            <FormattedMessage id="OrderBreakdown.bookingDate" />
           </div>
           <div className={css.dayInfo}>
-            <FormattedDate value={startDate} {...timeFormatOptions} {...timeZoneMaybe} />
-          </div>
-          <div className={css.itemLabel}>
+            <FormattedDate value={startDate} {...timeFormatOptions} {...timeZoneMaybe} />{' '}
             <FormattedDate value={startDate} {...dateFormatOptions} {...timeZoneMaybe} />
           </div>
+          {/* <div className={css.itemLabel}>
+            <FormattedDate value={startDate} {...dateFormatOptions} {...timeZoneMaybe} />
+          </div> */}
         </div>
 
-        <div className={css.bookingPeriodSectionRight}>
+        {/* <div className={css.bookingPeriodSectionRight}>
           <div className={css.dayLabel}>
             <FormattedMessage id="OrderBreakdown.bookingEnd" />
           </div>
@@ -50,7 +52,7 @@ const BookingPeriod = props => {
           <div className={css.itemLabel}>
             <FormattedDate value={endDate} {...dateFormatOptions} {...timeZoneMaybe} />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

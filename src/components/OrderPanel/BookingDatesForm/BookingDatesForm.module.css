@@ -70,6 +70,9 @@
     padding: 0;
     margin-top: 72px;
   }
+  & button {
+    background: #000;
+  }
 }
 
 .arrowIcon {
