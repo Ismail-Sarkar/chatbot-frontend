@@ -153,6 +153,7 @@ const endDateToPickerDate = (unitType, endDate, timeZone) => {
  * Returns an isOutsideRange function that can be passed to
  * a react-dates DateRangePicker component.
  */
+
 const isOutsideRangeFn = (
   monthlyTimeSlots,
   startDate,
@@ -245,6 +246,7 @@ const isDayBlockedFn = (
   const endOfAvailableRange = dayCountAvailableForBooking - 1;
   const outOfBookableDate = getStartOf(TODAY, 'day', timeZone, endOfAvailableRange + 1, 'days');
   const timeSlotsOnSelectedMonth = pickMonthlyTimeSlots(monthlyTimeSlots, startDate, timeZone);
+  console.log(678, timeZone, timeSlotsOnSelectedMonth);
 
   // Start date selected/focused, end date missing
   const startDateSelected = isStartDateSelected(
@@ -266,7 +268,6 @@ const isDayBlockedFn = (
     !endDate &&
     focusedInput === END_DATE &&
     unitType === LINE_ITEM_NIGHT;
-
   if (selectingEndDate) {
     // if end date is being selected first, block the day after a booked date
     // (as a booking can end on the day the following booking starts)
@@ -461,8 +462,12 @@ export const BookingDatesFormComponent = props => {
     timeZone,
     dayCountAvailableForBooking,
     marketplaceName,
+    monthlyTimeSlots,
     ...rest
   } = props;
+
+  console.log('slots', monthlyTimeSlots);
+
   const classes = classNames(rootClassName || css.root, className);
 
   const onFormSubmit = handleFormSubmit(setFocusedInput, onSubmit);
@@ -497,7 +502,7 @@ export const BookingDatesFormComponent = props => {
         } = fieldRenderProps;
 
         const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
-
+        console.log(34567, startDate, endDate);
         const startDateErrorMessage = intl.formatMessage({
           id: 'FieldDateRangeInput.invalidStartDate',
         });
@@ -597,7 +602,7 @@ export const BookingDatesFormComponent = props => {
         const singleDateChange = (value, form, props) => {
           const { timeZone, intl } = props;
           form.batch(() => {
-            form.change('selectedbookingDates', { startDate: value.date, endDate: value.date });
+            // form.change('selectedbookingDates', { date: value.date, endDate: value.date });
             form.change('bookingDates', {
               startDate: value.date,
               endDate: new Date(
@@ -609,7 +614,7 @@ export const BookingDatesFormComponent = props => {
           });
         };
 
-        console.log(111, values);
+        console.log(111, props.monthlyTimeSlots);
 
         return (
           <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
@@ -864,10 +869,10 @@ export const BookingDatesFormComponent = props => {
             /> */}
 
             <FieldDateInput
-              // name="selectedbookingDates"
-              // id="selectedbookingDates"
-              name="bookingDates"
-              id="bookingDates"
+              name="selectedbookingDates"
+              id="selectedbookingDates"
+              // name="bookingDates"
+              // id="bookingDates"
               placeholderText={intl.formatDate(
                 values.bookingDates?.startDate || TODAY,
                 dateFormattingOptions
@@ -877,63 +882,79 @@ export const BookingDatesFormComponent = props => {
               //  className={classNames(textfield, css.dateInputDiv)}
               //  errorClassName={errorTextField}
               // isOutsideRange={date => moment().diff(date, 'days') <= 0}
-              // isDayBlocked={isDayBlocked}
+
+              isDayBlocked={day => {
+                const monthlyTimeSlots = props.monthlyTimeSlots;
+                const key = moment(day)?.format('YYYY-MM');
+                console.log(121, moment(day).format(), key);
+                const matchedData = monthlyTimeSlots[key]?.timeSlots;
+                const dataMatchedArray = matchedData?.filter(
+                  slot =>
+                    moment(day).isBetween(slot.attributes.start, slot.attributes.end, 'day') ||
+                    moment(day).isSame(slot.attributes.start, 'day') ||
+                    moment(day).isSame(slot.attributes.end, 'day')
+                );
+                if (dataMatchedArray?.length > 0) {
+                  return false;
+                } else {
+                  return true;
+                }
+              }}
               // isOutsideRange={isOutsideRange}
-              // onChange={value => singleDateChange(value, form, props)}
-              // displayFormat="DD/MM/YYYY"
-              format={v => {
-                const { date } = v || {};
-                const startDate = date;
-                const endDate = new Date(
-                  moment(date)
-                    .add(1, 'days')
-                    .format()
-                );
-                // Format the Final Form field's value for the DateRangeInput
-                // DateRangeInput operates on local time zone, but the form uses listing's time zone
-                const formattedStart = startDate
-                  ? timeOfDayFromTimeZoneToLocal(startDate, timeZone)
-                  : startDate;
-                const formattedEnd = endDate
-                  ? timeOfDayFromTimeZoneToLocal(endDate, timeZone)
-                  : endDate;
-                return v ? { startDate: formattedStart, endDate: formattedEnd } : v;
-              }}
-              parse={v => {
-                const { date } = v || {};
-                const startDate = date;
-                const endDate = new Date(
-                  moment(date)
-                    .add(1, 'days')
-                    .format()
-                );
-                // Parse the DateRangeInput's value (local noon) for the Final Form
-                // The form expects listing's time zone and start of day aka 00:00
-                const parsedStart = startDate
-                  ? getStartOf(timeOfDayFromLocalToTimeZone(startDate, timeZone), 'day', timeZone)
-                  : startDate;
-                const parsedEnd = endDate
-                  ? getStartOf(timeOfDayFromLocalToTimeZone(endDate, timeZone), 'day', timeZone)
-                  : endDate;
-                return v ? { startDate: parsedStart, endDate: parsedEnd } : v;
-              }}
+              onChange={value => singleDateChange(value, form, props)}
+              // format={v => {
+              //   const { date } = v || {};
+              //   const startDate = date;
+              //   const endDate = new Date(
+              //     moment(date)
+              //       .add(1, 'days')
+              //       .format()
+              //   );
+              //   // Format the Final Form field's value for the DateRangeInput
+              //   // DateRangeInput operates on local time zone, but the form uses listing's time zone
+              //   const formattedStart = startDate
+              //     ? timeOfDayFromTimeZoneToLocal(startDate, timeZone)
+              //     : startDate;
+              //   const formattedEnd = endDate
+              //     ? timeOfDayFromTimeZoneToLocal(endDate, timeZone)
+              //     : endDate;
+              //   return v ? { startDate: formattedStart, endDate: formattedEnd } : v;
+              // }}
+              // parse={v => {
+              //   const { date } = v || {};
+              //   const startDate = date;
+              //   const endDate = new Date(
+              //     moment(date)
+              //       .add(1, 'days')
+              //       .format()
+              //   );
+              //   // Parse the DateRangeInput's value (local noon) for the Final Form
+              //   // The form expects listing's time zone and start of day aka 00:00
+              //   const parsedStart = startDate
+              //     ? getStartOf(timeOfDayFromLocalToTimeZone(startDate, timeZone), 'day', timeZone)
+              //     : startDate;
+              //   const parsedEnd = endDate
+              //     ? getStartOf(timeOfDayFromLocalToTimeZone(endDate, timeZone), 'day', timeZone)
+              //     : endDate;
+              //   return v ? { startDate: parsedStart, endDate: parsedEnd } : v;
+              // }}
               initialVisibleMonth={initialVisibleMonth(startDate || startOfToday, timeZone)}
-              navNext={
-                <Next
-                  currentMonth={currentMonth}
-                  timeZone={timeZone}
-                  dayCountAvailableForBooking={dayCountAvailableForBooking}
-                />
-              }
-              navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
-              onPrevMonthClick={() => {
-                setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
-                onMonthClick(prevMonthFn);
-              }}
-              onNextMonthClick={() => {
-                setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
-                onMonthClick(nextMonthFn);
-              }}
+              // navNext={
+              //   <Next
+              //     currentMonth={currentMonth}
+              //     timeZone={timeZone}
+              //     dayCountAvailableForBooking={dayCountAvailableForBooking}
+              //   />
+              // }
+              // navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
+              // onPrevMonthClick={() => {
+              //   setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
+              //   onMonthClick(prevMonthFn);
+              // }}
+              // onNextMonthClick={() => {
+              //   setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
+              //   onMonthClick(nextMonthFn);
+              // }}
               //
               // isBlockedBetween={isBlockedBetween(monthlyTimeSlots, timeZone)}
               // disabled={fetchLineItemsInProgress}
