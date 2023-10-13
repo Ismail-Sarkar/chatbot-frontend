@@ -1,12 +1,18 @@
+const { isArray } = require('lodash');
 const {
   calculateQuantityFromDates,
   calculateQuantityFromHours,
   calculateTotalFromLineItems,
   calculateShippingFee,
   hasCommissionPercentage,
+  resolveGuestPrice,
+  hasServiceFeePercentage,
+  calculateCurrentPayment,
 } = require('./lineItemHelpers');
 const { types } = require('sharetribe-flex-sdk');
 const { Money } = types;
+const currency = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
+const MARKETPLACE_SERVICE_FEE = 3;
 
 /**
  * Get quantity and add extra line-items that are related to delivery method
@@ -118,6 +124,10 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
   const unitPrice = listing.attributes.price;
   const currency = unitPrice.currency;
 
+  const { extraPerk = [], additionalGuest = 0 } = orderData || {};
+  const hasExtraPerk = (isArray(extraPerk) && extraPerk.length) || false;
+  console.log(hasExtraPerk, 1234);
+
   /**
    * Pricing starts with order's base price:
    * Listing's price is related to a single unit. It needs to be multiplied by quantity
@@ -175,6 +185,29 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
     includeFor: ['customer', 'provider'],
   };
 
+  const extraPerkFees = hasExtraPerk
+    ? extraPerk.map(data => ({
+        code: `line-item/${data.key}`,
+        unitPrice: new Money(data.value * 100, currency),
+        quantity: 1,
+        includeFor: ['customer', 'provider'],
+      }))
+    : [];
+
+  console.log(order, extraPerkFees);
+
+  const guestFees =
+    additionalGuest > 0
+      ? [
+          {
+            code: `line-item/custom-guest-price`,
+            unitPrice: resolveGuestPrice(listing, additionalGuest, [order, ...extraPerkFees]),
+            quantity: additionalGuest * 1,
+            includeFor: ['customer', 'provider'],
+          },
+        ]
+      : [];
+
   // Provider commission reduces the amount of money that is paid out to provider.
   // Therefore, the provider commission line-item should have negative effect to the payout total.
   const getNegation = percentage => {
@@ -194,9 +227,46 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
       ]
     : [];
 
+  const serviceFeeMaybe = hasServiceFeePercentage(MARKETPLACE_SERVICE_FEE)
+    ? [
+        {
+          code: 'line-item/service-fee',
+          unitPrice: calculateTotalFromLineItems([order, ...extraPerkFees, ...guestFees]),
+          percentage: MARKETPLACE_SERVICE_FEE,
+          includeFor: ['provider', 'customer'],
+        },
+      ]
+    : [];
+
+  const currentPayment = [
+    {
+      code: 'line-item/current-pay',
+      unitPrice: calculateCurrentPayment([
+        order,
+        ...extraPerkFees,
+        ...guestFees,
+        ...serviceFeeMaybe,
+      ]),
+      quantity: 1,
+      // percentage: getNegation(10),
+
+      includeFor: ['provider', 'customer'],
+    },
+  ];
+
+  console.log(currentPayment, 4588);
+
   // Let's keep the base price (order) as first line item and provider's commission as last one.
   // Note: the order matters only if OrderBreakdown component doesn't recognize line-item.
-  const lineItems = [order, ...extraLineItems, ...providerCommissionMaybe];
+  const lineItems = [
+    order,
+    ...extraPerkFees,
+    ...guestFees,
+    ...extraLineItems,
+    ...providerCommissionMaybe,
+    ...serviceFeeMaybe,
+    ...currentPayment,
+  ];
 
   return lineItems;
 };

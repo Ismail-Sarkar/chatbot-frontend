@@ -7,6 +7,7 @@ const { getAmountAsDecimalJS, convertDecimalJSToNumber } = require('./currency')
 const { nightsBetween, daysBetween } = require('./dates');
 const LINE_ITEM_NIGHT = 'line-item/night';
 const LINE_ITEM_DAY = 'line-item/day';
+const currency = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
 
 /** Helper functions for constructing line items*/
 
@@ -208,6 +209,37 @@ exports.calculateTotalFromLineItems = lineItems => {
   return new Money(numericTotalPrice, unitPrice.currency);
 };
 
+exports.calculateCurrentPayment = lineItems => {
+  const totalPrice = lineItems
+    .filter(item => item.code !== 'line-item/current-pay' && !item.reversal)
+    .reduce((sum, lineItem) => {
+      const lineTotal = this.calculateLineTotal(lineItem);
+      return getAmountAsDecimalJS(lineTotal).add(sum);
+    }, 0);
+  const serviceFee = lineItems.find(
+    item => item.code === 'line-item/service-fee' && !item.reversal
+  );
+  console.log(lineItems, serviceFee);
+  const totalProviderPrice = lineItems
+    .filter(item => item.code !== 'line-item/current-pay' && !item.reversal)
+    .filter(item => item.code !== 'line-item/service-fee' && !item.reversal)
+    .reduce((sum, lineItem) => {
+      const lineTotal = this.calculateLineTotal(lineItem);
+      return getAmountAsDecimalJS(lineTotal).add(sum);
+    }, 0);
+  console.log(totalPrice, totalProviderPrice, 458);
+
+  // Get total price as Number (and validate that the conversion is safe)
+  const per = totalProviderPrice * 0.9;
+  const ammnt = parseInt(totalProviderPrice) - per;
+  /* eslint-disable */
+  const numericTotalPrice = parseInt(-per);
+  const unitPrice = lineItems[0].unitPrice;
+  console.log(totalProviderPrice, ammnt, numericTotalPrice, 4588);
+
+  return new Money(numericTotalPrice, unitPrice.currency);
+};
+
 /**
  * Calculates the total sum of lineTotals for given lineItems where `includeFor` includes `provider`
  * @param {*} lineItems
@@ -275,4 +307,30 @@ exports.hasCommissionPercentage = commission => {
     throw new Error(`${percentage} is not a number.`);
   }
   return isDefined;
+};
+
+exports.hasServiceFeePercentage = serviceFee => {
+  const percentage = serviceFee;
+  const isDefined = percentage != null;
+  const isNumber = typeof percentage === 'number' && !isNaN(percentage);
+  if (isDefined && !isNumber) {
+    throw new Error(`${percentage} is not a number.`);
+  }
+  return isDefined;
+};
+
+exports.resolveGuestPrice = (listing, additionalGuest, lineItems) => {
+  const publicData = listing.attributes.publicData;
+  const setUpfFee = publicData && publicData.setUpFee;
+  const basePriceForGuest = lineItems.reduce((acc, curr) => {
+    acc += curr.unitPrice.amount;
+    return acc;
+  }, 0);
+  console.log(lineItems, basePriceForGuest, 1752);
+
+  if (additionalGuest && basePriceForGuest) {
+    return new Money(basePriceForGuest, currency);
+  }
+
+  return new Money(0, currency);
 };

@@ -39,6 +39,7 @@ import css from './BookingDatesForm.module.css';
 import { SingleDatePicker } from 'react-dates';
 import MuiMultiSelect from '../../MuiMultiSelect/MuiMultiSelect';
 import moment from 'moment';
+import { isArray } from 'lodash';
 
 const TODAY = new Date();
 
@@ -354,6 +355,7 @@ const handleMonthClick = (
 // focus on that input, otherwise continue with the
 // default handleSubmit function.
 const handleFormSubmit = (setFocusedInput, onSubmit) => e => {
+  console.log('e', e);
   const { startDate, endDate } = e.bookingDates || {};
   if (!startDate) {
     e.preventDefault();
@@ -385,12 +387,31 @@ const handleFormSpyChange = (
 ) => formValues => {
   const { startDate, endDate } =
     formValues.values && formValues.values.bookingDates ? formValues.values.bookingDates : {};
+  const { additionalGuest, extraPerk } = formValues.values || {};
+  console.log(
+    formValues,
+    // startDate && endDate && additionalGuest && isArray(extraPerk),
+    startDate,
+    endDate,
+    additionalGuest,
+    isArray(extraPerk),
+    254
+  );
 
-  if (startDate && endDate && !fetchLineItemsInProgress) {
+  if (
+    startDate &&
+    endDate &&
+    // additionalGuest &&
+    // isArray(extraPerk) &&
+    // extraPerk.length &&
+    !fetchLineItemsInProgress
+  ) {
     onFetchTransactionLineItems({
       orderData: {
         bookingStart: startDate,
         bookingEnd: endDate,
+        additionalGuest,
+        extraPerk,
       },
       listingId,
       isOwnListing,
@@ -944,7 +965,10 @@ export const BookingDatesFormComponent = props => {
             <div className={css.muiselectcontainer}>
               <MuiMultiSelect
                 value={extraPerk}
-                setValue={handleSetExtraPerk}
+                setValue={val => {
+                  handleSetExtraPerk(val);
+                  form.change('extraPerk', val);
+                }}
                 datas={extraParkValues}
                 placeholdertext={'Add extra perk'}
                 label={'Add extra perks?'}
@@ -959,7 +983,7 @@ export const BookingDatesFormComponent = props => {
               // isOutsideRange={isOutsideRange}
               label="Additional Guests"
               placeholder={'Enter additional guests'}
-              validate={required}
+              // validate={required}
               // className={css.nameFields}
             />
 

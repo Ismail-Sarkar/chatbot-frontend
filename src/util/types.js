@@ -369,6 +369,9 @@ export const LINE_ITEM_CUSTOMER_COMMISSION = 'line-item/customer-commission';
 export const LINE_ITEM_PROVIDER_COMMISSION = 'line-item/provider-commission';
 export const LINE_ITEM_SHIPPING_FEE = 'line-item/shipping-fee';
 export const LINE_ITEM_PICKUP_FEE = 'line-item/pickup-fee';
+export const LINE_ITEM_CUSTOM_GUEST_PRICE = 'line-item/custom-guest-price';
+export const LINE_ITEM_SERVICE_FEE = 'line-item/service-fee';
+export const LINE_ITEM_CURRENT_PAY = 'line-item/current-pay';
 
 export const LINE_ITEMS = [
   LINE_ITEM_NIGHT,
@@ -379,6 +382,10 @@ export const LINE_ITEMS = [
   LINE_ITEM_PROVIDER_COMMISSION,
   LINE_ITEM_SHIPPING_FEE,
   LINE_ITEM_PICKUP_FEE,
+  LINE_ITEM_CUSTOM_GUEST_PRICE,
+  LINE_ITEM_SERVICE_FEE,
+  ,
+  LINE_ITEM_CURRENT_PAY,
 ];
 export const LISTING_UNIT_TYPES = [LINE_ITEM_NIGHT, LINE_ITEM_DAY, LINE_ITEM_HOUR, LINE_ITEM_ITEM];
 
