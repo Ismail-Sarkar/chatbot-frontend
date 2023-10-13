@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { bool, func, number, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
@@ -17,6 +17,7 @@ import { Button, Form, FieldCurrencyInput, FieldTextInput } from '../../../../co
 
 // Import modules from this directory
 import css from './EditListingPricingForm.module.css';
+import { useState } from 'react';
 
 const { Money } = sdkTypes;
 
@@ -24,7 +25,6 @@ const getPriceValidators = (listingMinimumPriceSubUnits, marketplaceCurrency, in
   const priceRequiredMsgId = { id: 'EditListingPricingForm.priceRequired' };
   const priceRequiredMsg = intl.formatMessage(priceRequiredMsgId);
   const priceRequired = validators.required(priceRequiredMsg);
-
   const minPriceRaw = new Money(listingMinimumPriceSubUnits, marketplaceCurrency);
   const minPrice = formatMoney(intl, minPriceRaw);
   const priceTooLowMsgId = { id: 'EditListingPricingForm.priceTooLow' };
@@ -80,6 +80,7 @@ export const EditListingPricingFormComponent = props => (
         values,
         form,
         errors,
+        editListingLinkType,
       } = formRenderProps;
       // console.log(3, listingMinimumPriceSubUnits);
       const PERK_MAX_LENGTH = 70;
@@ -97,18 +98,24 @@ export const EditListingPricingFormComponent = props => (
         return getPriceValidators(1, marketplaceCurrency, intl);
       };
       //
+      // const perkValueRef = useRef(null);
+      // useEffect(() => {
+      //   perkValueRef.current = [];
+      // }, []);
 
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
-      const submitDisabled = invalid || disabled || submitInProgress;
+      const submitDisabled =
+        editListingLinkType !== 'edit'
+          ? invalid || disabled || submitInProgress
+          : (values.perkNameOne !== undefined && values.perkNameOnePrice === null) ||
+            (values.perkNameTwo !== undefined && values.perkNameTwoPrice === null) ||
+            (values.perkNameThree !== undefined && values.perkNameThreePrice === null)
+          ? true
+          : false;
       // (values.perkNameOne !== undefined && !values.perkNameOnePrice);
-      console.log(
-        34,
-        values.perkNameOne !== undefined &&
-          !values.perkNameOnePrice &&
-          (values.perkNameTwo !== undefined && !values.perkNameTwoPrice)
-      );
+      // console.log(34, values.perkNameOne, values.perkNameOnePrice);
       const { updateListingError, showListingsError } = fetchErrors || {};
       const restrictText = e => {
         const value = e.target.value;
@@ -123,6 +130,9 @@ export const EditListingPricingFormComponent = props => (
         // Use a regular expression to allow only numeric characters
         const numericValue = value.replace(/[^0-9]/g, '');
         form.change('reserVations', numericValue);
+      };
+      const perkPriceValue = func => {
+        func();
       };
       return (
         <Form onSubmit={handleSubmit} className={classes}>
@@ -150,8 +160,13 @@ export const EditListingPricingFormComponent = props => (
             validate={priceValidators}
           />
           <div className={css.optionalPerkFee}>
-            Optional: Add up to 3 additional perks (ex: Perk name: “unlimited coffee,” | Price:
-            $25.00 USD)
+            Optional: Add up to 3 additional perks
+            {/* (ex: Perk name: “unlimited coffee,” | Price:
+            $25.00 USD) */}
+          </div>
+          <div className={css.perkNameExample}>
+            ex: Perk name: unlimited coffee | Price: $25.00 USD<br></br>ex: Perk name: 1 hour
+            Swedish massage | Price: $90.00 USD
           </div>
           <div>
             <div className={css.perksField}>
@@ -161,6 +176,15 @@ export const EditListingPricingFormComponent = props => (
                 id="perkNameOne"
                 placeholder="Perk Name"
                 maxLength={PERK_MAX_LENGTH}
+                onChange={e => {
+                  const perkNameOne = e.target.value;
+                  form.change('perkNameOne', perkNameOne);
+                  console.log(234, values.perkNameOne, perkNameOne);
+                  if (perkNameOne === '') {
+                    // form.change('perkNameOnePrice', undefined);
+                    // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
+                  }
+                }}
               />
               <FieldCurrencyInput
                 id="perkNameOnePrice"
@@ -169,6 +193,8 @@ export const EditListingPricingFormComponent = props => (
                 currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
                 disabled={values.perkNameOne ? false : true}
                 validate={perkPriceValidators(values.perkNameOne)}
+                // perkValueRef={perkValueRef.current}
+                // perkPriceValue={perkPriceValue}
               />
             </div>
             <div className={css.perksField}>

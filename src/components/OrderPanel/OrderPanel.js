@@ -130,7 +130,7 @@ const PriceMaybe = props => {
         <div className={css.timeDuration}>Duration</div>
         <div
           className={css.timeDuration}
-        >{`${publicData.availableStartTime.label}-${publicData.availableEndTime.label}`}</div>
+        >{`${publicData?.availableStartTime?.label}-${publicData?.availableEndTime?.label}`}</div>
       </div>
     </>
   );

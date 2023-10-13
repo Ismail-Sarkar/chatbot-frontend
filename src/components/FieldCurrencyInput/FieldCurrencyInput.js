@@ -101,6 +101,7 @@ class CurrencyInputComponent extends Component {
     this.onInputBlur = this.onInputBlur.bind(this);
     this.onInputFocus = this.onInputFocus.bind(this);
     this.updateValues = this.updateValues.bind(this);
+    // this.clearValues = this.clearValues.bind(this);
   }
 
   onInputChange(event) {
@@ -150,7 +151,9 @@ class CurrencyInputComponent extends Component {
       };
     });
   }
-
+  // clearValues() {
+  //   this.setState({ value: null });
+  // }
   updateValues(event) {
     try {
       const { currencyConfig, intl } = this.props;
@@ -196,9 +199,21 @@ class CurrencyInputComponent extends Component {
       return { formattedValue, unformattedValue, value };
     }
   }
+  // componentDidUpdate(prevState, prevProps) {
+  //   const { perkValueRef, perkPriceValue, input } = this.props;
+  //   perkValueRef.includes(input.name)
+  // }
 
   render() {
-    const { className, currencyConfig, defaultValue, placeholder, intl } = this.props;
+    const {
+      className,
+      currencyConfig,
+      defaultValue,
+      placeholder,
+      intl,
+      // perkValueRef,
+      // perkPriceValue,
+    } = this.props;
     const placeholderText = placeholder || intl.formatNumber(defaultValue, currencyConfig);
     return (
       <input
@@ -240,7 +255,17 @@ CurrencyInputComponent.propTypes = {
 export const CurrencyInput = injectIntl(CurrencyInputComponent);
 
 const FieldCurrencyInputComponent = props => {
-  const { rootClassName, className, id, label, input, meta, hideErrorMessage, ...rest } = props;
+  const {
+    rootClassName,
+    className,
+    id,
+    label,
+    input,
+    meta,
+    hideErrorMessage,
+
+    ...rest
+  } = props;
 
   if (label && !id) {
     throw new Error('id required when a label is given');

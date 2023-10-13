@@ -139,9 +139,11 @@ const EditListingAvailabilityPanel = props => {
   const [valuesFromLastSubmit, setValuesFromLastSubmit] = useState(null);
   const [entryRules, setEntryRules] = useState(listing.attributes.publicData.entryRules || null);
   const [startTime, setStartTime] = useState(
-    listing.attributes.publicData.availableStartTime || null
+    listing.attributes.publicData.availableStartTime || { value: '00:00am', label: '00:00am' }
   );
-  const [endTime, setEndTime] = useState(listing.attributes.publicData.availableEndTime || null);
+  const [endTime, setEndTime] = useState(
+    listing.attributes.publicData.availableEndTime || { value: '11:00pm', label: '11:00pm' }
+  );
   const [sdk, setSdk] = useState(null);
   useEffect(() => {
     setSdk(createInstance({ clientId: process.env.REACT_APP_SHARETRIBE_SDK_CLIENT_ID }));
@@ -164,6 +166,7 @@ const EditListingAvailabilityPanel = props => {
       }
     }
   }
+  console.log(65, timeOptions);
   const changeStartTime = startTime => {
     setStartTime(startTime);
   };
@@ -359,11 +362,11 @@ const EditListingAvailabilityPanel = props => {
             </InlineTextButton>
           </section>
           <div className={css.startEndTimeTitle}>
-            Add a start & finish time for your remote work day pass
+            Add a start & finish time for your remote work day pass*
           </div>
           <section className={css.time}>
             <div className={css.startEndTime}>
-              <div>Start Time</div>
+              <div>Start Time*</div>
               <Select
                 id="startTime"
                 name="startTime"
@@ -375,7 +378,7 @@ const EditListingAvailabilityPanel = props => {
               />
             </div>
             <div className={css.startEndTime}>
-              <div>End Time</div>
+              <div>End Time*</div>
               <Select
                 id="endTime"
                 name="endTime"

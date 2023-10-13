@@ -1,17 +1,20 @@
 import React from 'react';
+import css from './ListingPage.module.css';
 
 function ManualAddress(props) {
   const { publicData } = props;
-  const { fullManualAddress } = publicData;
-  const cityStateCountry = fullManualAddress?.state ? fullManualAddress?.state : '';
+  const { fullManualAddress, manualAddress } = publicData;
+  const country =
+    manualAddress && fullManualAddress.cityStateCountry
+      ? `${fullManualAddress.cityStateCountry},`
+      : '';
+  const street = manualAddress && fullManualAddress.street ? `${fullManualAddress.street},` : '';
+  const zip = manualAddress && fullManualAddress.zip ? `${fullManualAddress.zip}` : '';
   return (
-    <div>
-      <div>Manual Address</div>
-      {fullManualAddress?.cityStateCountry && (
-        <div>{`City state country : ${fullManualAddress?.cityStateCountry}`}</div>
-      )}
-      {fullManualAddress?.street && <div>{`Street : ${fullManualAddress?.street}`}</div>}
-      {fullManualAddress?.zip && <div>{`Zip : ${fullManualAddress?.zip}`}</div>}
+    <div className={css.mannualAddressOuter}>
+      <div className={css.mannualAddressInner}>
+        <div>{`${street}${country}${zip}`}</div>
+      </div>
     </div>
   );
 }
