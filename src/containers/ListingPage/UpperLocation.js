@@ -5,7 +5,7 @@ function UpperLocation(props) {
   const { manualAddress, mapLocation, fullManualAddress } = publicData;
   const country = manualAddress
     ? fullManualAddress.cityStateCountry
-      ? `${fullManualAddress.cityStateCountry},`
+      ? `${fullManualAddress.cityStateCountry}`
       : ''
     : mapLocation?.country
     ? `${mapLocation?.country}`
@@ -17,11 +17,7 @@ function UpperLocation(props) {
 
   return (
     <div className={css.upperAddress}>
-      {manualAddress ? (
-        <div>{`${street}${country}${zip}`}</div>
-      ) : (
-        <div>{`${district}${state}${country}`}</div>
-      )}
+      {manualAddress ? <div>{`${country}`}</div> : <div>{`${district}${state}${country}`}</div>}
     </div>
   );
 }
