@@ -13,11 +13,18 @@ import { formatMoney } from '../../../../util/currency';
 import { types as sdkTypes } from '../../../../util/sdkLoader';
 
 // Import shared components
-import { Button, Form, FieldCurrencyInput, FieldTextInput } from '../../../../components';
+import {
+  Button,
+  Form,
+  FieldCurrencyInput,
+  FieldTextInput,
+  FieldSelect,
+} from '../../../../components';
 
 // Import modules from this directory
 import css from './EditListingPricingForm.module.css';
 import { useState } from 'react';
+import { useConfiguration } from '../../../../context/configurationContext';
 
 const { Money } = sdkTypes;
 
@@ -67,6 +74,9 @@ export const EditListingPricingFormComponent = props => (
         disabled,
         ready,
         handleSubmit,
+        prefferedPaymentMethod,
+        paymentMethodValues,
+        onPrefferedPaymentMethodChange,
         marketplaceCurrency,
         unitType,
         listingMinimumPriceSubUnits,
@@ -134,6 +144,7 @@ export const EditListingPricingFormComponent = props => (
       const perkPriceValue = func => {
         func();
       };
+
       return (
         <Form onSubmit={handleSubmit} className={classes}>
           {updateListingError ? (
@@ -146,6 +157,26 @@ export const EditListingPricingFormComponent = props => (
               <FormattedMessage id="EditListingPricingForm.showListingFailed" />
             </p>
           ) : null}
+          <FieldSelect
+            id="prefferedPaymentMethod"
+            name="prefferedPaymentMethod"
+            className={css.listingTypeSelect}
+            label={intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodTitle' })}
+            validate={validators.required(
+              intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodRequired' })
+            )}
+          >
+            <option disabled value="">
+              {intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodPlaceholder' })}
+            </option>
+            {paymentMethodValues.map(({ option, label }) => {
+              return (
+                <option key={option} value={option}>
+                  {label}
+                </option>
+              );
+            })}
+          </FieldSelect>
           <FieldCurrencyInput
             id={`${formId}price`}
             name="price"

@@ -261,6 +261,10 @@
   "EditListingPricingForm.priceTooLow": "Price should be at least {minPrice}.",
   "EditListingPricingForm.showListingFailed": "Fetching listing data failed.",
   "EditListingPricingForm.updateFailed": "Failed to update listing. Please try again.",
+  "EditListingPricingForm.paymentMethodTitle": "Choose preffered payment method",
+  "EditListingPricingForm.paymentMethodRequired": "You need to choose preffered payment method",
+  "EditListingPricingForm.paymentMethodPlaceholder": "Choose...",
+
   "EditListingPricingPanel.createListingTitle": "Pricing",
   "EditListingPricingPanel.listingPriceCurrencyInvalid": "The listing currency is different from the marketplace currency. You cannot edit the price.",
   "EditListingPricingPanel.title": "Edit the pricing of {listingTitle}",

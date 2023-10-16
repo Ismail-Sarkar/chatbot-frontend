@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -18,8 +18,15 @@ import {
   LISTING_PAGE_PARAM_TYPE_DRAFT,
   LISTING_PAGE_PARAM_TYPE_EDIT,
 } from '../../../../util/urlHelpers';
+import { useConfiguration } from '../../../../context/configurationContext';
 
 const { Money } = sdkTypes;
+
+// const paymentMethodvalues = [
+//   { key: 'creditDebitCash', label: 'Credit/debit card & cash' },
+//   { key: 'creditDebit', label: 'Credit/debit card only' },
+//   { key: 'cash', label: 'Cash only' },
+// ];
 
 const getInitialValues = params => {
   const { listing } = params;
@@ -33,7 +40,10 @@ const getInitialValues = params => {
     perkNameThreePrice,
     guests,
     reserVations,
+    prefferedPaymentMethod,
   } = listing?.attributes?.publicData;
+
+  // const selectedPrefferedPaymentMethod = paymentMethodvalues.find((elem)=>elem.value===)
 
   return {
     price,
@@ -51,6 +61,7 @@ const getInitialValues = params => {
       : null,
     guests,
     reserVations,
+    prefferedPaymentMethod: prefferedPaymentMethod,
   };
 };
 
@@ -69,6 +80,14 @@ const EditListingPricingPanel = props => {
     updateInProgress,
     errors,
   } = props;
+
+  const config = useConfiguration();
+
+  const { enumOptions: paymentMethodValues } = config.listing.listingFields.find(
+    ({ key }) => key === 'paymentMethodValues'
+  );
+
+  console.log('thygukhi', paymentMethodValues, 888);
 
   const classes = classNames(rootClassName || css.root, className);
   const initialValues = getInitialValues(props);
@@ -102,6 +121,7 @@ const EditListingPricingPanel = props => {
         <EditListingPricingForm
           className={css.form}
           initialValues={initialValues}
+          paymentMethodValues={paymentMethodValues}
           onSubmit={values => {
             const {
               price,
@@ -113,12 +133,14 @@ const EditListingPricingPanel = props => {
               perkNameThreePrice,
               guests,
               reserVations,
+              prefferedPaymentMethod,
             } = values;
-            console.log(445, values);
+            // console.log(445, values, prefferedPaymentMethod);
             // New values for listing attributes
             const updateValues = {
               price,
               publicData: {
+                prefferedPaymentMethod: prefferedPaymentMethod,
                 listingPrice: {
                   amount: price.amount,
                   currency: price.currency,
