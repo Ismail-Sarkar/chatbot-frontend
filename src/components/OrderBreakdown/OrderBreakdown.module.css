@@ -128,8 +128,8 @@
 .feeInfo {
   composes: marketplaceTinyFontStyles from global;
   flex-shrink: 0;
-  margin: 0;
-  color: var(--colorGrey300);
+  margin: 10px 0 0 0;
+  color: #000;
   padding-top: 4px;
   padding-bottom: 14px;
 
@@ -137,4 +137,23 @@
     padding-top: 11px;
     padding-bottom: 21px;
   }
+}
+
+.seperator {
+  margin-top: 30px;
+}
+
+.reservationLabel {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 10px;
+
+  & span {
+    text-decoration: underline;
+  }
+}
+
+.remainingPay {
+  color: #ff0000;
+  margin-top: 20px;
 }

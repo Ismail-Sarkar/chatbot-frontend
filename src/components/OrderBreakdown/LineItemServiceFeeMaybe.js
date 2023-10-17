@@ -80,22 +80,22 @@ function LineItemServiceFeeMaybe(props) {
 
   return (
     <React.Fragment>
-      <hr className={css.totalDivider} />
-
-      {bookingLineItem.map(({ label, formattedMoneyLabel, key }, i) => (
-        <div key={`item.code+${i}`}>
-          {/* {(key === 'subTotal' || key === 'seats') && <hr className={css.totalDivider} />} */}
-          <div className={css.lineItem}>
-            <span className={css.itemLabel}>{label}</span>
-            <span className={css.itemValue}>{formattedMoneyLabel}</span>
-          </div>
-        </div>
-      ))}
-      <div className={css.lineItem}>
-        <span className={css.itemLabel}>{'Total price'}</span>
-        <span className={css.itemValue}>{formattedTotalPrice}</span>
-      </div>
       {/* <hr className={css.totalDivider} /> */}
+      <div className={css.seperator}>
+        {bookingLineItem.map(({ label, formattedMoneyLabel, key }, i) => (
+          <div key={`item.code+${i}`}>
+            {/* {(key === 'subTotal' || key === 'seats') && <hr className={css.totalDivider} />} */}
+            <div className={css.lineItem}>
+              <span className={css.itemLabel}>{label}</span>
+              <span className={css.itemValue}>{formattedMoneyLabel}</span>
+            </div>
+          </div>
+        ))}
+        <div className={css.lineItem}>
+          <span className={css.itemLabel}>{'Total price'}</span>
+          <span className={css.itemValue}>{formattedTotalPrice}</span>
+        </div>
+      </div>
     </React.Fragment>
   );
 }

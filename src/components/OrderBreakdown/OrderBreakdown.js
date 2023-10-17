@@ -30,6 +30,9 @@ import LineItemUnknownItemsMaybe from './LineItemUnknownItemsMaybe';
 import css from './OrderBreakdown.module.css';
 import LineItemGuestFeeMaybe from './LineItemGuestFeeMaybe';
 import LineItemServiceFeeMaybe from './LineItemServiceFeeMaybe';
+import LineItemCurrentPayMaybe from './LineItemCurrentPayMaybe';
+import { useConfiguration } from '../../context/configurationContext';
+import { isArray } from 'lodash';
 
 export const OrderBreakdownComponent = props => {
   const {
@@ -98,6 +101,15 @@ export const OrderBreakdownComponent = props => {
    *
    */
 
+  const { listing } = transaction || {};
+
+  const { publicData } = listing?.attributes || {};
+  const { prefferedPaymentMethod } = publicData || {};
+
+  const config = useConfiguration();
+
+  const { availablePaymentMethods } = config.listing || {};
+
   return (
     <div className={classes}>
       <LineItemBookingPeriod
@@ -155,12 +167,31 @@ export const OrderBreakdownComponent = props => {
       />
 
       <LineItemTotalPrice transaction={transaction} isProvider={isProvider} intl={intl} />
+      <LineItemCurrentPayMaybe
+        transaction={transaction}
+        isProvider={isProvider}
+        intl={intl}
+        lineItems={lineItems}
+      />
 
-      {hasCommissionLineItem ? (
+      {isCustomer && prefferedPaymentMethod && isArray(availablePaymentMethods) && (
+        <span className={css.feeInfo}>
+          <FormattedMessage
+            id="OrderBreakdown.hostPaymentMethod"
+            values={{
+              paymentMethod: availablePaymentMethods.find(
+                ({ key }) => key === prefferedPaymentMethod
+              ).label,
+            }}
+          />
+        </span>
+      )}
+
+      {/* {hasCommissionLineItem ? (
         <span className={css.feeInfo}>
           <FormattedMessage id="OrderBreakdown.commissionFeeNote" />
         </span>
-      ) : null}
+      ) : null} */}
     </div>
   );
 };
