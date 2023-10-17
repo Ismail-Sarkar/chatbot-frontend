@@ -11,7 +11,7 @@ import {
 import { getStateDataForBookingProcess } from './InboxPage.stateDataBooking.js';
 import { getStateDataForInquiryProcess } from './InboxPage.stateDataInquiry.js';
 import { getStateDataForPurchaseProcess } from './InboxPage.stateDataPurchase.js';
-import { getStateDataForAdventurelyBookingProcess } from '../TransactionPage/TransactionPage.stateDataAdventurelyBooking';
+import { getStateDataForAdventurelyBookingProcess } from './InboxPage.stateDataAdventurelyBooking';
 
 export const stateDataShape = shape({
   processName: string.isRequired,
@@ -44,6 +44,7 @@ export const getStateData = params => {
   } else if (processName === INQUIRY_PROCESS_NAME) {
     return getStateDataForInquiryProcess(params, processInfo());
   } else if (processName === ADVENTURELY_PROCESS_NAME) {
+    console.log('first', params, processInfo());
     return getStateDataForAdventurelyBookingProcess(params, processInfo());
   } else {
     return {};
