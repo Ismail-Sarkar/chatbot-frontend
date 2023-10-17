@@ -218,6 +218,8 @@ const LocationOrShippingDetails = props => {
     isBooking,
     isFuzzyLocation,
     intl,
+    fullManualAddress,
+    manualAddress,
   } = props;
 
   const locationDetails = listingLocation?.building
@@ -225,7 +227,6 @@ const LocationOrShippingDetails = props => {
     : listingLocation?.address
     ? listingLocation.address
     : intl.formatMessage({ id: 'StripePaymentForm.locationUnknown' });
-
   return askShippingDetails ? (
     <ShippingDetails intl={intl} formApi={formApi} locale={locale} />
   ) : !isBooking && showPickUplocation ? (
@@ -240,7 +241,7 @@ const LocationOrShippingDetails = props => {
       <Heading as="h3" rootClassName={css.heading}>
         <FormattedMessage id="StripePaymentForm.locationDetailsTitle" />
       </Heading>
-      <p className={css.locationDetails}>{locationDetails}</p>
+      <p className={css.locationDetails}>{fullManualAddress?.street}</p>
     </div>
   ) : null;
 };
@@ -449,7 +450,11 @@ class StripePaymentForm extends Component {
       isBooking,
       isFuzzyLocation,
       values,
+      listing,
     } = formRenderProps;
+
+    const { publicData } = listing?.attributes || {};
+    const { fullManualAddress, manualAddress } = publicData || {};
 
     this.finalFormAPI = formApi;
 
@@ -545,6 +550,8 @@ class StripePaymentForm extends Component {
           formApi={formApi}
           locale={locale}
           intl={intl}
+          fullManualAddress={fullManualAddress}
+          manualAddress={manualAddress}
         />
 
         {billingDetailsNeeded && !loadingData ? (
@@ -628,10 +635,10 @@ class StripePaymentForm extends Component {
             <Heading as="h3" rootClassName={css.heading}>
               <FormattedMessage id="StripePaymentForm.messageHeading" />
             </Heading>
-              <p>
+            <p>
               <FormattedMessage id="StripePaymentForm.bookingMessage" />
-              </p>
-{/* 
+            </p>
+            {/* 
             <FieldTextInput
               type="textarea"
               id={`${formId}-message`}
