@@ -631,7 +631,7 @@ class StripePaymentForm extends Component {
               <p>
               <FormattedMessage id="StripePaymentForm.bookingMessage" />
               </p>
-
+{/* 
             <FieldTextInput
               type="textarea"
               id={`${formId}-message`}
@@ -639,7 +639,7 @@ class StripePaymentForm extends Component {
               label={initialMessageLabel}
               placeholder={messagePlaceholder}
               className={css.message}
-            />
+            /> */}
           </div>
         ) : null}
         <div className={css.submitContainer}>

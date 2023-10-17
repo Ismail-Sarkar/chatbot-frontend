@@ -199,7 +199,7 @@
   "EditListingDetailsForm.maxLength": "Must be {maxLength} characters or less",
   "EditListingDetailsForm.showListingFailed": "Fetching listing data failed.",
   "EditListingDetailsForm.title": "Listing title",
-  "EditListingDetailsForm.titlePlaceholder": "What kind of bike is it?",
+  "EditListingDetailsForm.titlePlaceholder": "Name your listing.",
   "EditListingDetailsForm.titleRequired": "You need to add a title.",
   "EditListingDetailsForm.updateFailed": "Failed to update listing. Please try again.",
   "EditListingDetailsPanel.createListingTitle": "Listing details",
