@@ -83,11 +83,11 @@ const EditListingPricingPanel = props => {
 
   const config = useConfiguration();
 
-  const { enumOptions: paymentMethodValues } = config.listing.listingFields.find(
-    ({ key }) => key === 'paymentMethodValues'
-  );
+  const { availablePaymentMethods } = config.listing || {};
 
-  console.log('thygukhi', paymentMethodValues, 888);
+  // const { enumOptions: paymentMethodValues } = config.listing.listingFields.find(
+  //   ({ key }) => key === 'paymentMethodValues'
+  // );
 
   const classes = classNames(rootClassName || css.root, className);
   const initialValues = getInitialValues(props);
@@ -121,7 +121,7 @@ const EditListingPricingPanel = props => {
         <EditListingPricingForm
           className={css.form}
           initialValues={initialValues}
-          paymentMethodValues={paymentMethodValues}
+          paymentMethodValues={availablePaymentMethods}
           onSubmit={values => {
             const {
               price,
