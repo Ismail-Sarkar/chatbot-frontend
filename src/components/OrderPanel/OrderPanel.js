@@ -16,6 +16,7 @@ import {
 import loadable from '@loadable/component';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
+import { types as sdkTypes } from '../../util/sdkLoader';
 
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import { displayPrice } from '../../util/configHelpers';
@@ -27,7 +28,7 @@ import {
   LINE_ITEM_ITEM,
   LINE_ITEM_HOUR,
 } from '../../util/types';
-import { formatMoney } from '../../util/currency';
+import { convertMoneyToNumber, formatMoney } from '../../util/currency';
 import { parse, stringify } from '../../util/urlHelpers';
 import { userDisplayNameAsString } from '../../util/data';
 import {
@@ -60,6 +61,8 @@ const ProductOrderForm = loadable(() =>
 // This defines when ModalInMobile shows content as Modal
 const MODAL_BREAKPOINT = 1023;
 const TODAY = new Date();
+
+const { Money } = sdkTypes;
 
 const priceData = (price, currency, intl) => {
   if (price && price.currency === currency) {
@@ -165,6 +168,87 @@ const OrderPanel = props => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
   } = props;
+
+  const listingPublicData = listing?.attributes?.publicData;
+
+  const perkNameOnePrice = formatMoney(
+    intl,
+    new Money(
+      listingPublicData?.perkNameOnePrice?.amount ||
+        // chatItem.chat.payableAmmount.amount ||
+        0,
+      'USD'
+    )
+  );
+  const perkNameTwoPrice = formatMoney(
+    intl,
+    new Money(
+      listingPublicData?.perkNameTwoPrice?.amount ||
+        // chatItem.chat.payableAmmount.amount ||
+        0,
+      'USD'
+    )
+  );
+  const perkNameThreePrice = formatMoney(
+    intl,
+    new Money(
+      listingPublicData?.perkNameThreePrice?.amount ||
+        // chatItem.chat.payableAmmount.amount ||
+        0,
+      'USD'
+    )
+  );
+
+  let extraParkValues = [];
+  if (listingPublicData.perkNameOne) {
+    extraParkValues.push({
+      key: `${listingPublicData?.perkNameOne}/${perkNameOnePrice}`,
+      label: `${listingPublicData?.perkNameOne}/${perkNameOnePrice}`,
+      value: convertMoneyToNumber(
+        new Money(listingPublicData?.perkNameOnePrice?.amount || 0, 'USD')
+      ),
+    });
+  }
+  if (listingPublicData.perkNameTwo) {
+    extraParkValues.push({
+      key: `${listingPublicData?.perkNameTwo}/${perkNameTwoPrice}`,
+      label: `${listingPublicData?.perkNameTwo}/${perkNameTwoPrice}`,
+      value: convertMoneyToNumber(
+        new Money(listingPublicData?.perkNameTwoPrice?.amount || 0, 'USD')
+      ),
+    });
+  }
+  if (listingPublicData.perkNameThree) {
+    extraParkValues.push({
+      key: `${listingPublicData?.perkNameThree}/${perkNameThreePrice}`,
+      label: `${listingPublicData?.perkNameThree}/${perkNameThreePrice}`,
+      value: convertMoneyToNumber(
+        new Money(listingPublicData?.perkNameThreePrice?.amount || 0, 'USD')
+      ),
+    });
+  }
+
+  // const xdxfghk = [
+  //   {
+  //     key: `${listingPublicData.perkNameOne}/${perkNameOnePrice}`,
+  //     label: `${listingPublicData.perkNameOne}/${perkNameOnePrice}`,
+  //     value: convertMoneyToNumber(new Money(listingPublicData.perkNameOnePrice.amount || 0, 'USD')),
+  //   },
+  //   {
+  //     key: `${listingPublicData.perkNameTwo}/${perkNameTwoPrice}`,
+  //     label: `${listingPublicData.perkNameTwo}/${perkNameTwoPrice}`,
+  //     value: convertMoneyToNumber(new Money(listingPublicData.perkNameTwoPrice.amount || 0, 'USD')),
+  //   },
+  //   {
+  //     key: `${listingPublicData.perkNameThree}/${perkNameThreePrice}`,
+  //     label: `${listingPublicData.perkNameThree}/${perkNameThreePrice}`,
+  //     value: convertMoneyToNumber(
+  //       new Money(listingPublicData.perkNameThreePrice.amount || 0, 'USD')
+  //     ),
+  //   },
+  // ];
+
+  console.log(456, extraParkValues);
 
   const publicData = listing?.attributes?.publicData || {};
   const { unitType, transactionProcessAlias = '' } = publicData || {};
@@ -315,6 +399,7 @@ const OrderPanel = props => {
             lineItems={lineItems}
             fetchLineItemsInProgress={fetchLineItemsInProgress}
             fetchLineItemsError={fetchLineItemsError}
+            extraParkValues={extraParkValues}
           />
         ) : showProductOrderForm ? (
           <ProductOrderForm
@@ -444,7 +529,4 @@ OrderPanel.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default compose(
-  withRouter,
-  injectIntl
-)(OrderPanel);
+export default compose(withRouter, injectIntl)(OrderPanel);

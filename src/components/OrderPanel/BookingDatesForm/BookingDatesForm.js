@@ -442,16 +442,18 @@ export const BookingDatesFormComponent = props => {
   const [currentMonth, setCurrentMonth] = useState(getStartOf(TODAY, 'month', props.timeZone));
   const [extraPerk, setExtraPerk] = useState([]);
 
+  const { extraParkValues } = props;
+
   const handleSetExtraPerk = val => {
     setExtraPerk(val);
   };
 
   // const extraParkValues = findOptionsForSelectFilter('extraParkValues', config.custom.filters);
-  const extraParkValues = [
-    { key: 'Lunch Buffet / $30', label: 'Lunch Buffet / $30', value: 30 },
-    { key: 'Hike equipment helmut / $25', label: 'Hike equipment helmut / $25', value: 25 },
-    { key: 'Photographs of you hiking / $15', label: 'Photographs of you hiking / $15', value: 15 },
-  ];
+  // const extraParkValues = [
+  //   { key: 'Lunch Buffet / $30', label: 'Lunch Buffet / $30', value: 30 },
+  //   { key: 'Hike equipment helmut / $25', label: 'Hike equipment helmut / $25', value: 25 },
+  //   { key: 'Photographs of you hiking / $15', label: 'Photographs of you hiking / $15', value: 15 },
+  // ];
 
   useEffect(() => {
     // Call onMonthChanged function if it has been passed in among props.

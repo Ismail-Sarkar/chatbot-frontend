@@ -102,7 +102,7 @@ export const EditListingPricingFormComponent = props => (
         intl
       );
       const perkPriceValidators = perkName => {
-        if (perkName === undefined) {
+        if (perkName === undefined || perkName === '') {
           return null;
         }
         return getPriceValidators(1, marketplaceCurrency, intl);
@@ -113,6 +113,8 @@ export const EditListingPricingFormComponent = props => (
       //   perkValueRef.current = [];
       // }, []);
 
+      console.log(121, values, values.guests, values.reserVations);
+
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
@@ -121,7 +123,11 @@ export const EditListingPricingFormComponent = props => (
           ? invalid || disabled || submitInProgress
           : (values.perkNameOne !== undefined && values.perkNameOnePrice === null) ||
             (values.perkNameTwo !== undefined && values.perkNameTwoPrice === null) ||
-            (values.perkNameThree !== undefined && values.perkNameThreePrice === null)
+            (values.perkNameThree !== undefined && values.perkNameThreePrice === null) ||
+            values.guests === undefined ||
+            values.guests === '' ||
+            values.reserVations === undefined ||
+            values.reserVations === ''
           ? true
           : false;
       // (values.perkNameOne !== undefined && !values.perkNameOnePrice);
@@ -144,6 +150,8 @@ export const EditListingPricingFormComponent = props => (
       const perkPriceValue = func => {
         func();
       };
+
+      const required = validators.required('This field is required');
 
       return (
         <Form onSubmit={handleSubmit} className={classes}>
@@ -266,21 +274,23 @@ export const EditListingPricingFormComponent = props => (
           <div className={css.optionalPerkFee}>Guests</div>
           <FieldTextInput
             className={css.guests}
-            type="text"
+            type="number"
             name="guests"
             id="guests"
-            label="Enter the maximum total number of guests you’ll accept per reservation"
+            label="Enter the maximum total number of guests you’ll accept per reservation*"
             placeholder="Enter"
             onChange={restrictText}
+            validate={required}
           />
           <FieldTextInput
             className={css.guests}
-            type="text"
+            type="number"
             name="reserVations"
             id="reserVations"
-            label="Enter the maximum number of reservations you’ll accept per day"
+            label="Enter the maximum number of reservations you’ll accept per day*"
             placeholder="Enter"
             onChange={restrictTextReservation}
+            validate={required}
           />
 
           <Button
