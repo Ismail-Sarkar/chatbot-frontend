@@ -72,6 +72,9 @@
   }
   & button {
     background: #000;
+    &:hover{
+      background: #000 !important;
+    }
   }
 }
 

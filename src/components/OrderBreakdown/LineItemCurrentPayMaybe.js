@@ -1,5 +1,5 @@
 import React from 'react';
-import { intlShape } from '../../util/reactIntl';
+import { FormattedMessage, intlShape } from '../../util/reactIntl';
 import { formatMoney } from '../../util/currency';
 import { humanizeLineItemCode } from '../../util/data';
 import {
@@ -21,44 +21,32 @@ const { Money } = sdkTypes;
 function LineItemCurrentPayMaybe(props) {
   const { lineItems, transaction, intl, isProvider } = props;
 
-  const { lineTotal } = serviceFeeLineItem || {};
-  const formattedLabel = (label, quantity) =>
-    quantity && quantity > 0
-      ? `${humanizeLineItemCode(label)} x ${quantity}`
-      : humanizeLineItemCode(label);
-
-  const bookingLineItem = [
-    {
-      key: 'seats',
-      label: formattedLabel(`line-item/current-payment`),
-      formattedMoneyLabel: formatMoney(
-        intl,
-        new Money(lineTotal?.amount, lineTotal?.currency || 'USD')
-      ),
-    },
-  ];
-
-  const totalPrice = isProvider
-    ? transaction.attributes.payoutTotal
-    : transaction.attributes.payinTotal;
-  const formattedTotalPrice = formatMoney(intl, totalPrice);
-
-  return (
-    <React.Fragment>
-      <hr className={css.totalDivider} />
-
-      {bookingLineItem.map(({ label, formattedMoneyLabel, key }, i) => (
-        <div key={`item.code+${i}`}>
-          {/* {(key === 'subTotal' || key === 'seats') && <hr className={css.totalDivider} />} */}
-          <div className={css.lineItem}>
-            <span className={css.itemLabel}>{label}</span>
-            <span className={css.itemValue}>{formattedMoneyLabel}</span>
-          </div>
-        </div>
-      ))}
-      {/* <hr className={css.totalDivider} /> */}
-    </React.Fragment>
+  const currentPayFeeLineItem = lineItems.find(
+    item => item.code === LINE_ITEM_CURRENT_PAY && !item.reversal
   );
+  const { lineTotal } = currentPayFeeLineItem || {};
+
+  const formattedMoneyLabel =
+    lineTotal &&
+    lineTotal.amount &&
+    lineTotal.currency &&
+    formatMoney(intl, new Money(Math.abs(lineTotal?.amount), lineTotal?.currency || 'USD'));
+
+  return lineTotal && lineTotal.amount && lineTotal.currency ? (
+    <div className={css.remainingPay}>
+      {isProvider ? (
+        <FormattedMessage
+          id="OrderBreakdown.remainingFeeProvider"
+          values={{ remainingFee: formattedMoneyLabel }}
+        />
+      ) : (
+        <FormattedMessage
+          id="OrderBreakdown.remainingFeeCustomer"
+          values={{ remainingFee: formattedMoneyLabel }}
+        />
+      )}
+    </div>
+  ) : null;
 }
 
 export default LineItemCurrentPayMaybe;

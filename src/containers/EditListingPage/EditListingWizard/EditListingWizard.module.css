@@ -96,11 +96,11 @@
 }
 
 .customField {
-  margin-bottom: 24px;
+  margin-bottom:15px;
 
-  @media (--viewportMedium) {
+  /* @media (--viewportMedium) {
     margin-bottom: 32px;
-  }
+  } */
 }
 
 .customFieldMultiEnum {

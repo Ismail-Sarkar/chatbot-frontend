@@ -86,7 +86,8 @@ const LineItemBookingPeriod = props => {
           timeZone={timeZone}
         />
       </div>
-      <hr className={css.totalDivider} />
+      {/* <hr className={css.totalDivider} /> */}
+      <div className={css.seperator}></div>
     </>
   );
 };

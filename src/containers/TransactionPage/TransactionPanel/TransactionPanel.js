@@ -126,6 +126,7 @@ export class TransactionPanelComponent extends Component {
       provider,
       hasTransitions,
       protectedData,
+      transactionStatus,
       messages,
       initialMessageFailed,
       savePaymentMethodFailed,
@@ -271,6 +272,12 @@ export class TransactionPanelComponent extends Component {
                 />
               </div>
             ) : null}
+
+            {transactionStatus==='transition/accept' && isCustomer &&<div className={css.msgDiv}>
+              <p>
+              <FormattedMessage id="Transactionpanel.bookingMessage" />
+              </p>
+            </div>}
 
             <FeedSection
               rootClassName={css.feedContainer}

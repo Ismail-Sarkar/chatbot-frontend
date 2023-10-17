@@ -22,11 +22,11 @@
 }
 
 .formMargins {
-  margin-bottom: 24px;
-
+  margin-bottom: 15px;
+/* 
   @media (--viewportMedium) {
     margin-bottom: 32px;
-  }
+  } */
 }
 
 .title {

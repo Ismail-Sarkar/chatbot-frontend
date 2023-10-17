@@ -424,6 +424,7 @@ export const TransactionPageComponent = props => {
       provider={provider}
       hasTransitions={txTransitions.length > 0}
       protectedData={transaction?.attributes?.protectedData}
+      transactionStatus={transaction?.attributes?.lastTransition}
       messages={messages}
       initialMessageFailed={initialMessageFailed}
       savePaymentMethodFailed={savePaymentMethodFailed}

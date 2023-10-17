@@ -624,11 +624,14 @@ class StripePaymentForm extends Component {
           <span className={css.errorMessage}>{initiateOrderError.message}</span>
         ) : null}
         {showInitialMessageInput ? (
-          <div>
+          <div className={css.msgDiv}>
             <Heading as="h3" rootClassName={css.heading}>
               <FormattedMessage id="StripePaymentForm.messageHeading" />
             </Heading>
-
+              <p>
+              <FormattedMessage id="StripePaymentForm.bookingMessage" />
+              </p>
+{/* 
             <FieldTextInput
               type="textarea"
               id={`${formId}-message`}
@@ -636,7 +639,7 @@ class StripePaymentForm extends Component {
               label={initialMessageLabel}
               placeholder={messagePlaceholder}
               className={css.message}
-            />
+            /> */}
           </div>
         ) : null}
         <div className={css.submitContainer}>
