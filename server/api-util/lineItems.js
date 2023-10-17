@@ -258,7 +258,7 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
     ...extraPerkFees,
     ...guestFees,
     ...extraLineItems,
-    ...providerCommissionMaybe,
+    // ...providerCommissionMaybe,
     ...serviceFeeMaybe,
     ...currentPayment,
   ];

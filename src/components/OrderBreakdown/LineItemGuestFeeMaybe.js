@@ -59,17 +59,19 @@ function LineItemGuestFeeMaybe(props) {
 
   return (
     <React.Fragment>
-      {guestFeeLineItem &&
-        bookingLineItem.map(({ label, formattedMoneyLabel, key }, i) => (
-          <div key={`item.code+${i}`}>
-            {/* {(key === 'subTotal' || key === 'seats') && <hr className={css.totalDivider} />} */}
-            <div className={css.lineItem}>
-              <span className={css.itemLabel}>{label}</span>
-              <span className={css.itemValue}>{formattedMoneyLabel}</span>
+      {guestFeeLineItem && (
+        <div className={css.seperator}>
+          {bookingLineItem.map(({ label, formattedMoneyLabel, key }, i) => (
+            <div key={`item.code+${i}`}>
+              {/* {(key === 'subTotal' || key === 'seats') && <hr className={css.totalDivider} />} */}
+              <div className={css.lineItem}>
+                <span className={css.itemLabel}>{label}</span>
+                <span className={css.itemValue}>{formattedMoneyLabel}</span>
+              </div>
             </div>
-          </div>
-        ))}
-      {/* <hr className={css.totalDivider} /> */}
+          ))}
+        </div>
+      )}
     </React.Fragment>
   );
 }
