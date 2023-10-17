@@ -9,7 +9,16 @@ import css from './TransactionPanel.module.css';
 
 // Functional component as a helper to build AddressLinkMaybe
 const AddressLinkMaybe = props => {
-  const { className, rootClassName, linkRootClassName, location, geolocation, showAddress } = props;
+  const {
+    className,
+    rootClassName,
+    linkRootClassName,
+    location,
+    geolocation,
+    showAddress,
+    manualAddress,
+    fullManualAddress,
+  } = props;
   const { address, building } = location || {};
   const { lat, lng } = geolocation || {};
   const hrefToGoogleMaps = geolocation
@@ -23,14 +32,20 @@ const AddressLinkMaybe = props => {
 
   const classes = classNames(rootClassName || css.address, className);
   return showAddress && hrefToGoogleMaps ? (
-    <p className={classes}>
-      {fullAddress} <br />
-      <span className={css.viewOnGoogleMapsWrapper}>
-        <ExternalLink className={linkRootClassName} href={hrefToGoogleMaps}>
-          <FormattedMessage id="AddressLinkMaybe.viewOnGoogleMaps" />
-        </ExternalLink>
-      </span>
-    </p>
+    manualAddress ? (
+      <p className={classes}>
+        {fullManualAddress?.street} <br />
+      </p>
+    ) : (
+      <p className={classes}>
+        {fullAddress} <br />
+        <span className={css.viewOnGoogleMapsWrapper}>
+          <ExternalLink className={linkRootClassName} href={hrefToGoogleMaps}>
+            <FormattedMessage id="AddressLinkMaybe.viewOnGoogleMaps" />
+          </ExternalLink>
+        </span>
+      </p>
+    )
   ) : null;
 };
 

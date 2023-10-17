@@ -90,7 +90,8 @@ const estimatedCustomerTransaction = (
   timeZone,
   process,
   processName,
-  marketplaceCurrency
+  marketplaceCurrency,
+  listing
 ) => {
   const transitions = process?.transitions;
   const now = new Date();
@@ -123,12 +124,21 @@ const estimatedCustomerTransaction = (
         },
       ],
     },
+    listing,
     ...bookingMaybe,
   };
 };
 
 const EstimatedCustomerBreakdownMaybe = props => {
-  const { breakdownData = {}, lineItems, timeZone, currency, marketplaceName, processName } = props;
+  const {
+    breakdownData = {},
+    lineItems,
+    timeZone,
+    currency,
+    marketplaceName,
+    processName,
+    listing,
+  } = props;
   const { startDate, endDate } = breakdownData;
 
   let process = null;
@@ -160,7 +170,8 @@ const EstimatedCustomerBreakdownMaybe = props => {
           timeZone,
           process,
           processName,
-          currency
+          currency,
+          listing
         )
       : null;
 

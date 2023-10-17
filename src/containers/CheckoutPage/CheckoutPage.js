@@ -131,6 +131,7 @@ const EnhancedCheckoutPage = props => {
       processName={processName}
       pageData={pageData}
       listingTitle={listingTitle}
+      listing={listing}
       title={title}
       onInquiryWithoutPayment={onInquiryWithoutPayment}
       onSubmitCallback={onSubmitCallback}
@@ -147,6 +148,7 @@ const EnhancedCheckoutPage = props => {
       pageData={pageData}
       setPageData={setPageData}
       listingTitle={listingTitle}
+      listing={listing}
       title={title}
       onSubmitCallback={onSubmitCallback}
       {...props}

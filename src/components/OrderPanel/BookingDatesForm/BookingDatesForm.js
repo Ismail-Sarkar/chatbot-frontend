@@ -508,6 +508,7 @@ export const BookingDatesFormComponent = props => {
           fetchLineItemsError,
           onFetchTimeSlots,
           form,
+          listing,
           userNativeLang,
         } = fieldRenderProps;
 
@@ -893,7 +894,6 @@ export const BookingDatesFormComponent = props => {
               isDayBlocked={day => {
                 const monthlyTimeSlots = props.monthlyTimeSlots;
                 const key = moment(day)?.format('YYYY-MM');
-                console.log(121, moment(day).format(), key);
                 const matchedData = monthlyTimeSlots[key]?.timeSlots;
                 const dataMatchedArray = matchedData?.filter(
                   slot =>
@@ -1003,6 +1003,7 @@ export const BookingDatesFormComponent = props => {
                 <EstimatedCustomerBreakdownMaybe
                   breakdownData={breakdownData}
                   lineItems={lineItems}
+                  listing={listing}
                   timeZone={timeZone}
                   currency={unitPrice.currency}
                   marketplaceName={marketplaceName}

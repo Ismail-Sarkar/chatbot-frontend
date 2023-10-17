@@ -248,8 +248,6 @@ const OrderPanel = props => {
   //   },
   // ];
 
-  console.log(456, extraParkValues);
-
   const publicData = listing?.attributes?.publicData || {};
   const { unitType, transactionProcessAlias = '' } = publicData || {};
   const processName = resolveLatestProcessName(transactionProcessAlias.split('/')[0]);
@@ -390,6 +388,7 @@ const OrderPanel = props => {
             marketplaceCurrency={marketplaceCurrency}
             dayCountAvailableForBooking={dayCountAvailableForBooking}
             listingId={listing.id}
+            listing={listing}
             isOwnListing={isOwnListing}
             monthlyTimeSlots={monthlyTimeSlots}
             onFetchTimeSlots={onFetchTimeSlots}

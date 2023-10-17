@@ -332,7 +332,7 @@ export const CheckoutPageWithPayment = props => {
 
   const { listing, transaction, orderData } = pageData;
   const existingTransaction = ensureTransaction(transaction);
-  const speculatedTransaction = ensureTransaction(speculatedTransactionMaybe, {}, null);
+  const speculatedTransaction = ensureTransaction(speculatedTransactionMaybe, {}, listing);
 
   // If existing transaction has line-items, it has gone through one of the request-payment transitions.
   // Otherwise, we try to rely on speculatedTransaction for order breakdown data.
