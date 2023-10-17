@@ -227,11 +227,11 @@ export const listingFields = [
 
 export const listingTypes = [
   {
-    listingType: 'daily-booking',
-    label: 'Daily booking',
+    listingType: 'adventurely-booking',
+    label: 'Adventurely-booking',
     transactionType: {
-      process: 'default-booking',
-      alias: 'default-booking/release-1',
+      process: 'adventurely-booking',
+      alias: 'adventurely-booking/release-1',
       unitType: 'day',
     },
   },

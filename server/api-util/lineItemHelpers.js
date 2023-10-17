@@ -210,24 +210,25 @@ exports.calculateTotalFromLineItems = lineItems => {
 };
 
 exports.calculateCurrentPayment = lineItems => {
-  const totalPrice = lineItems
-    .filter(item => item.code !== 'line-item/current-pay' && !item.reversal)
-    .reduce((sum, lineItem) => {
+  const totalPrice = lineItems.reduce((sum, lineItem) => {
+    if (lineItem.code !== 'line-item/current-pay' && !lineItem.reversal) {
       const lineTotal = this.calculateLineTotal(lineItem);
       return getAmountAsDecimalJS(lineTotal).add(sum);
-    }, 0);
-  const serviceFee = lineItems.find(
-    item => item.code === 'line-item/service-fee' && !item.reversal
-  );
-  console.log(lineItems, serviceFee);
-  const totalProviderPrice = lineItems
-    .filter(item => item.code !== 'line-item/current-pay' && !item.reversal)
-    .filter(item => item.code !== 'line-item/service-fee' && !item.reversal)
-    .reduce((sum, lineItem) => {
-      const lineTotal = this.calculateLineTotal(lineItem);
+    }
+    return sum;
+  }, 0);
+
+  const totalProviderPrice = lineItems.reduce((sum, item) => {
+    if (
+      item.code !== 'line-item/service-fee' &&
+      item.code !== 'line-item/current-pay' &&
+      !item.reversal
+    ) {
+      const lineTotal = this.calculateLineTotal(item);
       return getAmountAsDecimalJS(lineTotal).add(sum);
-    }, 0);
-  console.log(totalPrice, totalProviderPrice, 458);
+    }
+    return sum;
+  }, 0);
 
   // Get total price as Number (and validate that the conversion is safe)
   const per = totalProviderPrice * 0.9;
@@ -235,7 +236,6 @@ exports.calculateCurrentPayment = lineItems => {
   /* eslint-disable */
   const numericTotalPrice = parseInt(-per);
   const unitPrice = lineItems[0].unitPrice;
-  console.log(totalProviderPrice, ammnt, numericTotalPrice, 4588);
 
   return new Money(numericTotalPrice, unitPrice.currency);
 };
@@ -326,7 +326,6 @@ exports.resolveGuestPrice = (listing, additionalGuest, lineItems) => {
     acc += curr.unitPrice.amount;
     return acc;
   }, 0);
-  console.log(lineItems, basePriceForGuest, 1752);
 
   if (additionalGuest && basePriceForGuest) {
     return new Money(basePriceForGuest, currency);

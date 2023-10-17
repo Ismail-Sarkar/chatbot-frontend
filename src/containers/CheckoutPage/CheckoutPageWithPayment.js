@@ -24,6 +24,8 @@ import {
   hasTransactionPassedPendingPayment,
   processCheckoutWithPayment,
   setOrderPageInitialValues,
+  extraPerkMaybe,
+  additionalGuestMaybe,
 } from './CheckoutPageTransactionHelpers.js';
 import { getErrorMessages } from './ErrorMessages';
 
@@ -88,6 +90,8 @@ const getOrderParams = (pageData, shippingDetails, optionalPaymentParams, config
     ...deliveryMethodMaybe,
     ...quantityMaybe,
     ...bookingDatesMaybe(pageData.orderData?.bookingDates),
+    ...extraPerkMaybe(pageData.orderData?.extraPerk),
+    ...additionalGuestMaybe(pageData.orderData?.additionalGuest),
     ...protectedDataMaybe,
     ...optionalPaymentParams,
   };

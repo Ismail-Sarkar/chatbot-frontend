@@ -20,17 +20,6 @@ const { Money } = sdkTypes;
 
 function LineItemCurrentPayMaybe(props) {
   const { lineItems, transaction, intl, isProvider } = props;
-  const currentPayment = lineItems.find(
-    item => item.code === LINE_ITEM_CURRENT_PAY && !item.reversal
-  );
-  const allFilteredLineItems = lineItems.filter(
-    item => item.code !== LINE_ITEM_SERVICE_FEE && !item.reversal
-  );
-
-  const subTotalAmount = allFilteredLineItems.reduce((acc, curr) => {
-    acc += curr.lineTotal.amount;
-    return acc;
-  }, 0);
 
   const { lineTotal } = serviceFeeLineItem || {};
   const formattedLabel = (label, quantity) =>
@@ -48,8 +37,6 @@ function LineItemCurrentPayMaybe(props) {
       ),
     },
   ];
-
-  console.log(serviceFeeLineItem, subTotalAmount);
 
   const totalPrice = isProvider
     ? transaction.attributes.payoutTotal

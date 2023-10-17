@@ -21,7 +21,7 @@ import {
   stringifyDateToISO8601,
 } from '../../../util/dates';
 import { LINE_ITEM_DAY, LINE_ITEM_NIGHT, TIME_SLOT_TIME, propTypes } from '../../../util/types';
-import { BOOKING_PROCESS_NAME } from '../../../transactions/transaction';
+import { ADVENTURELY_PROCESS_NAME, BOOKING_PROCESS_NAME } from '../../../transactions/transaction';
 
 import {
   Form,
@@ -247,7 +247,6 @@ const isDayBlockedFn = (
   const endOfAvailableRange = dayCountAvailableForBooking - 1;
   const outOfBookableDate = getStartOf(TODAY, 'day', timeZone, endOfAvailableRange + 1, 'days');
   const timeSlotsOnSelectedMonth = pickMonthlyTimeSlots(monthlyTimeSlots, startDate, timeZone);
-  console.log(678, timeZone, timeSlotsOnSelectedMonth);
 
   // Start date selected/focused, end date missing
   const startDateSelected = isStartDateSelected(
@@ -356,7 +355,6 @@ const handleMonthClick = (
 // focus on that input, otherwise continue with the
 // default handleSubmit function.
 const handleFormSubmit = (setFocusedInput, onSubmit) => e => {
-  console.log('e', e);
   const { startDate, endDate } = e.bookingDates || {};
   if (!startDate) {
     e.preventDefault();
@@ -389,15 +387,6 @@ const handleFormSpyChange = (
   const { startDate, endDate } =
     formValues.values && formValues.values.bookingDates ? formValues.values.bookingDates : {};
   const { additionalGuest, extraPerk } = formValues.values || {};
-  console.log(
-    formValues,
-    // startDate && endDate && additionalGuest && isArray(extraPerk),
-    startDate,
-    endDate,
-    additionalGuest,
-    isArray(extraPerk),
-    254
-  );
 
   if (
     startDate &&
@@ -487,8 +476,6 @@ export const BookingDatesFormComponent = props => {
     ...rest
   } = props;
 
-  console.log('slots', monthlyTimeSlots);
-
   const classes = classNames(rootClassName || css.root, className);
 
   const onFormSubmit = handleFormSubmit(setFocusedInput, onSubmit);
@@ -523,7 +510,6 @@ export const BookingDatesFormComponent = props => {
         } = fieldRenderProps;
 
         const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
-        console.log(34567, startDate, endDate);
         const startDateErrorMessage = intl.formatMessage({
           id: 'FieldDateRangeInput.invalidStartDate',
         });
@@ -634,8 +620,6 @@ export const BookingDatesFormComponent = props => {
             });
           });
         };
-
-        console.log(111, props.monthlyTimeSlots);
 
         return (
           <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
@@ -1020,7 +1004,7 @@ export const BookingDatesFormComponent = props => {
                   timeZone={timeZone}
                   currency={unitPrice.currency}
                   marketplaceName={marketplaceName}
-                  processName={BOOKING_PROCESS_NAME}
+                  processName={ADVENTURELY_PROCESS_NAME}
                 />
               </div>
             ) : null}

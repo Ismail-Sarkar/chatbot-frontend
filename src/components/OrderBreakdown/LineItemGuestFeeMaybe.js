@@ -29,7 +29,6 @@ function LineItemGuestFeeMaybe(props) {
 
   const { lineTotal, unitPrice } = customItem || {};
   const totalUnit = lineTotal && lineTotal.amount / unitPrice.amount;
-  console.log(lineTotal, unitPrice, totalUnit, customItem, 2056);
   const formattedLabel = (label, quantity) =>
     quantity && quantity > 0
       ? `${humanizeLineItemCode(label)} x ${quantity}`

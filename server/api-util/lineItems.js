@@ -126,7 +126,6 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
 
   const { extraPerk = [], additionalGuest = 0 } = orderData || {};
   const hasExtraPerk = (isArray(extraPerk) && extraPerk.length) || false;
-  console.log(hasExtraPerk, 1234);
 
   /**
    * Pricing starts with order's base price:
@@ -194,8 +193,6 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
       }))
     : [];
 
-  console.log(order, extraPerkFees);
-
   const guestFees =
     additionalGuest > 0
       ? [
@@ -253,8 +250,6 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
       includeFor: ['provider', 'customer'],
     },
   ];
-
-  console.log(currentPayment, 4588);
 
   // Let's keep the base price (order) as first line item and provider's commission as last one.
   // Note: the order matters only if OrderBreakdown component doesn't recognize line-item.

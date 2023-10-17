@@ -153,6 +153,8 @@ export const handleSubmit = parameters => values => {
     bookingEndDate, // not relevant (omit)
     quantity: quantityRaw,
     deliveryMethod,
+    additionalGuest,
+    extraPerk,
     ...otherOrderData
   } = values;
 
@@ -182,6 +184,8 @@ export const handleSubmit = parameters => values => {
       ...quantityMaybe,
       ...deliveryMethodMaybe,
       ...otherOrderData,
+      ...(additionalGuest ? { additionalGuest } : {}),
+      ...(extraPerk ? { extraPerk } : {}),
     },
     confirmPaymentError: null,
   };
