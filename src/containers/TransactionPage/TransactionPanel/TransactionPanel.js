@@ -272,6 +272,12 @@ export class TransactionPanelComponent extends Component {
               </div>
             ) : null}
 
+            <div className={css.msgDiv}>
+              <p>
+              <FormattedMessage id="Transactionpanel.bookingMessage" />
+              </p>
+            </div>
+
             <FeedSection
               rootClassName={css.feedContainer}
               hasMessages={messages.length > 0}
