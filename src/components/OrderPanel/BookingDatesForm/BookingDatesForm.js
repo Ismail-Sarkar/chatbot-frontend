@@ -898,8 +898,7 @@ export const BookingDatesFormComponent = props => {
                 const dataMatchedArray = matchedData?.filter(
                   slot =>
                     moment(day).isBetween(slot.attributes.start, slot.attributes.end, 'day') ||
-                    moment(day).isSame(slot.attributes.start, 'day') ||
-                    moment(day).isSame(slot.attributes.end, 'day')
+                    moment(day).isSame(slot.attributes.start, 'day')
                 );
                 if (dataMatchedArray?.length > 0) {
                   return false;
