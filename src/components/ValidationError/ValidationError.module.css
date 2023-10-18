@@ -2,24 +2,36 @@
 
 .root {
   composes: h4 from global;
-  margin-top: 6px;
+  margin-top: 5px;
   margin-bottom: 0;
   color: var(--colorFail);
   overflow: hidden;
   font-size: 13px;
-
+  line-height:inherit;
+/* 
   @media (--viewportMedium) {
     margin-top: 8px;
-  }
+  } */
 }
 .mannualAddressCheckbox {
   display: flex;
-  justify-content: center;
+  /* justify-content:space-between; */
   align-items: center;
-  & div {
-    flex-basis: 90%;
+   & div {
+    /* flex-basis: 90%; */
   }
-  & input {
-    flex-basis: 10%;
+   & input {
+    border: 0 !important;
+    /* flex-basis: 10%; */
+    /* width: auto !important; */
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    margin-left:5px;
+    margin-top: 5px;
+    &:focus{
+      border: 0 !important;
+      box-shadow:none !important;
+    }
   }
 }

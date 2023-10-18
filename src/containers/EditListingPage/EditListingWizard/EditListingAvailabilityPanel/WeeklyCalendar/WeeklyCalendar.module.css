@@ -42,6 +42,9 @@
 }
 .weekPicker {
   color: var(--colorGrey700);
+  & > div{
+    background-color: #fc334d !important;
+  }
 }
 
 .weekRange {

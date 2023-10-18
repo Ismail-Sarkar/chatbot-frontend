@@ -1025,6 +1025,7 @@ export const BookingDatesFormComponent = props => {
 
             <FieldTextInput
               type="text"
+              className={css.GuestContainer}
               name="additionalGuest"
               id="additionalGuest"
               isDayBlocked={isDayBlocked}

@@ -133,6 +133,17 @@ export const EditListingLocationFormComponent = props => (
             </p>
           ) : null}
 
+
+         <FieldTextInput
+            className={css.building}
+            type="text"
+            name="building"
+            id={`${formId}building`}
+            label={intl.formatMessage({ id: 'EditListingLocationForm.building' }, { optionalText })}
+            placeholder={intl.formatMessage({
+              id: 'EditListingLocationForm.buildingPlaceholder',
+            })}
+          />
           <FieldLocationAutocompleteInput
             rootClassName={css.locationAddress}
             inputClassName={css.locationAutocompleteInput}
@@ -160,16 +171,7 @@ export const EditListingLocationFormComponent = props => (
             handlecityStateCountryName={handlecityStateCountryName}
           />
 
-          <FieldTextInput
-            className={css.building}
-            type="text"
-            name="building"
-            id={`${formId}building`}
-            label={intl.formatMessage({ id: 'EditListingLocationForm.building' }, { optionalText })}
-            placeholder={intl.formatMessage({
-              id: 'EditListingLocationForm.buildingPlaceholder',
-            })}
-          />
+
           {manualAddressState && (
             <div>
               <span className={css.manualAddress}>

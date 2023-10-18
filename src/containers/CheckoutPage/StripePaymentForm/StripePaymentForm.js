@@ -650,7 +650,7 @@ class StripePaymentForm extends Component {
             <Heading as="h3" rootClassName={css.heading}>
               <FormattedMessage id="StripePaymentForm.messageHeading" />
             </Heading>
-            <p>
+            <p className={css.bookingMsg}>
               <FormattedMessage id="StripePaymentForm.bookingMessage" />
             </p>
             {/* 

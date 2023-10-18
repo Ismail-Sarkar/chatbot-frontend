@@ -32,7 +32,7 @@ const ValidationError = props => {
   return touched && error ? (
     tab === 'location' ? (
       <div className={css.mannualAddressCheckbox}>
-        <div className={classes}>{error}</div>
+        <span className={classes}>{error}</span>
         <input
           type="checkbox"
           id="manualAddress"

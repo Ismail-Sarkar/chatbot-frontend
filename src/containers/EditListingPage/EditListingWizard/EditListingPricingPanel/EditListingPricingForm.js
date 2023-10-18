@@ -271,7 +271,7 @@ export const EditListingPricingFormComponent = props => (
               />
             </div>
           </div>
-          <div className={css.optionalPerkFee}>Guests</div>
+          <div className={classNames(css.optionalPerkFee,css.GuestOption)}>Guests</div>
           <FieldTextInput
             className={css.guests}
             type="number"

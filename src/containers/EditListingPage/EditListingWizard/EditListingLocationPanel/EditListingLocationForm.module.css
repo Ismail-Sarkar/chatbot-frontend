@@ -48,11 +48,11 @@
 .locationAddress,
 .building {
   flex-shrink: 0;
-  margin-bottom: 24px;
-
-  @media (--viewportMedium) {
+  margin-bottom: 20px;
+  /* margin-top:10px; */
+  /* @media (--viewportMedium) {
     margin-bottom: 32px;
-  }
+  } */
 }
 
 .submitButton {
@@ -62,9 +62,12 @@
   @media (--viewportLarge) {
     display: inline-block;
     width: 241px;
-    margin-top: 100px;
+    margin-top: 60px;
   }
 }
 .manualAddress {
   margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 700;
 }
