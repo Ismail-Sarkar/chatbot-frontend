@@ -25,6 +25,7 @@ import {
 import css from './EditListingPricingForm.module.css';
 import { useState } from 'react';
 import { useConfiguration } from '../../../../context/configurationContext';
+import CustomPriceInput from '../../../../components/CustomPriceInput/CustomPriceInput';
 
 const { Money } = sdkTypes;
 
@@ -74,6 +75,7 @@ export const EditListingPricingFormComponent = props => (
         disabled,
         ready,
         handleSubmit,
+        initialValues,
         prefferedPaymentMethod,
         paymentMethodValues,
         onPrefferedPaymentMethodChange,
@@ -220,12 +222,12 @@ export const EditListingPricingFormComponent = props => (
                   form.change('perkNameOne', perkNameOne);
                   console.log(234, values.perkNameOne, perkNameOne);
                   if (perkNameOne === '') {
-                    // form.change('perkNameOnePrice', undefined);
+                    form.change('perkNameOnePrice', undefined);
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
                   }
                 }}
               />
-              <FieldCurrencyInput
+              {/* <FieldCurrencyInput
                 id="perkNameOnePrice"
                 name="perkNameOnePrice"
                 placeholder={values.perkNameOne !== undefined ? 'Price*' : 'price'}
@@ -234,6 +236,15 @@ export const EditListingPricingFormComponent = props => (
                 validate={perkPriceValidators(values.perkNameOne)}
                 // perkValueRef={perkValueRef.current}
                 // perkPriceValue={perkPriceValue}
+              /> */}
+              <CustomPriceInput
+                idNameField="perkNameOnePrice"
+                valueField="perkNameOnePriceVal"
+                form={form}
+                currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
+                initialPriceValue={initialValues?.perkNameOnePrice}
+                priceVal={values?.perkNameOnePrice}
+                values={values}
               />
             </div>
             <div className={css.perksField}>
@@ -271,7 +282,7 @@ export const EditListingPricingFormComponent = props => (
               />
             </div>
           </div>
-          <div className={classNames(css.optionalPerkFee,css.GuestOption)}>Guests</div>
+          <div className={classNames(css.optionalPerkFee, css.GuestOption)}>Guests</div>
           <FieldTextInput
             className={css.guests}
             type="number"
