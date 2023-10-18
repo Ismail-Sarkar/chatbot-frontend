@@ -625,9 +625,15 @@ export const BookingDatesFormComponent = props => {
           form.batch(() => {
             // form.change('selectedbookingDates', { date: value.date, endDate: value.date });
             form.change('bookingDates', {
-              startDate: value.date,
+              startDate: new Date(
+                moment(value.date)
+                  .clone()
+                  .startOf('day')
+              ),
               endDate: new Date(
                 moment(value.date)
+                  .clone()
+                  .startOf('day')
                   .add(1, 'days')
                   .format()
               ),

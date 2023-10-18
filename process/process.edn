@@ -8,7 +8,7 @@
    :actor :actor.role/customer,
    :actions
    [{:name :action/update-protected-data}
-    {:name :action/create-pending-booking, :config {:type :time}}
+    {:name :action/create-pending-booking, :config {:observe-availability? true,:type :time}}
     {:name :action/privileged-set-line-items}
     ;; {:name :action/stripe-create-payment-intent}
     ],
@@ -18,7 +18,7 @@
    :actor :actor.role/customer,
    :actions
    [{:name :action/update-protected-data}
-    {:name :action/create-pending-booking, :config {:type :time}}
+    {:name :action/create-pending-booking, :config {:observe-availability? true,:type :time}}
     {:name :action/privileged-set-line-items}
     ;; {:name :action/stripe-create-payment-intent}
     ],
