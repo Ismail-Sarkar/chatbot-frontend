@@ -6,6 +6,7 @@ import classNames from 'classnames';
 
 import { FormattedMessage, intlShape, injectIntl } from '../../../util/reactIntl';
 import { required, bookingDatesRequired, composeValidators } from '../../../util/validators';
+import * as validators from '../../../util/validators';
 import {
   START_DATE,
   END_DATE,
@@ -382,11 +383,14 @@ const handleFormSpyChange = (
   listingId,
   isOwnListing,
   fetchLineItemsInProgress,
-  onFetchTransactionLineItems
+  onFetchTransactionLineItems,
+  guestMaxForListing
 ) => formValues => {
   const { startDate, endDate } =
     formValues.values && formValues.values.bookingDates ? formValues.values.bookingDates : {};
   const { additionalGuest, extraPerk } = formValues.values || {};
+
+  console.log(additionalGuest, guestMaxForListing, 332);
 
   if (
     startDate &&
@@ -394,13 +398,19 @@ const handleFormSpyChange = (
     // additionalGuest &&
     // isArray(extraPerk) &&
     // extraPerk.length &&
+
     !fetchLineItemsInProgress
   ) {
     onFetchTransactionLineItems({
       orderData: {
         bookingStart: startDate,
         bookingEnd: endDate,
-        additionalGuest,
+        additionalGuest:
+          additionalGuest > 0
+            ? parseInt(additionalGuest) <= parseInt(guestMaxForListing)
+              ? additionalGuest
+              : guestMaxForListing
+            : 0,
         extraPerk,
       },
       listingId,
@@ -442,7 +452,7 @@ export const BookingDatesFormComponent = props => {
   const [currentMonth, setCurrentMonth] = useState(getStartOf(TODAY, 'month', props.timeZone));
   const [extraPerk, setExtraPerk] = useState([]);
 
-  const { extraParkValues } = props;
+  const { extraParkValues, guestMaxForListing } = props;
 
   const handleSetExtraPerk = val => {
     setExtraPerk(val);
@@ -486,7 +496,8 @@ export const BookingDatesFormComponent = props => {
     listingId,
     isOwnListing,
     fetchLineItemsInProgress,
-    onFetchTransactionLineItems
+    onFetchTransactionLineItems,
+    guestMaxForListing
   );
 
   return (
@@ -623,6 +634,35 @@ export const BookingDatesFormComponent = props => {
             });
           });
         };
+
+        // const validateGuestInput = (value => {
+        //   const validatedNumber = value?.replace(/[^0-9\.]/, '');
+        //   console.log(
+        //     'validatedNumber.......',
+        //     validatedNumber,
+        //     guestMaxForListing,
+        //     validatedNumber > guestMaxForListing
+        //   );
+        //   if (guestMaxForListing) {
+        //     return validatedNumber > guestMaxForListing;
+        //   } else {
+        //     return true;
+        //   }
+        // };
+
+        const handleAdditionalGuestChange = e => {
+          const updatedTargetValue = e.target.value.replace(/[^0-9\.]/, '');
+          if (updatedTargetValue === '') form.change('additionalGuest', undefined);
+          else form.change('additionalGuest', updatedTargetValue);
+        };
+        const validateGuestInput = validators.validateGuestInput(
+          guestMaxForListing,
+          `*${guestMaxForListing} maximum ${
+            guestMaxForListing > 1 ? 'guests' : 'guest'
+          } can be added`
+        );
+
+        console.log(334, values);
 
         return (
           <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
@@ -984,14 +1024,15 @@ export const BookingDatesFormComponent = props => {
             )}
 
             <FieldTextInput
-              type="number"
+              type="text"
               name="additionalGuest"
               id="additionalGuest"
               isDayBlocked={isDayBlocked}
               // isOutsideRange={isOutsideRange}
               label="Additional Guests"
               placeholder={'Enter additional guests'}
-              // validate={required}
+              onChange={handleAdditionalGuestChange}
+              validate={validateGuestInput}
               // className={css.nameFields}
             />
 
@@ -1019,7 +1060,11 @@ export const BookingDatesFormComponent = props => {
             ) : null}
 
             <div className={css.submitButton}>
-              <PrimaryButton type="submit" inProgress={fetchLineItemsInProgress}>
+              <PrimaryButton
+                type="submit"
+                inProgress={fetchLineItemsInProgress}
+                disabled={parseInt(values?.additionalGuest) > parseInt(guestMaxForListing)}
+              >
                 <FormattedMessage id="BookingDatesForm.requestToBook" />
               </PrimaryButton>
             </div>

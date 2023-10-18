@@ -399,6 +399,7 @@ const OrderPanel = props => {
             fetchLineItemsInProgress={fetchLineItemsInProgress}
             fetchLineItemsError={fetchLineItemsError}
             extraParkValues={extraParkValues}
+            guestMaxForListing={listing?.attributes?.publicData?.guests || 0}
           />
         ) : showProductOrderForm ? (
           <ProductOrderForm
