@@ -898,8 +898,7 @@ export const BookingDatesFormComponent = props => {
                 const dataMatchedArray = matchedData?.filter(
                   slot =>
                     moment(day).isBetween(slot.attributes.start, slot.attributes.end, 'day') ||
-                    moment(day).isSame(slot.attributes.start, 'day') ||
-                    moment(day).isSame(slot.attributes.end, 'day')
+                    moment(day).isSame(slot.attributes.start, 'day')
                 );
                 if (dataMatchedArray?.length > 0) {
                   return false;
@@ -969,18 +968,20 @@ export const BookingDatesFormComponent = props => {
                 setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
               }
             />
-            <div className={css.muiselectcontainer}>
-              <MuiMultiSelect
-                value={extraPerk}
-                setValue={val => {
-                  handleSetExtraPerk(val);
-                  form.change('extraPerk', val);
-                }}
-                datas={extraParkValues}
-                placeholdertext={'Add extra perk'}
-                label={'Add extra perks?'}
-              />
-            </div>
+            {extraParkValues.length > 0 && (
+              <div className={css.muiselectcontainer}>
+                <MuiMultiSelect
+                  value={extraPerk}
+                  setValue={val => {
+                    handleSetExtraPerk(val);
+                    form.change('extraPerk', val);
+                  }}
+                  datas={extraParkValues}
+                  placeholdertext={'Add extra perk'}
+                  label={'Add extra perks?'}
+                />
+              </div>
+            )}
 
             <FieldTextInput
               type="number"

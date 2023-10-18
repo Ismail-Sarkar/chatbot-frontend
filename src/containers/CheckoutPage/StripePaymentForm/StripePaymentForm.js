@@ -227,23 +227,38 @@ const LocationOrShippingDetails = props => {
     : listingLocation?.address
     ? listingLocation.address
     : intl.formatMessage({ id: 'StripePaymentForm.locationUnknown' });
-  return askShippingDetails ? (
-    <ShippingDetails intl={intl} formApi={formApi} locale={locale} />
-  ) : !isBooking && showPickUplocation ? (
-    <div className={css.locationWrapper}>
-      <Heading as="h3" rootClassName={css.heading}>
-        <FormattedMessage id="StripePaymentForm.pickupDetailsTitle" />
-      </Heading>
-      <p className={css.locationDetails}>{locationDetails}</p>
-    </div>
-  ) : isBooking && !isFuzzyLocation ? (
+  return manualAddress ? (
     <div className={css.locationWrapper}>
       <Heading as="h3" rootClassName={css.heading}>
         <FormattedMessage id="StripePaymentForm.locationDetailsTitle" />
       </Heading>
       <p className={css.locationDetails}>{fullManualAddress?.street}</p>
     </div>
-  ) : null;
+  ) : (
+    <div className={css.locationWrapper}>
+      <Heading as="h3" rootClassName={css.heading}>
+        <FormattedMessage id="StripePaymentForm.locationDetailsTitle" />
+      </Heading>
+      <p className={css.locationDetails}>{locationDetails}</p>
+    </div>
+  );
+  // askShippingDetails ? (
+  //   <ShippingDetails intl={intl} formApi={formApi} locale={locale} />
+  // ) : !isBooking && showPickUplocation ? (
+  //   <div className={css.locationWrapper}>
+  //     <Heading as="h3" rootClassName={css.heading}>
+  //       <FormattedMessage id="StripePaymentForm.pickupDetailsTitle" />
+  //     </Heading>
+  //     <p className={css.locationDetails}>{locationDetails}</p>
+  //   </div>
+  // ) : isBooking && !isFuzzyLocation ? (
+  //   <div className={css.locationWrapper}>
+  //     <Heading as="h3" rootClassName={css.heading}>
+  //       <FormattedMessage id="StripePaymentForm.locationDetailsTitle" />
+  //     </Heading>
+  //     <p className={css.locationDetails}>{fullManualAddress?.street}</p>
+  //   </div>
+  // ) : null;
 };
 
 const initialState = {
