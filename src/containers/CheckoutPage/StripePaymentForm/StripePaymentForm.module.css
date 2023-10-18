@@ -97,7 +97,7 @@
 }
 
 .billingDetails {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .sameAddressCheckbox {
@@ -158,3 +158,10 @@
   color: var(--colorFail);
 }
 .msgDiv{}
+.bookingMsg{
+  font-size:14px;
+  line-height:20px;
+  color: #000;
+  margin: 6px 0;
+  padding: 0;
+}

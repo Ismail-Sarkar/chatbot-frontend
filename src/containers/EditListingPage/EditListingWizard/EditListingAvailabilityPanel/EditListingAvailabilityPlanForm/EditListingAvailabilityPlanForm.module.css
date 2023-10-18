@@ -34,7 +34,14 @@
     padding-right: 60px;
   }
 }
-
+.submitButton{
+  & > button{
+    background-color:#000;
+    &:hover,&:focus{
+    background-color:#000 !important;
+    }
+  }
+}
 .subheading {
   margin: 0 0 6px 0;
   padding-top: 19px;

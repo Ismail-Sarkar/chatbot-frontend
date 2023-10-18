@@ -984,6 +984,7 @@ export const BookingDatesFormComponent = props => {
 
             <FieldTextInput
               type="number"
+              className={css.GuestContainer}
               name="additionalGuest"
               id="additionalGuest"
               isDayBlocked={isDayBlocked}

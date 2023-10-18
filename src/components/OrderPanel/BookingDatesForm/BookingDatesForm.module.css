@@ -8,6 +8,8 @@
 .bookingBreakdownTitle {
   letter-spacing: 1px;
   font-weight: var(--fontWeightMedium);
+  font-size:18px;
+  line-height:26px;
 }
 
 .totalDivider {
@@ -37,7 +39,7 @@
 
   @media (--viewportMedium) {
     padding: 0;
-    margin-top: 40px;
+    margin-top: 20px;
   }
 }
 
@@ -72,7 +74,8 @@
   }
   & button {
     background: #000;
-    &:hover{
+    &:hover,
+    &:focus{
       background: #000 !important;
     }
   }
@@ -86,6 +89,11 @@
 .muiselectcontainer {
   & > div {
     width: 100% !important;
+    & > div{
+      & > div{
+        padding:2px !important;
+      }
+    }
   }
   & input {
     &:focus,
@@ -96,4 +104,8 @@
       transition: none;
     }
   }
+  padding-top:10px;
+}
+.GuestContainer{
+  padding-top:10px;
 }

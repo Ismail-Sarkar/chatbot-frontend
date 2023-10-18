@@ -54,6 +54,10 @@
   & :global(.DayPickerNavigation_button) {
     color: var(--colorGrey700);
     border: 0;
+    & > svg{
+      stroke: #fff;
+      fill: #fff;
+    }
   }
 
   & :global(.CalendarMonth),
@@ -71,7 +75,7 @@
     font-size: 14px;
     line-height: 18px;
     letter-spacing: 0;
-
+    color:#fff;
     margin-top: 0;
     margin-bottom: 0;
 
@@ -87,7 +91,7 @@
   }
 
   & :global(.CalendarMonth_caption) {
-    color: var(--colorGrey700);
+    color:#fff;
     font-weight: var(--fontWeightRegular);
     font-size: 18px;
     line-height: 20px;
@@ -120,7 +124,7 @@
     line-height: 24px;
     letter-spacing: 0;
 
-    color: var(--colorGrey700);
+    color:#ff0000;
     border: 0;
     margin-top: 0;
     margin-bottom: 0;
@@ -129,6 +133,9 @@
       font-weight: var(--fontWeightMedium);
       margin-top: 0;
       margin-bottom: 0;
+    }
+    &:hover{
+      background-color: rgb(255 255 255 / 40%);
     }
   }
 
@@ -139,8 +146,8 @@
     align-items: center;
     width: 100%;
     height: var(--DateRangeController_selectionHeight);
-    background-image: url("data:image/svg+xml;utf8,<svg width='14' height='2' viewBox='0 0 14 2' xmlns='http://www.w3.org/2000/svg'><path d='M0 0h14v2H0z' fill='%234A4A4A' fill-rule='evenodd'/></svg>");
-    background-position: center 28px;
+    /* background-image: url("data:image/svg+xml;utf8,<svg width='14' height='2' viewBox='0 0 14 2' xmlns='http://www.w3.org/2000/svg'><path d='M0 0h14v2H0z' fill='%234A4A4A' fill-rule='evenodd'/></svg>");
+    background-position: center 28px; */
   }
 
   & :global(.CalendarDay__today.CalendarDay__selected .renderedDay) {
@@ -153,7 +160,7 @@
     align-items: center;
     width: 100%;
     height: var(--DateRangeController_selectionHeight);
-    background-color: var(--colorGrey100);
+    background-color:rgb(255 255 255 / 40%);
     color: var(--colorGrey700);
   }
 
@@ -163,21 +170,21 @@
     background-image: transparent;
     background-color: transparent;
   }
-  & :global(.CalendarDay__hovered_span .renderedDay),
-  & :global(.CalendarDay__selected_span .renderedDay),
-  & :global(.CalendarDay__hovered_span:hover .renderedDay),
-  & :global(.CalendarDay__selected_span:hover .renderedDay) {
+  /* & :global(.CalendarDay__hovered_span .renderedDay), */
+  & :global(.CalendarDay__selected_span .renderedDay){
+  /* & :global(.CalendarDay__hovered_span:hover .renderedDay), */
+  /* & :global(.CalendarDay__selected_span:hover .renderedDay) { */
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: var(--DateRangeController_selectionHeight);
-    background-color: var(--colorSuccess);
-    color: var(--colorWhite);
+    background-color:#fff;
+    color:#000;
   }
 
   & :global(.CalendarDay__hovered_offset) {
-    background-color: var(--colorGrey100);
+    /* background-color: var(--colorGrey100); */
   }
 
   /* Remove default bg-color and use our extra span instead '.renderedDay' */
@@ -191,10 +198,10 @@
     align-items: center;
     width: 100%;
     height: var(--DateRangeController_selectionHeight);
-    background-color: var(--colorSuccess);
-    color: var(--colorWhite);
-    border-top-left-radius: calc(var(--DateRangeController_selectionHeight) / 2);
-    border-bottom-left-radius: calc(var(--DateRangeController_selectionHeight) / 2);
+    /* background-color: var(--colorSuccess);
+    color: var(--colorWhite); */
+    /* border-top-left-radius: calc(var(--DateRangeController_selectionHeight) / 2);
+    border-bottom-left-radius: calc(var(--DateRangeController_selectionHeight) / 2); */
   }
 
   /* Remove default bg-color and use our extra span instead '.renderedDay' */
@@ -207,7 +214,7 @@
     align-items: center;
     width: 100%;
     height: var(--DateRangeController_selectionHeight);
-    background-color: var(--colorSuccess);
+    /* background-color: var(--colorSuccess); */
     color: var(--colorWhite);
     border-top-right-radius: calc(var(--DateRangeController_selectionHeight) / 2);
     border-bottom-right-radius: calc(var(--DateRangeController_selectionHeight) / 2);
@@ -219,9 +226,10 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: var(--DateRangeController_selectionHeight);
-    background-color: var(--colorSuccess);
-    color: var(--colorWhite);
+    /* height: var(--DateRangeController_selectionHeight); */
+    /* background-color:#fff; */
+
+    color:#000;
   }
 
   & :global(.CalendarDay__selected_span .renderedDay) {
@@ -230,8 +238,8 @@
     align-items: center;
     width: 100%;
     height: var(--DateRangeController_selectionHeight);
-    background-color: var(--colorSuccess);
-    color: var(--colorWhite);
+    /* background-color: var(--colorSuccess);
+    color: var(--colorWhite); */
     transition: all 0.2s ease-out;
   }
 
@@ -239,7 +247,7 @@
   & :global(.CalendarDay__blocked_out_of_range .renderedDay),
   & :global(.CalendarDay__blocked_out_of_range:hover .renderedDay) {
     background-color: transparent;
-    color: var(--colorGrey300);
+    color:#ff0000;
     text-decoration: line-through;
     border: 0;
   }
