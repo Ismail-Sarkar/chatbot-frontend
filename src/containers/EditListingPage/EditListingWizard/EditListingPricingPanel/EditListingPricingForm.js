@@ -309,7 +309,7 @@ export const EditListingPricingFormComponent = props => (
                   const perkNameThree = e.target.value;
                   form.change('perkNameThree', perkNameThree);
                   console.log(234, values.perkNameThree, perkNameThree);
-                  if (perkNameOne === '') {
+                  if (perkNameThree === '') {
                     form.change('perkNameThreePrice', undefined);
                     form.change('perkNameThreePriceVal', undefined);
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
