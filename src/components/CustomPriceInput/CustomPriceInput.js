@@ -17,12 +17,14 @@ function CustomPriceInput(props) {
     placeholder,
     disabled,
     validate,
+    formatedshippingCharge,
+    setFormatedShippingCharge,
     // perkPriceValidators,
     // correspondingPerkName,
   } = props;
   const { Money } = sdkTypes;
   // const [formatedPrice, setFormatedPrice] = useState(null);
-  const [formatedshippingCharge, setFormatedShippingCharge] = useState(null);
+  // const [formatedshippingCharge, setFormatedShippingCharge] = useState(null);
   const [fieldActive, setFieldActive] = useState({});
 
   useEffect(() => {
@@ -38,6 +40,8 @@ function CustomPriceInput(props) {
       // console.log('first');
       if (isNumber(initialshippingCharge)) {
         form.change(idNameField, `$${Math.round(initialshippingCharge / 100)}.00`);
+        form.change(valueField, priceVal);
+
         setFormatedShippingCharge(Math.round(initialshippingCharge / 100));
       }
     }

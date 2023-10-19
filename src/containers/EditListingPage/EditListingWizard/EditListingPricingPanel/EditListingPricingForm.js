@@ -97,6 +97,10 @@ export const EditListingPricingFormComponent = props => (
       // console.log(3, listingMinimumPriceSubUnits);
       const PERK_MAX_LENGTH = 70;
 
+      const [formatedPerkNameOnePrice, setFormatedPerkNameOnePrice] = useState(null);
+      const [formatedPerkNameTwoPrice, setFormatedPerkNameTwoPrice] = useState(null);
+      const [formatedPerkNameThreePrice, setFormatedPerkNameThreePrice] = useState(null);
+
       const priceValidators = getPriceValidators(
         listingMinimumPriceSubUnits,
 
@@ -249,6 +253,8 @@ export const EditListingPricingFormComponent = props => (
                 placeholder="Price"
                 disabled={values.perkNameOne ? false : true}
                 validate={perkPriceValidators(values.perkNameOne)}
+                formatedshippingCharge={formatedPerkNameOnePrice}
+                setFormatedShippingCharge={setFormatedPerkNameOnePrice}
               />
             </div>
             <div className={css.perksField}>
@@ -288,6 +294,8 @@ export const EditListingPricingFormComponent = props => (
                 placeholder="Price"
                 disabled={values.perkNameTwo ? false : true}
                 validate={perkPriceValidators(values.perkNameTwo)}
+                formatedshippingCharge={formatedPerkNameTwoPrice}
+                setFormatedShippingCharge={setFormatedPerkNameTwoPrice}
               />
             </div>
             <div className={css.perksField}>
@@ -327,6 +335,8 @@ export const EditListingPricingFormComponent = props => (
                 placeholder="Price"
                 disabled={values.perkNameThree ? false : true}
                 validate={perkPriceValidators(values.perkNameThree)}
+                formatedshippingCharge={formatedPerkNameThreePrice}
+                setFormatedShippingCharge={setFormatedPerkNameThreePrice}
               />
             </div>
           </div>

@@ -200,7 +200,7 @@ const OrderPanel = props => {
   );
 
   let extraParkValues = [];
-  if (listingPublicData.perkNameOne) {
+  if (listingPublicData.perkNameOne && listingPublicData?.perkNameOnePrice) {
     extraParkValues.push({
       key: `${listingPublicData?.perkNameOne}/${perkNameOnePrice}`,
       label: `${listingPublicData?.perkNameOne}/${perkNameOnePrice}`,
@@ -209,7 +209,7 @@ const OrderPanel = props => {
       ),
     });
   }
-  if (listingPublicData.perkNameTwo) {
+  if (listingPublicData.perkNameTwo && listingPublicData?.perkNameTwoPrice) {
     extraParkValues.push({
       key: `${listingPublicData?.perkNameTwo}/${perkNameTwoPrice}`,
       label: `${listingPublicData?.perkNameTwo}/${perkNameTwoPrice}`,
@@ -218,7 +218,7 @@ const OrderPanel = props => {
       ),
     });
   }
-  if (listingPublicData.perkNameThree) {
+  if (listingPublicData.perkNameThree && listingPublicData?.perkNameThreePrice) {
     extraParkValues.push({
       key: `${listingPublicData?.perkNameThree}/${perkNameThreePrice}`,
       label: `${listingPublicData?.perkNameThree}/${perkNameThreePrice}`,
