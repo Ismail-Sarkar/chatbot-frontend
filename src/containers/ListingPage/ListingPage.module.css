@@ -72,6 +72,10 @@
   @media (--viewportLarge) {
     margin: 0 0 24px 0;
   }
+  @media(max-width:767px){
+    margin: 24px 0;
+    width: 100%;
+  }
 }
 
 .actionBarForHeroLayout {
@@ -592,6 +596,10 @@
   @media (--viewportMedium) {
     padding: 5px 0 2px 0;
     line-height: 32px;
+  }
+  @media(max-width:767px){
+    flex-direction:column;
+    justify-content:inherit;
   }
 }
 

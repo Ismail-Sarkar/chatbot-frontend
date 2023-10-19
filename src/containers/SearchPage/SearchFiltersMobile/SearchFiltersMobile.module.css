@@ -56,6 +56,10 @@
   width: 100%;
   padding: 94px 0;
   margin: 0 24px;
+  @media(max-width:575px){
+    padding: 65px 0;
+    margin: 0 15px;
+  }
 }
 
 .modalHeadingWrapper {
@@ -95,6 +99,9 @@
    * under the mobile safari bottom bar or the "Show results"
    * button bar */
   padding-bottom: 220px;
+  @media(max-width:575px){
+    padding-bottom:120px;
+  }
 }
 
 .showListingsContainer {
@@ -114,4 +121,7 @@
   background-color: var(--marketplaceColor);
   display: inline-block;
   border-radius: 3px;
+}
+.SearchMobile{
+  
 }

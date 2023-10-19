@@ -65,4 +65,7 @@
       border-color: transparent;
     }
   }
+  @media(max-width:340px){
+    padding: 0 4px;
+  }
 }

@@ -34,4 +34,7 @@
       box-shadow:none !important;
     }
   }
+  @media(max-width:767px){
+    align-items:baseline;
+  }
 }
