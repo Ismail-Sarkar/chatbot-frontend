@@ -66,8 +66,11 @@
   }
 }
 .manualAddress {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   font-size: 13px;
   line-height: 16px;
   font-weight: 700;
+}
+.AddressDiv{
+ margin-bottom:10px;
 }
