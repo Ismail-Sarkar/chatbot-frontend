@@ -14,23 +14,28 @@ function CustomPriceInput(props) {
     initialPriceValue,
     priceVal,
     values,
+    placeholder,
+    disabled,
+    validate,
+    // perkPriceValidators,
+    // correspondingPerkName,
   } = props;
   const { Money } = sdkTypes;
-  const [formatedPrice, setFormatedPrice] = useState(null);
+  // const [formatedPrice, setFormatedPrice] = useState(null);
   const [formatedshippingCharge, setFormatedShippingCharge] = useState(null);
   const [fieldActive, setFieldActive] = useState({});
 
   useEffect(() => {
-    const initialshippingCharge = initialPriceValue?.amount ? initialPriceValue?.amount : null;
+    // const initialshippingCharge = initialPriceValue?.amount ? initialPriceValue?.amount : null;
+    if (!priceVal) {
+      setFormatedShippingCharge(null);
+    }
+    const initialshippingCharge = priceVal?.amount ? priceVal?.amount : null;
 
     const currentShippingCharge = priceVal?.amount;
-    console.log(
-      787,
-      initialshippingCharge !== formatedshippingCharge,
-      formatedshippingCharge,
-      priceVal
-    );
+
     if (initialshippingCharge !== formatedshippingCharge) {
+      // console.log('first');
       if (isNumber(initialshippingCharge)) {
         form.change(idNameField, `$${Math.round(initialshippingCharge / 100)}.00`);
         setFormatedShippingCharge(Math.round(initialshippingCharge / 100));
@@ -38,15 +43,24 @@ function CustomPriceInput(props) {
     }
   }, [priceVal]);
 
-  console.log(777, initialPriceValue, priceVal, values);
+  // useEffect(() => {
+  //   perkPriceValidators(values.perkNameOne);
+  // }, [values.perkNameOne]);
+
+  // console.log(777, values);
 
   return (
     <div>
+      {/* {console.log(989, values.perkNameOne)} */}
       <FieldTextInput
         id={idNameField}
         name={idNameField}
         type="text"
         label={label}
+        placeholder={placeholder}
+        disabled={disabled}
+        // validate={validate}
+        // validate={perkPriceValidators(correspondingPerkName)}
         // className={classNames(css.inputs, {
         //   [css.invalidInputs]: touched.shippingChargeCustom && !!errors.shippingChargeCustom,
         //   [css.fnNonEmptyInputs]: !!values.shippingChargeCustom || fieldActive.shippingChargeCustom,
@@ -77,6 +91,8 @@ function CustomPriceInput(props) {
             form.change(idNameField, `$${Math.round(e.target.value)}.00`);
           }
           //   setFieldActive({ shippingChargeCustom: false });
+          form.blur(idNameField);
+          form.focus(idNameField);
         }}
       />
     </div>

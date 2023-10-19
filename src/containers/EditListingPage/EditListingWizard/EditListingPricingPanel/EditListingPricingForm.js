@@ -104,7 +104,7 @@ export const EditListingPricingFormComponent = props => (
         intl
       );
       const perkPriceValidators = perkName => {
-        if (perkName === undefined || perkName === '') {
+        if (typeof perkName === 'undefined' || perkName === '') {
           return null;
         }
         return getPriceValidators(1, marketplaceCurrency, intl);
@@ -223,6 +223,7 @@ export const EditListingPricingFormComponent = props => (
                   console.log(234, values.perkNameOne, perkNameOne);
                   if (perkNameOne === '') {
                     form.change('perkNameOnePrice', undefined);
+                    form.change('perkNameOnePriceVal', undefined);
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
                   }
                 }}
@@ -245,6 +246,9 @@ export const EditListingPricingFormComponent = props => (
                 initialPriceValue={initialValues?.perkNameOnePrice}
                 priceVal={values?.perkNameOnePrice}
                 values={values}
+                placeholder="Price"
+                disabled={values.perkNameOne ? false : true}
+                validate={perkPriceValidators(values.perkNameOne)}
               />
             </div>
             <div className={css.perksField}>
@@ -254,12 +258,34 @@ export const EditListingPricingFormComponent = props => (
                 id="perkNameTwo"
                 placeholder="Perk Name"
                 maxLength={PERK_MAX_LENGTH}
+                onChange={e => {
+                  const perkNameTwo = e.target.value;
+                  form.change('perkNameTwo', perkNameTwo);
+                  console.log(234, values.perkNameTwo, perkNameTwo);
+                  if (perkNameTwo === '') {
+                    form.change('perkNameTwoPrice', undefined);
+                    form.change('perkNameTwoPriceVal', undefined);
+                    // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
+                  }
+                }}
               />
-              <FieldCurrencyInput
+              {/* <FieldCurrencyInput
                 id="perkNameTwoPrice"
                 name="perkNameTwoPrice"
                 placeholder={values.perkNameTwo !== undefined ? 'Price*' : 'Price'}
                 currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
+                disabled={values.perkNameTwo ? false : true}
+                validate={perkPriceValidators(values.perkNameTwo)}
+              /> */}
+              <CustomPriceInput
+                idNameField="perkNameTwoPrice"
+                valueField="perkNameTwoPriceVal"
+                form={form}
+                currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
+                initialPriceValue={initialValues?.perkNameTwoPrice}
+                priceVal={values?.perkNameTwoPrice}
+                values={values}
+                placeholder="Price"
                 disabled={values.perkNameTwo ? false : true}
                 validate={perkPriceValidators(values.perkNameTwo)}
               />
@@ -271,12 +297,34 @@ export const EditListingPricingFormComponent = props => (
                 id="perkNameThree"
                 placeholder="Perk Name"
                 maxLength={PERK_MAX_LENGTH}
+                onChange={e => {
+                  const perkNameThree = e.target.value;
+                  form.change('perkNameThree', perkNameThree);
+                  console.log(234, values.perkNameThree, perkNameThree);
+                  if (perkNameOne === '') {
+                    form.change('perkNameThreePrice', undefined);
+                    form.change('perkNameThreePriceVal', undefined);
+                    // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
+                  }
+                }}
               />
-              <FieldCurrencyInput
+              {/* <FieldCurrencyInput
                 id="perkNameThreePrice"
                 name="perkNameThreePrice"
                 placeholder={values.perkNameThree !== undefined ? 'Price*' : 'Price'}
                 currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
+                disabled={values.perkNameThree ? false : true}
+                validate={perkPriceValidators(values.perkNameThree)}
+              /> */}
+              <CustomPriceInput
+                idNameField="perkNameThreePrice"
+                valueField="perkNameThreePriceVal"
+                form={form}
+                currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
+                initialPriceValue={initialValues?.perkNameThreePrice}
+                priceVal={values?.perkNameThreePrice}
+                values={values}
+                placeholder="Price"
                 disabled={values.perkNameThree ? false : true}
                 validate={perkPriceValidators(values.perkNameThree)}
               />

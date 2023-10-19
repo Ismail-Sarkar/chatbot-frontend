@@ -126,11 +126,14 @@ const EditListingPricingPanel = props => {
             const {
               price,
               perkNameOnePrice,
+              perkNameOnePriceVal,
               perkNameOne,
               perkNameTwo,
               perkNameTwoPrice,
+              perkNameTwoPriceVal,
               perkNameThree,
               perkNameThreePrice,
+              perkNameThreePriceVal,
               guests,
               reserVations,
               prefferedPaymentMethod,
@@ -146,16 +149,28 @@ const EditListingPricingPanel = props => {
                   currency: price.currency,
                 },
                 perkNameOne: perkNameOne ? perkNameOne : null,
-                perkNameOnePrice: perkNameOnePrice
-                  ? { amount: perkNameOnePrice.amount, currency: perkNameOnePrice.currency }
+                // perkNameOnePrice: perkNameOnePrice
+                //   ? { amount: perkNameOnePrice.amount, currency: perkNameOnePrice.currency }
+                //   : null,
+                perkNameOnePrice: perkNameOnePriceVal
+                  ? { amount: perkNameOnePriceVal.amount, currency: perkNameOnePriceVal.currency }
                   : null,
                 perkNameTwo: perkNameTwo ? perkNameTwo : null,
-                perkNameTwoPrice: perkNameTwoPrice
-                  ? { amount: perkNameTwoPrice.amount, currency: perkNameTwoPrice.currency }
+                // perkNameTwoPrice: perkNameTwoPrice
+                //   ? { amount: perkNameTwoPrice.amount, currency: perkNameTwoPrice.currency }
+                //   : null,
+                perkNameTwoPrice: perkNameTwoPriceVal
+                  ? { amount: perkNameTwoPriceVal.amount, currency: perkNameTwoPriceVal.currency }
                   : null,
                 perkNameThree: perkNameThree ? perkNameThree : null,
-                perkNameThreePrice: perkNameThreePrice
-                  ? { amount: perkNameThreePrice.amount, currency: perkNameThreePrice.currency }
+                // perkNameThreePrice: perkNameThreePrice
+                //   ? { amount: perkNameThreePrice.amount, currency: perkNameThreePrice.currency }
+                //   : null,
+                perkNameThreePrice: perkNameThreePriceVal
+                  ? {
+                      amount: perkNameThreePriceVal.amount,
+                      currency: perkNameThreePriceVal.currency,
+                    }
                   : null,
                 guests: guests ? guests : null,
                 reserVations: reserVations ? reserVations : null,
