@@ -31,6 +31,10 @@
 }
 .sectionTitle {
   margin-right: 5px;
+  @media(max-width:767px){
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
 
 .weekPickerLabel {
@@ -39,11 +43,14 @@
   gap: 8px;
   align-items: center;
   text-align: left;
+  @media(max-width:767px){
+    font-size:14px;
+  }
 }
 .weekPicker {
   color: var(--colorGrey700);
   & > div{
-    background-color: #fc334d !important;
+    background-color:#b30202 !important;
   }
 }
 
@@ -117,6 +124,9 @@
   @media (--viewportMedium) {
     padding: 24px 24px 23px 24px;
     border-bottom: solid 1px var(--colorGrey100);
+  }
+  @media(Max-width:767px){
+    padding:15px 15px 0;
   }
 }
 .dateLabel {
@@ -260,6 +270,9 @@
     flex-direction: row;
     flex-wrap: wrap;
     padding: 24px 24px 23px 24px;
+  }
+  @media(max-width:767px){
+    padding:15px;
   }
 }
 

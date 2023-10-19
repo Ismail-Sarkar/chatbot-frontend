@@ -174,10 +174,12 @@ export const EditListingLocationFormComponent = props => (
 
           {manualAddressState && (
             <div>
+              <div className={css.AddressDiv}>
               <span className={css.manualAddress}>
                 {' '}
                 Manually enter the address for your remote work day pass*
               </span>
+              </div>
               <FieldTextInput
                 className={css.building}
                 type="text"

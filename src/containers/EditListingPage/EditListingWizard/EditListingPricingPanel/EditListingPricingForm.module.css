@@ -31,6 +31,9 @@
     margin-top:15px;
     padding:0 !important;
   }
+  @media(max-width:767px){
+    margin-bottom: 15px;
+  }
 }
 
 .submitButton {
@@ -54,6 +57,13 @@
   & div:nth-child(2) {
     flex-basis: 30%;
   }
+  @media(max-width:767px){
+    flex-direction:column;
+    column-gap:0;
+    /* row-gap:20px; */
+    row-gap: 10px;
+    margin-bottom: 15px;
+  }
 }
 .optionalPerkFee {
    font-size: 28px;
@@ -64,12 +74,24 @@
     font-weight: 700;
     padding-bottom: 0;
     /* margin-top: 40px; */
+    @media(max-width:767px){
+    font-size: 18px;
+    line-height: 26px;
+    margin-top:20px;
+  }
 }
 .guests {
   margin-bottom: 15px;
   & input {
     width: 100%;
     max-width: 30%;
+    @media(max-width:767px){
+      max-width:none;
+      margin-bottom:15px;
+    }
+  }
+  & > label{
+   margin-top:0 !important;
   }
 }
 .perkNameExample {
@@ -79,4 +101,7 @@
 }
 .GuestOption{
   margin-top:40px;
+  @media(max-width:767px){
+    margin-top:20px;
+  }
 }

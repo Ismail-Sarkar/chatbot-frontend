@@ -20,6 +20,12 @@
   @media (--viewportXLarge) {
     grid-template-columns: repeat(3, 1fr);
   }
+  @media(max-width:991px){
+    padding:0 0 50px 0;
+  }
+  @media(max-width:575px){
+    gap:15px;
+  }
 }
 
 .listingCards {
@@ -60,4 +66,7 @@
   /* margin-top: auto; pushes pagination to the end of the page. */
   margin-top: auto;
   background-color: transparent;
+  @media(max-width:991px){
+    padding-bottom:20px;
+  }
 }

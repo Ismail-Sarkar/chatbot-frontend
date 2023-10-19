@@ -9,6 +9,14 @@
 
 .form {
   flex-grow: 1;
+  & > div{
+    & > label{
+      @media(max-width:767px){
+        margin-top:15px;
+        margin-bottom:10px;
+      }
+    }
+  }
 }
 
 .priceCurrencyInvalid {

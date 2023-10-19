@@ -4,6 +4,12 @@
 
 .contentWrapper {
   margin-bottom: 0;
+  & > fieldset{
+    @media(max-width:575px){
+      padding-left:0;
+      padding-right:0;
+    }
+  }
 }
 
 .buttonsWrapper {

@@ -17,9 +17,14 @@
   }
 
   & :global(.DayPicker__horizontal) {
-    margin: 0 auto;
     box-shadow: none;
-    background-color: transparent;
+    background-color: #b30202!important;
+    width: 100% !important;
+    max-width: 340px !important;
+    margin: 0 auto;
+    @media(max-width:340px){
+      max-width: 290px !important;
+    }
   }
 
   & :global(.DayPickerNavigation__horizontal) {
@@ -63,6 +68,10 @@
   & :global(.CalendarMonth),
   & :global(.CalendarMonthGrid) {
     background-color: transparent;
+    @media(max-width:340px){
+      padding:0 !important;
+      position:static !important;
+    }
   }
 
   & :global(.DayPicker_weekHeader) {

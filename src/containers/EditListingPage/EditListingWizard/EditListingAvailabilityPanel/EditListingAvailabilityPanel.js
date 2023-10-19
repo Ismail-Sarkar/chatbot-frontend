@@ -429,6 +429,7 @@ const EditListingAvailabilityPanel = props => {
 
       {onManageDisableScrolling && isEditPlanModalOpen ? (
         <Modal
+          className={css.availabilityModal}
           id="EditAvailabilityPlan"
           isOpen={isEditPlanModalOpen}
           onClose={() => setIsEditPlanModalOpen(false)}
