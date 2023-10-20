@@ -42,7 +42,7 @@
     margin: 0;
     border-radius: 6px;
     border: 1px solid #d8dce6;
-    background-color: #fff;
+    /* background-color: #fff; */
     outline: none;
 
     transition: all 0.1s ease-in-out;
@@ -153,7 +153,8 @@
   }
 
   & :global(.CalendarDay__default) {
-    background-color:#fff;
+    background-color:transparent !important;
+    color:#fff;
     border: 0;
     padding: 0;
     width: 100%;
@@ -165,7 +166,7 @@
     line-height: 24px;
     letter-spacing: 0;
 
-    color:#000;
+    color:#fff;
     border: 0;
     margin-top: 0;
     margin-bottom: 0;
@@ -222,8 +223,8 @@
     align-items: center;
     width: 100%;
     height: var(--DateInput_selectionHeight);
-    background-color:#fff;
-    color: #000;
+    /* background-color:#fff; */
+    color: #fff;
     /* border-radius: calc(var(--DateInput_selectionHeight) / 2); */
   }
   /* Remove default bg-color and use our extra span instead '.renderedDay' */
@@ -245,7 +246,7 @@
     width: 100%;
     height: var(--DateInput_selectionHeight);
     background-color:rgb(255 255 255 / 40%);
-    color:#000;
+    color:#fff;
   }
   /* Remove default bg-color and use our extra span instead '.renderedDay' */
   & :global(.CalendarDay__blocked_out_of_range),
