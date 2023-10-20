@@ -18,7 +18,7 @@
 
   & :global(.DayPicker__horizontal) {
     box-shadow: none;
-    background-color: #b30202!important;
+    background-color:#fc334d!important;
     width: 100% !important;
     max-width: 340px !important;
     margin: 0 auto;
@@ -170,7 +170,7 @@
     width: 100%;
     height: var(--DateRangeController_selectionHeight);
     background-color:rgb(255 255 255 / 40%);
-    color: var(--colorGrey700);
+    color:#fff;
   }
 
   /* Remove default bg-color and use our extra span instead '.renderedDay' */
