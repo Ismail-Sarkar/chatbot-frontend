@@ -564,6 +564,9 @@
     padding: 0;
     margin-bottom: 0;
   }
+  & > div{
+    margin-bottom:5px;
+  }
 }
 
 .sectionReviews,
@@ -587,13 +590,14 @@
 
 .detailsRow {
   display: inline-flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   width: 100%;
   padding: 1px 0 4px 0;
   line-height: 36px;
   list-style: none;
   font-weight: var(--fontWeightRegular);
-
+  gap:5px 0;
+  flex-direction:column;
   &:not(:last-child) {
     border-bottom: 1px solid var(--colorGrey100);
   }
@@ -757,5 +761,10 @@
   /* margin-left: 12px; */
   @media (max-width: 768px) {
     margin-left: 14px;
+  }
+}
+.RulesDiv{
+  @media(max-width:1023px){
+    margin-top:20px;
   }
 }
