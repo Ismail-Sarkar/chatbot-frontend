@@ -46,6 +46,28 @@ const getPriceValidators = (listingMinimumPriceSubUnits, marketplaceCurrency, in
     ? validators.composeValidators(priceRequired, minPriceRequired)
     : priceRequired;
 };
+
+const getPerkPriceValidators = (listingMinimumPriceSubUnits, marketplaceCurrency, intl) => {
+  const priceRequiredMsgId = { id: 'EditListingPricingForm.priceRequired' };
+  const priceRequiredMsg = intl.formatMessage(priceRequiredMsgId);
+  const priceRequired = validators.required(priceRequiredMsg);
+  const minPriceRaw = new Money(listingMinimumPriceSubUnits, marketplaceCurrency);
+  const minPrice = formatMoney(intl, minPriceRaw);
+  const priceTooLowMsgId = { id: 'EditListingPricingForm.priceTooLow' };
+  const priceTooLowMsg = intl.formatMessage(priceTooLowMsgId, { minPrice });
+  const minPriceRequired = validators.moneySubUnitAmountAtLeastForPerk(
+    priceTooLowMsg,
+    listingMinimumPriceSubUnits
+  );
+
+  // return listingMinimumPriceSubUnits
+  //   ? validators.composeValidators(priceRequired, minPriceRequired)
+  //   : priceRequired;
+  return listingMinimumPriceSubUnits
+    ? validators.composeValidators(priceRequired, minPriceRequired)
+    : priceRequired;
+};
+
 // const getPeakPriceValidators = (listingMinimumPriceSubUnits, marketplaceCurrency, intl) => {
 //   const priceRequiredMsgId = { id: 'EditListingPricingForm.priceRequired' };
 //   const priceRequiredMsg = intl.formatMessage(priceRequiredMsgId);
@@ -108,10 +130,11 @@ export const EditListingPricingFormComponent = props => (
         intl
       );
       const perkPriceValidators = perkName => {
+        console.log('perk', perkName);
         if (typeof perkName === 'undefined' || perkName === '') {
-          return null;
+          return undefined;
         }
-        return getPriceValidators(1, marketplaceCurrency, intl);
+        return getPerkPriceValidators(1, marketplaceCurrency, intl);
       };
       //
       // const perkValueRef = useRef(null);
@@ -231,6 +254,13 @@ export const EditListingPricingFormComponent = props => (
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
                   }
                 }}
+                // onBlur={e => {
+                //   if ((e.target.value = '')) {
+                //     form.blur(perkNameOnePrice);
+                //     form.focus(perkNameOnePrice);
+                //   }
+                //   //   setFieldActive({ shippingChargeCustom: false });
+                // }}
               />
               {/* <FieldCurrencyInput
                 id="perkNameOnePrice"

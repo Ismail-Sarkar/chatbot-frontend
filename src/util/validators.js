@@ -130,6 +130,14 @@ export const moneySubUnitAmountAtLeast = (message, minValue) => value => {
   return value instanceof Money && value.amount >= minValue ? VALID : message;
 };
 
+export const moneySubUnitAmountAtLeastForPerk = (message, minValue) => value => {
+  console.log(555, minValue, value);
+  // return value instanceof Money && value.amount >= minValue ? VALID : message
+  return value && parseFloat(value.toString().replace(/[^0-9.-]+/g, '')) > minValue
+    ? VALID
+    : message;
+};
+
 const parseNum = str => {
   const num = Number.parseInt(str, 10);
   return Number.isNaN(num) ? null : num;
