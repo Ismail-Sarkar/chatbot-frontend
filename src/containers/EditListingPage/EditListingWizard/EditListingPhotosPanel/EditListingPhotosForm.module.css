@@ -15,6 +15,9 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   margin: 0 0 24px 0;
+  @media(max-width:767px){
+    grid-template-columns: 1fr;
+  }
 }
 
 .thumbnail {
@@ -123,6 +126,9 @@
     margin-top: 0;
     margin-bottom: 0;
   }
+  @media(max-width:767px){
+    margin-bottom:30px;
+  }
 }
 
 .error {
@@ -156,6 +162,6 @@
   @media (--viewportLarge) {
     display: inline-block;
     width: 241px;
-    margin-top: 100px;
+    margin-top: 60px;
   }
 }

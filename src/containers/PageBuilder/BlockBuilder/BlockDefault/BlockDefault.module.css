@@ -14,4 +14,14 @@
   &:first-child {
     margin-top: 0;
   }
+  & > h1{
+    @media(max-width:991px){
+      font-size:31px;
+    }
+  }
+  & > h3{
+    @media(max-width:991px){
+      font-size: 22px;
+    }
+  }
 }

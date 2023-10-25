@@ -73,11 +73,14 @@ import SectionMapMaybe from './SectionMapMaybe';
 import SectionGallery from './SectionGallery';
 
 import css from './ListingPage.module.css';
+import ManualAddress from './ManualAddress';
+import Rules from './Rules';
+import UpperLocation from './UpperLocation';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
-const { UUID } = sdkTypes;
-
+const { UUID, LatLng } = sdkTypes;
+const defaultLocation = new LatLng(37.0902, -95.7129);
 export const ListingPageComponent = props => {
   const [inquiryModalOpen, setInquiryModalOpen] = useState(
     props.inquiryModalOpenForListingId === props.params.id
@@ -260,7 +263,6 @@ export const ListingPageComponent = props => {
     currentStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
 
   const createFilterOptions = options => options.map(o => ({ key: `${o.option}`, label: o.label }));
-
   return (
     <Page
       title={schemaTitle}
@@ -299,6 +301,7 @@ export const ListingPageComponent = props => {
                 }}
               />
             ) : null}
+            <UpperLocation currentListing={currentListing} publicData={publicData} />
             <SectionGallery
               listing={currentListing}
               variantPrefix={config.layout.listingImage.variantPrefix}
@@ -337,13 +340,18 @@ export const ListingPageComponent = props => {
                   ]
                 : pickedElements;
             }, [])}
+            {/* {publicData?.manualAddress && (
+              <ManualAddress publicData={publicData} listingId={currentListing.id} />
+            )} */}
 
             <SectionMapMaybe
-              geolocation={geolocation}
+              geolocation={publicData?.manualAddress ? defaultLocation : geolocation}
               publicData={publicData}
               listingId={currentListing.id}
               mapsConfig={config.maps}
             />
+            {publicData.entryRules && <Rules publicData={publicData} />}
+
             <SectionReviews reviews={reviews} fetchReviewsError={fetchReviewsError} />
             <SectionAuthorMaybe
               title={title}
@@ -554,11 +562,6 @@ const mapDispatchToProps = dispatch => ({
 // lifecycle hook.
 //
 // See: https://github.com/ReactTraining/react-router/issues/4671
-const ListingPage = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-)(EnhancedListingPage);
+const ListingPage = compose(connect(mapStateToProps, mapDispatchToProps))(EnhancedListingPage);
 
 export default ListingPage;

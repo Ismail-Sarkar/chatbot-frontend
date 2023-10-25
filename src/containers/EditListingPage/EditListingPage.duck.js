@@ -167,7 +167,7 @@ export const REMOVE_LISTING_IMAGE = 'app/EditListingPage/REMOVE_LISTING_IMAGE';
 export const SAVE_PAYOUT_DETAILS_REQUEST = 'app/EditListingPage/SAVE_PAYOUT_DETAILS_REQUEST';
 export const SAVE_PAYOUT_DETAILS_SUCCESS = 'app/EditListingPage/SAVE_PAYOUT_DETAILS_SUCCESS';
 export const SAVE_PAYOUT_DETAILS_ERROR = 'app/EditListingPage/SAVE_PAYOUT_DETAILS_ERROR';
-
+export const IS_MANUAL_ADDRESS_CHECKED = 'app/EditListingPage/IS_MANUAL_ADDRESS_CHECKED';
 // ================ Reducer ================ //
 
 const initialState = {
@@ -208,6 +208,7 @@ const initialState = {
   updateInProgress: false,
   payoutDetailsSaveInProgress: false,
   payoutDetailsSaved: false,
+  isManualAddressChecked: false,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -451,7 +452,9 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, payoutDetailsSaveInProgress: false };
     case SAVE_PAYOUT_DETAILS_SUCCESS:
       return { ...state, payoutDetailsSaveInProgress: false, payoutDetailsSaved: true };
-
+    case IS_MANUAL_ADDRESS_CHECKED:
+      console.log(345, payload);
+      return { ...state, isManualAddressChecked: payload };
     default:
       return state;
   }
@@ -473,6 +476,10 @@ export const clearUpdatedTab = () => ({
 export const removeListingImage = imageId => ({
   type: REMOVE_LISTING_IMAGE,
   payload: { imageId },
+});
+export const manualAddressChecked = data => ({
+  type: IS_MANUAL_ADDRESS_CHECKED,
+  payload: data,
 });
 
 // All the action creators that don't have the {Success, Error} suffix

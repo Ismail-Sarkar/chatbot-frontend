@@ -161,6 +161,7 @@
   position: relative;
   white-space: nowrap;
   text-align: center;
+  height: 370px;
 }
 .image-gallery-slide {
   left: 0;

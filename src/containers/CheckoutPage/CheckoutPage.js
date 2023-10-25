@@ -131,6 +131,7 @@ const EnhancedCheckoutPage = props => {
       processName={processName}
       pageData={pageData}
       listingTitle={listingTitle}
+      listing={listing}
       title={title}
       onInquiryWithoutPayment={onInquiryWithoutPayment}
       onSubmitCallback={onSubmitCallback}
@@ -147,6 +148,7 @@ const EnhancedCheckoutPage = props => {
       pageData={pageData}
       setPageData={setPageData}
       listingTitle={listingTitle}
+      listing={listing}
       title={title}
       onSubmitCallback={onSubmitCallback}
       {...props}
@@ -210,12 +212,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(savePaymentMethod(stripeCustomer, stripePaymentMethodId)),
 });
 
-const CheckoutPage = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-)(EnhancedCheckoutPage);
+const CheckoutPage = compose(connect(mapStateToProps, mapDispatchToProps))(EnhancedCheckoutPage);
 
 CheckoutPage.setInitialValues = (initialValues, saveToSessionStorage = false) => {
   if (saveToSessionStorage) {

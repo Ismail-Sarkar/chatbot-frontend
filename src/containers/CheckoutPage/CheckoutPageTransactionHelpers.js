@@ -33,6 +33,12 @@ export const getTransactionTypeData = (listingType, unitTypeInPublicData, config
 export const bookingDatesMaybe = bookingDates => {
   return bookingDates ? { bookingDates } : {};
 };
+export const extraPerkMaybe = extraPerk => {
+  return extraPerk ? { extraPerk } : {};
+};
+export const additionalGuestMaybe = additionalGuest => {
+  return additionalGuest ? { additionalGuest } : {};
+};
 
 /**
  * Construct billing details (JSON-like object) for the Stripe API
@@ -231,46 +237,61 @@ export const processCheckoutWithPayment = (orderParams, extraPaymentParams) => {
   //////////////////////////////////
   // Step 2: pay using Stripe SDK //
   //////////////////////////////////
+  // const fnConfirmCardPayment = fnParams => {
+  //   // fnParams should be returned transaction entity
+  //   const order = fnParams;
+
+  //   const hasPaymentIntents = order?.attributes?.protectedData?.stripePaymentIntents;
+  //   if (!hasPaymentIntents) {
+  //     throw new Error(
+  //       `Missing StripePaymentIntents key in transaction's protectedData. Check that your transaction process is configured to use payment intents.`
+  //     );
+  //   }
+
+  //   const { stripePaymentIntentClientSecret } = hasPaymentIntents
+  //     ? order.attributes.protectedData.stripePaymentIntents.default
+  //     : null;
+
+  //   const { stripe, card, billingDetails, paymentIntent } = extraPaymentParams;
+  //   const stripeElementMaybe = !isPaymentFlowUseSavedCard ? { card } : {};
+
+  //   // Note: For basic USE_SAVED_CARD scenario, we have set it already on API side, when PaymentIntent was created.
+  //   // However, the payment_method is save here for USE_SAVED_CARD flow if customer first attempted onetime payment
+  //   const paymentParams = !isPaymentFlowUseSavedCard
+  //     ? {
+  //         payment_method: {
+  //           billing_details: billingDetails,
+  //           card: card,
+  //         },
+  //       }
+  //     : { payment_method: stripePaymentMethodId };
+
+  //   const params = {
+  //     stripePaymentIntentClientSecret,
+  //     orderId: order?.id,
+  //     stripe,
+  //     ...stripeElementMaybe,
+  //     paymentParams,
+  //   };
+
+  // return hasPaymentIntentUserActionsDone
+  //   ? Promise.resolve({ transactionId: order?.id, paymentIntent })
+  //   : onConfirmCardPayment(params);
+  // };
+
   const fnConfirmCardPayment = fnParams => {
     // fnParams should be returned transaction entity
+
     const order = fnParams;
-
-    const hasPaymentIntents = order?.attributes?.protectedData?.stripePaymentIntents;
-    if (!hasPaymentIntents) {
-      throw new Error(
-        `Missing StripePaymentIntents key in transaction's protectedData. Check that your transaction process is configured to use payment intents.`
-      );
-    }
-
-    const { stripePaymentIntentClientSecret } = hasPaymentIntents
-      ? order.attributes.protectedData.stripePaymentIntents.default
-      : null;
-
     const { stripe, card, billingDetails, paymentIntent } = extraPaymentParams;
-    const stripeElementMaybe = !isPaymentFlowUseSavedCard ? { card } : {};
 
-    // Note: For basic USE_SAVED_CARD scenario, we have set it already on API side, when PaymentIntent was created.
-    // However, the payment_method is save here for USE_SAVED_CARD flow if customer first attempted onetime payment
-    const paymentParams = !isPaymentFlowUseSavedCard
-      ? {
-          payment_method: {
-            billing_details: billingDetails,
-            card: card,
-          },
-        }
-      : { payment_method: stripePaymentMethodId };
+    console.log('executting.1');
 
-    const params = {
-      stripePaymentIntentClientSecret,
-      orderId: order?.id,
-      stripe,
-      ...stripeElementMaybe,
-      paymentParams,
-    };
+    return Promise.resolve({ transactionId: order?.id, paymentIntent }); //this section needs to be replace with the below commented code after custom stripe
 
-    return hasPaymentIntentUserActionsDone
-      ? Promise.resolve({ transactionId: order?.id, paymentIntent })
-      : onConfirmCardPayment(params);
+    // return hasPaymentIntentUserActionsDone
+    //   ? Promise.resolve({ transactionId: order?.id, paymentIntent })
+    //   : onConfirmCardPayment(params);
   };
 
   ///////////////////////////////////////////////////

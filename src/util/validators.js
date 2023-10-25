@@ -29,6 +29,22 @@ export const required = message => value => {
   }
   return VALID;
 };
+// export const
+
+export const validateGuestInput = (guestMaxForListing, message) => value => {
+  if (typeof value === 'undefined' || value === null || value === '') {
+    return VALID;
+  }
+  // else if (typeof value === 'string') {
+  //   // undefined or null values are invalid
+  //   return message;
+  // }
+  else {
+    // guest checking
+    return parseInt(value) <= parseInt(guestMaxForListing) ? VALID : message;
+  }
+  return VALID;
+};
 
 export const requiredStringNoTrim = message => value => {
   return typeof value === 'string' && value.length > 0 ? VALID : message;

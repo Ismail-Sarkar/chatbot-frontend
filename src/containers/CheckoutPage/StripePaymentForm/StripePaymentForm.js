@@ -218,6 +218,8 @@ const LocationOrShippingDetails = props => {
     isBooking,
     isFuzzyLocation,
     intl,
+    fullManualAddress,
+    manualAddress,
   } = props;
 
   const locationDetails = listingLocation?.building
@@ -225,24 +227,38 @@ const LocationOrShippingDetails = props => {
     : listingLocation?.address
     ? listingLocation.address
     : intl.formatMessage({ id: 'StripePaymentForm.locationUnknown' });
-
-  return askShippingDetails ? (
-    <ShippingDetails intl={intl} formApi={formApi} locale={locale} />
-  ) : !isBooking && showPickUplocation ? (
+  return manualAddress ? (
     <div className={css.locationWrapper}>
       <Heading as="h3" rootClassName={css.heading}>
-        <FormattedMessage id="StripePaymentForm.pickupDetailsTitle" />
+        <FormattedMessage id="StripePaymentForm.locationDetailsTitle" />
       </Heading>
-      <p className={css.locationDetails}>{locationDetails}</p>
+      <p className={css.locationDetails}>{fullManualAddress?.street}</p>
     </div>
-  ) : isBooking && !isFuzzyLocation ? (
+  ) : (
     <div className={css.locationWrapper}>
       <Heading as="h3" rootClassName={css.heading}>
         <FormattedMessage id="StripePaymentForm.locationDetailsTitle" />
       </Heading>
       <p className={css.locationDetails}>{locationDetails}</p>
     </div>
-  ) : null;
+  );
+  // askShippingDetails ? (
+  //   <ShippingDetails intl={intl} formApi={formApi} locale={locale} />
+  // ) : !isBooking && showPickUplocation ? (
+  //   <div className={css.locationWrapper}>
+  //     <Heading as="h3" rootClassName={css.heading}>
+  //       <FormattedMessage id="StripePaymentForm.pickupDetailsTitle" />
+  //     </Heading>
+  //     <p className={css.locationDetails}>{locationDetails}</p>
+  //   </div>
+  // ) : isBooking && !isFuzzyLocation ? (
+  //   <div className={css.locationWrapper}>
+  //     <Heading as="h3" rootClassName={css.heading}>
+  //       <FormattedMessage id="StripePaymentForm.locationDetailsTitle" />
+  //     </Heading>
+  //     <p className={css.locationDetails}>{fullManualAddress?.street}</p>
+  //   </div>
+  // ) : null;
 };
 
 const initialState = {
@@ -449,7 +465,11 @@ class StripePaymentForm extends Component {
       isBooking,
       isFuzzyLocation,
       values,
+      listing,
     } = formRenderProps;
+
+    const { publicData } = listing?.attributes || {};
+    const { fullManualAddress, manualAddress } = publicData || {};
 
     this.finalFormAPI = formApi;
 
@@ -545,6 +565,8 @@ class StripePaymentForm extends Component {
           formApi={formApi}
           locale={locale}
           intl={intl}
+          fullManualAddress={fullManualAddress}
+          manualAddress={manualAddress}
         />
 
         {billingDetailsNeeded && !loadingData ? (
@@ -624,11 +646,14 @@ class StripePaymentForm extends Component {
           <span className={css.errorMessage}>{initiateOrderError.message}</span>
         ) : null}
         {showInitialMessageInput ? (
-          <div>
+          <div className={css.msgDiv}>
             <Heading as="h3" rootClassName={css.heading}>
               <FormattedMessage id="StripePaymentForm.messageHeading" />
             </Heading>
-
+            <p className={css.bookingMsg}>
+              <FormattedMessage id="StripePaymentForm.bookingMessage" />
+            </p>
+            {/* 
             <FieldTextInput
               type="textarea"
               id={`${formId}-message`}
@@ -636,7 +661,7 @@ class StripePaymentForm extends Component {
               label={initialMessageLabel}
               placeholder={messagePlaceholder}
               className={css.message}
-            />
+            /> */}
           </div>
         ) : null}
         <div className={css.submitContainer}>

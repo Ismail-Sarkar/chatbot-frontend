@@ -6,14 +6,15 @@
 }
 
 .locationWrapper {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .heading {
   composes: p from global;
   font-weight: var(--fontWeightBold);
   padding: 0;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
+  margin-top:6px;
 }
 
 .locationDetails {
@@ -53,13 +54,13 @@
 
 .saveForLaterUse {
   padding-top: 6px;
-  margin-bottom: 36px;
+  margin-bottom: 30px;
 
-  @media (--viewportMedium) {
+  /* @media (--viewportMedium) {
     padding-top: 8px;
     margin-top: 0px;
     margin-bottom: 48px;
-  }
+  } */
 }
 
 .saveForLaterUseCheckbox {
@@ -96,7 +97,7 @@
 }
 
 .billingDetails {
-  margin-bottom: 48px;
+  margin-bottom: 20px;
 }
 
 .sameAddressCheckbox {
@@ -121,11 +122,11 @@
 }
 
 .submitContainer {
-  margin-top: auto;
+  margin-top: 0;
 
-  @media (--viewportLarge) {
+  /* @media (--viewportLarge) {
     margin-top: 72px;
-  }
+  } */
 }
 
 .paymentInfo {
@@ -144,7 +145,7 @@
 
 .submitButton {
   margin-top: 22px;
-
+  background-color:#000 !important;
   @media (--viewportMedium) {
     margin-top: 26px;
   }
@@ -155,4 +156,12 @@
 
 .missingStripeKey {
   color: var(--colorFail);
+}
+.msgDiv{}
+.bookingMsg{
+  font-size:14px;
+  line-height:20px;
+  color: #000;
+  margin: 6px 0;
+  padding: 0;
 }

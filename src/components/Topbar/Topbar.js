@@ -90,7 +90,10 @@ class TopbarComponent extends Component {
   }
 
   handleMobileSearchOpen() {
-    redirectToURLWithModalState(this.props, 'mobilesearch');
+    // redirectToURLWithModalState(this.props, 'mobilesearch');
+    this.props.history.push(
+      createResourceLocatorString('SearchPage', this.props.routeConfiguration, {}, {})
+    );
   }
 
   handleMobileSearchClose() {

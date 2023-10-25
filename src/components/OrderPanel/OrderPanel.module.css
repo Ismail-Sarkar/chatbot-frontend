@@ -56,11 +56,11 @@
   composes: h4 from global;
   font-weight: var(--fontWeightBold);
 
-  color: var(--marketplaceColor);
+  color:#fc334d;
   margin: 0 0 0 24px;
 
   @media (--viewportMedium) {
-    margin: 0;
+    margin: 10px 0;
     padding: 0;
   }
 }
@@ -171,6 +171,44 @@
   @media (--viewportLarge) {
     min-width: 312px;
     min-height: auto;
+  }
+  & > div{
+    & > div{
+      & > div{
+        & > div{
+          & > div{
+            & > div:nth-child(2){
+              & > div{
+                background-color:#fc334d!important;
+                /* & > div{
+                  & > div{
+                    & > div:nth-child(2){
+                      & > div:nth-child(2){
+                        & > div{
+                          & > div:nth-child(2){
+                            & > div{
+                              & > table{
+                                & > tbody{
+                                  & > tr:nth-child(5){
+                                    & > td{
+                                      background-color: #fc334d !important;
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                } */
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -287,4 +325,19 @@
   @media (--viewportMedium) {
     padding: 0;
   }
+}
+.bookingMessage {
+  font-size: 18px;
+  font-weight: 700;
+  border-bottom: 2px solid black;
+  margin-bottom: 5px;
+}
+.timeDuration {
+  font-size:14px;
+  line-height:20px;
+  /* font-weight: 600; */
+  color:#000;
+}
+.durationMainDiv {
+  margin-bottom: 20px;
 }

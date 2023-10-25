@@ -14,7 +14,7 @@ import { required, nonEmptyArray } from '../../../util/validators';
 import { FieldCheckboxGroup, FieldSelect, FieldTextInput, FieldBoolean } from '../../../components';
 // Import modules from this directory
 import css from './EditListingWizard.module.css';
-
+import classNames from 'classnames';
 const createFilterOptions = options => options.map(o => ({ key: `${o.option}`, label: o.label }));
 
 const CustomFieldEnum = props => {
@@ -30,7 +30,7 @@ const CustomFieldEnum = props => {
   const filterOptions = createFilterOptions(enumOptions);
 
   return filterOptions ? (
-    <FieldSelect className={css.customField} name={name} id={name} label={label} {...validateMaybe}>
+    <FieldSelect className={classNames(css.customField, css.ThemeField)} name={name} id={name} label={label} {...validateMaybe}>
       <option disabled value="">
         {placeholder}
       </option>
@@ -53,16 +53,18 @@ const CustomFieldMultiEnum = props => {
   const validateMaybe = isRequired
     ? { validate: nonEmptyArray(requiredMessage || defaultRequiredMessage) }
     : {};
-
   return enumOptions ? (
-    <FieldCheckboxGroup
-      className={css.customField}
-      id={name}
-      name={name}
-      label={label}
-      options={createFilterOptions(enumOptions)}
-      {...validateMaybe}
-    />
+    <>
+      <FieldCheckboxGroup
+        className={css.customField}
+        id={name}
+        name={name}
+        label={label}
+        options={createFilterOptions(enumOptions)}
+        {...validateMaybe}
+      />
+      {/* <div>{name}</div> */}
+    </>
   ) : null;
 };
 
@@ -76,6 +78,7 @@ const CustomFieldText = props => {
     placeholderMessage || intl.formatMessage({ id: 'CustomExtendedDataField.placeholderText' });
 
   return (
+    
     <FieldTextInput
       className={css.customField}
       id={name}

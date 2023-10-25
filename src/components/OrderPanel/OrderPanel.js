@@ -16,6 +16,7 @@ import {
 import loadable from '@loadable/component';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
+import { types as sdkTypes } from '../../util/sdkLoader';
 
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import { displayPrice } from '../../util/configHelpers';
@@ -27,7 +28,7 @@ import {
   LINE_ITEM_ITEM,
   LINE_ITEM_HOUR,
 } from '../../util/types';
-import { formatMoney } from '../../util/currency';
+import { convertMoneyToNumber, formatMoney } from '../../util/currency';
 import { parse, stringify } from '../../util/urlHelpers';
 import { userDisplayNameAsString } from '../../util/data';
 import {
@@ -60,6 +61,8 @@ const ProductOrderForm = loadable(() =>
 // This defines when ModalInMobile shows content as Modal
 const MODAL_BREAKPOINT = 1023;
 const TODAY = new Date();
+
+const { Money } = sdkTypes;
 
 const priceData = (price, currency, intl) => {
   if (price && price.currency === currency) {
@@ -119,12 +122,20 @@ const PriceMaybe = props => {
   }
 
   return (
-    <div className={css.priceContainer}>
-      <p className={css.price}>{formatMoney(intl, price)}</p>
-      <div className={css.perUnit}>
-        <FormattedMessage id="OrderPanel.perUnit" values={{ unitType }} />
+    <>
+      <div className={css.priceContainer}>
+        <p className={css.price}>{formatMoney(intl, price)}</p>
+        {/* <div className={css.perUnit}>
+          <FormattedMessage id="OrderPanel.perUnit" values={{ unitType }} />
+        </div> */}
       </div>
-    </div>
+      <div className={css.durationMainDiv}>
+        <div className={css.timeDuration}>Duration</div>
+        <div
+          className={css.timeDuration}
+        >{`${publicData.availableStartTime?.label}-${publicData.availableEndTime?.label}`}</div>
+      </div>
+    </>
   );
 };
 
@@ -157,6 +168,85 @@ const OrderPanel = props => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
   } = props;
+
+  const listingPublicData = listing?.attributes?.publicData;
+
+  const perkNameOnePrice = formatMoney(
+    intl,
+    new Money(
+      listingPublicData?.perkNameOnePrice?.amount ||
+        // chatItem.chat.payableAmmount.amount ||
+        0,
+      'USD'
+    )
+  );
+  const perkNameTwoPrice = formatMoney(
+    intl,
+    new Money(
+      listingPublicData?.perkNameTwoPrice?.amount ||
+        // chatItem.chat.payableAmmount.amount ||
+        0,
+      'USD'
+    )
+  );
+  const perkNameThreePrice = formatMoney(
+    intl,
+    new Money(
+      listingPublicData?.perkNameThreePrice?.amount ||
+        // chatItem.chat.payableAmmount.amount ||
+        0,
+      'USD'
+    )
+  );
+
+  let extraParkValues = [];
+  if (listingPublicData.perkNameOne && listingPublicData?.perkNameOnePrice) {
+    extraParkValues.push({
+      key: `${listingPublicData?.perkNameOne}/${perkNameOnePrice}`,
+      label: `${listingPublicData?.perkNameOne}/${perkNameOnePrice}`,
+      value: convertMoneyToNumber(
+        new Money(listingPublicData?.perkNameOnePrice?.amount || 0, 'USD')
+      ),
+    });
+  }
+  if (listingPublicData.perkNameTwo && listingPublicData?.perkNameTwoPrice) {
+    extraParkValues.push({
+      key: `${listingPublicData?.perkNameTwo}/${perkNameTwoPrice}`,
+      label: `${listingPublicData?.perkNameTwo}/${perkNameTwoPrice}`,
+      value: convertMoneyToNumber(
+        new Money(listingPublicData?.perkNameTwoPrice?.amount || 0, 'USD')
+      ),
+    });
+  }
+  if (listingPublicData.perkNameThree && listingPublicData?.perkNameThreePrice) {
+    extraParkValues.push({
+      key: `${listingPublicData?.perkNameThree}/${perkNameThreePrice}`,
+      label: `${listingPublicData?.perkNameThree}/${perkNameThreePrice}`,
+      value: convertMoneyToNumber(
+        new Money(listingPublicData?.perkNameThreePrice?.amount || 0, 'USD')
+      ),
+    });
+  }
+
+  // const xdxfghk = [
+  //   {
+  //     key: `${listingPublicData.perkNameOne}/${perkNameOnePrice}`,
+  //     label: `${listingPublicData.perkNameOne}/${perkNameOnePrice}`,
+  //     value: convertMoneyToNumber(new Money(listingPublicData.perkNameOnePrice.amount || 0, 'USD')),
+  //   },
+  //   {
+  //     key: `${listingPublicData.perkNameTwo}/${perkNameTwoPrice}`,
+  //     label: `${listingPublicData.perkNameTwo}/${perkNameTwoPrice}`,
+  //     value: convertMoneyToNumber(new Money(listingPublicData.perkNameTwoPrice.amount || 0, 'USD')),
+  //   },
+  //   {
+  //     key: `${listingPublicData.perkNameThree}/${perkNameThreePrice}`,
+  //     label: `${listingPublicData.perkNameThree}/${perkNameThreePrice}`,
+  //     value: convertMoneyToNumber(
+  //       new Money(listingPublicData.perkNameThreePrice.amount || 0, 'USD')
+  //     ),
+  //   },
+  // ];
 
   const publicData = listing?.attributes?.publicData || {};
   const { unitType, transactionProcessAlias = '' } = publicData || {};
@@ -235,6 +325,7 @@ const OrderPanel = props => {
         onManageDisableScrolling={onManageDisableScrolling}
         usePortal
       >
+        <div className={css.bookingMessage}>Book This Remote Work Day Pass</div>
         <div className={css.modalHeading}>
           <H1 className={css.heading}>{title}</H1>
         </div>
@@ -251,7 +342,7 @@ const OrderPanel = props => {
           intl={intl}
         />
 
-        <div className={css.author}>
+        {/* <div className={css.author}>
           <AvatarSmall user={author} className={css.providerAvatar} />
           <span className={css.providerNameLinked}>
             <FormattedMessage id="OrderPanel.author" values={{ name: authorLink }} />
@@ -259,7 +350,7 @@ const OrderPanel = props => {
           <span className={css.providerNamePlain}>
             <FormattedMessage id="OrderPanel.author" values={{ name: authorDisplayName }} />
           </span>
-        </div>
+        </div> */}
 
         {showPriceMissing ? (
           <PriceMissing />
@@ -297,6 +388,7 @@ const OrderPanel = props => {
             marketplaceCurrency={marketplaceCurrency}
             dayCountAvailableForBooking={dayCountAvailableForBooking}
             listingId={listing.id}
+            listing={listing}
             isOwnListing={isOwnListing}
             monthlyTimeSlots={monthlyTimeSlots}
             onFetchTimeSlots={onFetchTimeSlots}
@@ -306,6 +398,8 @@ const OrderPanel = props => {
             lineItems={lineItems}
             fetchLineItemsInProgress={fetchLineItemsInProgress}
             fetchLineItemsError={fetchLineItemsError}
+            extraParkValues={extraParkValues}
+            guestMaxForListing={listing?.attributes?.publicData?.guests || 0}
           />
         ) : showProductOrderForm ? (
           <ProductOrderForm
@@ -435,7 +529,4 @@ OrderPanel.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default compose(
-  withRouter,
-  injectIntl
-)(OrderPanel);
+export default compose(withRouter, injectIntl)(OrderPanel);

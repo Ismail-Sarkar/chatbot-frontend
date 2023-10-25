@@ -294,8 +294,10 @@
   margin: 5px 24px 25px 24px;
 
   @media (--viewportLarge) {
-    padding: 6px 0 2px 0;
+    padding: 0;
     margin: 16px 0 8px 0;
+    font-size: 18px;
+    line-height: 26px;
   }
 }
 

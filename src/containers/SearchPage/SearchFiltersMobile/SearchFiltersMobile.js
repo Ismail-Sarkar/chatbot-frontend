@@ -122,6 +122,7 @@ class SearchFiltersMobileComponent extends Component {
         {noResultsInfo ? noResultsInfo : null}
 
         <ModalInMobile
+          className={css.SearchMobile}
           id="SearchFiltersMobile.filters"
           isModalOpenOnMobile={this.state.isFiltersOpenOnMobile}
           onClose={this.cancelFilters}

@@ -64,7 +64,9 @@ const LocationPredictionsList = props => {
     onSelectStart,
     onSelectMove,
     onSelectEnd,
+    handlecityStateCountryName,
   } = props;
+  // console.log(2233, props);
   if (predictions.length === 0) {
     return null;
   }
@@ -397,7 +399,6 @@ class LocationAutocompleteInputImplementation extends Component {
       .then(results => {
         const { search: currentSearch } = currentValue(this.props);
         this.setState({ fetchingPredictions: false });
-
         // If the earlier predictions arrive when the user has already
         // changed the search term, ignore and wait until the latest
         // predictions arrive. Without this logic, results for earlier
@@ -458,6 +459,10 @@ class LocationAutocompleteInputImplementation extends Component {
   }
 
   handlePredictionsSelectEnd(prediction) {
+    console.log(6677, typeof this.props.handlecityStateCountryName);
+    if (typeof this.props.handlecityStateCountryName === 'function') {
+      this.props.handlecityStateCountryName(prediction);
+    }
     let selectAndFinalize = false;
     this.setState(
       prevState => {
@@ -557,6 +562,7 @@ class LocationAutocompleteInputImplementation extends Component {
             onSelectStart={this.handlePredictionsSelectStart}
             onSelectMove={this.handlePredictionsSelectMove}
             onSelectEnd={this.handlePredictionsSelectEnd}
+            // handlecityStateCountryName={this.props.handlecityStateCountryName}
           >
             <GeocoderAttribution className={predictionsAttributionClassName} />
           </LocationPredictionsList>

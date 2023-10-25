@@ -126,6 +126,7 @@ export class TransactionPanelComponent extends Component {
       provider,
       hasTransitions,
       protectedData,
+      transactionStatus,
       messages,
       initialMessageFailed,
       savePaymentMethodFailed,
@@ -272,6 +273,12 @@ export class TransactionPanelComponent extends Component {
               </div>
             ) : null}
 
+            {transactionStatus==='transition/accept' && isCustomer &&<div className={css.msgDiv}>
+              <p>
+              <FormattedMessage id="Transactionpanel.bookingMessage" />
+              </p>
+            </div>}
+
             <FeedSection
               rootClassName={css.feedContainer}
               hasMessages={messages.length > 0}
@@ -281,7 +288,7 @@ export class TransactionPanelComponent extends Component {
               activityFeed={activityFeed}
               isConversation={isInquiryProcess}
             />
-            {showSendMessageForm ? (
+            {/* {showSendMessageForm ? (
               <SendMessageForm
                 formId={this.sendMessageFormName}
                 rootClassName={css.sendMessageForm}
@@ -299,7 +306,7 @@ export class TransactionPanelComponent extends Component {
               <div className={css.sendingMessageNotAllowed}>
                 <FormattedMessage id="TransactionPanel.sendingMessageNotAllowed" />
               </div>
-            )}
+            )} */}
 
             {stateData.showActionButtons ? (
               <>

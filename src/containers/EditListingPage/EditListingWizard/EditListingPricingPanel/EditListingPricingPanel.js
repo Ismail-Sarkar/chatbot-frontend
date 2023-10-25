@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -13,14 +13,56 @@ import { H3, ListingLink } from '../../../../components';
 // Import modules from this directory
 import EditListingPricingForm from './EditListingPricingForm';
 import css from './EditListingPricingPanel.module.css';
+import { convertUnitToSubUnit, unitDivisor } from '../../../../util/currency';
+import {
+  LISTING_PAGE_PARAM_TYPE_DRAFT,
+  LISTING_PAGE_PARAM_TYPE_EDIT,
+} from '../../../../util/urlHelpers';
+import { useConfiguration } from '../../../../context/configurationContext';
 
 const { Money } = sdkTypes;
+
+// const paymentMethodvalues = [
+//   { key: 'creditDebitCash', label: 'Credit/debit card & cash' },
+//   { key: 'creditDebit', label: 'Credit/debit card only' },
+//   { key: 'cash', label: 'Cash only' },
+// ];
 
 const getInitialValues = params => {
   const { listing } = params;
   const { price } = listing?.attributes || {};
+  const {
+    perkNameOne,
+    perkNameOnePrice,
+    perkNameTwo,
+    perkNameTwoPrice,
+    perkNameThree,
+    perkNameThreePrice,
+    guests,
+    reserVations,
+    prefferedPaymentMethod,
+  } = listing?.attributes?.publicData;
 
-  return { price };
+  // const selectedPrefferedPaymentMethod = paymentMethodvalues.find((elem)=>elem.value===)
+
+  return {
+    price,
+    perkNameOne,
+    perkNameOnePrice: perkNameOnePrice?.amount
+      ? new Money(perkNameOnePrice?.amount, perkNameOnePrice?.currency)
+      : null,
+    perkNameTwo,
+    perkNameTwoPrice: perkNameTwoPrice?.amount
+      ? new Money(perkNameTwoPrice?.amount, perkNameTwoPrice?.currency)
+      : null,
+    perkNameThree,
+    perkNameThreePrice: perkNameThreePrice?.amount
+      ? new Money(perkNameThreePrice?.amount, perkNameThreePrice?.currency)
+      : null,
+    guests,
+    reserVations,
+    prefferedPaymentMethod: prefferedPaymentMethod,
+  };
 };
 
 const EditListingPricingPanel = props => {
@@ -39,9 +81,21 @@ const EditListingPricingPanel = props => {
     errors,
   } = props;
 
+  const config = useConfiguration();
+
+  const { availablePaymentMethods } = config.listing || {};
+
+  // const { enumOptions: paymentMethodValues } = config.listing.listingFields.find(
+  //   ({ key }) => key === 'paymentMethodValues'
+  // );
+
   const classes = classNames(rootClassName || css.root, className);
   const initialValues = getInitialValues(props);
   const isPublished = listing?.id && listing?.attributes?.state !== LISTING_STATE_DRAFT;
+  const isDraft = listing?.attributes?.state === LISTING_STATE_DRAFT;
+  const editListingLinkType = isDraft
+    ? LISTING_PAGE_PARAM_TYPE_DRAFT
+    : LISTING_PAGE_PARAM_TYPE_EDIT;
   const priceCurrencyValid =
     initialValues.price instanceof Money
       ? initialValues.price.currency === marketplaceCurrency
@@ -67,13 +121,62 @@ const EditListingPricingPanel = props => {
         <EditListingPricingForm
           className={css.form}
           initialValues={initialValues}
+          paymentMethodValues={availablePaymentMethods}
           onSubmit={values => {
-            const { price } = values;
-
+            const {
+              price,
+              perkNameOnePrice,
+              perkNameOnePriceVal,
+              perkNameOne,
+              perkNameTwo,
+              perkNameTwoPrice,
+              perkNameTwoPriceVal,
+              perkNameThree,
+              perkNameThreePrice,
+              perkNameThreePriceVal,
+              guests,
+              reserVations,
+              prefferedPaymentMethod,
+            } = values;
+            // console.log(445, values, prefferedPaymentMethod);
             // New values for listing attributes
             const updateValues = {
               price,
+              publicData: {
+                prefferedPaymentMethod: prefferedPaymentMethod,
+                listingPrice: {
+                  amount: price.amount,
+                  currency: price.currency,
+                },
+                perkNameOne: perkNameOne ? perkNameOne : null,
+                // perkNameOnePrice: perkNameOnePrice
+                //   ? { amount: perkNameOnePrice.amount, currency: perkNameOnePrice.currency }
+                //   : null,
+                perkNameOnePrice: perkNameOnePriceVal
+                  ? { amount: perkNameOnePriceVal.amount, currency: perkNameOnePriceVal.currency }
+                  : null,
+                perkNameTwo: perkNameTwo ? perkNameTwo : null,
+                // perkNameTwoPrice: perkNameTwoPrice
+                //   ? { amount: perkNameTwoPrice.amount, currency: perkNameTwoPrice.currency }
+                //   : null,
+                perkNameTwoPrice: perkNameTwoPriceVal
+                  ? { amount: perkNameTwoPriceVal.amount, currency: perkNameTwoPriceVal.currency }
+                  : null,
+                perkNameThree: perkNameThree ? perkNameThree : null,
+                // perkNameThreePrice: perkNameThreePrice
+                //   ? { amount: perkNameThreePrice.amount, currency: perkNameThreePrice.currency }
+                //   : null,
+                perkNameThreePrice: perkNameThreePriceVal
+                  ? {
+                      amount: perkNameThreePriceVal.amount,
+                      currency: perkNameThreePriceVal.currency,
+                    }
+                  : null,
+                guests: guests ? guests : null,
+                reserVations: reserVations ? reserVations : null,
+              },
             };
+
             onSubmit(updateValues);
           }}
           marketplaceCurrency={marketplaceCurrency}
@@ -85,6 +188,7 @@ const EditListingPricingPanel = props => {
           updated={panelUpdated}
           updateInProgress={updateInProgress}
           fetchErrors={errors}
+          editListingLinkType={editListingLinkType}
         />
       ) : (
         <div className={css.priceCurrencyInvalid}>

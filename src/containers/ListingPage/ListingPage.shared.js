@@ -153,6 +153,8 @@ export const handleSubmit = parameters => values => {
     bookingEndDate, // not relevant (omit)
     quantity: quantityRaw,
     deliveryMethod,
+    additionalGuest,
+    extraPerk,
     ...otherOrderData
   } = values;
 
@@ -182,6 +184,8 @@ export const handleSubmit = parameters => values => {
       ...quantityMaybe,
       ...deliveryMethodMaybe,
       ...otherOrderData,
+      ...(additionalGuest ? { additionalGuest } : {}),
+      ...(extraPerk ? { extraPerk } : {}),
     },
     confirmPaymentError: null,
   };
@@ -197,14 +201,16 @@ export const handleSubmit = parameters => values => {
   onInitializeCardPaymentData();
 
   // Redirect to CheckoutPage
-  history.push(
-    createResourceLocatorString(
-      'CheckoutPage',
-      routes,
-      { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
-      {}
-    )
-  );
+  if (!(parseInt(additionalGuest) > parseInt(listing?.attributes?.publicData?.guests || 0))) {
+    history.push(
+      createResourceLocatorString(
+        'CheckoutPage',
+        routes,
+        { id: listing.id.uuid, slug: createSlug(listing.attributes.title) },
+        {}
+      )
+    );
+  }
 };
 
 /**

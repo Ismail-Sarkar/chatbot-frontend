@@ -13,12 +13,21 @@ const LocationAutocompleteInputImpl = loadable(() =>
 class LocationAutocompleteInputComponent extends Component {
   render() {
     /* eslint-disable no-unused-vars */
-    const { rootClassName, labelClassName, hideErrorMessage, ...restProps } = this.props;
+    const {
+      rootClassName,
+      labelClassName,
+      hideErrorMessage,
+      tab,
+      changeCheckBoxValue,
+      manualAddressState,
+
+      ...restProps
+    } = this.props;
     const { input, label, meta, valueFromForm, ...otherProps } = restProps;
     /* eslint-enable no-unused-vars */
-
     const value = typeof valueFromForm !== 'undefined' ? valueFromForm : input.value;
     const locationAutocompleteProps = { label, meta, ...otherProps, input: { ...input, value } };
+    console.log(76, locationAutocompleteProps);
     const labelInfo = label ? (
       <label className={labelClassName} htmlFor={input.name}>
         {label}
@@ -29,7 +38,15 @@ class LocationAutocompleteInputComponent extends Component {
       <div className={rootClassName}>
         {labelInfo}
         <LocationAutocompleteInputImpl {...locationAutocompleteProps} />
-        {hideErrorMessage ? null : <ValidationError fieldMeta={meta} />}
+        {hideErrorMessage ? null : (
+          <ValidationError
+            fieldMeta={meta}
+            tab={tab}
+            changeCheckBoxValue={changeCheckBoxValue}
+            manualAddressState={manualAddressState}
+          />
+        )}
+        {/* {meta.error} */}
       </div>
     );
   }
@@ -56,5 +73,6 @@ LocationAutocompleteInputComponent.propTypes = {
 export default LocationAutocompleteInputImpl;
 
 export const FieldLocationAutocompleteInput = props => {
+  console.log(8877, props);
   return <Field component={LocationAutocompleteInputComponent} {...props} />;
 };

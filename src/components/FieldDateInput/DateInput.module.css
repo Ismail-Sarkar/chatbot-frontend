@@ -42,7 +42,7 @@
     margin: 0;
     border-radius: 6px;
     border: 1px solid #d8dce6;
-    background-color: #fff;
+    /* background-color: #fff; */
     outline: none;
 
     transition: all 0.1s ease-in-out;
@@ -67,10 +67,10 @@
     }
 
     @media (--viewportMedium) {
-      background-position: 8px 13px;
+      background-position: 8px 12px;
       font-size: 16px;
       line-height: 32px;
-      padding: 7px 0 7px 32px;
+      padding: 4px 0 4px 32px;
 
       &:focus {
         border-radius: 6px 6px 0 0;
@@ -153,7 +153,8 @@
   }
 
   & :global(.CalendarDay__default) {
-    background-color: var(--marketplaceColor);
+    background-color:transparent !important;
+    color:#fff;
     border: 0;
     padding: 0;
     width: 100%;
@@ -165,7 +166,7 @@
     line-height: 24px;
     letter-spacing: 0;
 
-    color: var(--colorWhite);
+    color:#fff;
     border: 0;
     margin-top: 0;
     margin-bottom: 0;
@@ -184,8 +185,8 @@
     align-items: center;
     width: 100%;
     height: var(--DateInput_selectionHeight);
-    background-image: url("data:image/svg+xml;utf8,<svg width='14' height='2' viewBox='0 0 14 2' xmlns='http://www.w3.org/2000/svg'><path d='M0 0h14v2H0z' fill='%23FFF' fill-rule='evenodd'/></svg>");
-    background-position: center 28px;
+    /* background-image: url("data:image/svg+xml;utf8,<svg width='14' height='2' viewBox='0 0 14 2' xmlns='http://www.w3.org/2000/svg'><path d='M0 0h14v2H0z' fill='%23FFF' fill-rule='evenodd'/></svg>");
+    background-position: center 28px; */
   }
 
   /* Remove default bg-color and use our extra span instead '.renderedDay' */
@@ -222,8 +223,9 @@
     align-items: center;
     width: 100%;
     height: var(--DateInput_selectionHeight);
-    background-color: var(--colorSuccess);
-    border-radius: calc(var(--DateInput_selectionHeight) / 2);
+    /* background-color:#fff; */
+    color: #fff;
+    /* border-radius: calc(var(--DateInput_selectionHeight) / 2); */
   }
   /* Remove default bg-color and use our extra span instead '.renderedDay' */
   & :global(.CalendarDay__after-hovered) {
@@ -243,7 +245,8 @@
     align-items: center;
     width: 100%;
     height: var(--DateInput_selectionHeight);
-    background-color: var(--DateInput_hoveredOverlayColor);
+    background-color:rgb(255 255 255 / 40%);
+    color:#fff;
   }
   /* Remove default bg-color and use our extra span instead '.renderedDay' */
   & :global(.CalendarDay__blocked_out_of_range),
@@ -258,7 +261,7 @@
   & :global(.CalendarDay__blocked_calendar:active),
   & :global(.CalendarDay__blocked_calendar:hover) {
     background-color: transparent;
-    color: var(--marketplaceColorDark);
+    color:#ff0000;
     border: 0;
   }
   & :global(.CalendarDay__blocked_out_of_range .CalendarDay__blocked_calendar .renderedDay) {

@@ -13,4 +13,12 @@
     margin-bottom: 8px;
     height: auto;
   }
+  & > :nth-child(3){
+    & > div{
+      & > div{
+        background-color:#fc334d;
+        z-index: 1;
+      }
+    }
+  }
 }

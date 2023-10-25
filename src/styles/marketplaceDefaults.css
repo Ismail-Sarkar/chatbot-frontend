@@ -1474,3 +1474,67 @@ textarea {
     margin-top: 32px;
   }
 }
+
+/* Mui Select component css  */
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root,
+.css-1km1ehz {
+  font-family: Gilroy-Regular !important;
+  font-size: 14px !important;
+  color: #000 !important;
+  border-bottom: 1px solid #f5f5f5 !important;
+  line-height: 150% !important;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important;
+}
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root .defaultHeadLabel,
+.css-1km1ehz .defaultHeadLabel {
+  display: inline-block;
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
+}
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root .headLabel,
+.css-1km1ehz .headLabel {
+  font-family: Gilroy-Regular !important;
+  font-size: 16px !important;
+  color: #000 !important;
+  font-weight: 600;
+  line-height: 150% !important;
+}
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root .additionalLabel,
+.css-1km1ehz .additionalLabel {
+  font-family: 'Avenir-Next' !important;
+  font-size: 12px !important;
+  color: #737373 !important;
+  font-weight: 400;
+  color: #737373;
+  line-height: 150% !important;
+  display: inline-block;
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
+}
+
+.MuiInputBase-root svg {
+  fill: #737373 !important;
+  font-size:25px;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  background-color: #f9f9f9;
+  height: 4px !important;
+  cursor: pointer;
+  @media(max-width:767px){
+  height: 3px !important;
+  }
+}
+::-webkit-scrollbar-thumb {
+  background-color:#000;
+  border-radius: 15px;
+}

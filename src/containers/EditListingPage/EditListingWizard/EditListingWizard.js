@@ -206,7 +206,12 @@ const tabCompleted = (tab, listing, config) => {
     case DELIVERY:
       return !!deliveryOptionPicked;
     case LOCATION:
-      return !!(geolocation && publicData?.location?.address);
+      return geolocation && publicData?.location?.address
+        ? !!(geolocation && publicData?.location?.address)
+        : publicData?.manualAddress &&
+            publicData?.fullManualAddress?.street &&
+            publicData?.fullManualAddress?.cityStateCountry &&
+            publicData?.fullManualAddress?.zip;
     case AVAILABILITY:
       return !!availabilityPlan;
     case PHOTOS:
@@ -346,15 +351,16 @@ class EditListingWizard extends Component {
       stripeAccount &&
       (hasRequirements(stripeAccountData, 'past_due') ||
         hasRequirements(stripeAccountData, 'currently_due'));
+    onPublishListingDraft(id);
 
-    if (isInquiryProcess || (stripeConnected && !stripeRequirementsMissing)) {
-      onPublishListingDraft(id);
-    } else {
-      this.setState({
-        draftId: id,
-        showPayoutDetails: true,
-      });
-    }
+    // if (isInquiryProcess || (stripeConnected && !stripeRequirementsMissing)) {
+    //   onPublishListingDraft(id);
+    // } else {
+    //   this.setState({
+    //     draftId: id,
+    //     showPayoutDetails: true,
+    //   });
+    // }
   }
 
   handlePayoutModalClose() {

@@ -8,6 +8,8 @@
 .bookingBreakdownTitle {
   letter-spacing: 1px;
   font-weight: var(--fontWeightMedium);
+  font-size:18px;
+  line-height:26px;
 }
 
 .totalDivider {
@@ -37,7 +39,7 @@
 
   @media (--viewportMedium) {
     padding: 0;
-    margin-top: 40px;
+    margin-top: 20px;
   }
 }
 
@@ -70,9 +72,40 @@
     padding: 0;
     margin-top: 72px;
   }
+  & button {
+    background: #000;
+    &:hover,
+    &:focus{
+      background: #000 !important;
+    }
+  }
 }
 
 .arrowIcon {
   stroke: var(--colorWhite);
   fill: var(--colorWhite);
+}
+
+.muiselectcontainer {
+  & > div {
+    width: 100% !important;
+    & > div{
+      & > div{
+        padding:2px !important;
+      }
+    }
+  }
+  & input {
+    &:focus,
+    &:hover {
+      background-color: transparent;
+      box-shadow: none;
+      border: none;
+      transition: none;
+    }
+  }
+  padding-top:10px;
+}
+.GuestContainer{
+  padding-top:10px;
 }

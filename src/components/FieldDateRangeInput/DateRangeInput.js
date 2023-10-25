@@ -6,7 +6,7 @@
  */
 import React, { Component } from 'react';
 import { bool, func, instanceOf, oneOf, shape, string } from 'prop-types';
-import { DateRangePicker } from 'react-dates';
+import { DateRangePicker, SingleDatePicker } from 'react-dates';
 import classNames from 'classnames';
 import moment from 'moment';
 
@@ -145,6 +145,7 @@ class DateRangeInputComponent extends Component {
     this.state = {
       focusedInput: null,
       currentStartDate: null,
+      date: null,
     };
 
     this.blurTimeoutId = null;
@@ -202,7 +203,7 @@ class DateRangeInputComponent extends Component {
     // DateRangePicker requires 'onFocusChange' function and 'focusedInput'
     // but Fields of React-Form deals with onFocus & onBlur instead
     this.setState({ focusedInput });
-
+    console.log(334, focusedInput);
     if (focusedInput) {
       window.clearTimeout(this.blurTimeoutId);
       this.props.onFocus(focusedInput);
@@ -234,9 +235,10 @@ class DateRangeInputComponent extends Component {
       isBlockedBetween,
       isDayBlocked,
       isOutsideRange,
+      form,
       ...datePickerProps
     } = this.props;
-
+    console.log(52, this.state.focusedInput);
     const initialStartMoment = initialDates ? moment(initialDates.startDate) : null;
     const initialEndMoment = initialDates ? moment(initialDates.endDate) : null;
     const startDate =
@@ -274,6 +276,21 @@ class DateRangeInputComponent extends Component {
           endDatePlaceholderText={endDatePlaceholderTxt}
           screenReaderInputMessage={screenReaderInputText}
         />
+        {/* <SingleDatePicker
+          id="startDate"
+          date={this.state.date}
+          onDateChange={date => {
+            form.change('startDate', date);
+
+            this.setState({ date: date });
+          }}
+          minDate={new Date()}
+          focused={this.state.focusedInput}
+          numberOfMonths={1}
+          onFocusChange={this.onFocusChange}
+          isDayBlocked={isDayBlocked(this.state.focusedInput)}
+          isOutsideRange={isOutsideRange(this.state.focusedInput)}
+        /> */}
       </div>
     );
   }
