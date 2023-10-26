@@ -236,6 +236,7 @@ export const EditListingPricingFormComponent = props => (
       };
 
       const required = validators.required('This field is required');
+      console.log(777, updated, pristine);
 
       return (
         <Form onSubmit={handleSubmit} className={classes}>
@@ -309,6 +310,7 @@ export const EditListingPricingFormComponent = props => (
                     form.change('perkNameOnePriceVal', undefined);
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
                   }
+                  form.resetFieldState('perkNameOne');
                 }}
                 // onBlur={e => {
                 //   if ((e.target.value = '')) {
@@ -359,6 +361,7 @@ export const EditListingPricingFormComponent = props => (
                     form.change('perkNameTwoPriceVal', undefined);
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
                   }
+                  form.resetFieldState('perkNameTwo');
                 }}
               />
               {/* <FieldCurrencyInput
@@ -400,6 +403,7 @@ export const EditListingPricingFormComponent = props => (
                     form.change('perkNameThreePriceVal', undefined);
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
                   }
+                  form.resetFieldState('perkNameThree');
                 }}
               />
               {/* <FieldCurrencyInput

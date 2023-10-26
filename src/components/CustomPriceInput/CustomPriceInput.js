@@ -84,6 +84,7 @@ function CustomPriceInput(props) {
             }
             form.change(idNameField, value);
             setFormatedShippingCharge(value);
+            form.resetFieldState(idNameField);
           }
         }}
         onFocus={e => {
