@@ -1036,7 +1036,7 @@ export const BookingDatesFormComponent = props => {
               id="additionalGuest"
               isDayBlocked={isDayBlocked}
               // isOutsideRange={isOutsideRange}
-              label="Additional Guests"
+              label="Additional Guests?"
               placeholder={'Enter additional guests'}
               onChange={handleAdditionalGuestChange}
               validate={validateGuestInput}
