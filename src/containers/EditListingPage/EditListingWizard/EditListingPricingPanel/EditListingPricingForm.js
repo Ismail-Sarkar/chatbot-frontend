@@ -47,27 +47,6 @@ const getPriceValidators = (listingMinimumPriceSubUnits, marketplaceCurrency, in
     : priceRequired;
 };
 
-const getPerkPriceValidators = (listingMinimumPriceSubUnits, marketplaceCurrency, intl) => {
-  const priceRequiredMsgId = { id: 'EditListingPricingForm.priceRequired' };
-  const priceRequiredMsg = intl.formatMessage(priceRequiredMsgId);
-  const priceRequired = validators.required(priceRequiredMsg);
-  const minPriceRaw = new Money(listingMinimumPriceSubUnits, marketplaceCurrency);
-  const minPrice = formatMoney(intl, minPriceRaw);
-  const priceTooLowMsgId = { id: 'EditListingPricingForm.priceTooLow' };
-  const priceTooLowMsg = intl.formatMessage(priceTooLowMsgId, { minPrice });
-  const minPriceRequired = validators.moneySubUnitAmountAtLeastForPerk(
-    priceTooLowMsg,
-    listingMinimumPriceSubUnits
-  );
-
-  // return listingMinimumPriceSubUnits
-  //   ? validators.composeValidators(priceRequired, minPriceRequired)
-  //   : priceRequired;
-  return listingMinimumPriceSubUnits
-    ? validators.composeValidators(priceRequired, minPriceRequired)
-    : priceRequired;
-};
-
 // const getPeakPriceValidators = (listingMinimumPriceSubUnits, marketplaceCurrency, intl) => {
 //   const priceRequiredMsgId = { id: 'EditListingPricingForm.priceRequired' };
 //   const priceRequiredMsg = intl.formatMessage(priceRequiredMsgId);
@@ -118,6 +97,7 @@ export const EditListingPricingFormComponent = props => (
       } = formRenderProps;
       // console.log(3, listingMinimumPriceSubUnits);
       const PERK_MAX_LENGTH = 70;
+      const VALID = undefined;
 
       const [formatedPerkNameOnePrice, setFormatedPerkNameOnePrice] = useState(null);
       const [formatedPerkNameTwoPrice, setFormatedPerkNameTwoPrice] = useState(null);
@@ -129,20 +109,91 @@ export const EditListingPricingFormComponent = props => (
         marketplaceCurrency,
         intl
       );
-      const perkPriceValidators = perkName => {
-        console.log('perk', perkName);
-        if (typeof perkName === 'undefined' || perkName === '') {
-          return undefined;
-        }
-        return getPerkPriceValidators(1, marketplaceCurrency, intl);
-      };
+
       //
       // const perkValueRef = useRef(null);
       // useEffect(() => {
       //   perkValueRef.current = [];
       // }, []);
 
-      console.log(121, values, values.guests, values.reserVations);
+      const isNonEmptyString = val => {
+        return typeof val === 'string' && val.trim().length > 0;
+      };
+
+      const perkpriceRequired = (message, value) => {
+        if (typeof value === 'undefined' || value === null) {
+          // undefined or null values are invalid
+          return message;
+        }
+        if (typeof value === 'string') {
+          // string must be nonempty when trimmed
+          return isNonEmptyString(value) ? VALID : message;
+        }
+        return VALID;
+      };
+
+      const perkpriceValidator = (
+        perkName,
+        perkPrice,
+        listingMinimumPriceSubUnits,
+        marketplaceCurrency,
+        intl
+      ) => {
+        if (typeof perkName === 'undefined' || perkName === '') return VALID;
+        else {
+          const priceRequiredMsgId = { id: 'EditListingPricingForm.priceRequired' };
+          const priceRequiredMsg = intl.formatMessage(priceRequiredMsgId);
+          const priceRequired = perkpriceRequired(priceRequiredMsg, perkPrice);
+          const minPriceRaw = new Money(listingMinimumPriceSubUnits, marketplaceCurrency);
+          const minPrice = formatMoney(intl, minPriceRaw);
+          const priceTooLowMsgId = { id: 'EditListingPricingForm.priceTooLow' };
+          const priceTooLowMsg = intl.formatMessage(priceTooLowMsgId, { minPrice });
+          const minPriceRequired =
+            perkPrice &&
+            parseFloat(perkPrice.toString().replace(/[^0-9.-]+/g, '')) > listingMinimumPriceSubUnits
+              ? VALID
+              : priceTooLowMsg;
+
+          // return listingMinimumPriceSubUnits
+          //   ? validators.composeValidators(priceRequired, minPriceRequired)
+          //   : priceRequired;
+          // return listingMinimumPriceSubUnits
+          //   ? validators.composeValidators(priceRequired, minPriceRequired)
+          //   : priceRequired;
+
+          return listingMinimumPriceSubUnits
+            ? minPriceRequired
+              ? minPriceRequired
+              : priceRequired
+            : priceRequired;
+        }
+      };
+
+      // console.log(121, values, values.guests, values.reserVations);
+
+      const perkPriceOneError = perkpriceValidator(
+        values?.perkNameOne,
+        values?.perkNameOnePrice,
+        1,
+        marketplaceCurrency,
+        intl
+      );
+
+      const perkPriceTwoError = perkpriceValidator(
+        values?.perkNameTwo,
+        values?.perkNameTwoPrice,
+        1,
+        marketplaceCurrency,
+        intl
+      );
+
+      const perkPriceThreeError = perkpriceValidator(
+        values?.perkNameThree,
+        values?.perkNameThreePrice,
+        1,
+        marketplaceCurrency,
+        intl
+      );
 
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
@@ -150,9 +201,12 @@ export const EditListingPricingFormComponent = props => (
       const submitDisabled =
         editListingLinkType !== 'edit'
           ? invalid || disabled || submitInProgress
-          : (values.perkNameOne !== undefined && values.perkNameOnePrice === null) ||
-            (values.perkNameTwo !== undefined && values.perkNameTwoPrice === null) ||
-            (values.perkNameThree !== undefined && values.perkNameThreePrice === null) ||
+          : typeof perkPriceOneError !== 'undefined' ||
+            typeof perkPriceTwoError !== 'undefined' ||
+            typeof perkPriceThreeError !== 'undefined' ||
+            // (values.perkNameOne !== undefined && values.perkNameOnePrice === null) ||
+            //   (values.perkNameTwo !== undefined && values.perkNameTwoPrice === null) ||
+            //   (values.perkNameThree !== undefined && values.perkNameThreePrice === null) ||
             values.guests === undefined ||
             values.guests === '' ||
             values.reserVations === undefined ||
@@ -282,9 +336,9 @@ export const EditListingPricingFormComponent = props => (
                 values={values}
                 placeholder="Price"
                 disabled={values.perkNameOne ? false : true}
-                validate={perkPriceValidators(values.perkNameOne)}
                 formatedshippingCharge={formatedPerkNameOnePrice}
                 setFormatedShippingCharge={setFormatedPerkNameOnePrice}
+                customValidationError={perkPriceOneError}
               />
             </div>
             <div className={css.perksField}>
@@ -323,9 +377,9 @@ export const EditListingPricingFormComponent = props => (
                 values={values}
                 placeholder="Price"
                 disabled={values.perkNameTwo ? false : true}
-                validate={perkPriceValidators(values.perkNameTwo)}
                 formatedshippingCharge={formatedPerkNameTwoPrice}
                 setFormatedShippingCharge={setFormatedPerkNameTwoPrice}
+                customValidationError={perkPriceTwoError}
               />
             </div>
             <div className={css.perksField}>
@@ -364,9 +418,9 @@ export const EditListingPricingFormComponent = props => (
                 values={values}
                 placeholder="Price"
                 disabled={values.perkNameThree ? false : true}
-                validate={perkPriceValidators(values.perkNameThree)}
                 formatedshippingCharge={formatedPerkNameThreePrice}
                 setFormatedShippingCharge={setFormatedPerkNameThreePrice}
+                customValidationError={perkPriceThreeError}
               />
             </div>
           </div>
