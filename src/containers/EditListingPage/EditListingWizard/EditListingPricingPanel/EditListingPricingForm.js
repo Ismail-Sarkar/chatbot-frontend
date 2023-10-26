@@ -171,6 +171,19 @@ export const EditListingPricingFormComponent = props => (
               <FormattedMessage id="EditListingPricingForm.showListingFailed" />
             </p>
           ) : null}
+          <FieldCurrencyInput
+            id={`${formId}price`}
+            name="price"
+            className={css.input}
+            autoFocus={autoFocus}
+            label={intl.formatMessage(
+              { id: 'EditListingPricingForm.pricePerProduct' },
+              { unitType }
+            )}
+            placeholder={intl.formatMessage({ id: 'EditListingPricingForm.priceInputPlaceholder' })}
+            currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
+            validate={priceValidators}
+          />
           <FieldSelect
             id="prefferedPaymentMethod"
             name="prefferedPaymentMethod"
@@ -191,19 +204,7 @@ export const EditListingPricingFormComponent = props => (
               );
             })}
           </FieldSelect>
-          <FieldCurrencyInput
-            id={`${formId}price`}
-            name="price"
-            className={css.input}
-            autoFocus={autoFocus}
-            label={intl.formatMessage(
-              { id: 'EditListingPricingForm.pricePerProduct' },
-              { unitType }
-            )}
-            placeholder={intl.formatMessage({ id: 'EditListingPricingForm.priceInputPlaceholder' })}
-            currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
-            validate={priceValidators}
-          />
+
           <div className={css.optionalPerkFee}>
             Optional: Add up to 3 additional perks
             {/* (ex: Perk name: “unlimited coffee,” | Price:
