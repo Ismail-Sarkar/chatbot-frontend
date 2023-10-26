@@ -281,6 +281,8 @@ const EditListingAvailabilityPanel = props => {
     ],
   };
   const availabilityPlan = listingAttributes?.availabilityPlan || defaultAvailabilityPlan;
+
+  console.log(777, availabilityPlan, listing);
   const initialValues = valuesFromLastSubmit
     ? valuesFromLastSubmit
     : createInitialValues(availabilityPlan);
