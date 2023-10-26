@@ -31,7 +31,7 @@
 }
 
 .section {
-  margin: 24px 0 0 0;
+  margin: 5px 0 0 0;
   @media(max-width:767px){
     margin: 0 0 0;
   }
@@ -48,11 +48,11 @@
 .addExceptionButton {
   composes: h4 from global;
   padding: 1px 0 5px 0;
-  margin: 0 0 24px 0;
+  margin: 0 0 15px 0;
 
   @media (--viewportMedium) {
     padding: 3px 0 5px 0;
-    margin: 0 0 32px 0;
+    /* margin: 0 0 32px 0; */
   }
   @media(max-width:767px){
     margin:15px 0 0;
@@ -60,7 +60,7 @@
 }
 
 .goToNextTabButton {
-  margin-top: 60px;
+  margin-top: 50px;
   margin-bottom: 24px;
   flex-shrink: 0;
 
@@ -94,7 +94,7 @@
   color: var(--colorFail);
 }
 .time {
-  margin-bottom: 20px;
+  margin-bottom:8px;
   width: 100%;
   /* max-width: 40%; */
   @media(max-width:767px){
@@ -127,8 +127,8 @@
 }
 .startEndTimeTitle {
   margin-bottom: 20px;
-  font-size: 24px;
-  line-height: 35px;
+  font-size: 20px;
+  line-height: 30px;
   font-weight: 600;
   @media(max-width:767px){
     font-size: 18px;
@@ -143,8 +143,8 @@
   margin-bottom: 20px;
 }
 .entryRulesTitle {
-  font-size: 24px;
-  line-height: 35px;
+  font-size: 20px;
+  line-height: 30px;
   font-weight: 600;
   margin-bottom: 20px;
   @media(max-width:767px){

@@ -171,7 +171,7 @@ export const EditListingLocationFormComponent = props => (
           />
 
           {manualAddressState && (
-            <div>
+            <div className={css.AddressWrap}>
               <div className={css.AddressDiv}>
                 <span className={css.manualAddress}>
                   {' '}

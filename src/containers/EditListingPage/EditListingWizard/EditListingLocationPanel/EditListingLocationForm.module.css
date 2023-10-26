@@ -45,16 +45,18 @@
 .validLocation {
 }
 
-.locationAddress,
-.building {
+.locationAddress{
   flex-shrink: 0;
-  margin-bottom: 20px;
+  margin-bottom:5px;
   /* margin-top:10px; */
   /* @media (--viewportMedium) {
     margin-bottom: 32px;
   } */
 }
+.building {
+  margin-bottom: 10px;
 
+}
 .submitButton {
   margin-top: auto;
   margin-bottom: 24px;
@@ -62,7 +64,7 @@
   @media (--viewportLarge) {
     display: inline-block;
     width: 241px;
-    margin-top: 60px;
+    margin-top: 50px;
   }
 }
 .manualAddress {
@@ -73,4 +75,7 @@
 }
 .AddressDiv{
  margin-bottom:10px;
+}
+.AddressWrap{
+  margin-top:12px;
 }
