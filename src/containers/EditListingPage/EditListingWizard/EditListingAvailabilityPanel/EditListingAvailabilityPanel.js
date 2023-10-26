@@ -166,7 +166,45 @@ const EditListingAvailabilityPanel = props => {
       }
     }
   }
-  console.log(65, timeOptions);
+
+  for (let hour = 0; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 60) {
+      const parts = startTime?.value?.split(':');
+      if (parts?.length === 2) {
+        const starthour = parts[0]; // This will give you '10' as a string
+        const startminute = parts[1].slice(0, 2);
+        if (hour > starthour) {
+          if (hour < 13) {
+            const time = `${hour.toString().padStart(2, '0')}:${minute
+              .toString()
+              .padStart(2, '0')}am`;
+            endTimeOptions.push({ value: time, label: time });
+          } else {
+            const newHour = hour - 12;
+            const time = `${newHour.toString().padStart(2, '0')}:${minute
+              .toString()
+              .padStart(2, '0')}pm`;
+            endTimeOptions.push({ value: time, label: time });
+          }
+        }
+      } else {
+        if (hour < 13) {
+          const time = `${hour.toString().padStart(2, '0')}:${minute
+            .toString()
+            .padStart(2, '0')}am`;
+          endTimeOptions.push({ value: time, label: time });
+        } else {
+          const newHour = hour - 12;
+          const time = `${newHour.toString().padStart(2, '0')}:${minute
+            .toString()
+            .padStart(2, '0')}pm`;
+          endTimeOptions.push({ value: time, label: time });
+        }
+      }
+    }
+  }
+
+  // console.log(65, timeOptions, startTime);
   const changeStartTime = startTime => {
     setStartTime(startTime);
   };
@@ -382,7 +420,7 @@ const EditListingAvailabilityPanel = props => {
               <Select
                 id="endTime"
                 name="endTime"
-                options={timeOptions}
+                options={endTimeOptions}
                 onChange={changeEndTime}
                 value={endTime}
                 isSearchable={false}

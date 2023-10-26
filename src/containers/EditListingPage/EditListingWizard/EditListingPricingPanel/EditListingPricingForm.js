@@ -96,7 +96,7 @@ export const EditListingPricingFormComponent = props => (
         editListingLinkType,
       } = formRenderProps;
       // console.log(3, listingMinimumPriceSubUnits);
-      const PERK_MAX_LENGTH = 70;
+      const PERK_MAX_LENGTH = 50;
       const VALID = undefined;
 
       const [formatedPerkNameOnePrice, setFormatedPerkNameOnePrice] = useState(null);
