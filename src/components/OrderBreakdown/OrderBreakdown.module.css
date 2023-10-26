@@ -13,10 +13,10 @@
   composes: h4 from global;
   margin: 0;
 
-  @media (--viewportMedium) {
+  /* @media (--viewportMedium) {
     padding-top: 7px;
     padding-bottom: 1px;
-  }
+  } */
 
   display: flex;
   flex-direction: row;
@@ -31,12 +31,13 @@
   padding-bottom: 6px;
 
   @media (--viewportMedium) {
-    padding-bottom: 8px;
+    /* padding-bottom: 8px; */
   }
 }
 
 .bookingPeriodSectionLeft {
   text-align: left;
+  margin-top: -7px;
 }
 
 .bookingPeriodSectionRight {
@@ -49,7 +50,7 @@
   line-height: 24px;
   padding-top: 2px;
   padding-bottom: 4px;
-  font-size:15px;
+  font-size:14px;
   @media (--viewportMedium) {
     padding: 0;
   }
@@ -141,14 +142,14 @@
 }
 
 .seperator {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .reservationLabel {
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 700;
-  margin-bottom:6px;
-  color: #595959;
+  margin-bottom:0;
+  color: #000;
    & span {
     text-decoration: underline;
   }

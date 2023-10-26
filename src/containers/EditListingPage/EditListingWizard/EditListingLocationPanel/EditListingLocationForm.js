@@ -133,17 +133,6 @@ export const EditListingLocationFormComponent = props => (
             </p>
           ) : null}
 
-
-         <FieldTextInput
-            className={css.building}
-            type="text"
-            name="building"
-            id={`${formId}building`}
-            label={intl.formatMessage({ id: 'EditListingLocationForm.building' }, { optionalText })}
-            placeholder={intl.formatMessage({
-              id: 'EditListingLocationForm.buildingPlaceholder',
-            })}
-          />
           <FieldLocationAutocompleteInput
             rootClassName={css.locationAddress}
             inputClassName={css.locationAutocompleteInput}
@@ -170,15 +159,24 @@ export const EditListingLocationFormComponent = props => (
             manualAddressState={manualAddressState}
             handlecityStateCountryName={handlecityStateCountryName}
           />
-
+          <FieldTextInput
+            className={css.building}
+            type="text"
+            name="building"
+            id={`${formId}building`}
+            label={intl.formatMessage({ id: 'EditListingLocationForm.building' }, { optionalText })}
+            placeholder={intl.formatMessage({
+              id: 'EditListingLocationForm.buildingPlaceholder',
+            })}
+          />
 
           {manualAddressState && (
             <div>
               <div className={css.AddressDiv}>
-              <span className={css.manualAddress}>
-                {' '}
-                Manually enter the address for your remote work day pass*
-              </span>
+                <span className={css.manualAddress}>
+                  {' '}
+                  Manually enter the address for your remote work day pass*
+                </span>
               </div>
               <FieldTextInput
                 className={css.building}
