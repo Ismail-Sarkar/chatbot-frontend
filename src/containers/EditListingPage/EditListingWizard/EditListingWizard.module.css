@@ -108,12 +108,13 @@
 }
 
 .customField {
-  margin-bottom:15px;
+  margin-bottom:5px;
 
   /* @media (--viewportMedium) {
     margin-bottom: 32px;
   } */
   & > ul{
+    margin-top: 7px;
     @media(max-width:767px){
       margin-top:15px;
     }

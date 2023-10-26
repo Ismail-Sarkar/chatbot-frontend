@@ -262,26 +262,6 @@ export const EditListingPricingFormComponent = props => (
             currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
             validate={priceValidators}
           />
-          <FieldSelect
-            id="prefferedPaymentMethod"
-            name="prefferedPaymentMethod"
-            className={css.listingTypeSelect}
-            label={intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodTitle' })}
-            validate={validators.required(
-              intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodRequired' })
-            )}
-          >
-            <option disabled value="">
-              {intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodPlaceholder' })}
-            </option>
-            {paymentMethodValues.map(({ option, label }) => {
-              return (
-                <option key={option} value={option}>
-                  {label}
-                </option>
-              );
-            })}
-          </FieldSelect>
 
           <div className={css.optionalPerkFee}>
             Optional: Add up to 3 additional perks
@@ -447,6 +427,26 @@ export const EditListingPricingFormComponent = props => (
             onChange={restrictTextReservation}
             validate={required}
           />
+          <FieldSelect
+            id="prefferedPaymentMethod"
+            name="prefferedPaymentMethod"
+            className={css.listingTypeSelect}
+            label={intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodTitle' })}
+            validate={validators.required(
+              intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodRequired' })
+            )}
+          >
+            <option disabled value="">
+              {intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodPlaceholder' })}
+            </option>
+            {paymentMethodValues.map(({ option, label }) => {
+              return (
+                <option key={option} value={option}>
+                  {label}
+                </option>
+              );
+            })}
+          </FieldSelect>
 
           <Button
             className={css.submitButton}
