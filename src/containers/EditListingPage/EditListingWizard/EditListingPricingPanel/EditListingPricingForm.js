@@ -144,13 +144,14 @@ export const EditListingPricingFormComponent = props => (
           const priceRequiredMsgId = { id: 'EditListingPricingForm.priceRequired' };
           const priceRequiredMsg = intl.formatMessage(priceRequiredMsgId);
           const priceRequired = perkpriceRequired(priceRequiredMsg, perkPrice);
-          const minPriceRaw = new Money(listingMinimumPriceSubUnits, marketplaceCurrency);
+          const minPriceRaw = new Money(listingMinimumPriceSubUnits * 100, marketplaceCurrency);
           const minPrice = formatMoney(intl, minPriceRaw);
           const priceTooLowMsgId = { id: 'EditListingPricingForm.priceTooLow' };
           const priceTooLowMsg = intl.formatMessage(priceTooLowMsgId, { minPrice });
           const minPriceRequired =
             perkPrice &&
-            parseFloat(perkPrice.toString().replace(/[^0-9.-]+/g, '')) > listingMinimumPriceSubUnits
+            parseFloat(perkPrice.toString().replace(/[^0-9.-]+/g, '')) >=
+              listingMinimumPriceSubUnits
               ? VALID
               : priceTooLowMsg;
 
