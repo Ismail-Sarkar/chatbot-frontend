@@ -431,6 +431,11 @@ export const EditListingPricingFormComponent = props => (
             onChange={restrictTextReservation}
             validate={required}
           />
+
+          <div className={classNames(css.optionalPerkFee, css.GuestOption)}>
+            In person payment method
+          </div>
+
           <FieldSelect
             id="prefferedPaymentMethod"
             name="prefferedPaymentMethod"
