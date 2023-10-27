@@ -236,7 +236,7 @@ export const EditListingPricingFormComponent = props => (
       };
 
       const required = validators.required('This field is required');
-      console.log(777, updated, pristine);
+      // console.log(777, updated, pristine);
 
       return (
         <Form onSubmit={handleSubmit} className={classes}>
@@ -304,7 +304,7 @@ export const EditListingPricingFormComponent = props => (
                 onChange={e => {
                   const perkNameOne = e.target.value;
                   form.change('perkNameOne', perkNameOne);
-                  console.log(234, values.perkNameOne, perkNameOne);
+
                   if (perkNameOne === '') {
                     form.change('perkNameOnePrice', undefined);
                     form.change('perkNameOnePriceVal', undefined);
@@ -355,7 +355,7 @@ export const EditListingPricingFormComponent = props => (
                 onChange={e => {
                   const perkNameTwo = e.target.value;
                   form.change('perkNameTwo', perkNameTwo);
-                  console.log(234, values.perkNameTwo, perkNameTwo);
+
                   if (perkNameTwo === '') {
                     form.change('perkNameTwoPrice', undefined);
                     form.change('perkNameTwoPriceVal', undefined);
@@ -397,7 +397,7 @@ export const EditListingPricingFormComponent = props => (
                 onChange={e => {
                   const perkNameThree = e.target.value;
                   form.change('perkNameThree', perkNameThree);
-                  console.log(234, values.perkNameThree, perkNameThree);
+
                   if (perkNameThree === '') {
                     form.change('perkNameThreePrice', undefined);
                     form.change('perkNameThreePriceVal', undefined);
