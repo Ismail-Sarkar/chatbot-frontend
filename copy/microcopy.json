@@ -871,7 +871,7 @@
   "StripePaymentForm.confirmCardPaymentError": "Unable to authenticate your payment method. Please check your authentication details and try again.",
   "StripePaymentForm.confirmPaymentError": "A payment has been made but we are unable to confirm the booking. Please try to confirm the booking request again. If the booking isn't confirmed in time, the payment will be fully refunded.",
   "StripePaymentForm.genericError": "Couldn't handle payment data. Please try again.",
-  "StripePaymentForm.locationDetailsTitle": "Location of the bike",
+  "StripePaymentForm.locationDetailsTitle": "Address/ Meeting point  for this remote work day pass",
   "StripePaymentForm.locationUnknown": "Unknown location",
   "StripePaymentForm.messageHeading": "Additional information",
   "StripePaymentForm.messageLabel": "Is there something the bike owner should know? {messageOptionalText}",

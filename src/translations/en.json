@@ -1135,6 +1135,8 @@
   "TransactionPage.adventurely-booking.provider.transitionAccept.actionError": "Oops, accepting failed. Please try again.",
   "TransactionPage.adventurely-booking.provider.transitionDecline.actionButton": "Decline request",
   "TransactionPage.adventurely-booking.provider.transitionDecline.actionError": "Oops, declining failed. Please try again.",
+  "TransactionPage.adventurely-booking.provider.transition-accept.actionError": "Oops, accepting failed. Please try again.",
+  "TransactionPage.adventurely-booking.provider.transition-decline.actionError": "Oops, declining failed. Please try again.",
   "TransactionPanel.adventurely-booking.orderBreakdownTitle": "Booking breakdown",
   "TransactionPage.adventurely-booking.provider.transition-accept.actionButton": "Accept",
   "TransactionPage.adventurely-booking.provider.transition-decline.actionButton": "Decline"
