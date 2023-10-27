@@ -43,7 +43,7 @@
   @media (--viewportLarge) {
     display: inline-block;
     width: 241px;
-    margin-top: 60px;
+    margin-top: 50px;
   }
 }
 .perksField {
@@ -73,7 +73,7 @@
     margin-bottom: 0;
     font-weight: 700;
     padding-bottom: 0;
-    margin-top: 30px;
+    margin-top: 15px;
     @media(max-width:767px){
     font-size: 18px;
     line-height: 26px;
@@ -100,7 +100,7 @@
   margin-bottom: 13px;
 }
 .GuestOption{
-  margin-top:40px;
+  margin-top:15px;
   @media(max-width:767px){
     margin-top:20px;
   }
