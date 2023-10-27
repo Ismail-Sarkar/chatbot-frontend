@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import { types as sdkTypes, createImageVariantConfig } from '../../util/sdkLoader';
 import { findNextBoundary, getStartOf, monthIdString } from '../../util/dates';
 import { isTransactionsTransitionInvalidTransition, storableError } from '../../util/errors';
-import { transactionLineItems } from '../../util/api';
+import { apiBaseUrl, transactionLineItems } from '../../util/api';
 import * as log from '../../util/log';
 import {
   updatedEntities,
@@ -20,11 +20,14 @@ import {
 
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
+import axios from 'axios';
 
 const { UUID } = sdkTypes;
 
 const MESSAGES_PAGE_SIZE = 100;
 const REVIEW_TX_INCLUDES = ['reviews', 'reviews.author', 'reviews.subject'];
+
+const ACCEPT_BOOKING_TRANSITION = 'transition/accept';
 
 // ================ Action types ================ //
 
@@ -453,11 +456,20 @@ export const fetchTransaction = (id, txRole, config) => (dispatch, getState, sdk
     });
 };
 
-export const makeTransition = (txId, transitionName, params) => (dispatch, getState, sdk) => {
+export const makeTransition = (txId, transitionName, params) => async (dispatch, getState, sdk) => {
   if (transitionInProgress(getState())) {
     return Promise.reject(new Error('Transition already in progress'));
   }
   dispatch(transitionRequest(transitionName));
+  if (transitionName === ACCEPT_BOOKING_TRANSITION) {
+    try {
+      const payment = await axios.post(`${apiBaseUrl()}/api/transaction/capturePaymentIntent`, {
+        txId: txId.uuid,
+      });
+    } catch (e) {
+      console.error('error occurred during capture payment...');
+    }
+  }
 
   return sdk.transactions
     .transition({ id: txId, transition: transitionName, params }, { expand: true })

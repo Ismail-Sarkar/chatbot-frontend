@@ -55,6 +55,7 @@
    :actor :actor.role/operator,
    :actions
    [{:name :action/accept-booking}
+    {:name :action/update-protected-data},
     ;; {:name :action/stripe-capture-payment-intent}
     ],
    :from :state/preauthorized,

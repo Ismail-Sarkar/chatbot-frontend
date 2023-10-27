@@ -20,6 +20,7 @@ const createUserWithIdp = require('./api/auth/createUserWithIdp');
 
 const { authenticateFacebook, authenticateFacebookCallback } = require('./api/auth/facebook');
 const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/google');
+const transactionsRouter = require('./api/transactions');
 
 const router = express.Router();
 
@@ -79,5 +80,9 @@ router.get('/auth/google', authenticateGoogle);
 // with Google. In this route a Passport.js custom callback is used for calling
 // loginWithIdp endpoint in Flex API to authenticate user to Flex
 router.get('/auth/google/callback', authenticateGoogleCallback);
+
+//transactionRouter
+
+router.use('/transaction', transactionsRouter);
 
 module.exports = router;
