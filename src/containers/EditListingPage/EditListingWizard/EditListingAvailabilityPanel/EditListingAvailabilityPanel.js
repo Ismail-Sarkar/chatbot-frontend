@@ -77,7 +77,7 @@ const createInitialValues = availabilityPlan => {
 };
 
 // Create entries from submit values
-const createEntriesFromSubmitValues = values =>
+const createEntriesFromSubmitValues = (values, listing) =>
   WEEKDAYS.reduce((allEntries, dayOfWeek) => {
     const dayValues = values[dayOfWeek] || [];
     const dayEntries = dayValues.map(dayValue => {
@@ -86,7 +86,7 @@ const createEntriesFromSubmitValues = values =>
       return startTime && endTime
         ? {
             dayOfWeek,
-            seats: 1,
+            seats: listing?.attributes?.publicData?.reserVations || 1,
             startTime,
             endTime: endTime === '24:00' ? '00:00' : endTime,
           }
@@ -97,11 +97,11 @@ const createEntriesFromSubmitValues = values =>
   }, []);
 
 // Create availabilityPlan from submit values
-const createAvailabilityPlan = values => ({
+const createAvailabilityPlan = (values, listing) => ({
   availabilityPlan: {
     type: 'availability-plan/time',
     timezone: values.timezone,
-    entries: createEntriesFromSubmitValues(values),
+    entries: createEntriesFromSubmitValues(values, listing),
   },
 });
 
@@ -281,6 +281,8 @@ const EditListingAvailabilityPanel = props => {
     ],
   };
   const availabilityPlan = listingAttributes?.availabilityPlan || defaultAvailabilityPlan;
+
+  console.log(777, availabilityPlan, listing);
   const initialValues = valuesFromLastSubmit
     ? valuesFromLastSubmit
     : createInitialValues(availabilityPlan);
@@ -289,7 +291,7 @@ const EditListingAvailabilityPanel = props => {
     setValuesFromLastSubmit(values);
 
     // Final Form can wait for Promises to return.
-    return onSubmit(createAvailabilityPlan(values))
+    return onSubmit(createAvailabilityPlan(values, listing))
       .then(() => {
         setIsEditPlanModalOpen(false);
       })

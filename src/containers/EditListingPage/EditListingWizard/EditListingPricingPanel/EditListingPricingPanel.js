@@ -140,8 +140,24 @@ const EditListingPricingPanel = props => {
             } = values;
             // console.log(445, values, prefferedPaymentMethod);
             // New values for listing attributes
+
+            const newAvailabitiyPlan =
+              listing?.attributes?.publicData?.reserVations !== reserVations &&
+              listing?.attributes?.availabilityPlan?.type === 'availability-plan/time'
+                ? {
+                    ...listing?.attributes?.availabilityPlan,
+                    entries: listing?.attributes?.availabilityPlan?.entries?.map(entry => {
+                      return {
+                        ...entry, // Spread the original entry
+                        seats: parseInt(reserVations), // Update the "seats" property to reserVations
+                      };
+                    }),
+                  }
+                : listing?.attributes?.availabilityPlan;
+
             const updateValues = {
               price,
+              availabilityPlan: newAvailabitiyPlan,
               publicData: {
                 prefferedPaymentMethod: prefferedPaymentMethod,
                 listingPrice: {
