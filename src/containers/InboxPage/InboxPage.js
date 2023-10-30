@@ -251,8 +251,6 @@ export const InboxPageComponent = props => {
   const hasTransactions =
     !fetchInProgress && hasOrderOrSaleTransactions(transactions, isOrders, currentUser);
 
-  console.log(currentUser?.attributes?.profile?.publicData?.userType, 777);
-
   const tabs =
     currentUser?.attributes?.profile?.publicData?.userType === 'partner'
       ? [
