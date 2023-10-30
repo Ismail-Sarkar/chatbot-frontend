@@ -251,23 +251,11 @@ export const InboxPageComponent = props => {
   const hasTransactions =
     !fetchInProgress && hasOrderOrSaleTransactions(transactions, isOrders, currentUser);
 
+  console.log(currentUser?.attributes?.profile?.publicData?.userType, 777);
+
   const tabs =
     currentUser?.attributes?.profile?.publicData?.userType === 'partner'
       ? [
-          {
-            text: (
-              <span>
-                <FormattedMessage id="InboxPage.ordersTabTitle" />
-              </span>
-            ),
-            selected: isOrders,
-            linkProps: {
-              name: 'InboxPage',
-              params: { tab: 'orders' },
-            },
-          },
-        ]
-      : [
           {
             text: (
               <span>
@@ -281,6 +269,20 @@ export const InboxPageComponent = props => {
             linkProps: {
               name: 'InboxPage',
               params: { tab: 'sales' },
+            },
+          },
+        ]
+      : [
+          {
+            text: (
+              <span>
+                <FormattedMessage id="InboxPage.ordersTabTitle" />
+              </span>
+            ),
+            selected: isOrders,
+            linkProps: {
+              name: 'InboxPage',
+              params: { tab: 'orders' },
             },
           },
         ];
