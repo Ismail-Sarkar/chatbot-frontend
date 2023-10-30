@@ -257,6 +257,20 @@ export const InboxPageComponent = props => {
           {
             text: (
               <span>
+                <FormattedMessage id="InboxPage.ordersTabTitle" />
+              </span>
+            ),
+            selected: isOrders,
+            linkProps: {
+              name: 'InboxPage',
+              params: { tab: 'orders' },
+            },
+          },
+        ]
+      : [
+          {
+            text: (
+              <span>
                 <FormattedMessage id="InboxPage.salesTabTitle" />
                 {providerNotificationCount > 0 ? (
                   <NotificationBadge count={providerNotificationCount} />
@@ -267,20 +281,6 @@ export const InboxPageComponent = props => {
             linkProps: {
               name: 'InboxPage',
               params: { tab: 'sales' },
-            },
-          },
-        ]
-      : [
-          {
-            text: (
-              <span>
-                <FormattedMessage id="InboxPage.ordersTabTitle" />
-              </span>
-            ),
-            selected: isOrders,
-            linkProps: {
-              name: 'InboxPage',
-              params: { tab: 'orders' },
             },
           },
         ];
