@@ -39,6 +39,8 @@ export const SEND_INQUIRY_REQUEST = 'app/ListingPage/SEND_INQUIRY_REQUEST';
 export const SEND_INQUIRY_SUCCESS = 'app/ListingPage/SEND_INQUIRY_SUCCESS';
 export const SEND_INQUIRY_ERROR = 'app/ListingPage/SEND_INQUIRY_ERROR';
 
+const TIMEZONE_FETCH_SUCCESS = 'app/ListingPage/TIMEZONE_FETCH_SUCCESS';
+
 // ================ Reducer ================ //
 
 const initialState = {
@@ -59,6 +61,7 @@ const initialState = {
   sendInquiryInProgress: false,
   sendInquiryError: null,
   inquiryModalOpenForListingId: null,
+  listingTimeZone: null,
 };
 
 const listingPageReducer = (state = initialState, action = {}) => {
@@ -129,6 +132,9 @@ const listingPageReducer = (state = initialState, action = {}) => {
     case SEND_INQUIRY_ERROR:
       return { ...state, sendInquiryInProgress: false, sendInquiryError: payload };
 
+    case TIMEZONE_FETCH_SUCCESS:
+      return { ...state, listingTimeZone: payload };
+
     default:
       return state;
   }
@@ -190,6 +196,8 @@ export const fetchLineItemsError = error => ({
 export const sendInquiryRequest = () => ({ type: SEND_INQUIRY_REQUEST });
 export const sendInquirySuccess = () => ({ type: SEND_INQUIRY_SUCCESS });
 export const sendInquiryError = e => ({ type: SEND_INQUIRY_ERROR, error: true, payload: e });
+
+export const timeZoneFetchSuccess = payload => ({ type: TIMEZONE_FETCH_SUCCESS, payload });
 
 // ================ Thunks ================ //
 
@@ -265,8 +273,9 @@ export const fetchReviews = listingId => (dispatch, getState, sdk) => {
     });
 };
 
-const timeSlotsRequest = params => (dispatch, getState, sdk) => {
+const timeSlotsRequest = (params, timeZone) => (dispatch, getState, sdk) => {
   return sdk.timeslots.query(params).then(response => {
+    dispatch(timeZoneFetchSuccess(timeZone));
     return denormalisedResponseEntities(response);
   });
 };
@@ -282,7 +291,7 @@ export const fetchTimeSlots = (listingId, start, end, timeZone) => (dispatch, ge
     page: 1,
   };
 
-  return dispatch(timeSlotsRequest({ listingId, start, end, ...extraParams }))
+  return dispatch(timeSlotsRequest({ listingId, start, end, ...extraParams }, timeZone))
     .then(timeSlots => {
       dispatch(fetchTimeSlotsSuccess(monthId, timeSlots));
     })

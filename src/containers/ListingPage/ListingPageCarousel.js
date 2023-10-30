@@ -114,6 +114,7 @@ export const ListingPageComponent = props => {
     onInitializeCardPaymentData,
     config,
     routeConfiguration,
+    listingTimeZone,
   } = props;
 
   // prop override makes testing a bit easier
@@ -402,6 +403,7 @@ export const ListingPageComponent = props => {
               marketplaceCurrency={config.currency}
               dayCountAvailableForBooking={config.stripe.dayCountAvailableForBooking}
               marketplaceName={config.marketplaceName}
+              listingTimeZone={listingTimeZone}
             />
           </div>
         </div>
@@ -510,6 +512,7 @@ const mapStateToProps = state => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
     inquiryModalOpenForListingId,
+    listingTimeZone,
   } = state.ListingPage;
   const { currentUser } = state.user;
 
@@ -541,6 +544,7 @@ const mapStateToProps = state => {
     fetchLineItemsError,
     sendInquiryInProgress,
     sendInquiryError,
+    listingTimeZone,
   };
 };
 
