@@ -24,6 +24,9 @@ const LoginFormComponent = props => (
         invalid,
       } = fieldRenderProps;
 
+      const isPartner =
+        typeof window !== 'undefined' && window.location.pathname?.includes('partner');
+
       // email
       const emailLabel = intl.formatMessage({
         id: 'LoginForm.emailLabel',
@@ -97,6 +100,22 @@ const LoginFormComponent = props => (
             <PrimaryButton type="submit" inProgress={submitInProgress} disabled={submitDisabled}>
               <FormattedMessage id="LoginForm.logIn" />
             </PrimaryButton>
+          </div>
+
+          <div className={css.otherTypeLoginLink}>
+            {isPartner ? (
+              <NamedLink name="LoginPage" className={css.signupLink}>
+                {/* <span className={css.signup}> */}
+                <FormattedMessage id="LoginForm.customerLogIn" />
+                {/* </span> */}
+              </NamedLink>
+            ) : (
+              <NamedLink name="PartnerLoginPage" className={css.signupLink}>
+                {/* <span className={css.signup}> */}
+                <FormattedMessage id="LoginForm.partnerLogIn" />
+                {/* </span> */}
+              </NamedLink>
+            )}
           </div>
         </Form>
       );

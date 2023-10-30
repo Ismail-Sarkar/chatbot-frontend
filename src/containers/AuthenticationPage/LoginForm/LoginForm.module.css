@@ -10,6 +10,11 @@
   }
 }
 
+.otherTypeLoginLink {
+  margin: 25px auto 0;
+  text-align: center;
+}
+
 .password {
   composes: marketplaceModalPasswordMargins from global;
 }

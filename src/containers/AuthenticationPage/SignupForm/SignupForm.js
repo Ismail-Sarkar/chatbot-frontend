@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { FormattedMessage, injectIntl, intlShape } from '../../../util/reactIntl';
 import * as validators from '../../../util/validators';
-import { Form, PrimaryButton, FieldTextInput } from '../../../components';
+import { Form, PrimaryButton, FieldTextInput, NamedLink } from '../../../components';
 
 import css from './SignupForm.module.css';
 
@@ -26,6 +26,9 @@ const SignupFormComponent = props => (
         intl,
         termsAndConditions,
       } = fieldRenderProps;
+
+      const isPartner =
+        typeof window !== 'undefined' && window.location.pathname?.includes('partner');
 
       // email
       const emailRequired = validators.required(
@@ -73,6 +76,20 @@ const SignupFormComponent = props => (
         passwordMinLength,
         passwordMaxLength
       );
+
+      //SignupCode for partners
+
+      const signupCodeRequiredMessage = intl.formatMessage({
+        id: 'SignupForm.signupCodeRequired',
+      });
+
+      const signupCodeValid = validators.signupCodeValid(
+        intl.formatMessage({
+          id: 'SignupForm.signupCodeRequired',
+        })
+      );
+
+      const signupCodeRequired = validators.requiredStringNoTrim(signupCodeRequiredMessage);
 
       const classes = classNames(rootClassName || css.root, className);
       const submitInProgress = inProgress;
@@ -132,6 +149,27 @@ const SignupFormComponent = props => (
                 )}
               />
             </div>
+            {isPartner && (
+              <FieldTextInput
+                className={css.fieldGrp}
+                type="text"
+                id={formId ? `${formId}.businessRole` : 'businessRole'}
+                name="businessRole"
+                autoComplete="businessRole"
+                label={intl.formatMessage({
+                  id: 'SignupForm.businessRoleLabel',
+                })}
+                placeholder={intl.formatMessage({
+                  id: 'SignupForm.businessRolePlaceholder',
+                })}
+                // validate={validators.composeValidators(emailRequired, emailValid)}
+                validate={validators.required(
+                  intl.formatMessage({
+                    id: 'SignupForm.businessRoleRequired',
+                  })
+                )}
+              />
+            )}
             <FieldTextInput
               className={css.password}
               type="password"
@@ -146,13 +184,45 @@ const SignupFormComponent = props => (
               })}
               validate={passwordValidators}
             />
-          </div>
 
+            {isPartner && (
+              <FieldTextInput
+                className={css.fieldGrp}
+                type="text"
+                id={formId ? `${formId}.signupCode` : 'signupCode'}
+                name="signupCode"
+                autoComplete="signupCode"
+                label={intl.formatMessage({
+                  id: 'SignupForm.signupCodeLabel',
+                })}
+                placeholder={intl.formatMessage({
+                  id: 'SignupForm.signupCodePlaceholder',
+                })}
+                validate={validators.composeValidators(signupCodeRequired, signupCodeValid)}
+              />
+            )}
+          </div>
           <div className={css.bottomWrapper}>
             {termsAndConditions}
             <PrimaryButton type="submit" inProgress={submitInProgress} disabled={submitDisabled}>
               <FormattedMessage id="SignupForm.signUp" />
             </PrimaryButton>
+          </div>
+
+          <div className={css.otherTypeSignupLink}>
+            {isPartner ? (
+              <NamedLink name="SignupPage" className={css.signupLink}>
+                {/* <span className={css.signup}> */}
+                <FormattedMessage id="SignupForm.customerSignUp" />
+                {/* </span> */}
+              </NamedLink>
+            ) : (
+              <NamedLink name="PartnerSignupPage" className={css.signupLink}>
+                {/* <span className={css.signup}> */}
+                <FormattedMessage id="SignupForm.partnerSignUp" />
+                {/* </span> */}
+              </NamedLink>
+            )}
           </div>
         </Form>
       );

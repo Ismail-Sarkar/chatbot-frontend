@@ -142,6 +142,9 @@ export const AuthenticationForms = props => {
     submitSignup,
     termsAndConditions,
   } = props;
+
+  const isPartner = typeof window !== 'undefined' && window.location.pathname?.includes('partner');
+
   const fromState = { state: from ? { from } : null };
   const tabs = [
     {
@@ -172,7 +175,12 @@ export const AuthenticationForms = props => {
 
   const handleSubmitSignup = values => {
     const { fname, lname, ...rest } = values;
-    const params = { firstName: fname.trim(), lastName: lname.trim(), ...rest };
+    const params = {
+      firstName: fname.trim(),
+      lastName: lname.trim(),
+      userType: isPartner ? 'partner' : 'customer',
+      ...rest,
+    };
     submitSignup(params);
   };
 
@@ -621,10 +629,7 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const AuthenticationPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(AuthenticationPageComponent);
 

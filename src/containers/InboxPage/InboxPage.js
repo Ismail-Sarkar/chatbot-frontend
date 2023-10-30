@@ -251,36 +251,39 @@ export const InboxPageComponent = props => {
   const hasTransactions =
     !fetchInProgress && hasOrderOrSaleTransactions(transactions, isOrders, currentUser);
 
-  const tabs = [
-    {
-      text: (
-        <span>
-          <FormattedMessage id="InboxPage.ordersTabTitle" />
-        </span>
-      ),
-      selected: isOrders,
-      linkProps: {
-        name: 'InboxPage',
-        params: { tab: 'orders' },
-      },
-    },
-    {
-      text: (
-        <span>
-          <FormattedMessage id="InboxPage.salesTabTitle" />
-          {providerNotificationCount > 0 ? (
-            <NotificationBadge count={providerNotificationCount} />
-          ) : null}
-        </span>
-      ),
-      selected: !isOrders,
-      linkProps: {
-        name: 'InboxPage',
-        params: { tab: 'sales' },
-      },
-    },
-  ];
-
+  const tabs =
+    currentUser?.attributes?.profile?.publicData?.userType === 'partner'
+      ? [
+          {
+            text: (
+              <span>
+                <FormattedMessage id="InboxPage.salesTabTitle" />
+                {providerNotificationCount > 0 ? (
+                  <NotificationBadge count={providerNotificationCount} />
+                ) : null}
+              </span>
+            ),
+            selected: !isOrders,
+            linkProps: {
+              name: 'InboxPage',
+              params: { tab: 'sales' },
+            },
+          },
+        ]
+      : [
+          {
+            text: (
+              <span>
+                <FormattedMessage id="InboxPage.ordersTabTitle" />
+              </span>
+            ),
+            selected: isOrders,
+            linkProps: {
+              name: 'InboxPage',
+              params: { tab: 'orders' },
+            },
+          },
+        ];
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
       <LayoutSideNavigation
