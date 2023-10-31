@@ -42,8 +42,7 @@ export const ProfileSettingsPageComponent = props => {
   } = props;
 
   const handleSubmit = values => {
-    const { firstName, lastName, bio: rawBio } = values;
-
+    const { firstName, lastName, bio: rawBio, businessName } = values;
     // Ensure that the optional bio is a string
     const bio = rawBio || '';
 
@@ -51,6 +50,7 @@ export const ProfileSettingsPageComponent = props => {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       bio,
+      publicData: { businessName: businessName },
     };
     const uploadedImage = props.image;
 
@@ -72,7 +72,13 @@ export const ProfileSettingsPageComponent = props => {
     <ProfileSettingsForm
       className={css.form}
       currentUser={currentUser}
-      initialValues={{ firstName, lastName, bio, profileImage: user.profileImage }}
+      initialValues={{
+        firstName,
+        lastName,
+        bio,
+        profileImage: user.profileImage,
+        businessName: user.attributes.profile.publicData.businessName,
+      }}
       profileImage={profileImage}
       onImageUpload={e => onImageUploadHandler(e, onImageUpload)}
       uploadInProgress={uploadInProgress}
@@ -176,10 +182,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ProfileSettingsPage = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(ProfileSettingsPageComponent);
 
