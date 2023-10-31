@@ -158,21 +158,18 @@ const TopbarDesktop = props => {
         <LiaSearchSolid size={25} />
         <div className={css.searchTitle}> Search Passes...</div>
       </NamedLink>
+      <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
+        <span className={css.createListing}>
+          <FormattedMessage id="TopbarDesktop.blog" />
+        </span>
+      </ExternalLink>
       {currentUser?.attributes?.profile?.publicData?.userType === 'partner' ? (
         <NamedLink className={css.createListingLink} name="NewListingPage">
           <span className={css.createListing}>
             <FormattedMessage id="TopbarDesktop.createListing" />
           </span>
         </NamedLink>
-      ) : (
-        ''
-      )}
-      <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
-        <span className={css.createListing}>
-          <FormattedMessage id="TopbarDesktop.blog" />
-        </span>
-      </ExternalLink>
-      {!currentUser ? (
+      ) : !currentUser ? (
         <NamedLink className={css.createListingLink} name="NewListingPage">
           <span className={css.createListing}>
             <FormattedMessage id="TopbarDesktop.createListing" />
