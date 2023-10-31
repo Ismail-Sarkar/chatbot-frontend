@@ -159,12 +159,20 @@ const TopbarDesktop = props => {
         <div className={css.searchTitle}> Search Passes...</div>
       </NamedLink>
 
-      {currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
+      {currentUser?.attributes?.profile?.publicData?.userType === 'partner' ? (
         <NamedLink className={css.createListingLink} name="NewListingPage">
           <span className={css.createListing}>
             <FormattedMessage id="TopbarDesktop.createListing" />
           </span>
         </NamedLink>
+      ) : !currentUser ? (
+        <NamedLink className={css.createListingLink} name="NewListingPage">
+          <span className={css.createListing}>
+            <FormattedMessage id="TopbarDesktop.createListing" />
+          </span>
+        </NamedLink>
+      ) : (
+        ''
       )}
       <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
         <span className={css.createListing}>

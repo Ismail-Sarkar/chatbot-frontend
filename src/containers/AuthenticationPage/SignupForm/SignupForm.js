@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 import { FormattedMessage, injectIntl, intlShape } from '../../../util/reactIntl';
 import * as validators from '../../../util/validators';
-import { Form, PrimaryButton, FieldTextInput, NamedLink } from '../../../components';
+import { Form, PrimaryButton, FieldTextInput, NamedLink, H4 } from '../../../components';
 
 import css from './SignupForm.module.css';
 
@@ -98,6 +98,11 @@ const SignupFormComponent = props => (
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           <div>
+            {isPartner && (
+              <H4 as="h2" className={css.sectionTitle}>
+                <FormattedMessage id="SignupForm.partnerSignUp" />
+              </H4>
+            )}
             <FieldTextInput
               type="email"
               id={formId ? `${formId}.email` : 'email'}
@@ -209,21 +214,21 @@ const SignupFormComponent = props => (
             </PrimaryButton>
           </div>
 
-          <div className={css.otherTypeSignupLink}>
+          {/* <div className={css.otherTypeSignupLink}>
             {isPartner ? (
               <NamedLink name="SignupPage" className={css.signupLink}>
-                {/* <span className={css.signup}> */}
+                
                 <FormattedMessage id="SignupForm.customerSignUp" />
-                {/* </span> */}
+                
               </NamedLink>
             ) : (
               <NamedLink name="PartnerSignupPage" className={css.signupLink}>
-                {/* <span className={css.signup}> */}
+                
                 <FormattedMessage id="SignupForm.partnerSignUp" />
-                {/* </span> */}
+               
               </NamedLink>
             )}
-          </div>
+          </div> */}
         </Form>
       );
     }}

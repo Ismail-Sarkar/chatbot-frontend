@@ -35,3 +35,9 @@
 .recoveryLinkInfo {
   composes: marketplaceModalHelperText from global;
 }
+
+.sectionTitle {
+  font-size: 30px;
+  margin-top: -15px;
+  margin-bottom: 25px;
+}

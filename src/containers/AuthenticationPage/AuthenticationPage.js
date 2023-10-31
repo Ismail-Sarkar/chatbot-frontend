@@ -146,32 +146,37 @@ export const AuthenticationForms = props => {
   const isPartner = typeof window !== 'undefined' && window.location.pathname?.includes('partner');
 
   const fromState = { state: from ? { from } : null };
-  const tabs = [
-    {
-      text: (
-        <Heading as={!isLogin ? 'h1' : 'h2'} rootClassName={css.tab}>
-          <FormattedMessage id="AuthenticationPage.signupLinkText" />
-        </Heading>
-      ),
-      selected: !isLogin,
-      linkProps: {
-        name: 'SignupPage',
-        to: fromState,
-      },
-    },
-    {
-      text: (
-        <Heading as={isLogin ? 'h1' : 'h2'} rootClassName={css.tab}>
-          <FormattedMessage id="AuthenticationPage.loginLinkText" />
-        </Heading>
-      ),
-      selected: isLogin,
-      linkProps: {
-        name: 'LoginPage',
-        to: fromState,
-      },
-    },
-  ];
+  const tabs =
+    typeof window !== 'undefined' && window.location.pathname === '/partnersignup'
+      ? []
+      : typeof window !== 'undefined' && window.location.pathname === '/partnerlogin'
+      ? []
+      : [
+          {
+            text: (
+              <Heading as={!isLogin ? 'h1' : 'h2'} rootClassName={css.tab}>
+                <FormattedMessage id="AuthenticationPage.signupLinkText" />
+              </Heading>
+            ),
+            selected: !isLogin,
+            linkProps: {
+              name: 'SignupPage',
+              to: fromState,
+            },
+          },
+          {
+            text: (
+              <Heading as={isLogin ? 'h1' : 'h2'} rootClassName={css.tab}>
+                <FormattedMessage id="AuthenticationPage.loginLinkText" />
+              </Heading>
+            ),
+            selected: isLogin,
+            linkProps: {
+              name: 'LoginPage',
+              to: fromState,
+            },
+          },
+        ];
 
   const handleSubmitSignup = values => {
     const { fname, lname, ...rest } = values;

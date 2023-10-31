@@ -117,6 +117,7 @@ const routeConfiguration = (layoutConfig) => {
       path: '/l/new',
       name: 'NewListingPage',
       auth: true,
+      authPage: 'PartnerSignupPage',
       component: () => (
         <NamedRedirect
           name="EditListingPage"
