@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { bool, func, object, oneOf, shape } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter, Redirect, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import classNames from 'classnames';
 import { isEmpty } from 'lodash';
@@ -143,6 +143,8 @@ export const AuthenticationForms = props => {
     termsAndConditions,
   } = props;
 
+  const history = useHistory();
+
   const isPartner = typeof window !== 'undefined' && window.location.pathname?.includes('partner');
 
   const fromState = { state: from ? { from } : null };
@@ -186,7 +188,7 @@ export const AuthenticationForms = props => {
       userType: isPartner ? 'partner' : 'customer',
       ...rest,
     };
-    submitSignup(params);
+    submitSignup(params).then(res => isPartner && history.push('/partnerlogin'));
   };
 
   const loginErrorMessage = (
@@ -359,6 +361,8 @@ export const AuthenticationPageComponent = props => {
   const [authInfo, setAuthInfo] = useState(getAuthInfoFromCookies());
   const [authError, setAuthError] = useState(getAuthErrorFromCookies());
   const config = useConfiguration();
+
+  const history = useHistory();
 
   useEffect(() => {
     // Remove the autherror cookie once the content is saved to state
