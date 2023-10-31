@@ -158,14 +158,7 @@ const TopbarDesktop = props => {
         <LiaSearchSolid size={25} />
         <div className={css.searchTitle}> Search Passes...</div>
       </NamedLink>
-
       {currentUser?.attributes?.profile?.publicData?.userType === 'partner' ? (
-        <NamedLink className={css.createListingLink} name="NewListingPage">
-          <span className={css.createListing}>
-            <FormattedMessage id="TopbarDesktop.createListing" />
-          </span>
-        </NamedLink>
-      ) : !currentUser ? (
         <NamedLink className={css.createListingLink} name="NewListingPage">
           <span className={css.createListing}>
             <FormattedMessage id="TopbarDesktop.createListing" />
@@ -179,6 +172,16 @@ const TopbarDesktop = props => {
           <FormattedMessage id="TopbarDesktop.blog" />
         </span>
       </ExternalLink>
+      {!currentUser ? (
+        <NamedLink className={css.createListingLink} name="NewListingPage">
+          <span className={css.createListing}>
+            <FormattedMessage id="TopbarDesktop.createListing" />
+          </span>
+        </NamedLink>
+      ) : (
+        ''
+      )}
+
       {inboxLink}
       {profileMenu}
       {signupLink}
