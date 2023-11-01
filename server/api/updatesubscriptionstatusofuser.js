@@ -1,6 +1,6 @@
 module.exports.updatesubscriptionstatusofuser = async (req, res) => {
   try {
-    console.log('WebHook status: Hitted');
+    console.log('WebHook status: Hitted', req.body);
     res.status(200).send({ message: 'WebHook status: Hitted' });
   } catch (err) {
     console.log('Error hitting webhook', err);
