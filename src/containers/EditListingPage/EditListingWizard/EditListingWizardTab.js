@@ -21,7 +21,8 @@ import EditListingPricingPanel from './EditListingPricingPanel/EditListingPricin
 import EditListingPricingAndStockPanel from './EditListingPricingAndStockPanel/EditListingPricingAndStockPanel';
 
 import css from './EditListingWizardTab.module.css';
-
+import EditListingSubscribePanel from './EditListingSubscribePanel/EditListingSubscribePanel';
+export const SUBSCRIBE = 'subscribe';
 export const DETAILS = 'details';
 export const PRICING = 'pricing';
 export const PRICING_AND_STOCK = 'pricing-and-stock';
@@ -32,6 +33,7 @@ export const PHOTOS = 'photos';
 
 // EditListingWizardTab component supports these tabs
 export const SUPPORTED_TABS = [
+  SUBSCRIBE,
   DETAILS,
   PRICING,
   PRICING_AND_STOCK,
@@ -103,6 +105,7 @@ const EditListingWizardTab = props => {
     tabSubmitButtonText,
     config,
     routeConfiguration,
+    currentUser,
   } = props;
 
   const { type } = params;
@@ -165,6 +168,7 @@ const EditListingWizardTab = props => {
       params,
       locationSearch,
       updateInProgress,
+      currentUser,
       // newListingPublished and fetchInProgress are flags for the last wizard tab
       ready: newListingPublished,
       disabled: fetchInProgress,
@@ -179,6 +183,16 @@ const EditListingWizardTab = props => {
 
   // TODO: add missing cases for supported tabs
   switch (tab) {
+    case SUBSCRIBE: {
+      return (
+        <EditListingSubscribePanel
+          {...panelProps(SUBSCRIBE)}
+          onListingTypeChange={onListingTypeChange}
+          config={config}
+          history={history}
+        />
+      );
+    }
     case DETAILS: {
       return (
         <EditListingDetailsPanel

@@ -41,6 +41,7 @@ import {
 
 // Import modules from this directory
 import EditListingWizardTab, {
+  SUBSCRIBE,
   DETAILS,
   PRICING,
   PRICING_AND_STOCK,
@@ -50,6 +51,7 @@ import EditListingWizardTab, {
   PHOTOS,
 } from './EditListingWizardTab';
 import css from './EditListingWizard.module.css';
+import moment from 'moment';
 
 // You can reorder these panels.
 // Note 1: You need to change save button translations for new listing flow
@@ -57,9 +59,10 @@ import css from './EditListingWizard.module.css';
 //         and listing publishing happens after last panel.
 // Note 3: The first tab creates a draft listing and title is mandatory attribute for it.
 //         Details tab asks for "title" and is therefore the first tab in the wizard flow.
+
 const TABS_DETAILS_ONLY = [DETAILS];
 const TABS_PRODUCT = [DETAILS, PRICING_AND_STOCK, DELIVERY, PHOTOS];
-const TABS_BOOKING = [DETAILS, LOCATION, PRICING, AVAILABILITY, PHOTOS];
+const TABS_BOOKING = [SUBSCRIBE, DETAILS, LOCATION, PRICING, AVAILABILITY, PHOTOS];
 const TABS_INQUIRY = [DETAILS, LOCATION, PRICING, PHOTOS];
 const TABS_INQUIRY_WITHOUT_PRICE = [DETAILS, LOCATION, PHOTOS];
 const TABS_ALL = [...TABS_PRODUCT, ...TABS_BOOKING, ...TABS_INQUIRY];
@@ -84,7 +87,10 @@ const tabLabelAndSubmit = (intl, tab, isNewListingFlow, isPriceDisabled, process
 
   let labelKey = null;
   let submitButtonKey = null;
-  if (tab === DETAILS) {
+  if (tab === SUBSCRIBE) {
+    labelKey = 'EditListingWizard.tabLabelSubscribe';
+    submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveSubscribe`;
+  } else if (tab === DETAILS) {
     labelKey = 'EditListingWizard.tabLabelDetails';
     submitButtonKey = `EditListingWizard.${processNameString}${newOrEdit}.saveDetails`;
   } else if (tab === PRICING) {
@@ -174,7 +180,7 @@ const hasValidListingFieldsInExtendedData = (publicData, privateData, config) =>
  *
  * @return true if tab / step is completed.
  */
-const tabCompleted = (tab, listing, config) => {
+const tabCompleted = (tab, listing, config, currentUser) => {
   const {
     availabilityPlan,
     description,
@@ -190,6 +196,24 @@ const tabCompleted = (tab, listing, config) => {
   const deliveryOptionPicked = publicData && (shippingEnabled || pickupEnabled);
 
   switch (tab) {
+    case SUBSCRIBE:
+      return typeof currentUser.attributes.profile.privateData.subscriptionDetails !== 'undefined'
+        ? currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStatus ===
+            'active' &&
+            (moment(new Date()).isBetween(
+              currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
+              currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+              'day'
+            ) ||
+              moment(new Date()).isSame(
+                currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
+                'day'
+              ) ||
+              moment(new Date()).isSame(
+                currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+                'day'
+              ))
+        : false;
     case DETAILS:
       return !!(
         description &&
@@ -231,12 +255,17 @@ const tabCompleted = (tab, listing, config) => {
  *
  * @return object containing activity / editability of different tabs of this wizard
  */
-const tabsActive = (isNew, listing, tabs, config) => {
+const tabsActive = (isNew, listing, tabs, config, currentUser) => {
   return tabs.reduce((acc, tab) => {
     const previousTabIndex = tabs.findIndex(t => t === tab) - 1;
     const validTab = previousTabIndex >= 0;
     const hasListingType = !!listing?.attributes?.publicData?.listingType;
-    const prevTabComletedInNewFlow = tabCompleted(tabs[previousTabIndex], listing, config);
+    const prevTabComletedInNewFlow = tabCompleted(
+      tabs[previousTabIndex],
+      listing,
+      config,
+      currentUser
+    );
     const isActive =
       validTab && !isNew ? hasListingType : validTab && isNew ? prevTabComletedInNewFlow : true;
     return { ...acc, [tab]: isActive };
@@ -445,7 +474,7 @@ class EditListingWizard extends Component {
 
     // Check if wizard tab is active / linkable.
     // When creating a new listing, we don't allow users to access next tab until the current one is completed.
-    const tabsStatus = tabsActive(isNewListingFlow, currentListing, tabs, config);
+    const tabsStatus = tabsActive(isNewListingFlow, currentListing, tabs, config, currentUser);
 
     // Redirect user to first tab when encoutering outdated draft listings.
     if (invalidExistingListingType && isNewListingFlow && selectedTab !== tabs[0]) {
@@ -570,6 +599,7 @@ class EditListingWizard extends Component {
                 onManageDisableScrolling={onManageDisableScrolling}
                 config={config}
                 routeConfiguration={routeConfiguration}
+                currentUser={currentUser}
               />
             );
           })}
