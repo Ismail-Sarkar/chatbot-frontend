@@ -25,7 +25,7 @@ const createCustomPaymentIntent = async info => {
       customer,
       payment_method_types: ['card'],
       capture_method: 'manual', // Set capture_method to manual
-
+      setup_future_usage: 'off_session',
       confirm: 'true',
       description,
       metadata: {
@@ -49,6 +49,8 @@ const createCustomPaymentIntent = async info => {
 
     confirm: 'false',
     description,
+    setup_future_usage: 'off_session',
+
     metadata: {
       'sharetribe-platform': 'sharetribe',
       'sharetribe-customer-id': customerId,
