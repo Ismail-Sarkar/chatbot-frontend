@@ -112,7 +112,7 @@ function StripeSubscriptionSuccessPanel(props) {
                   {formatMoney(
                     intl,
                     new Money(
-                      currentUser?.attributes.profile.privateData.subscriptionDetails.totalAmount,
+                      currentUser?.attributes?.profile?.privateData?.subscriptionDetails?.totalAmount || 7200,
                       CURRENCY
                     )
                   )}{' '}
@@ -126,8 +126,7 @@ function StripeSubscriptionSuccessPanel(props) {
                   {formatMoney(
                     intl,
                     new Money(
-                      currentUser?.attributes.profile.privateData.subscriptionDetails
-                        .discountAmount || 0,
+                      currentUser?.attributes?.profile?.privateData?.subscriptionDetails?.discountAmount || 0,
                       CURRENCY
                     )
                   )}{' '}
@@ -140,7 +139,7 @@ function StripeSubscriptionSuccessPanel(props) {
                   {formatMoney(
                     intl,
                     new Money(
-                      currentUser?.attributes.profile.privateData.subscriptionDetails.discountedAmount,
+                      currentUser?.attributes?.profile?.privateData?.subscriptionDetails?.discountedAmount ||7200,
                       CURRENCY
                     )
                   )}{' '}
