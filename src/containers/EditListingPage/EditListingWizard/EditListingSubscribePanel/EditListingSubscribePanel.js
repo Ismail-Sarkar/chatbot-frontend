@@ -323,36 +323,7 @@ const EditListingSubscribePanel = props => {
 
       {canSubscribe && (
         <Button
-          //   className={css.form}
-          //   initialValues={initialValues}
-          //   saveActionMsg={submitButtonText}
-          //   onSubmit={values => {
-          //     const {
-          //       title,
-          //       description,
-          //       listingType,
-          //       transactionProcessAlias,
-          //       unitType,
-          //       ...rest
-          //     } = values;
-
-          //     // New values for listing attributes
-          //     const updateValues = {
-          //       title: title.trim(),
-          //       description,
-          //       publicData: {
-          //         listingType,
-          //         transactionProcessAlias,
-          //         unitType,
-          //         ...pickListingFieldsData(rest, 'public', listingType, listingFieldsConfig),
-          //       },
-          //       privateData: pickListingFieldsData(rest, 'private', listingType, listingFieldsConfig),
-          //       ...setNoAvailabilityForUnbookableListings(transactionProcessAlias),
-          //     };
-
-          //     onSubmit(updateValues);
-          //   }}
-
+          className={css.submitButton}
           onClick={handleSubscribe}
           disabled={disabled}
           ready={ready}

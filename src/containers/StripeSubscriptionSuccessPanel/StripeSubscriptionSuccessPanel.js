@@ -77,12 +77,10 @@ function StripeSubscriptionSuccessPanel(props) {
         <div className={css.successPageRoot}>
           <div className={css.successContainerLeft}>
             <H3 as="h1" className={css.Title}>
-              <p>
-                <FormattedMessage
-                  id="StripeSubscriptionSuccessPanel.title"
-                  values={{ lineBreak: <br /> }}
-                />
-              </p>
+              <FormattedMessage
+                id="StripeSubscriptionSuccessPanel.title"
+                values={{ lineBreak: <br /> }}
+              />
             </H3>
             <p>
               <FormattedMessage
