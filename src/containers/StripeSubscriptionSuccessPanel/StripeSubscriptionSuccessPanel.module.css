@@ -26,10 +26,14 @@
     height: auto;
   }
 }
+
+.successPriceSection {
+  padding: 20px 30px;
+}
 .successPriceContainer {
   display: flex;
   justify-content: space-between;
-  padding: 20px 40px;
+  margin: 10px 0;
 }
 .priceTotalTitle {
 }

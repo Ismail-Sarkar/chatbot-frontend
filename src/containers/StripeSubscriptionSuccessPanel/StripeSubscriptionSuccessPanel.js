@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import moment from 'moment';
 
 function StripeSubscriptionSuccessPanel(props) {
+  const CURRENCY = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
   const { intl } = props;
   const history = useHistory();
   const title = intl.formatMessage({ id: 'StripeSubscriptionSuccessPanel.title' });
@@ -59,7 +60,7 @@ function StripeSubscriptionSuccessPanel(props) {
   const { Money } = sdkTypes;
 
   const SUBSCRIPTION_TOTAL_AMOUNT = 7200;
-  const CURRENCY = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
+
   return (
     <Page
       className={css.root}
@@ -104,10 +105,47 @@ function StripeSubscriptionSuccessPanel(props) {
             <div className={css.logoContainer}>
               <img src={AdventurelyLogo} alt="AdventurelyLogo"></img>
             </div>
-            <div className={css.successPriceContainer}>
-              <div className={css.priceTotalTitle}>Total Price:</div>
-              <div className={css.priceTotalAmount}>
-                {formatMoney(intl, new Money(SUBSCRIPTION_TOTAL_AMOUNT, CURRENCY))} {CURRENCY}
+            <div className={css.successPriceSection}>
+              <div className={css.successPriceContainer}>
+                <div className={css.priceTotalTitle}>Total Price:</div>
+                <div className={css.priceTotalAmount}>
+                  {formatMoney(
+                    intl,
+                    new Money(
+                      currentUser?.attributes.profile.privateData.subscriptionDetails.totalAmount,
+                      CURRENCY
+                    )
+                  )}{' '}
+                  {CURRENCY}
+                </div>
+              </div>
+              <div className={css.successPriceContainer}>
+                <div className={css.priceTotalTitle}>Promo discount:</div>
+                <div className={css.priceTotalAmount}>
+                  -
+                  {formatMoney(
+                    intl,
+                    new Money(
+                      currentUser?.attributes.profile.privateData.subscriptionDetails
+                        .discountAmount || 0,
+                      CURRENCY
+                    )
+                  )}{' '}
+                  {CURRENCY}
+                </div>
+              </div>
+              <div className={css.successPriceContainer}>
+                <div className={css.priceTotalTitle}>You Paid:</div>
+                <div className={css.priceTotalAmount}>
+                  {formatMoney(
+                    intl,
+                    new Money(
+                      currentUser?.attributes.profile.privateData.subscriptionDetails.discountedAmount,
+                      CURRENCY
+                    )
+                  )}{' '}
+                  {CURRENCY}
+                </div>
               </div>
             </div>
           </div>
