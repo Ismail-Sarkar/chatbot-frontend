@@ -39,6 +39,9 @@ const TransactionPage = loadable(() => import(/* webpackChunkName: "TransactionP
 // Styleguide helps you to review current components and develop new ones
 const StyleguidePage = loadable(() => import(/* webpackChunkName: "StyleguidePage" */ '../containers/StyleguidePage/StyleguidePage'));
 
+const StripeSubscriptionSucessPage = loadable(() => import(/* webpackChunkName: "StripeSubscriptionSucessPage" */ '../containers/StripeSubscriptionSuccessPanel/StripeSubscriptionSuccessPanel'));
+
+
 export const ACCOUNT_SETTINGS_PAGES = [
   'ContactDetailsPage',
   'PasswordChangePage',
@@ -381,6 +384,14 @@ const routeConfiguration = (layoutConfig) => {
       path: '/preview',
       name: 'PreviewResolverPage',
       component: PreviewResolverPage ,
+    },
+
+    {
+      path: '/stripesubscription',
+      name: 'StripeSubscriptionSucessPage',
+      auth: true,
+      authPage: 'PartnerLoginPage',
+      component: StripeSubscriptionSucessPage,
     },
   ];
 };

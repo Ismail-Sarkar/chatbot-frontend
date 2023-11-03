@@ -63,6 +63,7 @@ import moment from 'moment';
 const TABS_DETAILS_ONLY = [DETAILS];
 const TABS_PRODUCT = [DETAILS, PRICING_AND_STOCK, DELIVERY, PHOTOS];
 const TABS_BOOKING = [SUBSCRIBE, DETAILS, LOCATION, PRICING, AVAILABILITY, PHOTOS];
+const TABS_BOOKING_SUBSCRIBED = [DETAILS, LOCATION, PRICING, AVAILABILITY, PHOTOS];
 const TABS_INQUIRY = [DETAILS, LOCATION, PRICING, PHOTOS];
 const TABS_INQUIRY_WITHOUT_PRICE = [DETAILS, LOCATION, PHOTOS];
 const TABS_ALL = [...TABS_PRODUCT, ...TABS_BOOKING, ...TABS_INQUIRY];
@@ -460,12 +461,33 @@ class EditListingWizard extends Component {
       ? validListingTypes[0].transactionType.process
       : INQUIRY_PROCESS_NAME;
 
+    const isStripeSubscribed =
+      typeof currentUser.attributes.profile.privateData.subscriptionDetails !== 'undefined'
+        ? currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStatus ===
+            'active' &&
+          (moment(new Date()).isBetween(
+            currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
+            currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+            'day'
+          ) ||
+            moment(new Date()).isSame(
+              currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
+              'day'
+            ) ||
+            moment(new Date()).isSame(
+              currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+              'day'
+            ))
+        : false;
+
     // For oudated draft listing, we don't show other tabs but the "details"
     const tabs =
       invalidExistingListingType && isNewListingFlow
         ? TABS_DETAILS_ONLY
         : isBookingProcess(processName)
-        ? TABS_BOOKING
+        ? isStripeSubscribed
+          ? TABS_BOOKING_SUBSCRIBED
+          : TABS_BOOKING
         : isPurchaseProcess(processName)
         ? TABS_PRODUCT
         : isPriceDisabled
