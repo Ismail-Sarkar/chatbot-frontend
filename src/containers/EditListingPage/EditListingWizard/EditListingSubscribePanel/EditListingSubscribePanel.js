@@ -281,12 +281,13 @@ const EditListingSubscribePanel = props => {
   return (
     <div className={classes}>
       <H3 as="h1" className={css.Title}>
-        {isPublished ? (
-          <FormattedMessage
-            id="EditListingSubscribePanel.title"
-            values={{ listingTitle: <ListingLink listing={listing} />, lineBreak: <br /> }}
-          />
-        ) : !canSubscribe ? (
+        {// isPublished ? (
+        // <FormattedMessage
+        //   id="EditListingSubscribePanel.title"
+        //   values={{ listingTitle: <ListingLink listing={listing} />, lineBreak: <br /> }}
+        // />
+        // ) :
+        !canSubscribe ? (
           <FormattedMessage
             id="EditListingSubscribePanel.title"
             values={{ listingTitle: <ListingLink listing={listing} />, lineBreak: <br /> }}
@@ -298,14 +299,15 @@ const EditListingSubscribePanel = props => {
           />
         )}
       </H3>
-      {isPublished ? (
-        <p>
-          <FormattedMessage
-            id="EditListingSubscribePanel.subscribedtitle"
-            values={{ lineBreak: <br /> }}
-          />
-        </p>
-      ) : !canSubscribe ? (
+      {// isPublished ? (
+      // <p>
+      //   <FormattedMessage
+      //     id="EditListingSubscribePanel.subscribedtitle"
+      //     values={{ lineBreak: <br /> }}
+      //   />
+      // </p>
+      // ) :
+      !canSubscribe ? (
         <p>
           <FormattedMessage
             id="EditListingSubscribePanel.subscribedtitle"

@@ -108,11 +108,15 @@ const LoginFormComponent = props => (
           </div>
 
           <div className={css.otherTypeLoginLink}>
-            {!isPartner && (
+            {!isPartner ? (
               <NamedLink name="PartnerLoginPage" className={css.signupLink}>
                 {/* <span className={css.signup}> */}
                 <FormattedMessage id="LoginForm.partnerLogIn" />
                 {/* </span> */}
+              </NamedLink>
+            ) : (
+              <NamedLink name="PartnerSignupPage" className={css.signupLink}>
+                <FormattedMessage id="SignupForm.partnerSignUp" />
               </NamedLink>
             )}
           </div>
