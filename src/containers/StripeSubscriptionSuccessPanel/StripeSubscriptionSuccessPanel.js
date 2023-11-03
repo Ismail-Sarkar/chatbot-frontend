@@ -24,8 +24,7 @@ function StripeSubscriptionSuccessPanel(props) {
   const searchParams = new URLSearchParams(location?.search);
 
   let stripeSubcriptionStatusFromUrl = searchParams?.get('success');
-  // console.log(stripeSubcriptionStatusFromUrl, 2222);
-  console.log(currentUser, 2222);
+
   useEffect(() => {
     if (currentUser) {
       const isSubscribed =
@@ -52,7 +51,6 @@ function StripeSubscriptionSuccessPanel(props) {
         typeof stripeSubcriptionStatusFromUrl === 'undefined' ||
         !isSubscribed
       ) {
-        // console.log(currentUser, 2222);
         history.push('/');
       }
     }
@@ -61,8 +59,7 @@ function StripeSubscriptionSuccessPanel(props) {
   const { Money } = sdkTypes;
 
   const SUBSCRIPTION_TOTAL_AMOUNT = 7200;
-  const CURRENCY = 'USD';
-  // const CURRENCY = procss.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
+  const CURRENCY = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
   return (
     <Page
       className={css.root}
