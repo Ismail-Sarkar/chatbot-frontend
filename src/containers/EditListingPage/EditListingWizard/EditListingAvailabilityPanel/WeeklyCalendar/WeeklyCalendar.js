@@ -409,10 +409,6 @@ const WeeklyCalendar = props => {
 
   const classes = classNames(rootClassName || css.root, className);
 
-  // console.log(thisWeek, endOfRange, 'day', timeZone);
-
-  console.log(7778, availableDates);
-
   return (
     <section className={classes}>
       <header className={headerClassName}>
@@ -466,26 +462,6 @@ const WeeklyCalendar = props => {
               return !isDateValid;
             }}
             timeZone={timeZone}
-            // isDayBlocked={day => {
-            //   const key = moment(day)?.format('YYYY-MM-DD');
-            //   console.log(77789, key, availableDates[key]?.hasAvailability);
-
-            //   return (
-            //     typeof availableDates[key] !== 'undefined' && availableDates[key]?.hasAvailability
-            //   );
-            //   // const monthlyTimeSlots = props.monthlyTimeSlots;
-            //   // const matchedData = monthlyTimeSlots[key]?.timeSlots;
-            //   // const dataMatchedArray = matchedData?.filter(
-            //   //   slot =>
-            //   //     moment(day).isBetween(slot.attributes.start, slot.attributes.end, 'day') ||
-            //   //     moment(day).isSame(slot.attributes.start, 'day')
-            //   // );
-            //   // if (dataMatchedArray?.length > 0) {
-            //   //   return false;
-            //   // } else {
-            //   //   return true;
-            //   // }
-            // }}
           />
         </div>
         <div className={css.navigation}>
