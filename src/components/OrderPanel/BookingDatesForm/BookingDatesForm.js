@@ -6,6 +6,7 @@ import classNames from 'classnames';
 
 import { FormattedMessage, intlShape, injectIntl } from '../../../util/reactIntl';
 import { required, bookingDatesRequired, composeValidators } from '../../../util/validators';
+import * as validators from '../../../util/validators';
 import {
   START_DATE,
   END_DATE,
@@ -18,16 +19,29 @@ import {
   timeOfDayFromTimeZoneToLocal,
   monthIdString,
   initialVisibleMonth,
+  stringifyDateToISO8601,
 } from '../../../util/dates';
 import { LINE_ITEM_DAY, LINE_ITEM_NIGHT, TIME_SLOT_TIME, propTypes } from '../../../util/types';
-import { BOOKING_PROCESS_NAME } from '../../../transactions/transaction';
+import { ADVENTURELY_PROCESS_NAME, BOOKING_PROCESS_NAME } from '../../../transactions/transaction';
 
-import { Form, IconArrowHead, PrimaryButton, FieldDateRangeInput, H6 } from '../../../components';
+import {
+  Form,
+  IconArrowHead,
+  PrimaryButton,
+  FieldDateRangeInput,
+  H6,
+  FieldTextInput,
+  FieldDateInput,
+} from '../../../components';
 
 import EstimatedCustomerBreakdownMaybe from '../EstimatedCustomerBreakdownMaybe';
 
 import css from './BookingDatesForm.module.css';
 import { SingleDatePicker } from 'react-dates';
+import MuiMultiSelect from '../../MuiMultiSelect/MuiMultiSelect';
+import moment from 'moment';
+import momentTz from 'moment-timezone';
+import { isArray } from 'lodash';
 
 const TODAY = new Date();
 
@@ -142,6 +156,7 @@ const endDateToPickerDate = (unitType, endDate, timeZone) => {
  * Returns an isOutsideRange function that can be passed to
  * a react-dates DateRangePicker component.
  */
+
 const isOutsideRangeFn = (
   monthlyTimeSlots,
   startDate,
@@ -255,7 +270,6 @@ const isDayBlockedFn = (
     !endDate &&
     focusedInput === END_DATE &&
     unitType === LINE_ITEM_NIGHT;
-
   if (selectingEndDate) {
     // if end date is being selected first, block the day after a booked date
     // (as a booking can end on the day the following booking starts)
@@ -370,16 +384,35 @@ const handleFormSpyChange = (
   listingId,
   isOwnListing,
   fetchLineItemsInProgress,
-  onFetchTransactionLineItems
+  onFetchTransactionLineItems,
+  guestMaxForListing
 ) => formValues => {
   const { startDate, endDate } =
     formValues.values && formValues.values.bookingDates ? formValues.values.bookingDates : {};
+  const { additionalGuest, extraPerk } = formValues.values || {};
 
-  if (startDate && endDate && !fetchLineItemsInProgress) {
+  console.log(additionalGuest, guestMaxForListing, 332);
+
+  if (
+    startDate &&
+    endDate &&
+    // additionalGuest &&
+    // isArray(extraPerk) &&
+    // extraPerk.length &&
+
+    !fetchLineItemsInProgress
+  ) {
     onFetchTransactionLineItems({
       orderData: {
         bookingStart: startDate,
         bookingEnd: endDate,
+        additionalGuest:
+          additionalGuest > 0
+            ? parseInt(additionalGuest) <= parseInt(guestMaxForListing)
+              ? additionalGuest
+              : guestMaxForListing
+            : 0,
+        extraPerk,
       },
       listingId,
       isOwnListing,
@@ -418,6 +451,20 @@ const Prev = props => {
 export const BookingDatesFormComponent = props => {
   const [focusedInput, setFocusedInput] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(getStartOf(TODAY, 'month', props.timeZone));
+  const [extraPerk, setExtraPerk] = useState([]);
+
+  const { extraParkValues, guestMaxForListing } = props;
+
+  const handleSetExtraPerk = val => {
+    setExtraPerk(val);
+  };
+
+  // const extraParkValues = findOptionsForSelectFilter('extraParkValues', config.custom.filters);
+  // const extraParkValues = [
+  //   { key: 'Lunch Buffet / $30', label: 'Lunch Buffet / $30', value: 30 },
+  //   { key: 'Hike equipment helmut / $25', label: 'Hike equipment helmut / $25', value: 25 },
+  //   { key: 'Photographs of you hiking / $15', label: 'Photographs of you hiking / $15', value: 15 },
+  // ];
 
   useEffect(() => {
     // Call onMonthChanged function if it has been passed in among props.
@@ -438,8 +485,10 @@ export const BookingDatesFormComponent = props => {
     timeZone,
     dayCountAvailableForBooking,
     marketplaceName,
+    monthlyTimeSlots,
     ...rest
   } = props;
+
   const classes = classNames(rootClassName || css.root, className);
 
   const onFormSubmit = handleFormSubmit(setFocusedInput, onSubmit);
@@ -448,8 +497,10 @@ export const BookingDatesFormComponent = props => {
     listingId,
     isOwnListing,
     fetchLineItemsInProgress,
-    onFetchTransactionLineItems
+    onFetchTransactionLineItems,
+    guestMaxForListing
   );
+
   return (
     <FinalForm
       {...rest}
@@ -469,15 +520,19 @@ export const BookingDatesFormComponent = props => {
           fetchLineItemsError,
           onFetchTimeSlots,
           form,
+          listing,
+          userNativeLang,
+          listingTimeZone,
         } = fieldRenderProps;
-        const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
 
+        const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
         const startDateErrorMessage = intl.formatMessage({
           id: 'FieldDateRangeInput.invalidStartDate',
         });
         const endDateErrorMessage = intl.formatMessage({
           id: 'FieldDateRangeInput.invalidEndDate',
         });
+        const dateFormattingOptions = { month: 'short', day: 'numeric', weekday: 'short' };
 
         // This is the place to collect breakdown estimation data.
         // Note: lineItems are calculated and fetched from this Template's backend
@@ -500,6 +555,9 @@ export const BookingDatesFormComponent = props => {
           month: 'short',
           day: 'numeric',
         };
+
+        const formatFieldDateInput = timeZone => v =>
+          v && v.date ? { date: timeOfDayFromTimeZoneToLocal(v.date, timeZone) } : { date: v };
 
         const startOfToday = getStartOf(TODAY, 'day', timeZone);
         const tomorrow = addTime(startOfToday, 1, 'days');
@@ -534,10 +592,91 @@ export const BookingDatesFormComponent = props => {
           timeZone
         );
 
+        const selectDateLabel = 'Select Date';
+
+        const onExceptionStartDateChange = (value, dayCountAvailableForBooking, props) => {
+          const { timeZone, intl, formApi } = props;
+
+          if (!value || !value.date) {
+            formApi.batch(() => {
+              formApi.change('exceptionStartTime', null);
+              formApi.change('exceptionEndDate', { date: null });
+              formApi.change('exceptionEndTime', null);
+            });
+            return;
+          }
+
+          // This callback function is called from react-dates component.
+          // It gets raw value as a param - browser's local time instead of time in listing's timezone.
+          const selectedStartDate = timeOfDayFromLocalToTimeZone(value.date, timeZone);
+          const dayData =
+            dayCountAvailableForBooking[stringifyDateToISO8601(selectedStartDate, timeZone)];
+          const availableSlots = dayData.slots || [];
+          const params = { intl, timeZone, availableSlots, selectedStartDate };
+          const { startTime, endDate, endTime } = getAllTimeValues(params);
+
+          formApi.batch(() => {
+            formApi.change('exceptionStartTime', startTime);
+            formApi.change('exceptionEndDate', { date: endDate });
+            formApi.change('exceptionEndTime', endTime);
+          });
+        };
+
+        const singleDateChange = (value, form, props) => {
+          const { timeZone, intl } = props;
+          form.batch(() => {
+            // form.change('selectedbookingDates', { date: value.date, endDate: value.date });
+            form.change('bookingDates', {
+              startDate: new Date(
+                momentTz(value.date)
+                  .tz(listingTimeZone)
+                  .clone()
+                  .startOf('day')
+              ),
+
+              endDate: new Date(
+                momentTz(value.date)
+                  .tz(listingTimeZone)
+                  .clone()
+                  .startOf('day')
+                  .add(1, 'days')
+                  .format()
+              ),
+            });
+          });
+        };
+
+        // const validateGuestInput = (value => {
+        //   const validatedNumber = value?.replace(/[^0-9\.]/, '');
+        //   console.log(
+        //     'validatedNumber.......',
+        //     validatedNumber,
+        //     guestMaxForListing,
+        //     validatedNumber > guestMaxForListing
+        //   );
+        //   if (guestMaxForListing) {
+        //     return validatedNumber > guestMaxForListing;
+        //   } else {
+        //     return true;
+        //   }
+        // };
+
+        const handleAdditionalGuestChange = e => {
+          const updatedTargetValue = e.target.value.replace(/[^0-9\.]/, '');
+          if (updatedTargetValue === '') form.change('additionalGuest', undefined);
+          else form.change('additionalGuest', updatedTargetValue);
+        };
+        const validateGuestInput = validators.validateGuestInput(
+          guestMaxForListing,
+          `*${guestMaxForListing} maximum ${
+            guestMaxForListing > 1 ? 'guests' : 'guest'
+          } can be added`
+        );
+
         return (
           <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
             <FormSpy subscription={{ values: true }} onChange={onFormSpyChange} />
-            <FieldDateRangeInput
+            {/* <FieldDateRangeInput
               className={css.bookingDates}
               name="bookingDates"
               isDaily={lineItemUnitType === LINE_ITEM_DAY}
@@ -611,6 +750,300 @@ export const BookingDatesFormComponent = props => {
                 setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
               }
               form={form}
+            /> */}
+
+            {/* <FieldDateInput
+              id={`startDate`}
+              name={`startDate`}
+              // className={classNames(css.datefield, textfield)}
+              label={selectDateLabel}
+              // validate={startTitleValidator}
+              // errorClassName={errorTextField}
+              userNativeLang={userNativeLang}
+              // placeholderText={intl.formatDate(TODAY, dateFormattingOptions)}
+              // format={formatFieldDateInput(timeZone)}
+              // parse={parseFieldDateInput(timeZone)}
+
+              format={v => {
+                const { startDate, endDate } = v || {};
+                // Format the Final Form field's value for the DateRangeInput
+                // DateRangeInput operates on local time zone, but the form uses listing's time zone
+                const formattedStart = startDate
+                  ? timeOfDayFromTimeZoneToLocal(startDate, timeZone)
+                  : startDate;
+                const formattedEnd = endDate
+                  ? timeOfDayFromTimeZoneToLocal(endDate, timeZone)
+                  : endDate;
+                return v ? { startDate: formattedStart, endDate: formattedEnd } : v;
+              }}
+              parse={v => {
+                const { startDate, endDate } = v || {};
+                // Parse the DateRangeInput's value (local noon) for the Final Form
+                // The form expects listing's time zone and start of day aka 00:00
+                const parsedStart = startDate
+                  ? getStartOf(timeOfDayFromLocalToTimeZone(startDate, timeZone), 'day', timeZone)
+                  : startDate;
+                const parsedEnd = endDate
+                  ? getStartOf(timeOfDayFromLocalToTimeZone(endDate, timeZone), 'day', timeZone)
+                  : endDate;
+                return v ? { startDate: parsedStart, endDate: parsedEnd } : v;
+              }}
+              useMobileMargins
+              validate={composeValidators(
+                required(
+                  intl.formatMessage({
+                    id: 'BookingDatesForm.requiredDate',
+                  })
+                ),
+                bookingDatesRequired(startDateErrorMessage, endDateErrorMessage)
+              )}
+              initialVisibleMonth={initialVisibleMonth(startDate || startOfToday, timeZone)}
+              navNext={
+                <Next
+                  currentMonth={currentMonth}
+                  timeZone={timeZone}
+                  dayCountAvailableForBooking={dayCountAvailableForBooking}
+                />
+              }
+              navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
+              onPrevMonthClick={() => {
+                setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
+                onMonthClick(prevMonthFn);
+              }}
+              onNextMonthClick={() => {
+                setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
+                onMonthClick(nextMonthFn);
+              }}
+              isDayBlocked={isDayBlocked}
+              isOutsideRange={isOutsideRange}
+              isBlockedBetween={isBlockedBetween(monthlyTimeSlots, timeZone)}
+              disabled={fetchLineItemsInProgress}
+              onClose={event =>
+                setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
+              }
+              form={form}
+              //  min={minStartDate.toDate()}
+              // isDayBlocked={
+              //   date => moment(date).isBefore(minStartDate, 'day')
+
+              //   // to block current date and selected days
+              //   // selectedDates.some(selectedDate =>
+              //   //   moment(date).isSame(moment(selectedDate.date), 'day')
+              //   // ) || moment(date).isSame(moment(), 'day')
+              // }
+              // onChange={date => {
+              //   form.change(`${fieldName}.startTime.hours`, '');
+              //   form.change(`${fieldName}.startTime.min`, '');
+
+              //   form.change(`${fieldName}.endTime.hours`, '');
+              //   form.change(`${fieldName}.endTime.min`, '');
+              //   //  handleSelectedDateChange(fieldName, date.date);
+              //   const selectedDateTime = moment(date.date).isSame(
+              //     minStartDate,
+              //     'date'
+              //   )
+              //     ? moment(date.date).set({
+              //         hours: minStartDate.hour(),
+              //         minutes: minStartDate.minute(),
+              //         seconds: 0,
+              //       })
+              //     : moment(date.date).set({
+              //         hours: 0,
+              //         minutes: 0,
+              //       });
+              //   handleStartTimeOptions(selectedDateTime, minStartDate);
+
+              //   // console.log(
+              //   //   99999,
+              //   //   moment(date.date).isSame(minStartDate, 'date'),
+              //   //   selectedDateTime.format(),
+              //   //   minStartDate.format(),
+              //   //   moment(selectedDateTime).isAfter(minStartDate),
+              //   //   moment(selectedDateTime).isAfter(minStartDate, 'date')
+              //   //   // isSelectedDateAfterMinStartDate
+              //   // );
+              // }}
+            /> */}
+
+            {/* <FieldDateInput
+              className={css.fieldDateInput}
+              name="exceptionStartDate"
+              id="exceptionStartDate"
+              label={intl.formatMessage({
+                id: 'EditListingAvailabilityExceptionForm.exceptionStartDateLabel',
+              })}
+              placeholderText={intl.formatDate(TODAY, dateFormattingOptions)}
+              format={v => {
+                const { startDate, endDate } = v || {};
+                // Format the Final Form field's value for the DateRangeInput
+                // DateRangeInput operates on local time zone, but the form uses listing's time zone
+                const formattedStart = startDate
+                  ? timeOfDayFromTimeZoneToLocal(startDate, timeZone)
+                  : startDate;
+                const formattedEnd = endDate
+                  ? timeOfDayFromTimeZoneToLocal(endDate, timeZone)
+                  : endDate;
+                return v ? { startDate: formattedStart, endDate: formattedEnd } : v;
+              }}
+              parse={v => {
+                const { startDate, endDate } = v || {};
+                console.log(1112, startDate, endDate);
+                // Parse the DateRangeInput's value (local noon) for the Final Form
+                // The form expects listing's time zone and start of day aka 00:00
+                const parsedStart = startDate
+                  ? getStartOf(timeOfDayFromLocalToTimeZone(startDate, timeZone), 'day', timeZone)
+                  : startDate;
+                const parsedEnd = endDate
+                  ? getStartOf(timeOfDayFromLocalToTimeZone(endDate, timeZone), 'day', timeZone)
+                  : endDate;
+                return v ? { startDate: parsedStart, endDate: parsedEnd } : v;
+              }}
+              // isDayBlocked={isDayBlocked}
+              // isOutsideRange={isOutsideRange}
+              onChange={value =>
+                onExceptionStartDateChange(value, dayCountAvailableForBooking, props)
+              }
+              onPrevMonthClick={() => {
+                setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
+                onMonthClick(prevMonthFn);
+              }}
+              onNextMonthClick={() => {
+                setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
+                onMonthClick(nextMonthFn);
+              }}
+              initialVisibleMonth={initialVisibleMonth(startDate || startOfToday, timeZone)}
+              navNext={
+                <Next
+                  currentMonth={currentMonth}
+                  timeZone={timeZone}
+                  dayCountAvailableForBooking={dayCountAvailableForBooking}
+                />
+              }
+              navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
+              useMobileMargins
+              showErrorMessage={false}
+              // validate={bookingDateRequired('Required')}
+            /> */}
+
+            <FieldDateInput
+              name="selectedbookingDates"
+              id="selectedbookingDates"
+              // name="bookingDates"
+              // id="bookingDates"
+              placeholderText={intl.formatDate(
+                values.bookingDates?.startDate || TODAY,
+                dateFormattingOptions
+              )}
+              label={selectDateLabel}
+              // validate={birthdateValidator}
+              //  className={classNames(textfield, css.dateInputDiv)}
+              //  errorClassName={errorTextField}
+              // isOutsideRange={date => moment().diff(date, 'days') <= 0}
+
+              isDayBlocked={day => {
+                const monthlyTimeSlots = props.monthlyTimeSlots;
+                const key = moment(day)?.format('YYYY-MM');
+                const matchedData = monthlyTimeSlots[key]?.timeSlots;
+                const dataMatchedArray = matchedData?.filter(
+                  slot =>
+                    moment(day).isBetween(slot.attributes.start, slot.attributes.end, 'day') ||
+                    moment(day).isSame(slot.attributes.start, 'day')
+                );
+                if (dataMatchedArray?.length > 0) {
+                  return false;
+                } else {
+                  return true;
+                }
+              }}
+              // isOutsideRange={isOutsideRange}
+              onChange={value => singleDateChange(value, form, props)}
+              // format={v => {
+              //   const { date } = v || {};
+              //   const startDate = date;
+              //   const endDate = new Date(
+              //     moment(date)
+              //       .add(1, 'days')
+              //       .format()
+              //   );
+              //   // Format the Final Form field's value for the DateRangeInput
+              //   // DateRangeInput operates on local time zone, but the form uses listing's time zone
+              //   const formattedStart = startDate
+              //     ? timeOfDayFromTimeZoneToLocal(startDate, timeZone)
+              //     : startDate;
+              //   const formattedEnd = endDate
+              //     ? timeOfDayFromTimeZoneToLocal(endDate, timeZone)
+              //     : endDate;
+              //   return v ? { startDate: formattedStart, endDate: formattedEnd } : v;
+              // }}
+              // parse={v => {
+              //   const { date } = v || {};
+              //   const startDate = date;
+              //   const endDate = new Date(
+              //     moment(date)
+              //       .add(1, 'days')
+              //       .format()
+              //   );
+              //   // Parse the DateRangeInput's value (local noon) for the Final Form
+              //   // The form expects listing's time zone and start of day aka 00:00
+              //   const parsedStart = startDate
+              //     ? getStartOf(timeOfDayFromLocalToTimeZone(startDate, timeZone), 'day', timeZone)
+              //     : startDate;
+              //   const parsedEnd = endDate
+              //     ? getStartOf(timeOfDayFromLocalToTimeZone(endDate, timeZone), 'day', timeZone)
+              //     : endDate;
+              //   return v ? { startDate: parsedStart, endDate: parsedEnd } : v;
+              // }}
+              initialVisibleMonth={initialVisibleMonth(startDate || startOfToday, timeZone)}
+              // navNext={
+              //   <Next
+              //     currentMonth={currentMonth}
+              //     timeZone={timeZone}
+              //     dayCountAvailableForBooking={dayCountAvailableForBooking}
+              //   />
+              // }
+              // navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
+              // onPrevMonthClick={() => {
+              //   setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
+              //   onMonthClick(prevMonthFn);
+              // }}
+              // onNextMonthClick={() => {
+              //   setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
+              //   onMonthClick(nextMonthFn);
+              // }}
+              //
+              // isBlockedBetween={isBlockedBetween(monthlyTimeSlots, timeZone)}
+              // disabled={fetchLineItemsInProgress}
+              onClose={event =>
+                setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
+              }
+            />
+            {extraParkValues.length > 0 && (
+              <div className={css.muiselectcontainer}>
+                <MuiMultiSelect
+                  value={extraPerk}
+                  setValue={val => {
+                    handleSetExtraPerk(val);
+                    form.change('extraPerk', val);
+                  }}
+                  datas={extraParkValues}
+                  placeholdertext={'Add extra perk'}
+                  label={'Add extra perks?'}
+                />
+              </div>
+            )}
+
+            <FieldTextInput
+              type="text"
+              className={css.GuestContainer}
+              name="additionalGuest"
+              id="additionalGuest"
+              isDayBlocked={isDayBlocked}
+              // isOutsideRange={isOutsideRange}
+              label="Additional Guests?"
+              placeholder={'Enter additional guests'}
+              onChange={handleAdditionalGuestChange}
+              validate={validateGuestInput}
+              // className={css.nameFields}
             />
 
             {showEstimatedBreakdown ? (
@@ -622,10 +1055,11 @@ export const BookingDatesFormComponent = props => {
                 <EstimatedCustomerBreakdownMaybe
                   breakdownData={breakdownData}
                   lineItems={lineItems}
+                  listing={listing}
                   timeZone={timeZone}
                   currency={unitPrice.currency}
                   marketplaceName={marketplaceName}
-                  processName={BOOKING_PROCESS_NAME}
+                  processName={ADVENTURELY_PROCESS_NAME}
                 />
               </div>
             ) : null}
@@ -636,7 +1070,11 @@ export const BookingDatesFormComponent = props => {
             ) : null}
 
             <div className={css.submitButton}>
-              <PrimaryButton type="submit" inProgress={fetchLineItemsInProgress}>
+              <PrimaryButton
+                type="submit"
+                inProgress={fetchLineItemsInProgress}
+                disabled={parseInt(values?.additionalGuest) > parseInt(guestMaxForListing)}
+              >
                 <FormattedMessage id="BookingDatesForm.requestToBook" />
               </PrimaryButton>
             </div>

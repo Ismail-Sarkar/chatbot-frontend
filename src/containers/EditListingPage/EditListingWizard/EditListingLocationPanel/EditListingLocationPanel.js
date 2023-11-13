@@ -155,6 +155,11 @@ const EditListingLocationPanel = props => {
                   cityStateCountry: cityStateCountry,
                   zip: zip,
                 },
+                building,
+                street: street ? street : null,
+                cityStateCountry: cityStateCountry ? cityStateCountry : null,
+                zip: zip ? zip : null,
+                // manualAddress: manualAddress ? manualAddress : false,
               },
             });
             onSubmit(updateValues);

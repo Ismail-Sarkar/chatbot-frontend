@@ -108,6 +108,10 @@ class ProfileSettingsFormComponent extends Component {
             id: 'ProfileSettingsForm.bioPlaceholder',
           });
 
+          const businessNamePlaceholder = intl.formatMessage({
+            id: 'ProfileSettingsForm.businessNamePlaceholder',
+          });
+
           const uploadingOverlay =
             uploadInProgress || this.state.uploadDelay ? (
               <div className={css.uploadingImageOverlay}>
@@ -289,21 +293,40 @@ class ProfileSettingsFormComponent extends Component {
                   />
                 </div>
               </div>
-              <div className={classNames(css.sectionContainer, css.lastSection)}>
-                <H4 as="h2" className={css.sectionTitle}>
-                  <FormattedMessage id="ProfileSettingsForm.bioHeading" />
-                </H4>
-                <FieldTextInput
-                  type="textarea"
-                  id="bio"
-                  name="bio"
-                  label={bioLabel}
-                  placeholder={bioPlaceholder}
-                />
-                <p className={css.bioInfo}>
-                  <FormattedMessage id="ProfileSettingsForm.bioInfo" values={{ marketplaceName }} />
-                </p>
-              </div>
+              {currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
+                <>
+                  <div className={css.sectionContainer}>
+                    <H4 as="h2" className={css.sectionTitle}>
+                      <FormattedMessage id="ProfileSettingsForm.businessNameLabel" />
+                    </H4>
+                    <FieldTextInput
+                      type="text"
+                      id="businessName"
+                      name="businessName"
+                      // label={bioLabel}
+                      placeholder={businessNamePlaceholder}
+                    />
+                  </div>
+                  <div className={classNames(css.sectionContainer, css.lastSection)}>
+                    <H4 as="h2" className={css.sectionTitle}>
+                      <FormattedMessage id="ProfileSettingsForm.bioHeading" />
+                    </H4>
+                    <FieldTextInput
+                      type="textarea"
+                      id="bio"
+                      name="bio"
+                      label={bioLabel}
+                      placeholder={bioPlaceholder}
+                    />
+                    <p className={css.bioInfo}>
+                      <FormattedMessage
+                        id="ProfileSettingsForm.bioInfo"
+                        values={{ marketplaceName }}
+                      />
+                    </p>
+                  </div>
+                </>
+              )}
               {submitError}
               <Button
                 className={css.submitButton}

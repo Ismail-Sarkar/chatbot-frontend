@@ -14,7 +14,7 @@ const BookingLocationMaybe = props => {
   const classes = classNames(rootClassName || css.bookingLocationContainer, className);
 
   if (showBookingLocation) {
-    const location = listing?.attributes?.publicData?.location || {};
+    const { location, manualAddress, fullManualAddress } = listing?.attributes?.publicData || {};
     return (
       <div className={classes}>
         <Heading as="h3" rootClassName={css.sectionHeading}>
@@ -26,6 +26,8 @@ const BookingLocationMaybe = props => {
             location={location}
             geolocation={listing?.attributes?.geolocation}
             showAddress={true}
+            manualAddress={manualAddress}
+            fullManualAddress={fullManualAddress}
           />
         </div>
       </div>

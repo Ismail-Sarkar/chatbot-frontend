@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { bool, func, object, oneOf, shape } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter, Redirect, useHistory } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import classNames from 'classnames';
 import { isEmpty } from 'lodash';
@@ -142,38 +142,53 @@ export const AuthenticationForms = props => {
     submitSignup,
     termsAndConditions,
   } = props;
+
+  const history = useHistory();
+
+  const isPartner = typeof window !== 'undefined' && window.location.pathname?.includes('partner');
+
   const fromState = { state: from ? { from } : null };
-  const tabs = [
-    {
-      text: (
-        <Heading as={!isLogin ? 'h1' : 'h2'} rootClassName={css.tab}>
-          <FormattedMessage id="AuthenticationPage.signupLinkText" />
-        </Heading>
-      ),
-      selected: !isLogin,
-      linkProps: {
-        name: 'SignupPage',
-        to: fromState,
-      },
-    },
-    {
-      text: (
-        <Heading as={isLogin ? 'h1' : 'h2'} rootClassName={css.tab}>
-          <FormattedMessage id="AuthenticationPage.loginLinkText" />
-        </Heading>
-      ),
-      selected: isLogin,
-      linkProps: {
-        name: 'LoginPage',
-        to: fromState,
-      },
-    },
-  ];
+  const tabs =
+    typeof window !== 'undefined' && window.location.pathname === '/partnersignup'
+      ? []
+      : typeof window !== 'undefined' && window.location.pathname === '/partnerlogin'
+      ? []
+      : [
+          {
+            text: (
+              <Heading as={!isLogin ? 'h1' : 'h2'} rootClassName={css.tab}>
+                <FormattedMessage id="AuthenticationPage.signupLinkText" />
+              </Heading>
+            ),
+            selected: !isLogin,
+            linkProps: {
+              name: 'SignupPage',
+              to: fromState,
+            },
+          },
+          {
+            text: (
+              <Heading as={isLogin ? 'h1' : 'h2'} rootClassName={css.tab}>
+                <FormattedMessage id="AuthenticationPage.loginLinkText" />
+              </Heading>
+            ),
+            selected: isLogin,
+            linkProps: {
+              name: 'LoginPage',
+              to: fromState,
+            },
+          },
+        ];
 
   const handleSubmitSignup = values => {
     const { fname, lname, ...rest } = values;
-    const params = { firstName: fname.trim(), lastName: lname.trim(), ...rest };
-    submitSignup(params);
+    const params = {
+      firstName: fname.trim(),
+      lastName: lname.trim(),
+      userType: isPartner ? 'partner' : 'customer',
+      ...rest,
+    };
+    submitSignup(params).then(res => isPartner && history.push('/partnerlogin'));
   };
 
   const loginErrorMessage = (
@@ -346,6 +361,8 @@ export const AuthenticationPageComponent = props => {
   const [authInfo, setAuthInfo] = useState(getAuthInfoFromCookies());
   const [authError, setAuthError] = useState(getAuthErrorFromCookies());
   const config = useConfiguration();
+
+  const history = useHistory();
 
   useEffect(() => {
     // Remove the autherror cookie once the content is saved to state
@@ -621,10 +638,7 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const AuthenticationPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(AuthenticationPageComponent);
 

@@ -1,10 +1,10 @@
 import React from 'react';
-
+import css from './ListingPage.module.css';
 function Rules(props) {
   const { publicData } = props;
   const { entryRules } = publicData;
   return (
-    <div>
+    <div className={css.RulesDiv}>
       <div>Rules</div>
       <div>{entryRules}</div>
     </div>

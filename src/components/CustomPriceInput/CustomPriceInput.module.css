@@ -1,0 +1,15 @@
+.errorInputBox {
+  & input {
+    border: 1px solid #ff0000;
+  }
+}
+
+.errorInput {
+  margin-top: 5px;
+  margin-bottom: 0;
+  color: #ff0000;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: inherit;
+  font-weight: 700;
+}

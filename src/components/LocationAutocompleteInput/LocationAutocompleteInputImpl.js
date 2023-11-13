@@ -399,7 +399,6 @@ class LocationAutocompleteInputImplementation extends Component {
       .then(results => {
         const { search: currentSearch } = currentValue(this.props);
         this.setState({ fetchingPredictions: false });
-        console.log(556, results);
         // If the earlier predictions arrive when the user has already
         // changed the search term, ignore and wait until the latest
         // predictions arrive. Without this logic, results for earlier

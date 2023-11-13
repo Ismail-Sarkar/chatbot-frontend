@@ -13,10 +13,10 @@
   composes: h4 from global;
   margin: 0;
 
-  @media (--viewportMedium) {
+  /* @media (--viewportMedium) {
     padding-top: 7px;
     padding-bottom: 1px;
-  }
+  } */
 
   display: flex;
   flex-direction: row;
@@ -31,12 +31,13 @@
   padding-bottom: 6px;
 
   @media (--viewportMedium) {
-    padding-bottom: 8px;
+    /* padding-bottom: 8px; */
   }
 }
 
 .bookingPeriodSectionLeft {
   text-align: left;
+  margin-top: -7px;
 }
 
 .bookingPeriodSectionRight {
@@ -49,7 +50,7 @@
   line-height: 24px;
   padding-top: 2px;
   padding-bottom: 4px;
-
+  font-size:14px;
   @media (--viewportMedium) {
     padding: 0;
   }
@@ -128,13 +129,39 @@
 .feeInfo {
   composes: marketplaceTinyFontStyles from global;
   flex-shrink: 0;
-  margin: 0;
-  color: var(--colorGrey300);
+  margin: 10px 0 0 0;
+  color: #000;
   padding-top: 4px;
   padding-bottom: 14px;
-
+  font-size:14px;
+  line-height:20px;
   @media (--viewportMedium) {
-    padding-top: 11px;
-    padding-bottom: 21px;
+    /* padding-top: 11px;
+    padding-bottom: 21px; */
   }
+}
+
+.seperator {
+  margin-top: 15px;
+}
+
+.reservationLabel {
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom:0;
+  color: #000;
+   & span {
+    text-decoration: underline;
+  }
+}
+.reservationInfo{
+  font-size:14px;
+
+}
+.remainingPay {
+  color: #ff0000;
+  margin-top: 15px;
+  font-weight:400;
+  font-size:14px;
+  line-height:20px;
 }

@@ -45,16 +45,18 @@
 .validLocation {
 }
 
-.locationAddress,
-.building {
+.locationAddress{
   flex-shrink: 0;
-  margin-bottom: 24px;
-
-  @media (--viewportMedium) {
+  margin-bottom:5px;
+  /* margin-top:10px; */
+  /* @media (--viewportMedium) {
     margin-bottom: 32px;
-  }
+  } */
 }
+.building {
+  margin-bottom: 10px;
 
+}
 .submitButton {
   margin-top: auto;
   margin-bottom: 24px;
@@ -62,9 +64,18 @@
   @media (--viewportLarge) {
     display: inline-block;
     width: 241px;
-    margin-top: 100px;
+    margin-top: 50px;
   }
 }
 .manualAddress {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 700;
+}
+.AddressDiv{
+ margin-bottom:10px;
+}
+.AddressWrap{
+  margin-top:12px;
 }

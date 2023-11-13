@@ -23,6 +23,12 @@
   padding-bottom: 24px;
   min-width: 300px;
   border-radius: var(--borderRadiusMedium);
+  @media(max-width:360px){
+    min-width: 255px;
+    width: 100% !important;
+    right: 0 !important;
+    /* left:0 !important; */
+  }
 }
 
 /* left animated "border" like hover element */
@@ -86,6 +92,9 @@
   }
   &:disabled:hover .menuItemBorder {
     width: 0;
+  }
+  @media(max-width:350px){
+    min-width: 255px;
   }
 }
 

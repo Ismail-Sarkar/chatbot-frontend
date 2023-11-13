@@ -33,6 +33,12 @@ export const getTransactionTypeData = (listingType, unitTypeInPublicData, config
 export const bookingDatesMaybe = bookingDates => {
   return bookingDates ? { bookingDates } : {};
 };
+export const extraPerkMaybe = extraPerk => {
+  return extraPerk ? { extraPerk } : {};
+};
+export const additionalGuestMaybe = additionalGuest => {
+  return additionalGuest ? { additionalGuest } : {};
+};
 
 /**
  * Construct billing details (JSON-like object) for the Stripe API

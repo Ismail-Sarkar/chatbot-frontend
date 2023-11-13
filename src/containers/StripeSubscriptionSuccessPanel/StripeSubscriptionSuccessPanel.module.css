@@ -1,0 +1,50 @@
+@import '../../styles/customMediaQueries.css';
+
+.successPageRoot {
+  display: flex;
+  gap: 7%;
+  /* width: calc(100vw - 200px); */
+  /* align-items: center; */
+  /* justify-content: center; */
+  margin: 30px 15vw;
+  @media (max-width: 575px) {
+    flex-direction: column;
+  }
+}
+.successContainerLeft {
+  flex-basis: 48%;
+}
+.successContainerRight {
+  flex-basis: 45%;
+  max-width: 320px;
+  border: 1px solid var(--colorGrey100);
+  border-radius: 2px;
+}
+.logoContainer {
+  & img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.successPriceSection {
+  padding: 20px 30px;
+}
+.successPriceContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+.priceTotalTitle {
+}
+.priceTotalAmount {
+}
+
+.links {
+  text-decoration: underline;
+
+  &:hover {
+    cursor: pointer;
+    color: #000;
+  }
+}

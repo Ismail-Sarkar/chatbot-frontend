@@ -90,8 +90,8 @@
   margin: 0;
 
   &:hover {
-    color: var(--marketplaceColorDark);
-    border-bottom: 4px solid var(--marketplaceColor);
+    color:#fc334d;
+    border-bottom: 4px solid #fc334d;
     border-radius: 0;
     text-decoration: none;
   }
@@ -118,7 +118,8 @@
   margin: 0;
 
   &:hover {
-    border-bottom: 4px solid var(--marketplaceColor);
+    color: #fc334d;
+    border-bottom: 4px solid #fc334d;
     border-radius: 0;
     text-decoration: none;
   }
@@ -156,8 +157,8 @@
   margin: 0;
 
   &:hover {
-    color: var(--colorBlack);
-    border-bottom: 4px solid var(--marketplaceColor);
+    color:#fc334d;
+    border-bottom: 4px solid #fc334d;
     border-radius: 0;
     text-decoration: none;
   }
@@ -221,13 +222,17 @@
   padding: 0 12px 0 12px;
 
   &:hover {
-    border-bottom: 4px solid var(--marketplaceColor);
+    /* border-bottom: 4px solid var(--marketplaceColor); */
     border-radius: 0;
     text-decoration: none;
   }
 
   &:active {
     border-bottom: 0;
+  }
+  & > div{
+    background-image: none !important;
+    background-color: #fc334d !important;
   }
 }
 
@@ -405,6 +410,9 @@
   padding-left: 10px;
   &:hover {
     text-decoration: none;
+  }
+  & > svg{
+    fill:#fc334d;
   }
 }
 .searchTitle {

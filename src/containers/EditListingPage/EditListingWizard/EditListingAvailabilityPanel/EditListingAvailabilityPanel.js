@@ -77,7 +77,7 @@ const createInitialValues = availabilityPlan => {
 };
 
 // Create entries from submit values
-const createEntriesFromSubmitValues = values =>
+const createEntriesFromSubmitValues = (values, listing) =>
   WEEKDAYS.reduce((allEntries, dayOfWeek) => {
     const dayValues = values[dayOfWeek] || [];
     const dayEntries = dayValues.map(dayValue => {
@@ -86,7 +86,7 @@ const createEntriesFromSubmitValues = values =>
       return startTime && endTime
         ? {
             dayOfWeek,
-            seats: 1,
+            seats: listing?.attributes?.publicData?.reserVations || 1,
             startTime,
             endTime: endTime === '24:00' ? '00:00' : endTime,
           }
@@ -97,11 +97,11 @@ const createEntriesFromSubmitValues = values =>
   }, []);
 
 // Create availabilityPlan from submit values
-const createAvailabilityPlan = values => ({
+const createAvailabilityPlan = (values, listing) => ({
   availabilityPlan: {
     type: 'availability-plan/time',
     timezone: values.timezone,
-    entries: createEntriesFromSubmitValues(values),
+    entries: createEntriesFromSubmitValues(values, listing),
   },
 });
 
@@ -166,7 +166,45 @@ const EditListingAvailabilityPanel = props => {
       }
     }
   }
-  console.log(65, timeOptions);
+
+  for (let hour = 0; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 60) {
+      const parts = startTime?.value?.split(':');
+      if (parts?.length === 2) {
+        const starthour = parts[0]; // This will give you '10' as a string
+        const startminute = parts[1].slice(0, 2);
+        if (hour > starthour) {
+          if (hour < 13) {
+            const time = `${hour.toString().padStart(2, '0')}:${minute
+              .toString()
+              .padStart(2, '0')}am`;
+            endTimeOptions.push({ value: time, label: time });
+          } else {
+            const newHour = hour - 12;
+            const time = `${newHour.toString().padStart(2, '0')}:${minute
+              .toString()
+              .padStart(2, '0')}pm`;
+            endTimeOptions.push({ value: time, label: time });
+          }
+        }
+      } else {
+        if (hour < 13) {
+          const time = `${hour.toString().padStart(2, '0')}:${minute
+            .toString()
+            .padStart(2, '0')}am`;
+          endTimeOptions.push({ value: time, label: time });
+        } else {
+          const newHour = hour - 12;
+          const time = `${newHour.toString().padStart(2, '0')}:${minute
+            .toString()
+            .padStart(2, '0')}pm`;
+          endTimeOptions.push({ value: time, label: time });
+        }
+      }
+    }
+  }
+
+  // console.log(65, timeOptions, startTime);
   const changeStartTime = startTime => {
     setStartTime(startTime);
   };
@@ -243,6 +281,8 @@ const EditListingAvailabilityPanel = props => {
     ],
   };
   const availabilityPlan = listingAttributes?.availabilityPlan || defaultAvailabilityPlan;
+
+  console.log(777, availabilityPlan, listing);
   const initialValues = valuesFromLastSubmit
     ? valuesFromLastSubmit
     : createInitialValues(availabilityPlan);
@@ -251,7 +291,7 @@ const EditListingAvailabilityPanel = props => {
     setValuesFromLastSubmit(values);
 
     // Final Form can wait for Promises to return.
-    return onSubmit(createAvailabilityPlan(values))
+    return onSubmit(createAvailabilityPlan(values, listing))
       .then(() => {
         setIsEditPlanModalOpen(false);
       })
@@ -382,7 +422,7 @@ const EditListingAvailabilityPanel = props => {
               <Select
                 id="endTime"
                 name="endTime"
-                options={timeOptions}
+                options={endTimeOptions}
                 onChange={changeEndTime}
                 value={endTime}
                 isSearchable={false}
@@ -429,6 +469,7 @@ const EditListingAvailabilityPanel = props => {
 
       {onManageDisableScrolling && isEditPlanModalOpen ? (
         <Modal
+          className={css.availabilityModal}
           id="EditAvailabilityPlan"
           isOpen={isEditPlanModalOpen}
           onClose={() => setIsEditPlanModalOpen(false)}

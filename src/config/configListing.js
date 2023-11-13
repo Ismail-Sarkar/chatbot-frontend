@@ -227,11 +227,11 @@ export const listingFields = [
 
 export const listingTypes = [
   {
-    listingType: 'daily-booking',
-    label: 'Daily booking',
+    listingType: 'adventurely-booking',
+    label: 'Adventurely-booking',
     transactionType: {
-      process: 'default-booking',
-      alias: 'default-booking/release-1',
+      process: 'adventurely-booking',
+      alias: 'adventurely-booking/release-1',
       unitType: 'day',
     },
   },
@@ -290,3 +290,19 @@ export const listingTypes = [
 // Read More:
 // https://www.sharetribe.com/docs/how-to/manage-search-schemas-with-flex-cli/#adding-listing-search-schemas
 export const enforceValidListingType = false;
+
+export const availablePaymentMethods = [
+  {
+    key: 'creditDebitCash',
+    label: 'Credit/debit card & cash',
+    value: 'creditDebitCash',
+    option: 'creditDebitCash',
+  },
+  {
+    key: 'creditDebit',
+    label: 'Credit/debit card only',
+    value: 'creditDebit',
+    option: 'creditDebit',
+  },
+  { key: 'cash', label: 'Cash only', value: 'cash', option: 'cash' },
+];

@@ -7,6 +7,7 @@ const { getAmountAsDecimalJS, convertDecimalJSToNumber } = require('./currency')
 const { nightsBetween, daysBetween } = require('./dates');
 const LINE_ITEM_NIGHT = 'line-item/night';
 const LINE_ITEM_DAY = 'line-item/day';
+const currency = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
 
 /** Helper functions for constructing line items*/
 
@@ -208,6 +209,37 @@ exports.calculateTotalFromLineItems = lineItems => {
   return new Money(numericTotalPrice, unitPrice.currency);
 };
 
+exports.calculateCurrentPayment = lineItems => {
+  const totalPrice = lineItems.reduce((sum, lineItem) => {
+    if (lineItem.code !== 'line-item/current-pay' && !lineItem.reversal) {
+      const lineTotal = this.calculateLineTotal(lineItem);
+      return getAmountAsDecimalJS(lineTotal).add(sum);
+    }
+    return sum;
+  }, 0);
+
+  const totalProviderPrice = lineItems.reduce((sum, item) => {
+    if (
+      item.code !== 'line-item/service-fee' &&
+      item.code !== 'line-item/current-pay' &&
+      !item.reversal
+    ) {
+      const lineTotal = this.calculateLineTotal(item);
+      return getAmountAsDecimalJS(lineTotal).add(sum);
+    }
+    return sum;
+  }, 0);
+
+  // Get total price as Number (and validate that the conversion is safe)
+  const per = totalProviderPrice * 0.9;
+  const ammnt = parseInt(totalProviderPrice) - per;
+  /* eslint-disable */
+  const numericTotalPrice = parseInt(-per);
+  const unitPrice = lineItems[0].unitPrice;
+
+  return new Money(numericTotalPrice, unitPrice.currency);
+};
+
 /**
  * Calculates the total sum of lineTotals for given lineItems where `includeFor` includes `provider`
  * @param {*} lineItems
@@ -275,4 +307,29 @@ exports.hasCommissionPercentage = commission => {
     throw new Error(`${percentage} is not a number.`);
   }
   return isDefined;
+};
+
+exports.hasServiceFeePercentage = serviceFee => {
+  const percentage = serviceFee;
+  const isDefined = percentage != null;
+  const isNumber = typeof percentage === 'number' && !isNaN(percentage);
+  if (isDefined && !isNumber) {
+    throw new Error(`${percentage} is not a number.`);
+  }
+  return isDefined;
+};
+
+exports.resolveGuestPrice = (listing, additionalGuest, lineItems) => {
+  const publicData = listing.attributes.publicData;
+  const setUpfFee = publicData && publicData.setUpFee;
+  const basePriceForGuest = lineItems.reduce((acc, curr) => {
+    acc += curr.unitPrice.amount;
+    return acc;
+  }, 0);
+
+  if (additionalGuest && basePriceForGuest) {
+    return new Money(basePriceForGuest, currency);
+  }
+
+  return new Money(0, currency);
 };

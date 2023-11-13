@@ -56,7 +56,7 @@
   composes: h4 from global;
   font-weight: var(--fontWeightBold);
 
-  color: var(--marketplaceColor);
+  color:#fc334d;
   margin: 0 0 0 24px;
 
   @media (--viewportMedium) {
@@ -171,6 +171,44 @@
   @media (--viewportLarge) {
     min-width: 312px;
     min-height: auto;
+  }
+  & > div{
+    & > div{
+      & > div{
+        & > div{
+          & > div{
+            & > div:nth-child(2){
+              & > div{
+                background-color:#fc334d!important;
+                /* & > div{
+                  & > div{
+                    & > div:nth-child(2){
+                      & > div:nth-child(2){
+                        & > div{
+                          & > div:nth-child(2){
+                            & > div{
+                              & > table{
+                                & > tbody{
+                                  & > tr:nth-child(5){
+                                    & > td{
+                                      background-color: #fc334d !important;
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                } */
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -295,9 +333,10 @@
   margin-bottom: 5px;
 }
 .timeDuration {
-  font-size: 15px;
+  font-size:14px;
+  line-height:20px;
   /* font-weight: 600; */
-  color: black;
+  color:#000;
 }
 .durationMainDiv {
   margin-bottom: 20px;

@@ -37,10 +37,16 @@ const LineItemTotalPrice = props => {
 
   return (
     <>
-      <hr className={css.totalDivider} />
-      <div className={css.lineItemTotal}>
+      <div className={css.seperator}></div>
+      {/* <div className={css.lineItemTotal}>
         <div className={css.totalLabel}>{totalLabel}</div>
         <div className={css.totalPrice}>{formattedTotalPrice}</div>
+      </div> */}
+      <div className={css.reservationFeeSection}>
+        <div className={css.reservationLabel}>
+          Reserve now for <span>{`${formattedTotalPrice} USD`}</span> 
+        </div>
+        <div className={css.reservationInfo}>(10% of the cost + Service fee)</div>
       </div>
     </>
   );

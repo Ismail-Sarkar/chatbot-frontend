@@ -28,10 +28,25 @@
   width: calc(66% - 9px);
 }
 
+.fieldGrp {
+  margin: 25px auto 0;
+}
+
+.otherTypeSignupLink {
+  margin: 25px auto 0;
+  text-align: center;
+}
+
 .password {
   composes: marketplaceModalPasswordMargins from global;
 }
 
 .bottomWrapper {
   composes: marketplaceModalBottomWrapper from global;
+}
+
+.sectionTitle {
+  font-size: 30px;
+  margin-top: -15px;
+  margin-bottom: 25px;
 }

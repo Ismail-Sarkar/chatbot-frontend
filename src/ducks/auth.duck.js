@@ -199,18 +199,31 @@ export const signup = params => (dispatch, getState, sdk) => {
     return Promise.reject(new Error('Login or logout already in progress'));
   }
   dispatch(signupRequest());
-  const { email, password, firstName, lastName, ...rest } = params;
+  const { email, password, firstName, lastName, userType, businessRole, ...rest } = params;
 
   const createUserParams = isEmpty(rest)
-    ? { email, password, firstName, lastName }
-    : { email, password, firstName, lastName, protectedData: { ...rest } };
+    ? {
+        email,
+        password,
+        firstName,
+        lastName,
+        publicData: { userType: userType, businessRole: businessRole },
+      }
+    : {
+        email,
+        password,
+        firstName,
+        lastName,
+        publicData: { userType: userType, businessRole: businessRole },
+        protectedData: { ...rest },
+      };
 
   // We must login the user if signup succeeds since the API doesn't
   // do that automatically.
   return sdk.currentUser
     .create(createUserParams)
     .then(() => dispatch(signupSuccess()))
-    .then(() => dispatch(login(email, password)))
+    .then(() => userType !== 'partner' && dispatch(login(email, password)))
     .catch(e => {
       dispatch(signupError(storableError(e)));
       log.error(e, 'signup-failed', {
