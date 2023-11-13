@@ -16,7 +16,7 @@ import css from './OrderBreakdown.module.css';
 import moment from 'moment';
 import { isEmpty } from 'lodash';
 
-const lineItemsNotInclueded = ['line-item/current-pay'];
+const lineItemsNotInclueded = ['line-item/due-pay'];
 
 const { Money } = sdkTypes;
 
