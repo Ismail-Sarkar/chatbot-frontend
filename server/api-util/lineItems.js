@@ -21,6 +21,10 @@ const MARKETPLACE_SERVICE_FEE = 3;
  * @param {*} publicData should contain shipping prices
  * @param {*} currency should point to the currency of listing's price.
  */
+
+function formatLineItemCode(str) {
+  return str.replace(/\s/g, '-');
+}
 const getItemQuantityAndLineItems = (orderData, publicData, currency) => {
   // Check delivery method and shipping prices
   const quantity = orderData ? orderData.stockReservationQuantity : null;
@@ -186,7 +190,7 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
 
   const extraPerkFees = hasExtraPerk
     ? extraPerk.map(data => ({
-        code: `line-item/${data.key}`,
+        code: `line-item/${formatLineItemCode(data.key)}`,
         unitPrice: new Money(data.value * 100, currency),
         quantity: 1,
         includeFor: ['customer', 'provider'],
@@ -235,9 +239,9 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
       ]
     : [];
 
-  const currentPayment = [
+  const duePayment = [
     {
-      code: 'line-item/current-pay',
+      code: 'line-item/due-pay',
       unitPrice: calculateCurrentPayment([
         order,
         ...extraPerkFees,
@@ -260,7 +264,7 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
     ...extraLineItems,
     // ...providerCommissionMaybe,
     ...serviceFeeMaybe,
-    ...currentPayment,
+    ...duePayment,
   ];
 
   return lineItems;

@@ -371,7 +371,7 @@ export const LINE_ITEM_SHIPPING_FEE = 'line-item/shipping-fee';
 export const LINE_ITEM_PICKUP_FEE = 'line-item/pickup-fee';
 export const LINE_ITEM_CUSTOM_GUEST_PRICE = 'line-item/custom-guest-price';
 export const LINE_ITEM_SERVICE_FEE = 'line-item/service-fee';
-export const LINE_ITEM_CURRENT_PAY = 'line-item/current-pay';
+export const LINE_ITEM_CURRENT_PAY = 'line-item/due-pay';
 
 export const LINE_ITEMS = [
   LINE_ITEM_NIGHT,
