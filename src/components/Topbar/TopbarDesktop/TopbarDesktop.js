@@ -153,11 +153,14 @@ const TopbarDesktop = props => {
         alt={intl.formatMessage({ id: 'TopbarDesktop.logo' }, { marketplaceName })}
       />
       {/* {search} */}
-
-      <NamedLink className={classNames(css.searchLink, css.searchWithIcon)} name="SearchPage">
-        <LiaSearchSolid size={25} />
-        <div className={css.searchTitle}> Search Passes...</div>
-      </NamedLink>
+      {currentPage === 'SearchPage' ? (
+        search
+      ) : (
+        <NamedLink className={classNames(css.searchLink, css.searchWithIcon)} name="SearchPage">
+          <LiaSearchSolid size={25} />
+          <div className={css.searchTitle}> Search Passes...</div>
+        </NamedLink>
+      )}
       <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
         <span className={css.createListing}>
           <FormattedMessage id="TopbarDesktop.blog" />

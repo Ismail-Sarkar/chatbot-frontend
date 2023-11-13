@@ -217,7 +217,6 @@ export const AuthenticationForms = props => {
     <div className={css.content}>
       <LinkTabNavHorizontal className={css.tabs} tabs={tabs} />
       {loginOrSignupError}
-
       {isLogin ? (
         <LoginForm className={css.loginForm} onSubmit={submitLogin} inProgress={authInProgress} />
       ) : (
@@ -228,13 +227,14 @@ export const AuthenticationForms = props => {
           termsAndConditions={termsAndConditions}
         />
       )}
-
-      <SocialLoginButtonsMaybe
-        isLogin={isLogin}
-        showFacebookLogin={showFacebookLogin}
-        showGoogleLogin={showGoogleLogin}
-        from={from}
-      />
+      {/* {isPartner ? null : (
+        <SocialLoginButtonsMaybe
+          isLogin={isLogin}
+          showFacebookLogin={showFacebookLogin}
+          showGoogleLogin={showGoogleLogin}
+          from={from}
+        />
+      )} */}
     </div>
   );
 };
@@ -416,7 +416,6 @@ export const AuthenticationPageComponent = props => {
   // (i.e. `from` is present). We must also check the `emailVerified`
   // flag only when the current user is fully loaded.
   const showEmailVerification = !isLogin && currentUserLoaded && !user.attributes.emailVerified;
-
   // Already authenticated, redirect away from auth page
   if (isAuthenticated && from) {
     return <Redirect to={from} />;
@@ -638,7 +637,10 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const AuthenticationPage = compose(
   withRouter,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
   injectIntl
 )(AuthenticationPageComponent);
 

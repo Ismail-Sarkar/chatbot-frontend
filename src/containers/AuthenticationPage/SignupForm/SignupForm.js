@@ -213,6 +213,14 @@ const SignupFormComponent = props => (
               <FormattedMessage id="SignupForm.signUp" />
             </PrimaryButton>
           </div>
+          {isPartner && (
+            <div className={css.bottomMessage}>
+              Don’t have the code? Apply to list your space{' '}
+              <a href="http://www.adventurely.pro/vendors" target="_blank">
+                here
+              </a>
+            </div>
+          )}
 
           {/* <div className={css.otherTypeSignupLink}>
             {isPartner ? (

@@ -33,13 +33,13 @@ import css from './ProfilePage.module.css';
 const MAX_MOBILE_SCREEN_WIDTH = 768;
 
 export const AsideContent = props => {
-  const { user, displayName, isCurrentUser } = props;
+  const { user, displayName, isCurrentUser, businessname } = props;
   return (
     <div className={css.asideContent}>
       <AvatarLarge className={css.avatar} user={user} disableProfileLink />
       <H2 as="h1" className={css.mobileHeading}>
-        {displayName ? (
-          <FormattedMessage id="ProfilePage.mobileHeading" values={{ name: displayName }} />
+        {businessname ? (
+          <FormattedMessage id="ProfilePage.mobileHeading" values={{ name: businessname }} />
         ) : null}
       </H2>
       {isCurrentUser ? (
@@ -152,6 +152,7 @@ export const MainContent = props => {
     reviews,
     queryReviewsError,
     viewport,
+    businessname,
   } = props;
 
   const hasListings = listings.length > 0;
@@ -172,7 +173,7 @@ export const MainContent = props => {
   return (
     <div>
       <H2 as="h1" className={css.desktopHeading}>
-        <FormattedMessage id="ProfilePage.desktopHeading" values={{ name: displayName }} />
+        <FormattedMessage id="ProfilePage.desktopHeading" values={{ name: businessname }} />
       </H2>
       {hasBio ? <p className={css.bio}>{bio}</p> : null}
       {hasListings ? (
@@ -206,6 +207,7 @@ const ProfilePageComponent = props => {
   const isCurrentUser =
     ensuredCurrentUser.id && profileUser.id && ensuredCurrentUser.id.uuid === profileUser.id.uuid;
   const { bio, displayName } = profileUser?.attributes?.profile || {};
+  const businessname = profileUser?.attributes?.profile?.publicData?.businessName;
 
   const schemaTitleVars = { name: displayName, marketplaceName: config.marketplaceName };
   const schemaTitle = intl.formatMessage({ id: 'ProfilePage.schemaTitle' }, schemaTitleVars);
@@ -227,11 +229,22 @@ const ProfilePageComponent = props => {
         sideNavClassName={css.aside}
         topbar={<TopbarContainer currentPage="ProfilePage" />}
         sideNav={
-          <AsideContent user={user} isCurrentUser={isCurrentUser} displayName={displayName} />
+          <AsideContent
+            user={user}
+            isCurrentUser={isCurrentUser}
+            displayName={displayName}
+            businessname={businessname}
+          />
         }
         footer={<FooterContainer />}
       >
-        <MainContent bio={bio} displayName={displayName} userShowError={userShowError} {...rest} />
+        <MainContent
+          bio={bio}
+          displayName={displayName}
+          userShowError={userShowError}
+          businessname={businessname}
+          {...rest}
+        />
       </LayoutSideNavigation>
     </Page>
   );
