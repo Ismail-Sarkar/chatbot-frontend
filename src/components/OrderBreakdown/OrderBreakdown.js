@@ -33,6 +33,7 @@ import LineItemServiceFeeMaybe from './LineItemServiceFeeMaybe';
 import LineItemCurrentPayMaybe from './LineItemCurrentPayMaybe';
 import { useConfiguration } from '../../context/configurationContext';
 import { isArray } from 'lodash';
+import { formatMoney } from '../../util/currency';
 
 export const OrderBreakdownComponent = props => {
   const {
@@ -120,6 +121,15 @@ export const OrderBreakdownComponent = props => {
       />
 
       <LineItemBasePriceMaybe lineItems={lineItems} code={lineItemUnitType} intl={intl} />
+      {listing?.attributes && listing.attributes.price && (
+        <div className={css.lineItem}>
+          <span className={css.itemLabel}>
+            Remote Work Day pass
+            {/* <FormattedMessage id={'lineitemBasePriceMaybe.label'} values={{ unitPrice, quantity }} /> */}
+          </span>
+          <span className={css.itemValue}>{formatMoney(intl, listing.attributes.price)}</span>
+        </div>
+      )}
       <LineItemShippingFeeMaybe lineItems={lineItems} intl={intl} />
       <LineItemPickupFeeMaybe lineItems={lineItems} intl={intl} />
       <LineItemUnknownItemsMaybe lineItems={lineItems} isProvider={isProvider} intl={intl} />

@@ -20,6 +20,8 @@ const lineItemsNotInclueded = ['line-item/due-pay'];
 
 const { Money } = sdkTypes;
 
+const CURRENCY = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
+
 function LineItemServiceFeeMaybe(props) {
   const { lineItems, transaction, intl, isProvider } = props;
   const serviceFeeLineItem = lineItems.find(
@@ -29,7 +31,11 @@ function LineItemServiceFeeMaybe(props) {
     .filter(item => item.code !== LINE_ITEM_SERVICE_FEE && !item.reversal)
     .filter(item => item.code !== LINE_ITEM_CURRENT_PAY && !item.reversal);
 
-  const subTotalAmount = allFilteredLineItems.reduce((acc, curr) => {
+  const guestFeeLineItem = lineItems.filter(
+    lineItem => lineItem.code === LINE_ITEM_CUSTOM_GUEST_PRICE
+  );
+
+  const subTotalAmount = guestFeeLineItem.reduce((acc, curr) => {
     acc += curr.lineTotal.amount;
     return acc;
   }, 0);
@@ -61,15 +67,23 @@ function LineItemServiceFeeMaybe(props) {
 
   const getCustomerTotalPrice = lineItems => {
     const priceObj = lineItems
-      .filter(lineItem => !lineItemsNotInclueded.includes(lineItem.code))
-      .reduce((prev, curnt) => {
-        prev.currency = curnt.lineTotal.currency;
-        if (prev.amount === undefined) {
-          prev.amount = 0;
-        }
-        prev.amount += curnt.lineTotal.amount;
-        return prev;
-      }, {});
+      // .filter(lineItem => !lineItemsNotInclueded.includes(lineItem.code))
+      .reduce(
+        (prev, curnt) => {
+          if (
+            curnt.code !== 'line-item/custom-guest-price' &&
+            curnt.code !== 'line-item/service-fee'
+          )
+            return prev;
+          prev.currency = curnt.lineTotal.currency;
+          if (prev.amount === undefined) {
+            prev.amount = 0;
+          }
+          prev.amount += curnt.lineTotal.amount;
+          return prev;
+        },
+        { amount: 0, currency: CURRENCY }
+      );
     return new Money(priceObj.amount, priceObj.currency);
   };
 
