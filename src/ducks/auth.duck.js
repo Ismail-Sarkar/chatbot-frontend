@@ -207,14 +207,22 @@ export const signup = params => (dispatch, getState, sdk) => {
         password,
         firstName,
         lastName,
-        publicData: { userType: userType, businessRole: businessRole },
+        publicData: {
+          userType: userType,
+          businessRole: businessRole,
+          fullName: `${firstName} ${lastName}`,
+        },
       }
     : {
         email,
         password,
         firstName,
         lastName,
-        publicData: { userType: userType, businessRole: businessRole },
+        publicData: {
+          userType: userType,
+          businessRole: businessRole,
+          fullName: `${firstName} ${lastName}`,
+        },
         protectedData: { ...rest },
       };
 

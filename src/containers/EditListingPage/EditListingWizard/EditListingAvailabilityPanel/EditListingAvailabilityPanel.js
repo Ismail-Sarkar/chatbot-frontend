@@ -154,8 +154,11 @@ const EditListingAvailabilityPanel = props => {
 
   for (let hour = 0; hour < 24; hour++) {
     for (let minute = 0; minute < 60; minute += 60) {
-      if (hour < 13) {
+      if (hour < 12) {
         const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}am`;
+        timeOptions.push({ value: time, label: time });
+      } else if (hour === 12) {
+        const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}pm`;
         timeOptions.push({ value: time, label: time });
       } else {
         const newHour = hour - 12;
@@ -174,10 +177,15 @@ const EditListingAvailabilityPanel = props => {
         const starthour = parts[0]; // This will give you '10' as a string
         const startminute = parts[1].slice(0, 2);
         if (hour > starthour) {
-          if (hour < 13) {
+          if (hour < 12) {
             const time = `${hour.toString().padStart(2, '0')}:${minute
               .toString()
               .padStart(2, '0')}am`;
+            endTimeOptions.push({ value: time, label: time });
+          } else if (hour === 12) {
+            const time = `${hour.toString().padStart(2, '0')}:${minute
+              .toString()
+              .padStart(2, '0')}pm`;
             endTimeOptions.push({ value: time, label: time });
           } else {
             const newHour = hour - 12;

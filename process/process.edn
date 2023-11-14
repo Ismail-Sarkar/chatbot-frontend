@@ -193,10 +193,10 @@
    :on :transition/expire,
    :to :actor.role/customer,
    :template :booking-expired-request}
-  {:name :notification/booking-money-paid,
-   :on :transition/complete,
-   :to :actor.role/provider,
-   :template :booking-money-paid}
+  ;; {:name :notification/booking-money-paid,
+  ;;  :on :transition/complete,
+  ;;  :to :actor.role/provider,
+  ;;  :template :booking-money-paid}
   {:name :notification/review-period-start-provider,
    :on :transition/complete,
    :to :actor.role/provider,
@@ -205,10 +205,10 @@
    :on :transition/complete,
    :to :actor.role/customer,
    :template :booking-review-by-customer-wanted}
-  {:name :notification/booking-money-paid-operator-complete,
-   :on :transition/operator-complete,
-   :to :actor.role/provider,
-   :template :booking-money-paid}
+  ;; {:name :notification/booking-money-paid-operator-complete,
+  ;;  :on :transition/operator-complete,
+  ;;  :to :actor.role/provider,
+  ;;  :template :booking-money-paid}
   {:name :notification/review-period-start-provider-operator-complete,
    :on :transition/operator-complete,
    :to :actor.role/provider,

@@ -79,12 +79,12 @@ export const MobileReviews = props => {
       </H4>
       <ReviewsErrorMaybe queryReviewsError={queryReviewsError} />
       <Reviews reviews={reviewsOfProvider} />
-      <H4 as="h2" className={css.mobileReviewsTitle}>
+      {/* <H4 as="h2" className={css.mobileReviewsTitle}>
         <FormattedMessage
           id="ProfilePage.reviewsAsACustomerTitle"
           values={{ count: reviewsOfCustomer.length }}
         />
-      </H4>
+      </H4> */}
       <ReviewsErrorMaybe queryReviewsError={queryReviewsError} />
       <Reviews reviews={reviewsOfCustomer} />
     </div>
@@ -111,18 +111,18 @@ export const DesktopReviews = props => {
       selected: isReviewTypeProviderSelected,
       onClick: () => setShowReviewsType(REVIEW_TYPE_OF_PROVIDER),
     },
-    {
-      text: (
-        <Heading as="h3" rootClassName={css.desktopReviewsTitle}>
-          <FormattedMessage
-            id="ProfilePage.reviewsAsACustomerTitle"
-            values={{ count: reviewsOfCustomer.length }}
-          />
-        </Heading>
-      ),
-      selected: isReviewTypeCustomerSelected,
-      onClick: () => setShowReviewsType(REVIEW_TYPE_OF_CUSTOMER),
-    },
+    // {
+    //   text: (
+    //     <Heading as="h3" rootClassName={css.desktopReviewsTitle}>
+    //       <FormattedMessage
+    //         id="ProfilePage.reviewsAsACustomerTitle"
+    //         values={{ count: reviewsOfCustomer.length }}
+    //       />
+    //     </Heading>
+    //   ),
+    //   selected: isReviewTypeCustomerSelected,
+    //   onClick: () => setShowReviewsType(REVIEW_TYPE_OF_CUSTOMER),
+    // },
   ];
 
   return (

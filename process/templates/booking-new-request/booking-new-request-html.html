@@ -213,7 +213,9 @@
                             <tr>
                               <td>
                                 <td>
-                                  <p style="font-size:16px;line-height:1.4;margin:16px 0;color:#484848;margin-bottom:1px">{{> format-money money=unit-price}} × {{number quantity}} {{inflect quantity "night" "nights"}}</p>
+                                  <p style="font-size:16px;line-height:1.4;margin:16px 0;color:#484848;margin-bottom:1px">{{> format-money money=unit-price}}
+                                     <!-- × {{number quantity}}  -->
+                                     {{inflect quantity "night" "nights"}}</p>
                                 </td>
                                 <td style="text-align:right">
                                   <p style="font-size:16px;line-height:1.4;margin:16px 0;color:#484848;margin-bottom:1px">{{> format-money money=line-total}}</p>
@@ -238,8 +240,8 @@
                           </tbody>
                         </table>
                         {{/eq}}{{/contains}}{{/each}}
-                        <hr style="width:100%;border:none;border-top:1px solid #eaeaea;border-color:#E1E1E1;margin:20px 0" />
-                        <table align="center" border="0" cellPadding="0" cellSpacing="0" role="presentation" width="100%">
+                        <!-- <hr style="width:100%;border:none;border-top:1px solid #eaeaea;border-color:#E1E1E1;margin:20px 0" /> -->
+                        <!-- <table align="center" border="0" cellPadding="0" cellSpacing="0" role="presentation" width="100%">
                           <tbody>
                             <tr>
                               <td>
@@ -252,12 +254,12 @@
                               </td>
                             </tr>
                           </tbody>
-                        </table>
+                        </table> -->
                       </td>
                     </tr>
                   </tbody>
                 </table>
-                <p style="font-size:16px;line-height:1.4;margin:16px 0;color:#484848;font-weight:700">You need to accept the request by {{> format-date date=delayed-transition.run-at}}. Otherwise the request will expire automatically and you won't get paid.</p>
+                <p style="font-size:16px;line-height:1.4;margin:16px 0;color:#484848;font-weight:700">You need to accept the request by {{> format-date date=delayed-transition.run-at}}. Otherwise the request will expire.</p>
                 <p style="font-size:16px;line-height:1.4;margin:16px 0;color:#484848">If the booked dates don't work for you, you can also choose to decline the request.</p>
                 <table style="padding:16px 0 0" align="center" border="0" cellPadding="0" cellSpacing="0" role="presentation" width="100%">
                   <tbody>

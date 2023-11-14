@@ -43,9 +43,17 @@ const LineItemTotalPrice = props => {
         <div className={css.totalPrice}>{formattedTotalPrice}</div>
       </div> */}
       <div className={css.reservationFeeSection}>
-        <div className={css.reservationLabel}>
-          Reserve now for <span>{`${formattedTotalPrice} USD`}</span> 
-        </div>
+        {typeof window !== 'undefined' &&
+        (window.location?.pathname?.includes('sale') ||
+          window.location?.pathname?.includes('order')) ? (
+          <div className={css.reservationLabel}>
+            Customer paid: <span>{`${formattedTotalPrice} USD`}</span> Reservation fee
+          </div>
+        ) : (
+          <div className={css.reservationLabel}>
+            Reserve now for <span>{`${formattedTotalPrice} USD`}</span>
+          </div>
+        )}
         <div className={css.reservationInfo}>(10% of the cost + Service fee)</div>
       </div>
     </>
