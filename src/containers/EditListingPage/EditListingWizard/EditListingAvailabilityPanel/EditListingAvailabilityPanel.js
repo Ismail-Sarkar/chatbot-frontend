@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { arrayOf, bool, func, object, string } from 'prop-types';
 import classNames from 'classnames';
 
@@ -151,10 +151,20 @@ const EditListingAvailabilityPanel = props => {
   const [entryRules, setEntryRules] = useState(listing.attributes.publicData.entryRules || null);
   const [checkBoxVal, setCheckBoxVal] = useState(
     electricalOutletOption.reduce((acc, value) => {
-      acc[value.key] = false;
+      acc[value.key] = listing?.attributes?.publicData?.electricalOutletOption
+        ? listing?.attributes?.publicData?.electricalOutletOption[value.key]
+        : false;
       return acc;
     }, {})
   );
+  const [allValuesFalseRef, setAllValuesFalseRef] = useState(
+    Object.values(checkBoxVal).every(value => value === false)
+  );
+  useEffect(() => {
+    const isAllFalse = Object.values(checkBoxVal).every(value => value === false);
+    setAllValuesFalseRef(isAllFalse);
+  }, [checkBoxVal]);
+  console.log(23, allValuesFalseRef);
   const [startTime, setStartTime] = useState(
     listing.attributes.publicData.availableStartTime || { value: '00:00am', label: '00:00am' }
   );
@@ -229,10 +239,8 @@ const EditListingAvailabilityPanel = props => {
     }
   }
   const handleCheckboxChange = option => {
-    console.log(45, option);
-    setCheckBoxVal({ ...checkBoxVal, [option]: !checkBoxVal[option] });
+    setCheckBoxVal(checkBoxVal => ({ ...checkBoxVal, [option]: !checkBoxVal[option] }));
   };
-  console.log(455, checkBoxVal);
   const changeStartTime = startTime => {
     setStartTime(startTime);
   };
@@ -248,10 +256,10 @@ const EditListingAvailabilityPanel = props => {
             availableStartTime: startTime ? startTime : null,
             availableEndTime: endTime ? endTime : null,
             entryRules: entryRules ? entryRules : null,
+            electricalOutletOption: checkBoxVal,
           },
         })
         .then(res => {
-          // console.log(144, editListingLinkType);
           editListingLinkType === 'edit'
             ? history.push(
                 createResourceLocatorString(
@@ -473,19 +481,22 @@ const EditListingAvailabilityPanel = props => {
             />
           </section>
           <section className={css.electricRules}>
-            <div>Electrical outlet availability description for guests</div>
+            <div className={css.entryRulesTitle}>
+              Electrical outlet availability description for guests
+            </div>
             {electricalOutletOption.map(option => (
-              <>
+              <div>
                 {' '}
-                <label key={option.value}>
+                <label key={option.value} className={css.checkBoxLabel}>
                   <input
                     type="checkbox"
-                    // checked={checkboxes[checkboxName]}
+                    checked={checkBoxVal[option.value]}
                     onChange={() => handleCheckboxChange(option.value)}
+                    className={css.checkBox}
                   />
                   {option.label}
                 </label>
-              </>
+              </div>
             ))}
           </section>
         </>
@@ -504,7 +515,8 @@ const EditListingAvailabilityPanel = props => {
         onClick={() => {
           updateAndNextTab(id, slug, editListingLinkType);
         }}
-        disabled={!hasAvailabilityPlan}
+        // disabled={!hasAvailabilityPlan}
+        disabled={allValuesFalseRef}
       >
         {submitButtonText}
       </Button>
