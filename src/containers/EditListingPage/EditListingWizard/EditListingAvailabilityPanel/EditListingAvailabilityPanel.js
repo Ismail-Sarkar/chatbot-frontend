@@ -149,6 +149,12 @@ const EditListingAvailabilityPanel = props => {
   const [isEditExceptionsModalOpen, setIsEditExceptionsModalOpen] = useState(false);
   const [valuesFromLastSubmit, setValuesFromLastSubmit] = useState(null);
   const [entryRules, setEntryRules] = useState(listing.attributes.publicData.entryRules || null);
+  const [checkBoxVal, setCheckBoxVal] = useState(
+    electricalOutletOption.reduce((acc, value) => {
+      acc[value.key] = false;
+      return acc;
+    }, {})
+  );
   const [startTime, setStartTime] = useState(
     listing.attributes.publicData.availableStartTime || { value: '00:00am', label: '00:00am' }
   );
@@ -222,8 +228,11 @@ const EditListingAvailabilityPanel = props => {
       }
     }
   }
-
-  // console.log(65, timeOptions, startTime);
+  const handleCheckboxChange = option => {
+    console.log(45, option);
+    setCheckBoxVal({ ...checkBoxVal, [option]: !checkBoxVal[option] });
+  };
+  console.log(455, checkBoxVal);
   const changeStartTime = startTime => {
     setStartTime(startTime);
   };
@@ -463,17 +472,22 @@ const EditListingAvailabilityPanel = props => {
               onChange={e => handleEntryRules(e)}
             />
           </section>
-          {/* <section className={css.electricRules}>
+          <section className={css.electricRules}>
             <div>Electrical outlet availability description for guests</div>
-            <FieldCheckboxGroup
-              id="electricOptions"
-              name="electricOptions"
-              options={electricalOutletOption}
-              // validate={validators.required(
-              //   intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodRequired' })
-              // )}
-            />
-          </section> */}
+            {electricalOutletOption.map(option => (
+              <>
+                {' '}
+                <label key={option.value}>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxes[checkboxName]}
+                    onChange={() => handleCheckboxChange(option.value)}
+                  />
+                  {option.label}
+                </label>
+              </>
+            ))}
+          </section>
         </>
       ) : null}
 
