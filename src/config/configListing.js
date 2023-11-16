@@ -306,3 +306,23 @@ export const availablePaymentMethods = [
   },
   { key: 'cash', label: 'Cash only', value: 'cash', option: 'cash' },
 ];
+export const electricalOutletOption = [
+  {
+    key: 'noOutletsAvailable',
+    label: 'No outlets available - arrive with your laptop/phone charged',
+    value: 'noOutletsAvailable',
+    option: 'noOutletsAvailable',
+  },
+  {
+    key: 'smallAmountOfOutletAvailable',
+    label: 'A small amount of outlets available - arrive with your laptop/phone charged',
+    value: 'smallAmountOfOutletAvailable',
+    option: 'smallAmountOfOutletAvailable',
+  },
+  {
+    key: 'severalOutletsAvailable',
+    label: 'Several outlets are available - arrive with your laptop/phone charge',
+    value: 'severalOutletsAvailable',
+    option: 'severalOutletsAvailable',
+  },
+];

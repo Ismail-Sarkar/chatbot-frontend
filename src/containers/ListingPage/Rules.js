@@ -5,7 +5,7 @@ function Rules(props) {
   const { entryRules } = publicData;
   return (
     <div className={css.RulesDiv}>
-      <div>Rules</div>
+      <div className={css.rulesHead}>Rules</div>
       <div>{entryRules}</div>
     </div>
   );

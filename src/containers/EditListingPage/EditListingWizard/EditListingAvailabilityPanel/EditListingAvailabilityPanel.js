@@ -6,10 +6,19 @@ import classNames from 'classnames';
 import { FormattedMessage } from '../../../../util/reactIntl';
 import { getDefaultTimeZoneOnBrowser, timestampToDate } from '../../../../util/dates';
 import { LISTING_STATE_DRAFT, propTypes } from '../../../../util/types';
+import * as validators from '../../../../util/validators';
+
 import { DAY, isFullDay } from '../../../../transactions/transaction';
 
 // Import shared components
-import { Button, H3, InlineTextButton, ListingLink, Modal } from '../../../../components';
+import {
+  Button,
+  FieldCheckboxGroup,
+  H3,
+  InlineTextButton,
+  ListingLink,
+  Modal,
+} from '../../../../components';
 
 // Import modules from this directory
 import EditListingAvailabilityPlanForm from './EditListingAvailabilityPlanForm';
@@ -134,6 +143,8 @@ const EditListingAvailabilityPanel = props => {
     history,
   } = props;
   // Hooks
+  const { electricalOutletOption } = config.listing || {};
+
   const [isEditPlanModalOpen, setIsEditPlanModalOpen] = useState(false);
   const [isEditExceptionsModalOpen, setIsEditExceptionsModalOpen] = useState(false);
   const [valuesFromLastSubmit, setValuesFromLastSubmit] = useState(null);
@@ -290,7 +301,6 @@ const EditListingAvailabilityPanel = props => {
   };
   const availabilityPlan = listingAttributes?.availabilityPlan || defaultAvailabilityPlan;
 
-  console.log(777, availabilityPlan, listing);
   const initialValues = valuesFromLastSubmit
     ? valuesFromLastSubmit
     : createInitialValues(availabilityPlan);
@@ -453,6 +463,17 @@ const EditListingAvailabilityPanel = props => {
               onChange={e => handleEntryRules(e)}
             />
           </section>
+          {/* <section className={css.electricRules}>
+            <div>Electrical outlet availability description for guests</div>
+            <FieldCheckboxGroup
+              id="electricOptions"
+              name="electricOptions"
+              options={electricalOutletOption}
+              // validate={validators.required(
+              //   intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodRequired' })
+              // )}
+            />
+          </section> */}
         </>
       ) : null}
 
