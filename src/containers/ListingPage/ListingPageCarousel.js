@@ -351,7 +351,10 @@ export const ListingPageComponent = props => {
               listingId={currentListing.id}
               mapsConfig={config.maps}
             />
-            {publicData.entryRules && <Rules publicData={publicData} />}
+            {publicData.rulesValOption &&
+              !Object.values(publicData.rulesValOption).every(value => value === false) && (
+                <Rules publicData={publicData} />
+              )}
 
             <SectionReviews reviews={reviews} fetchReviewsError={fetchReviewsError} />
             <SectionAuthorMaybe

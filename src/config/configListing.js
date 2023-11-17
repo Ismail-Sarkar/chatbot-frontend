@@ -326,3 +326,24 @@ export const electricalOutletOption = [
     option: 'severalOutletsAvailable',
   },
 ];
+export const rules = [
+  {
+    key: 'noPhoneLaptopWorkCalls',
+    label: 'No phone or laptop work calls permitted while using your pass',
+    value: 'noPhoneLaptopWorkCalls',
+    option: 'noPhoneLaptopWorkCalls',
+  },
+  {
+    key: 'headphoneMust',
+    label:
+      'Headphones must be used for streaming music/audio from your phone or laptop while using your pass',
+    value: 'headphoneMust',
+    option: 'headphoneMust',
+  },
+  {
+    key: 'other',
+    label: 'Other',
+    value: 'other',
+    option: 'other',
+  },
+];

@@ -143,12 +143,25 @@ const EditListingAvailabilityPanel = props => {
     history,
   } = props;
   // Hooks
-  const { electricalOutletOption } = config.listing || {};
+  const { electricalOutletOption, rules } = config.listing || {};
 
   const [isEditPlanModalOpen, setIsEditPlanModalOpen] = useState(false);
   const [isEditExceptionsModalOpen, setIsEditExceptionsModalOpen] = useState(false);
   const [valuesFromLastSubmit, setValuesFromLastSubmit] = useState(null);
+  const [showOtherEntryRules, setShowOtherEntryRules] = useState(
+    listing?.attributes?.publicData?.rulesValOption
+      ? listing?.attributes?.publicData?.rulesValOption?.other
+      : false
+  );
   const [entryRules, setEntryRules] = useState(listing.attributes.publicData.entryRules || null);
+  const [rulesVal, setRulesVal] = useState(
+    rules.reduce((acc, value) => {
+      acc[value.key] = listing?.attributes?.publicData?.rulesValOption
+        ? listing?.attributes?.publicData?.rulesValOption[value.key]
+        : false;
+      return acc;
+    }, {})
+  );
   const [checkBoxVal, setCheckBoxVal] = useState(
     electricalOutletOption.reduce((acc, value) => {
       acc[value.key] = listing?.attributes?.publicData?.electricalOutletOption
@@ -164,7 +177,6 @@ const EditListingAvailabilityPanel = props => {
     const isAllFalse = Object.values(checkBoxVal).every(value => value === false);
     setAllValuesFalseRef(isAllFalse);
   }, [checkBoxVal]);
-  console.log(23, allValuesFalseRef);
   const [startTime, setStartTime] = useState(
     listing.attributes.publicData.availableStartTime || { value: '00:00am', label: '00:00am' }
   );
@@ -241,6 +253,12 @@ const EditListingAvailabilityPanel = props => {
   const handleCheckboxChange = option => {
     setCheckBoxVal(checkBoxVal => ({ ...checkBoxVal, [option]: !checkBoxVal[option] }));
   };
+  const handleRulesChange = option => {
+    setRulesVal(rulesVal => ({ ...rulesVal, [option]: !rulesVal[option] }));
+    if (option === 'other') {
+      setShowOtherEntryRules(!showOtherEntryRules);
+    }
+  };
   const changeStartTime = startTime => {
     setStartTime(startTime);
   };
@@ -255,8 +273,9 @@ const EditListingAvailabilityPanel = props => {
           publicData: {
             availableStartTime: startTime ? startTime : null,
             availableEndTime: endTime ? endTime : null,
-            entryRules: entryRules ? entryRules : null,
             electricalOutletOption: checkBoxVal,
+            rulesValOption: rulesVal,
+            entryRules: showOtherEntryRules && entryRules ? entryRules : null,
           },
         })
         .then(res => {
@@ -466,19 +485,34 @@ const EditListingAvailabilityPanel = props => {
           </section>
           <section className={css.entryRulesSection}>
             <div className={css.entryRulesTitle}>
-              Optional: Enter any rules for guests to follow during use of their remote work day
-              pass
+              Optional: Add any rules for guests to follow during their remote work day pass
             </div>
-            <textarea
-              className={css.entryRulesInput}
-              id="entryRules"
-              name="entryRules"
-              rows={4}
-              cols={50}
-              placeholder="Ex: No work phone calls/laptop calls permitted."
-              value={entryRules}
-              onChange={e => handleEntryRules(e)}
-            />
+            {rules.map(option => (
+              <div>
+                {' '}
+                <label key={option.value} className={css.checkBoxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={rulesVal[option.value]}
+                    onChange={() => handleRulesChange(option.value)}
+                    className={css.checkBox}
+                  />
+                  <span className={css.label}> {option.label}</span>
+                </label>
+              </div>
+            ))}
+            {showOtherEntryRules && (
+              <textarea
+                className={css.entryRulesInput}
+                id="entryRules"
+                name="entryRules"
+                rows={4}
+                cols={50}
+                placeholder="Ex: No work phone calls/laptop calls permitted."
+                value={entryRules}
+                onChange={e => handleEntryRules(e)}
+              />
+            )}
           </section>
           <section className={css.electricRules}>
             <div className={css.entryRulesTitle}>
@@ -494,7 +528,7 @@ const EditListingAvailabilityPanel = props => {
                     onChange={() => handleCheckboxChange(option.value)}
                     className={css.checkBox}
                   />
-                  {option.label}
+                  <span className={css.label}> {option.label}</span>
                 </label>
               </div>
             ))}
