@@ -13,7 +13,6 @@ function ProviderEmailMaybe(props) {
       axios.get(`${apiBaseUrl()}/api/getProviderMail/${providerId}`).then(resp => {
         const { email } = resp?.data?.data || {};
         setProviderEmail(email);
-        console.log(email);
       });
   }, [providerId]);
 
