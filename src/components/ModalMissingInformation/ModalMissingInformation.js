@@ -16,6 +16,7 @@ import css from './ModalMissingInformation.module.css';
 
 const MISSING_INFORMATION_MODAL_WHITELIST = [
   'LoginPage',
+  // 'PartnerLoginPage',
   'SignupPage',
   'ContactDetailsPage',
   'EmailVerificationPage',
@@ -65,7 +66,6 @@ class ModalMissingInformation extends Component {
     const pathChanged = newLocation.pathname !== this.props.location.pathname;
     const notRemindedYet =
       !this.state.showMissingInformationReminder && !this.state.hasSeenMissingInformationReminder;
-
     // Is the reminder already shown on current page
     const showOnPathChange = notRemindedYet || pathChanged;
 
@@ -77,7 +77,10 @@ class ModalMissingInformation extends Component {
       const hasListingsOrOrders = currentUserHasListings || hasOrders;
 
       const emailUnverified = !!currentUser.id && !currentUser.attributes.emailVerified;
-      const emailVerificationNeeded = hasListingsOrOrders && emailUnverified;
+      const emailVerificationNeeded =
+        // hasListingsOrOrders&&
+
+        emailUnverified;
 
       // Show reminder
       if (emailVerificationNeeded) {

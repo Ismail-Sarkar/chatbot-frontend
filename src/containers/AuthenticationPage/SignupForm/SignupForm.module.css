@@ -50,3 +50,13 @@
   margin-top: -15px;
   margin-bottom: 25px;
 }
+.bottomMessage {
+  color: red;
+  margin-top: 15px;
+  & a {
+    color: red;
+    font-weight: 800;
+    text-decoration: none;
+    border-bottom: 2px solid red;
+  }
+}

@@ -32,7 +32,7 @@
 
 .section {
   margin: 5px 0 0 0;
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     margin: 0 0 0;
   }
 }
@@ -54,8 +54,8 @@
     padding: 3px 0 5px 0;
     /* margin: 0 0 32px 0; */
   }
-  @media(max-width:767px){
-    margin:15px 0 0;
+  @media (max-width: 767px) {
+    margin: 15px 0 0;
   }
 }
 
@@ -68,8 +68,8 @@
     display: inline-block;
     width: 241px;
   }
-  @media(max-width:767px){
-    margin-top:30px;
+  @media (max-width: 767px) {
+    margin-top: 30px;
   }
 }
 
@@ -94,11 +94,11 @@
   color: var(--colorFail);
 }
 .time {
-  margin-bottom:8px;
+  margin-bottom: 8px;
   width: 100%;
   /* max-width: 40%; */
-  @media(max-width:767px){
-    margin-bottom:0;
+  @media (max-width: 767px) {
+    margin-bottom: 0;
   }
 }
 .startEndTime {
@@ -110,17 +110,17 @@
     /* margin-right: 25px; */
     flex-basis: 15%;
   }
-  @media(max-width:767px){
-    flex-direction:column;
+  @media (max-width: 767px) {
+    flex-direction: column;
   }
-  & > div:nth-child(1){
-   @media(max-width:767px){
-    margin-right: auto;
-    margin-bottom: 5px;
-   }
+  & > div:nth-child(1) {
+    @media (max-width: 767px) {
+      margin-right: auto;
+      margin-bottom: 5px;
+    }
   }
-  & > div:nth-child(2){
-    @media(max-width:767px){
+  & > div:nth-child(2) {
+    @media (max-width: 767px) {
       width: 100%;
     }
   }
@@ -130,7 +130,7 @@
   font-size: 20px;
   line-height: 30px;
   font-weight: 600;
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     font-size: 18px;
     line-height: 24px;
     font-weight: 600;
@@ -147,19 +147,30 @@
   line-height: 30px;
   font-weight: 600;
   margin-bottom: 20px;
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     font-size: 18px;
     line-height: 24px;
   }
 }
-.availabilityModal{
-  & > div{
-    & > div{
-      & > button{
-        @media(max-width:767px){
-          position:absolute;
+.availabilityModal {
+  & > div {
+    & > div {
+      & > button {
+        @media (max-width: 767px) {
+          position: absolute;
         }
       }
     }
   }
+}
+.checkBox {
+  width: unset;
+}
+.checkBoxLabel {
+  display: flex;
+  font-size: 16px;
+  font-weight: 500;
+}
+.label {
+  margin-left: 10px;
 }

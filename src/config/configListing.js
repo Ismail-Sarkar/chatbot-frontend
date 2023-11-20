@@ -306,3 +306,44 @@ export const availablePaymentMethods = [
   },
   { key: 'cash', label: 'Cash only', value: 'cash', option: 'cash' },
 ];
+export const electricalOutletOption = [
+  {
+    key: 'noOutletsAvailable',
+    label: 'No outlets available - arrive with your laptop/phone charged',
+    value: 'noOutletsAvailable',
+    option: 'noOutletsAvailable',
+  },
+  {
+    key: 'smallAmountOfOutletAvailable',
+    label: 'A small amount of outlets available - arrive with your laptop/phone charged',
+    value: 'smallAmountOfOutletAvailable',
+    option: 'smallAmountOfOutletAvailable',
+  },
+  {
+    key: 'severalOutletsAvailable',
+    label: 'Several outlets are available - arrive with your laptop/phone charge',
+    value: 'severalOutletsAvailable',
+    option: 'severalOutletsAvailable',
+  },
+];
+export const rules = [
+  {
+    key: 'noPhoneLaptopWorkCalls',
+    label: 'No phone or laptop work calls permitted while using your pass',
+    value: 'noPhoneLaptopWorkCalls',
+    option: 'noPhoneLaptopWorkCalls',
+  },
+  {
+    key: 'headphoneMust',
+    label:
+      'Headphones must be used for streaming music/audio from your phone or laptop while using your pass',
+    value: 'headphoneMust',
+    option: 'headphoneMust',
+  },
+  {
+    key: 'other',
+    label: 'Other',
+    value: 'other',
+    option: 'other',
+  },
+];

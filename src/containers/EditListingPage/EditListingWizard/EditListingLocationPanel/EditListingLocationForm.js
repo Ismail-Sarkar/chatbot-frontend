@@ -26,6 +26,7 @@ import css from './EditListingLocationForm.module.css';
 import { useSelector } from 'react-redux';
 import { manualAddressChecked } from '../../EditListingPage.duck';
 import { isEqual } from 'lodash';
+import { createResourceLocatorString } from '../../../../util/routes';
 // import { useState } from 'react';
 
 const identity = v => v;
@@ -119,6 +120,20 @@ export const EditListingLocationFormComponent = props => (
           onSubmit={e => {
             e.preventDefault();
             props.onSubmit(values);
+            // editListingLinkType === 'edit' &&
+            //   history.push(
+            //     createResourceLocatorString(
+            //       'EditListingPage',
+            //       routeConfiguration,
+            //       {
+            //         id,
+            //         slug,
+            //         type: editListingLinkType,
+            //         tab: 'location',
+            //       },
+            //       {}
+            //     )
+            //   );
           }}
         >
           {updateListingError ? (
