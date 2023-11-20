@@ -7,10 +7,11 @@ import { Heading } from '../../../components';
 import AddressLinkMaybe from './AddressLinkMaybe';
 
 import css from './TransactionPanel.module.css';
+import ProviderEmailMaybe from './ProviderEmailMaybe';
 
 // Functional component as a helper to build ActivityFeed section
 const BookingLocationMaybe = props => {
-  const { className, rootClassName, listing, showBookingLocation } = props;
+  const { className, rootClassName, listing, showBookingLocation, provider, isCustomer } = props;
   const classes = classNames(rootClassName || css.bookingLocationContainer, className);
 
   if (showBookingLocation) {
@@ -29,6 +30,8 @@ const BookingLocationMaybe = props => {
             manualAddress={manualAddress}
             fullManualAddress={fullManualAddress}
           />
+
+          <ProviderEmailMaybe provider={provider} isCustomer={isCustomer} />
         </div>
       </div>
     );

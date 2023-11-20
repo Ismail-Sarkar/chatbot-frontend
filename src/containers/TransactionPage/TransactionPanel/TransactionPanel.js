@@ -269,15 +269,19 @@ export class TransactionPanelComponent extends Component {
                   className={css.deliveryInfoSection}
                   listing={listing}
                   showBookingLocation={showBookingLocation}
+                  provider={provider}
+                  isCustomer={isCustomer}
                 />
               </div>
             ) : null}
 
-            {transactionStatus==='transition/accept' && isCustomer &&<div className={css.msgDiv}>
-              <p>
-              <FormattedMessage id="Transactionpanel.bookingMessage" />
-              </p>
-            </div>}
+            {transactionStatus === 'transition/accept' && isCustomer && (
+              <div className={css.msgDiv}>
+                <p>
+                  <FormattedMessage id="Transactionpanel.bookingMessage" />
+                </p>
+              </div>
+            )}
 
             <FeedSection
               rootClassName={css.feedContainer}
