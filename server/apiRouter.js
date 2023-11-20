@@ -22,6 +22,7 @@ const { authenticateFacebook, authenticateFacebookCallback } = require('./api/au
 const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/google');
 const transactionsRouter = require('./api/transactions');
 const { updatesubscriptionstatusofuser } = require('./api/updatesubscriptionstatusofuser');
+const fetchUserEmail = require('./api/fetchUserEmail');
 
 const router = express.Router();
 
@@ -87,5 +88,9 @@ router.post('/updatesubscriptionstatusofuser', updatesubscriptionstatusofuser);
 //transactionRouter
 
 router.use('/transaction', transactionsRouter);
+
+//fetch user email
+
+router.get('/getProviderMail/:userId', fetchUserEmail);
 
 module.exports = router;

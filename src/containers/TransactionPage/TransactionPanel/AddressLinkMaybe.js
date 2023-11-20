@@ -39,11 +39,11 @@ const AddressLinkMaybe = props => {
     ) : (
       <p className={classes}>
         {fullAddress} <br />
-        <span className={css.viewOnGoogleMapsWrapper}>
+        <div className={css.viewOnGoogleMapsWrapper}>
           <ExternalLink className={linkRootClassName} href={hrefToGoogleMaps}>
             <FormattedMessage id="AddressLinkMaybe.viewOnGoogleMaps" />
           </ExternalLink>
-        </span>
+        </div>
       </p>
     )
   ) : null;
