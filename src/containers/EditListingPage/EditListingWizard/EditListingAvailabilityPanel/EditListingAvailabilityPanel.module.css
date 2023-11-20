@@ -174,3 +174,8 @@
 .label {
   margin-left: 10px;
 }
+.editor {
+  border: 1px solid #ddd;
+  /* border-radius: 0.375rem; */
+  min-height: 200px;
+}

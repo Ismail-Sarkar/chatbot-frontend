@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { arrayOf, bool, func, object, string } from 'prop-types';
 import classNames from 'classnames';
+import { EditorState, convertFromHTML, ContentState, convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 
 // Import configs and util modules
 import { FormattedMessage } from '../../../../util/reactIntl';
@@ -33,6 +35,8 @@ import {
   createSlug,
 } from '../../../../util/urlHelpers';
 import { createResourceLocatorString } from '../../../../util/routes';
+// import TextEditor from './TextEditor';
+const TextEditor = lazy(() => import('./TextEditor'));
 // This is the order of days as JavaScript understands them
 // The number returned by "new Date().getDay()" refers to day of week starting from sunday.
 const WEEKDAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -153,7 +157,16 @@ const EditListingAvailabilityPanel = props => {
       ? listing?.attributes?.publicData?.rulesValOption?.other
       : false
   );
-  const [entryRules, setEntryRules] = useState(listing.attributes.publicData.entryRules || null);
+  const [editorState, setEditorState] = useState(
+    listing.attributes.publicData.entryRules
+      ? EditorState.createWithContent(
+          ContentState.createFromBlockArray(
+            convertFromHTML(listing.attributes.publicData.entryRules)
+          )
+        )
+      : EditorState.createEmpty()
+  );
+  // const [entryRules, setEntryRules] = useState(listing.attributes.publicData.entryRules || null);
   const [rulesVal, setRulesVal] = useState(
     rules.reduce((acc, value) => {
       acc[value.key] = listing?.attributes?.publicData?.rulesValOption
@@ -275,7 +288,11 @@ const EditListingAvailabilityPanel = props => {
             availableEndTime: endTime ? endTime : null,
             electricalOutletOption: checkBoxVal,
             rulesValOption: rulesVal,
-            entryRules: showOtherEntryRules && entryRules ? entryRules : null,
+            entryRules:
+              showOtherEntryRules && editorState
+                ? draftToHtml(convertToRaw(editorState.getCurrentContent()))
+                : null,
+            // entryRules: showOtherEntryRules && entryRules ? entryRules : null,
           },
         })
         .then(res => {
@@ -502,16 +519,25 @@ const EditListingAvailabilityPanel = props => {
               </div>
             ))}
             {showOtherEntryRules && (
-              <textarea
-                className={css.entryRulesInput}
-                id="entryRules"
-                name="entryRules"
-                rows={4}
-                cols={50}
-                placeholder="Ex: No work phone calls/laptop calls permitted."
-                value={entryRules}
-                onChange={e => handleEntryRules(e)}
-              />
+              // <textarea
+              //   className={css.entryRulesInput}
+              //   id="entryRules"
+              //   name="entryRules"
+              //   rows={4}
+              //   cols={50}
+              //   placeholder="Ex: No work phone calls/laptop calls permitted."
+              //   value={entryRules}
+              //   onChange={e => handleEntryRules(e)}
+              // />
+              <Suspense fallback={<div>Loading...</div>}>
+                <div className={css.editor}>
+                  <TextEditor
+                    name="entryRules"
+                    setEditorState={setEditorState}
+                    editorState={editorState}
+                  />
+                </div>
+              </Suspense>
             )}
           </section>
           <section className={css.electricRules}>
