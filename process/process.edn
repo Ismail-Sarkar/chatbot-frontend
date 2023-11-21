@@ -197,10 +197,10 @@
   ;;  :on :transition/complete,
   ;;  :to :actor.role/provider,
   ;;  :template :booking-money-paid}
-  {:name :notification/review-period-start-provider,
-   :on :transition/complete,
-   :to :actor.role/provider,
-   :template :booking-review-by-provider-wanted}
+  ;; {:name :notification/review-period-start-provider,
+  ;;  :on :transition/complete,
+  ;;  :to :actor.role/provider,
+  ;;  :template :booking-review-by-provider-wanted}
   {:name :notification/review-period-start-customer,
    :on :transition/complete,
    :to :actor.role/customer,
@@ -209,10 +209,10 @@
   ;;  :on :transition/operator-complete,
   ;;  :to :actor.role/provider,
   ;;  :template :booking-money-paid}
-  {:name :notification/review-period-start-provider-operator-complete,
-   :on :transition/operator-complete,
-   :to :actor.role/provider,
-   :template :booking-review-by-provider-wanted}
+  ;; {:name :notification/review-period-start-provider-operator-complete,
+  ;;  :on :transition/operator-complete,
+  ;;  :to :actor.role/provider,
+  ;;  :template :booking-review-by-provider-wanted}
   {:name :notification/review-period-start-customer-operator-complete,
    :on :transition/operator-complete,
    :to :actor.role/customer,
