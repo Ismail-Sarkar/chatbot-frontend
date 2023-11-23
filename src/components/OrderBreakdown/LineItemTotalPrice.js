@@ -51,7 +51,7 @@ const LineItemTotalPrice = props => {
           </div>
         ) : (
           <div className={css.reservationLabel}>
-            Reserve now for <span>{`${formattedTotalPrice} USD`}</span>
+            Pay <span>{`${formattedTotalPrice} USD`}</span> reservation fee
           </div>
         )}
         <div className={css.reservationInfo}>(10% of the cost + Service fee)</div>

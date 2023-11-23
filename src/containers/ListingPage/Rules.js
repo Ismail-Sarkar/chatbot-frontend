@@ -16,15 +16,15 @@ function Rules(props) {
       {rulesValOption.headphoneMust && (
         <li className={css.listStyle}>
           Headphones must be used for streaming music/audio from your phone or laptop while using
-          your pass
+          your pass.
         </li>
       )}
       {rulesValOption.noPhoneLaptopWorkCalls && (
         <li className={css.listStyle}>
-          No phone or laptop work calls permitted while using your pass
+          No phone or laptop work calls permitted while using your pass.
         </li>
       )}
-      {rulesValOption.other && <li className={css.listStyle}>Other</li>}
+      {rulesValOption.other && null}
 
       {rulesValOption.other && entryRules && (
         <div dangerouslySetInnerHTML={{ __html: editedEntryRules }} />

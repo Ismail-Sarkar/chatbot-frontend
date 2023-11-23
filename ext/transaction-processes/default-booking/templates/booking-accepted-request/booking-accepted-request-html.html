@@ -32,7 +32,7 @@
                   <tbody>
                     <tr>
                       <td>
-                        <table align="center" border="0" cellPadding="0" cellSpacing="0" role="presentation" width="100%">
+                        <!-- <table align="center" border="0" cellPadding="0" cellSpacing="0" role="presentation" width="100%">
                           <tbody>
                             <tr>
                               <td>
@@ -45,7 +45,8 @@
                               </td>
                             </tr>
                           </tbody>
-                        </table>{{#each tx-line-items}}{{#eq "line-item/hour" code}}
+                        </table> -->
+                        {{#each tx-line-items}}{{#eq "line-item/hour" code}}
                         <table align="center" border="0" cellPadding="0" cellSpacing="0" role="presentation" width="100%">
                           <tbody>
                             <tr>
@@ -233,7 +234,7 @@
                             <tr>
                               <td>
                                 <td>
-                                  <p style="font-size:16px;line-height:1.4;margin:16px 0;color:#484848;margin-top:1px;font-weight:700">Total price</p>
+                                  <p style="font-size:16px;line-height:1.4;margin:16px 0;color:#484848;margin-top:1px;font-weight:700">Reservation fee</p>
                                 </td>
                                 <td style="text-align:right">
                                   <p style="font-size:16px;line-height:1.4;margin:16px 0;color:#484848;margin-top:1px;font-weight:700">{{> format-money money=payin-total}}</p>

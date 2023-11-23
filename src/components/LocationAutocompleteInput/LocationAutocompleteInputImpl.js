@@ -459,7 +459,6 @@ class LocationAutocompleteInputImplementation extends Component {
   }
 
   handlePredictionsSelectEnd(prediction) {
-    console.log(6677, typeof this.props.handlecityStateCountryName);
     if (typeof this.props.handlecityStateCountryName === 'function') {
       this.props.handlecityStateCountryName(prediction);
     }
