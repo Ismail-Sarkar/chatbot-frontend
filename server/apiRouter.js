@@ -23,6 +23,7 @@ const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/g
 const transactionsRouter = require('./api/transactions');
 const { updatesubscriptionstatusofuser } = require('./api/updatesubscriptionstatusofuser');
 const fetchUserEmail = require('./api/fetchUserEmail');
+const getUserTypeByEmail = require('./api/getUserTypeByEmail');
 
 const router = express.Router();
 
@@ -92,5 +93,6 @@ router.use('/transaction', transactionsRouter);
 //fetch user email
 
 router.get('/getProviderMail/:userId', fetchUserEmail);
+router.get('/getUserType/:email', getUserTypeByEmail);
 
 module.exports = router;

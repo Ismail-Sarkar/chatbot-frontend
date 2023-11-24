@@ -44,3 +44,10 @@
 .redLink {
   color: red;
 }
+
+.errMsg {
+  font: normal normal 300 18px/32px Poppins;
+  letter-spacing: 0px;
+  margin: 5px 0 10px 14px;
+  color: red;
+}

@@ -218,7 +218,12 @@ export const AuthenticationForms = props => {
       <LinkTabNavHorizontal className={css.tabs} tabs={tabs} />
       {loginOrSignupError}
       {isLogin ? (
-        <LoginForm className={css.loginForm} onSubmit={submitLogin} inProgress={authInProgress} />
+        <LoginForm
+          className={css.loginForm}
+          onSubmit={submitLogin}
+          inProgress={authInProgress}
+          isPartner={isPartner}
+        />
       ) : (
         <SignupForm
           className={css.signupForm}
@@ -637,10 +642,7 @@ const mapDispatchToProps = dispatch => ({
 // See: https://github.com/ReactTraining/react-router/issues/4671
 const AuthenticationPage = compose(
   withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(AuthenticationPageComponent);
 
