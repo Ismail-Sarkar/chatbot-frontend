@@ -3,6 +3,9 @@ import { fetchCurrentUser } from '../../ducks/user.duck';
 import { types as sdkTypes, createImageVariantConfig } from '../../util/sdkLoader';
 import { denormalisedResponseEntities } from '../../util/data';
 import { storableError } from '../../util/errors';
+import axios from 'axios';
+import { apiBaseUrl } from '../../util/api';
+import { parse } from '../../util/urlHelpers';
 
 const { UUID } = sdkTypes;
 
@@ -180,7 +183,64 @@ export const showUser = userId => (dispatch, getState, sdk) => {
       dispatch(showUserSuccess());
       return response;
     })
-    .catch(e => dispatch(showUserError(storableError(e))));
+    .catch(e => {
+      // console.log(e);
+      return dispatch(showUserError(storableError(e)));
+    });
+};
+
+export const ProfilePageByUserName = (params, search, config) => (dispatch, getState, sdk) => {
+  const queryParams = parse(search);
+  const queryPage = queryParams.page || 1;
+  const tab = queryParams.tab || 'reviews';
+
+  const userName = params.userName;
+  if (!userName.startsWith('@')) {
+    const err = new Error('Not valid user name');
+    err.status = 404;
+    dispatch(showUserError(storableError(err)));
+    return Promise.reject(err);
+  }
+  const onlyFilterValues = {
+    listings: 'listings',
+    reviews: 'reviews',
+  };
+
+  const onlyFilter = onlyFilterValues[tab];
+  if (!onlyFilter) {
+    return Promise.reject(new Error(`Invalid tab for ProfilePage: ${tab}`));
+  }
+  // Clear state so that previously loaded data is not visible
+  // in case this page load fails.
+  dispatch(setInitialState());
+  dispatch(queryListingsRequest());
+  dispatch(queryReviewsRequest());
+
+  return axios
+    .get(`${apiBaseUrl()}/api/fetchByUserName/${userName}`)
+    .then(resp => {
+      const uuid = resp.data[0]?.id.uuid;
+      const userId = new UUID(uuid);
+      // console.log(userId);
+      // Clear state so that previously loaded data is not visible
+      // in case this page load fails.
+      if (!uuid) {
+        const err = new Error('No such user found');
+        err.status = 404;
+        throw err;
+      }
+
+      return Promise.all([
+        dispatch(fetchCurrentUser()),
+        dispatch(showUser(userId)),
+        dispatch(queryUserListings(userId, config)),
+        dispatch(queryUserReviews(userId, tab === 'reviews' ? queryPage : 1)),
+      ]);
+    })
+    .catch(e => {
+      // console.log(e);
+      return dispatch(showUserError(storableError(e)));
+    });
 };
 
 export const loadData = (params, search, config) => (dispatch, getState, sdk) => {

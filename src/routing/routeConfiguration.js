@@ -393,6 +393,13 @@ const routeConfiguration = (layoutConfig) => {
       authPage: 'PartnerLoginPage',
       component: StripeSubscriptionSucessPage,
     },
+    {
+      path: '/:userName',
+      name: 'UserProfilePage',
+      component: ProfilePage,
+      loadData:
+        pageDataLoadingAPI.ProfilePageByUserNameLoadData.ProfilePageByUserName,
+    },
   ];
 };
 

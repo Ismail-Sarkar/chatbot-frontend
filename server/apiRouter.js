@@ -24,6 +24,7 @@ const transactionsRouter = require('./api/transactions');
 const { updatesubscriptionstatusofuser } = require('./api/updatesubscriptionstatusofuser');
 const fetchUserEmail = require('./api/fetchUserEmail');
 const getUserTypeByEmail = require('./api/getUserTypeByEmail');
+const { fetchByUserName, checkAvailabilityOfUserName } = require('./api/userName');
 
 const router = express.Router();
 
@@ -94,5 +95,9 @@ router.use('/transaction', transactionsRouter);
 
 router.get('/getProviderMail/:userId', fetchUserEmail);
 router.get('/getUserType/:email', getUserTypeByEmail);
+
+//User name
+router.get('/fetchByUserName/:slug', fetchByUserName);
+router.get('/checkAvailabilityOfUserName/:slug', checkAvailabilityOfUserName);
 
 module.exports = router;
