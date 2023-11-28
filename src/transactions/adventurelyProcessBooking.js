@@ -42,6 +42,9 @@ export const transitions = {
   OPERATOR_ACCEPT: 'transition/operator-accept',
   OPERATOR_DECLINE: 'transition/operator-decline',
 
+  PROVIDER_CANCEL: 'transition/cancel-provider',
+  CUSTOMER_CANCEL: 'transition/cancel-customer',
+
   // The backend automatically expire the transaction.
   EXPIRE: 'transition/expire',
 
@@ -144,6 +147,8 @@ export const graph = {
     [states.ACCEPTED]: {
       on: {
         [transitions.CANCEL]: states.CANCELED,
+        [transitions.PROVIDER_CANCEL]: states.CANCELED,
+        [transitions.CUSTOMER_CANCEL]: states.CANCELED,
         [transitions.COMPLETE]: states.DELIVERED,
         [transitions.OPERATOR_COMPLETE]: states.DELIVERED,
       },
@@ -182,6 +187,8 @@ export const isRelevantPastTransition = transition => {
     transitions.ACCEPT,
     transitions.OPERATOR_ACCEPT,
     transitions.CANCEL,
+    transitions.PROVIDER_CANCEL,
+    transitions.CUSTOMER_CANCEL,
     transitions.COMPLETE,
     transitions.OPERATOR_COMPLETE,
     transitions.CONFIRM_PAYMENT,

@@ -91,6 +91,7 @@ const LoginFormComponent = props => (
               .catch(err => {
                 setLoginInProgress(false);
                 setLoginTypeError(null);
+                handleSubmit();
               });
           }}
         >

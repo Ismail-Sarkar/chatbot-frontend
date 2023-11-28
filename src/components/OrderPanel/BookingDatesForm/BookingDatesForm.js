@@ -391,8 +391,6 @@ const handleFormSpyChange = (
     formValues.values && formValues.values.bookingDates ? formValues.values.bookingDates : {};
   const { additionalGuest, extraPerk } = formValues.values || {};
 
-  console.log(additionalGuest, guestMaxForListing, 332);
-
   if (
     startDate &&
     endDate &&

@@ -56,6 +56,22 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
         secondaryButtonProps: secondary,
       };
     })
+    .cond([states.ACCEPTED, PROVIDER], () => {
+      return {
+        processName,
+        processState,
+        showDetailCardHeadings: true,
+        showCancelButtons: true,
+      };
+    })
+    .cond([states.ACCEPTED, CUSTOMER], () => {
+      return {
+        processName,
+        processState,
+        showDetailCardHeadings: true,
+        showCancelButtons: true,
+      };
+    })
     .cond([states.DELIVERED, _], () => {
       return {
         processName,

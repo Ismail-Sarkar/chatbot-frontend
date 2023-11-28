@@ -27,6 +27,7 @@ import DiminishedActionButtonMaybe from './DiminishedActionButtonMaybe';
 import PanelHeading from './PanelHeading';
 
 import css from './TransactionPanel.module.css';
+import CancelButtonMaybe from './CancelButtonMaybe';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, provider, customer, intl) => {
@@ -142,6 +143,11 @@ export class TransactionPanelComponent extends Component {
       orderBreakdown,
       orderPanel,
       config,
+      cancelInProgress,
+      cancelBookingError,
+      onCancelBookingCustomer,
+      onCancelBookingProvider,
+      transactionId,
     } = this.props;
 
     const isCustomer = transactionRole === 'customer';
@@ -177,6 +183,17 @@ export class TransactionPanelComponent extends Component {
       />
     );
 
+    const CancelButtons = (
+      <CancelButtonMaybe
+        showButtons={stateData.showCancelButtons}
+        cancelInProgress={cancelInProgress}
+        cancelBookingError={cancelBookingError}
+        isProvider={isProvider}
+        onCancelBookingCustomer={() => onCancelBookingCustomer(transactionId)}
+        onCancelBookingProvider={() => onCancelBookingProvider(transactionId)}
+      />
+    );
+
     const listingType = listing?.attributes?.publicData?.listingType;
     const listingTypeConfigs = config.listing.listingTypes;
     const listingTypeConfig = listingTypeConfigs.find(conf => conf.listingType === listingType);
@@ -207,7 +224,6 @@ export class TransactionPanelComponent extends Component {
                 <AvatarLarge user={customer} className={css.avatarDesktop} />
               </div>
             ) : null}
-
             <PanelHeading
               processName={stateData.processName}
               processState={stateData.processState}
@@ -225,13 +241,11 @@ export class TransactionPanelComponent extends Component {
               listingTitle={listingTitle}
               listingDeleted={listingDeleted}
             />
-
             <InquiryMessageMaybe
               protectedData={protectedData}
               showInquiryMessage={isInquiryProcess}
               isCustomer={isCustomer}
             />
-
             {!isInquiryProcess ? (
               <div className={css.orderDetails}>
                 <div className={css.orderDetailsMobileSection}>
@@ -274,7 +288,6 @@ export class TransactionPanelComponent extends Component {
                 />
               </div>
             ) : null}
-
             {transactionStatus === 'transition/accept' && isCustomer && (
               <div className={css.msgDiv}>
                 <p>
@@ -282,7 +295,6 @@ export class TransactionPanelComponent extends Component {
                 </p>
               </div>
             )}
-
             <FeedSection
               rootClassName={css.feedContainer}
               hasMessages={messages.length > 0}
@@ -311,11 +323,17 @@ export class TransactionPanelComponent extends Component {
                 <FormattedMessage id="TransactionPanel.sendingMessageNotAllowed" />
               </div>
             )} */}
-
             {stateData.showActionButtons ? (
               <>
                 <div className={css.mobileActionButtonSpacer}></div>
                 <div className={css.mobileActionButtons}>{actionButtons}</div>
+              </>
+            ) : null}
+            {stateData.showCancelButtons ? (
+              <>
+                <div className={css.mobileActionButtonSpacer}></div>
+
+                <div className={css.mobileActionButtons}>{CancelButtons}</div>
               </>
             ) : null}
           </div>
@@ -331,7 +349,6 @@ export class TransactionPanelComponent extends Component {
                   isCustomer={isCustomer}
                   listingImageConfig={config.layout.listingImage}
                 />
-
                 <DetailCardHeadingsMaybe
                   showDetailCardHeadings={stateData.showDetailCardHeadings}
                   listingTitle={
@@ -356,9 +373,13 @@ export class TransactionPanelComponent extends Component {
                   orderBreakdown={orderBreakdown}
                   processName={stateData.processName}
                 />
-
                 {stateData.showActionButtons ? (
                   <div className={css.desktopActionButtons}>{actionButtons}</div>
+                ) : null}
+                {stateData.showCancelButtons ? (
+                  <>
+                    <div className={css.desktopActionButtons}>{CancelButtons}</div>
+                  </>
                 ) : null}
               </div>
               <DiminishedActionButtonMaybe

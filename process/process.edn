@@ -51,6 +51,31 @@
     ],
    :from :state/preauthorized,
    :to :state/accepted}
+
+   ;; canecl by provider
+
+   {:name :transition/cancel-provider,
+   :actor :actor.role/provider,
+   :actions
+   [{:name :action/cancel-booking}
+    ;; {:name :action/calculate-full-refund}
+    ;; {:name :action/stripe-refund-payment}
+    ],
+   :from :state/accepted,
+   :to :state/cancelled}
+
+;; canecl by customer
+
+{:name :transition/cancel-customer,
+   :actor :actor.role/customer,
+   :actions
+   [{:name :action/cancel-booking}
+    ;; {:name :action/calculate-full-refund}
+    ;; {:name :action/stripe-refund-payment}
+    ],
+   :from :state/accepted,
+   :to :state/cancelled}
+
   {:name :transition/operator-accept,
    :actor :actor.role/operator,
    :actions
