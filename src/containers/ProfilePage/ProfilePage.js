@@ -29,8 +29,10 @@ import FooterContainer from '../../containers/FooterContainer/FooterContainer';
 import NotFoundPage from '../../containers/NotFoundPage/NotFoundPage';
 
 import css from './ProfilePage.module.css';
+import CopyText from '../../components/CopyText/CopyText';
 
 const MAX_MOBILE_SCREEN_WIDTH = 768;
+const MARKETPLACE_URL = process.env.REACT_APP_MARKETPLACE_ROOT_URL;
 
 export const AsideContent = props => {
   const { user, displayName, isCurrentUser, businessname } = props;
@@ -153,11 +155,15 @@ export const MainContent = props => {
     queryReviewsError,
     viewport,
     businessname,
+    user,
   } = props;
 
   const hasListings = listings.length > 0;
   const isMobileLayout = viewport.width < MAX_MOBILE_SCREEN_WIDTH;
   const hasBio = !!bio;
+
+  const { publicData } = user?.attributes?.profile || {};
+  const { profileUrl = null } = publicData || {};
 
   const listingsContainerClasses = classNames(css.listingsContainer, {
     [css.withBioMissingAbove]: !hasBio,
@@ -175,6 +181,11 @@ export const MainContent = props => {
       <H2 as="h1" className={css.desktopHeading}>
         <FormattedMessage id="ProfilePage.desktopHeading" values={{ name: businessname }} />
       </H2>
+      {profileUrl && (
+        <div className={css.profileUrl}>
+          <CopyText text={`${MARKETPLACE_URL}/${profileUrl}`} />
+        </div>
+      )}
       {hasBio ? <p className={css.bio}>{bio}</p> : null}
       {hasListings ? (
         <div className={listingsContainerClasses}>
@@ -240,6 +251,7 @@ const ProfilePageComponent = props => {
       >
         <MainContent
           bio={bio}
+          user={user}
           displayName={displayName}
           userShowError={userShowError}
           businessname={businessname}
