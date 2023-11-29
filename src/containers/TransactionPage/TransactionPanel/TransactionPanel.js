@@ -200,7 +200,12 @@ export class TransactionPanelComponent extends Component {
     const showPrice = isInquiryProcess && displayPrice(listingTypeConfig);
 
     const showSendMessageForm =
-      !isCustomerBanned && !isCustomerDeleted && !isProviderBanned && !isProviderDeleted;
+      !isCustomerBanned &&
+      !isCustomerDeleted &&
+      !isProviderBanned &&
+      !isProviderDeleted &&
+      stateData.allowMessaging &&
+      (isProvider || (isCustomer && messages.length));
 
     const deliveryMethod = protectedData?.deliveryMethod;
 
@@ -304,7 +309,7 @@ export class TransactionPanelComponent extends Component {
               activityFeed={activityFeed}
               isConversation={isInquiryProcess}
             />
-            {/* {showSendMessageForm ? (
+            {showSendMessageForm ? (
               <SendMessageForm
                 formId={this.sendMessageFormName}
                 rootClassName={css.sendMessageForm}
@@ -318,11 +323,11 @@ export class TransactionPanelComponent extends Component {
                 onBlur={this.onSendMessageFormBlur}
                 onSubmit={this.onMessageSubmit}
               />
-            ) : (
-              <div className={css.sendingMessageNotAllowed}>
-                <FormattedMessage id="TransactionPanel.sendingMessageNotAllowed" />
-              </div>
-            )} */}
+            ) : null
+            // <div className={css.sendingMessageNotAllowed}>
+            //   <FormattedMessage id="TransactionPanel.sendingMessageNotAllowed" />
+            // </div>
+            }
             {stateData.showActionButtons ? (
               <>
                 <div className={css.mobileActionButtonSpacer}></div>
