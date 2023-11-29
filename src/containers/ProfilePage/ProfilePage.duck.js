@@ -189,7 +189,15 @@ export const showUser = userId => (dispatch, getState, sdk) => {
     });
 };
 
-export const ProfilePageByUserName = (params, search, config) => (dispatch, getState, sdk) => {
+export const ProfilePageByUserName = (params, search, config) => async (
+  dispatch,
+  getState,
+  sdk
+) => {
+  dispatch(setInitialState());
+  // dispatch(queryListingsRequest());
+  // dispatch(queryReviewsRequest());
+
   const queryParams = parse(search);
   const queryPage = queryParams.page || 1;
   const tab = queryParams.tab || 'reviews';
@@ -212,34 +220,62 @@ export const ProfilePageByUserName = (params, search, config) => (dispatch, getS
   }
   // Clear state so that previously loaded data is not visible
   // in case this page load fails.
-  dispatch(setInitialState());
-  dispatch(queryListingsRequest());
-  dispatch(queryReviewsRequest());
-  return axios
-    .get(`${apiBaseUrl()}/api/fetchByUserName/${userName}`)
-    .then(resp => {
-      const uuid = resp.data[0]?.id.uuid;
-      const userId = new UUID(uuid);
-      // console.log(userId);
-      // Clear state so that previously loaded data is not visible
-      // in case this page load fails.
-      if (!uuid) {
-        const err = new Error('No such user found');
-        err.status = 404;
-        throw err;
-      }
+  try {
+    const resp = await axios.get(`${apiBaseUrl()}/api/fetchByUserName/${userName}`);
 
-      return Promise.all([
-        dispatch(fetchCurrentUser()),
-        dispatch(showUser(userId)),
-        dispatch(queryUserListings(userId, config)),
-        dispatch(queryUserReviews(userId, tab === 'reviews' ? queryPage : 1)),
-      ]);
-    })
-    .catch(e => {
-      // console.log(e);
-      return dispatch(showUserError(storableError(e)));
-    });
+    // const uuid = '65243708-1879-4fe0-8aec-2d4aad9b0507'; //resp.data[0]?.id.uuid;
+    const uuid = resp.data[0]?.id.uuid;
+    const userId = new UUID(uuid);
+    // console.log(userId);
+    // Clear state so that previously loaded data is not visible
+    // in case this page load fails.
+    if (!uuid) {
+      const err = new Error('No such user found');
+      err.status = 404;
+      throw err;
+    }
+
+    return Promise.all([
+      dispatch(fetchCurrentUser()),
+      dispatch(showUser(userId)),
+      dispatch(queryUserListings(userId, config)),
+      dispatch(queryUserReviews(userId, tab === 'reviews' ? queryPage : 1)),
+    ]);
+  } catch (err) {
+    return dispatch(showUserError(storableError(e)));
+  }
+
+  // return await axios
+  //   .get(`${apiBaseUrl()}/api/fetchByUserName/${userName}`)
+  //   .then(resp => {
+  //     const uuid = resp.data[0]?.id.uuid;
+  //     const userId = new UUID(uuid);
+  //     // console.log(userId);
+  //     // Clear state so that previously loaded data is not visible
+  //     // in case this page load fails.
+  //     if (!uuid) {
+  //       const err = new Error('No such user found');
+  //       err.status = 404;
+  //       throw err;
+  //     }
+
+  //     return Promise.all([
+  //       dispatch(fetchCurrentUser()),
+  //       dispatch(showUser(userId)),
+  //       dispatch(queryUserListings(userId, config)),
+  //       dispatch(queryUserReviews(userId, tab === 'reviews' ? queryPage : 1)),
+  //     ]);
+  //   })
+  //   .catch(e => {
+  //     // console.log(e);
+  //     return dispatch(showUserError(storableError(e)));
+  //   });
+};
+
+const delay = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, 300);
+  });
 };
 
 export const loadData = (params, search, config) => (dispatch, getState, sdk) => {
@@ -248,12 +284,13 @@ export const loadData = (params, search, config) => (dispatch, getState, sdk) =>
   // Clear state so that previously loaded data is not visible
   // in case this page load fails.
   dispatch(setInitialState());
-  for (let i = 0; i < 10000000000; i++) {}
-
-  return Promise.all([
-    dispatch(fetchCurrentUser()),
-    dispatch(showUser(userId)),
-    dispatch(queryUserListings(userId, config)),
-    dispatch(queryUserReviews(userId)),
-  ]);
+  return delay().then(() =>
+    Promise.all([
+      dispatch(fetchCurrentUser()),
+      dispatch(showUser(userId)),
+      dispatch(queryUserListings(userId, config)),
+      dispatch(queryUserReviews(userId)),
+    ])
+  );
+  // return ;
 };
