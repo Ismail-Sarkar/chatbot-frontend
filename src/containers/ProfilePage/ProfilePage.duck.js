@@ -215,7 +215,6 @@ export const ProfilePageByUserName = (params, search, config) => (dispatch, getS
   dispatch(setInitialState());
   dispatch(queryListingsRequest());
   dispatch(queryReviewsRequest());
-
   return axios
     .get(`${apiBaseUrl()}/api/fetchByUserName/${userName}`)
     .then(resp => {
@@ -249,6 +248,7 @@ export const loadData = (params, search, config) => (dispatch, getState, sdk) =>
   // Clear state so that previously loaded data is not visible
   // in case this page load fails.
   dispatch(setInitialState());
+  for (let i = 0; i < 10000000000; i++) {}
 
   return Promise.all([
     dispatch(fetchCurrentUser()),
