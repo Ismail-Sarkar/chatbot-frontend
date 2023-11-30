@@ -22,8 +22,8 @@ import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
 import axios from 'axios';
 import { transitions } from '../../transactions/adventurelyProcessBooking';
-import { customAlphabet } from 'nanoid';
-const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 8);
+// import { customAlphabet } from 'nanoid';
+// const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 8);
 
 const { UUID } = sdkTypes;
 
@@ -506,8 +506,8 @@ export const makeTransition = (txId, transitionName, params) => async (dispatch,
   let finalParams = params;
   dispatch(transitionRequest(transitionName));
   if (transitionName === ACCEPT_BOOKING_TRANSITION) {
-    const confirmationId = nanoid();
-    finalParams = { ...params, protectedData: { confirmationNumber: confirmationId } };
+    // const confirmationId = nanoid();
+    // finalParams = { ...params, protectedData: { confirmationNumber: confirmationId } };
     try {
       const payment = await axios.post(`${apiBaseUrl()}/api/transaction/capturePaymentIntent`, {
         txId: txId.uuid,
