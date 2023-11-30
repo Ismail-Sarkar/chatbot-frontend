@@ -24,9 +24,14 @@ const transactionsRouter = require('./api/transactions');
 const { updatesubscriptionstatusofuser } = require('./api/updatesubscriptionstatusofuser');
 const fetchUserEmail = require('./api/fetchUserEmail');
 const getUserTypeByEmail = require('./api/getUserTypeByEmail');
+const currencyExchangeCode = require('./controllers/currencyExchange');
 const { fetchByUserName, checkAvailabilityOfUserName } = require('./api/userName');
 
 const router = express.Router();
+
+//==============Mongo db connection=================//
+
+require('./mongo-config');
 
 // ================ API router middleware: ================ //
 
@@ -99,5 +104,8 @@ router.get('/getUserType/:email', getUserTypeByEmail);
 //User name
 router.get('/fetchByUserName/:slug', fetchByUserName);
 router.get('/checkAvailabilityOfUserName/:slug', checkAvailabilityOfUserName);
+
+//currency exchange
+router.use('/currency', currencyExchangeCode);
 
 module.exports = router;

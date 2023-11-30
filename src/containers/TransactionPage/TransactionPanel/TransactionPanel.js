@@ -290,6 +290,7 @@ export class TransactionPanelComponent extends Component {
                   showBookingLocation={showBookingLocation}
                   provider={provider}
                   isCustomer={isCustomer}
+                  protectedData={protectedData}
                 />
               </div>
             ) : null}
