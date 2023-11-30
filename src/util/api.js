@@ -17,7 +17,7 @@ export const apiBaseUrl = () => {
     return `http://localhost:${port}`;
   }
 
-  if (!port) {
+  if (!port || typeof window == 'undefined') {
     return `${ROOT_URL}`;
   }
 
