@@ -234,6 +234,7 @@ export const ProfilePageByUserName = (params, search, config) => async (
       dispatch(queryUserReviews(userId, tab === 'reviews' ? queryPage : 1)),
     ]);
   } catch (err) {
+    console.log(err);
     return dispatch(showUserError(storableError(err)));
   }
 };

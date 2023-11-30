@@ -76,6 +76,8 @@ const defaultDirectives = {
   ],
   scriptSrc: [
     self,
+    baseUrl,
+    assetCdnBaseUrl,
     unsafeInline,
     unsafeEval,
     data,
