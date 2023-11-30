@@ -274,7 +274,7 @@ export const ProfilePageByUserName = (params, search, config) => async (
 
 const delay = () => {
   return new Promise((resolve, reject) => {
-    setTimeout(resolve, 1000);
+    setTimeout(resolve, 10000);
   });
 };
 
