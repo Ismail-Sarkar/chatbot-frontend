@@ -189,7 +189,13 @@ export const showUser = userId => (dispatch, getState, sdk) => {
     });
 };
 
-export const ProfilePageByUserName = (params, search, config) => (dispatch, getState, sdk) => {
+export const ProfilePageByUserName = (params, search, config) => async (
+  dispatch,
+  getState,
+  sdk
+) => {
+  dispatch(setInitialState());
+
   const queryParams = parse(search);
   const queryPage = queryParams.page || 1;
   const tab = queryParams.tab || 'reviews';
@@ -210,37 +216,27 @@ export const ProfilePageByUserName = (params, search, config) => (dispatch, getS
   if (!onlyFilter) {
     return Promise.reject(new Error(`Invalid tab for ProfilePage: ${tab}`));
   }
-  // Clear state so that previously loaded data is not visible
-  // in case this page load fails.
-  dispatch(setInitialState());
-  dispatch(queryListingsRequest());
-  dispatch(queryReviewsRequest());
+  try {
+    const resp = await axios.get(`${apiBaseUrl()}/api/fetchByUserName/${userName}`);
 
-  return axios
-    .get(`${apiBaseUrl()}/api/fetchByUserName/${userName}`)
-    .then(resp => {
-      const uuid = resp.data[0]?.id.uuid;
-      const userId = new UUID(uuid);
-      // console.log(userId);
-      // Clear state so that previously loaded data is not visible
-      // in case this page load fails.
-      if (!uuid) {
-        const err = new Error('No such user found');
-        err.status = 404;
-        throw err;
-      }
+    const uuid = resp.data[0]?.id.uuid;
+    const userId = new UUID(uuid);
+    if (!uuid) {
+      const err = new Error('No such user found');
+      err.status = 404;
+      throw err;
+    }
 
-      return Promise.all([
-        dispatch(fetchCurrentUser()),
-        dispatch(showUser(userId)),
-        dispatch(queryUserListings(userId, config)),
-        dispatch(queryUserReviews(userId, tab === 'reviews' ? queryPage : 1)),
-      ]);
-    })
-    .catch(e => {
-      // console.log(e);
-      return dispatch(showUserError(storableError(e)));
-    });
+    return Promise.all([
+      dispatch(fetchCurrentUser()),
+      dispatch(showUser(userId)),
+      dispatch(queryUserListings(userId, config)),
+      dispatch(queryUserReviews(userId, tab === 'reviews' ? queryPage : 1)),
+    ]);
+  } catch (err) {
+    console.log(err);
+    return dispatch(showUserError(storableError(err)));
+  }
 };
 
 export const loadData = (params, search, config) => (dispatch, getState, sdk) => {
@@ -249,7 +245,6 @@ export const loadData = (params, search, config) => (dispatch, getState, sdk) =>
   // Clear state so that previously loaded data is not visible
   // in case this page load fails.
   dispatch(setInitialState());
-
   return Promise.all([
     dispatch(fetchCurrentUser()),
     dispatch(showUser(userId)),

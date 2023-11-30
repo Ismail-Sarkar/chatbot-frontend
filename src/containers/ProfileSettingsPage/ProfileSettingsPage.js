@@ -50,7 +50,7 @@ export const ProfileSettingsPageComponent = props => {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       bio,
-      publicData: { businessName, profileUrl: `@${profileUrl}` },
+      publicData: { businessName, profileUrl: profileUrl && `@${profileUrl}` },
     };
     const uploadedImage = props.image;
 
@@ -70,6 +70,8 @@ export const ProfileSettingsPageComponent = props => {
   const intialProfileUrl =
     publicData && publicData.profileUrl && publicData.profileUrl.split('@')[1];
 
+  console.log(typeof intialProfileUrl, publicData.profileUrl);
+
   const profileSettingsForm = user.id ? (
     <ProfileSettingsForm
       className={css.form}
@@ -80,7 +82,7 @@ export const ProfileSettingsPageComponent = props => {
         bio,
         profileImage: user.profileImage,
         businessName: user.attributes.profile.publicData.businessName,
-        profileUrl: intialProfileUrl,
+        profileUrl: intialProfileUrl || null,
       }}
       profileImage={profileImage}
       onImageUpload={e => onImageUploadHandler(e, onImageUpload)}
