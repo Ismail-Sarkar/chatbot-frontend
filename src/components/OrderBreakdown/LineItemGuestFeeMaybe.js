@@ -50,7 +50,7 @@ function LineItemGuestFeeMaybe(props) {
   guestFeeLineItem &&
     bookingLineItem.push({
       key: 'seats',
-      label: `x ${totalUnit} of people`,
+      label: `x ${totalUnit}`,
       formattedMoneyLabel: formatMoney(
         intl,
         new Money(lineTotal?.amount, lineTotal?.currency || 'USD')

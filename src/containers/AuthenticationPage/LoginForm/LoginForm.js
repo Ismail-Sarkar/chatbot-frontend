@@ -81,9 +81,9 @@ const LoginFormComponent = props => (
               .then(resp => {
                 setLoginInProgress(false);
                 if (resp.data.data.userType === 'partner' && !isPartner) {
-                  return setLoginTypeError('Please choose partner login.');
+                  return setLoginTypeError('Please use the Partner login.');
                 } else if (resp.data.data.userType === 'customer' && isPartner) {
-                  return setLoginTypeError('You are not a partner try sign in instead.');
+                  return setLoginTypeError('Partner account not found');
                 } else {
                   handleSubmit();
                 }

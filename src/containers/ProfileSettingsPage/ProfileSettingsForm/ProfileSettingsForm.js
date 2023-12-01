@@ -28,6 +28,8 @@ import axios from 'axios';
 const ACCEPT_IMAGES = 'image/*';
 const UPLOAD_CHANGE_DELAY = 2000; // Show spinner so that browser has time to load img srcset
 
+const ROOT_URL = process.env.REACT_APP_MARKETPLACE_ROOT_URL;
+
 class ProfileSettingsFormComponent extends Component {
   constructor(props) {
     super(props);
@@ -372,57 +374,66 @@ class ProfileSettingsFormComponent extends Component {
                 <h3 className={css.sectionTitle}>
                   <FormattedMessage id="ProfileSettingsForm.profileUrlName" />
                 </h3>
-                <FieldTextInput
-                  type="text"
-                  id="profileUrl"
-                  name="profileUrl"
-                  // className={classNames(css.inputs, css.interLightSemiSmallBlack, {
-                  //   [css.invalidInputs]: touched.profileUrl && !!errors.profileUrl,
-                  //   [css.fnNonEmptyInputs]: !!values.profileUrl || active === 'profileUrl',
-                  // })}
-                  // label={profileUrlLabel}
-                  placeholder={profileUrlPlaceholder}
-                  onChange={e => {
-                    form.change('profileUrl', e.target.value.replace(/\s/g, '').toLowerCase());
-                  }}
-                  // onFocus={e =>
-                  //   this.setState({
-                  //     profileUrlAvailabilityCheckInProgress: true,
-                  //   })
-                  // }
-                  onBlur={async e => {
-                    if (initialValues.profileUrl === values.profileUrl) return;
-                    this.setState({
-                      profileUrlAvailabilityCheckInProgress: true,
-                    });
-                    axios
-                      .get(`${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${e.target.value}`)
-                      .then(resp => {
-                        if (resp?.status === 200) {
-                          this.setState({ isProfileUrlAvailable: true });
-                        }
-                        this.setState({
-                          profileUrlAvailabilityCheckInProgress: false,
-                        });
-                      })
-                      .catch(err => {
-                        this.setState({
-                          profileUrlAvailabilityCheckInProgress: false,
-                        });
-                        if (err?.response?.status === 409) {
-                          this.setState({ isProfileUrlAvailable: false });
-                        }
+                <div className={css.inputContainer}>
+                  <div className={css.label}>{`${ROOT_URL}/@`}</div>
+                  <FieldTextInput
+                    type="text"
+                    id="profileUrl"
+                    name="profileUrl"
+                    className={css.inpField}
+                    // className={classNames(css.inputs, css.interLightSemiSmallBlack, {
+                    //   [css.invalidInputs]: touched.profileUrl && !!errors.profileUrl,
+                    //   [css.fnNonEmptyInputs]: !!values.profileUrl || active === 'profileUrl',
+                    // })}
+                    // label={profileUrlLabel}
+                    placeholder={profileUrlPlaceholder}
+                    onChange={e => {
+                      form.change('profileUrl', e.target.value.replace(/\s/g, '').toLowerCase());
+                    }}
+                    // onFocus={e =>
+                    //   this.setState({
+                    //     profileUrlAvailabilityCheckInProgress: true,
+                    //   })
+                    // }
+                    onBlur={async e => {
+                      if (initialValues.profileUrl === values.profileUrl) return;
+                      this.setState({
+                        profileUrlAvailabilityCheckInProgress: true,
                       });
-                  }}
-                />
+                      axios
+                        .get(`${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${e.target.value}`)
+                        .then(resp => {
+                          if (resp?.status === 200) {
+                            this.setState({ isProfileUrlAvailable: true });
+                          }
+                          this.setState({
+                            profileUrlAvailabilityCheckInProgress: false,
+                          });
+                        })
+                        .catch(err => {
+                          this.setState({
+                            profileUrlAvailabilityCheckInProgress: false,
+                          });
+                          if (err?.response?.status === 409) {
+                            this.setState({ isProfileUrlAvailable: false });
+                          }
+                        });
+                    }}
+                  />
+                </div>
                 {!this.state.isProfileUrlAvailable ? (
-                  <span className={css.errMsg}>
-                    <FormattedMessage id="ProfilesettingForm.profileUrlNotAvailable" />
-                  </span>
+                  <div className={css.errMsg}>
+                    <FormattedMessage id="profilesettingForm.profileUrlNotAvailable" />
+                  </div>
                 ) : // <p className={css.info}>
                 //   <FormattedMessage id="ProfileSettingsForm.profileUrlInfo" />
                 // </p>
                 null}
+                <div className={css.info}>
+                  <FormattedMessage id="profilesettingForm.profileUrlInfo" />
+                  <br />
+                  <FormattedMessage id="profilesettingForm.profileUrlInfoEx" />
+                </div>
               </div>
 
               {submitError}

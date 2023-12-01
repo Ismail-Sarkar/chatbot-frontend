@@ -68,9 +68,7 @@ export const ProfileSettingsPageComponent = props => {
   const profileImageId = user.profileImage ? user.profileImage.id : null;
   const profileImage = image || { imageId: profileImageId };
   const intialProfileUrl =
-    publicData && publicData.profileUrl && publicData.profileUrl.split('@')[1];
-
-  console.log(typeof intialProfileUrl, publicData.profileUrl);
+    publicData && publicData.profileUrl && publicData.profileUrl?.split('@')[1];
 
   const profileSettingsForm = user.id ? (
     <ProfileSettingsForm
