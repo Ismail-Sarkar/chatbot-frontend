@@ -22,8 +22,6 @@ import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
 import axios from 'axios';
 import { transitions } from '../../transactions/adventurelyProcessBooking';
-// import { customAlphabet } from 'nanoid';
-// const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 8);
 
 const { UUID } = sdkTypes;
 
@@ -506,14 +504,19 @@ export const makeTransition = (txId, transitionName, params) => async (dispatch,
   let finalParams = params;
   dispatch(transitionRequest(transitionName));
   if (transitionName === ACCEPT_BOOKING_TRANSITION) {
-    // const confirmationId = nanoid();
-    // finalParams = { ...params, protectedData: { confirmationNumber: confirmationId } };
     try {
-      const payment = await axios.post(`${apiBaseUrl()}/api/transaction/capturePaymentIntent`, {
-        txId: txId.uuid,
-      });
+      const [paymentResponse, uniqueIdResponse] = await Promise.all([
+        await axios.post(`${apiBaseUrl()}/api/transaction/capturePaymentIntent`, {
+          txId: txId.uuid,
+        }),
+        await axios.get(`${apiBaseUrl()}/api/uniqueId`),
+      ]);
+
+      const { data, status: uniqueIdStatus } = uniqueIdResponse || {};
+      const { nanoId: confirmationId } = data || {};
+      finalParams = { ...params, protectedData: { confirmationNumber: confirmationId } };
     } catch (e) {
-      console.error('error occurred during capture payment...');
+      console.error('error occurred during capture payment...', e);
     }
   }
 
@@ -582,7 +585,6 @@ export const cancelBookingProvider = (id, customTransfer) => (dispatch, getState
     return Promise.reject(new Error('Start or Cancel already in progress'));
   }
   dispatch(providerCancelRequest());
-  console.log(customTransfer, 9008);
 
   return sdk.transactions
     .transition(

@@ -26,6 +26,7 @@ const fetchUserEmail = require('./api/fetchUserEmail');
 const getUserTypeByEmail = require('./api/getUserTypeByEmail');
 const currencyExchangeCode = require('./controllers/currencyExchange');
 const { fetchByUserName, checkAvailabilityOfUserName } = require('./api/userName');
+const { getUniqueId } = require('./controllers/nanoIdController');
 
 const router = express.Router();
 
@@ -107,5 +108,8 @@ router.get('/checkAvailabilityOfUserName/:slug', checkAvailabilityOfUserName);
 
 //currency exchange
 router.use('/currency', currencyExchangeCode);
+
+//uniqe id
+router.get('/uniqueId', getUniqueId);
 
 module.exports = router;

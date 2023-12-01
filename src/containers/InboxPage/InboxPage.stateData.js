@@ -44,7 +44,6 @@ export const getStateData = params => {
   } else if (processName === INQUIRY_PROCESS_NAME) {
     return getStateDataForInquiryProcess(params, processInfo());
   } else if (processName === ADVENTURELY_PROCESS_NAME) {
-    console.log('first', params, processInfo());
     return getStateDataForAdventurelyBookingProcess(params, processInfo());
   } else {
     return {};
