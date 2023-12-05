@@ -41,6 +41,7 @@ import Next from '../NextArrow';
 import Prev from '../PrevArrow';
 import WeekPicker from './WeekPicker';
 import css from './WeeklyCalendar.module.css';
+import moment from 'moment';
 
 const TODAY = new Date();
 
@@ -449,7 +450,17 @@ const WeeklyCalendar = props => {
             startDateOffset={day => getStartOfWeekAsMoment(day, timeZone, firstDayOfWeek)}
             endDateOffset={day => getEndOfWeekAsMoment(day, timeZone, firstDayOfWeek)}
             onFocusChange={({ focused }) => setWeekPickerFocused(focused)}
-            isOutsideRange={day => !isInRange(day, thisWeek, endOfRange, 'day', timeZone)}
+            isOutsideRange={day => {
+              const isDateInRange = isInRange(day, thisWeek, endOfRange, 'day', timeZone);
+              const key = moment(day)?.format('YYYY-MM-DD');
+              const isDayAvailable =
+                typeof availableDates[key] !== 'undefined' && availableDates[key]?.hasAvailability;
+
+              const isDateValid = isDateInRange && isDayAvailable;
+              // console.log(77789, key, isDateInRange, isDayAvailable, isDateValid);
+
+              return !isDateValid;
+            }}
             timeZone={timeZone}
           />
         </div>

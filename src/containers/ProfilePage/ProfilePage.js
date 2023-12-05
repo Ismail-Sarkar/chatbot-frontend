@@ -29,17 +29,19 @@ import FooterContainer from '../../containers/FooterContainer/FooterContainer';
 import NotFoundPage from '../../containers/NotFoundPage/NotFoundPage';
 
 import css from './ProfilePage.module.css';
+import CopyText from '../../components/CopyText/CopyText';
 
 const MAX_MOBILE_SCREEN_WIDTH = 768;
+const MARKETPLACE_URL = process.env.REACT_APP_MARKETPLACE_ROOT_URL;
 
 export const AsideContent = props => {
-  const { user, displayName, isCurrentUser } = props;
+  const { user, displayName, isCurrentUser, businessname } = props;
   return (
     <div className={css.asideContent}>
       <AvatarLarge className={css.avatar} user={user} disableProfileLink />
       <H2 as="h1" className={css.mobileHeading}>
-        {displayName ? (
-          <FormattedMessage id="ProfilePage.mobileHeading" values={{ name: displayName }} />
+        {businessname ? (
+          <FormattedMessage id="ProfilePage.mobileHeading" values={{ name: businessname }} />
         ) : null}
       </H2>
       {isCurrentUser ? (
@@ -79,12 +81,12 @@ export const MobileReviews = props => {
       </H4>
       <ReviewsErrorMaybe queryReviewsError={queryReviewsError} />
       <Reviews reviews={reviewsOfProvider} />
-      <H4 as="h2" className={css.mobileReviewsTitle}>
+      {/* <H4 as="h2" className={css.mobileReviewsTitle}>
         <FormattedMessage
           id="ProfilePage.reviewsAsACustomerTitle"
           values={{ count: reviewsOfCustomer.length }}
         />
-      </H4>
+      </H4> */}
       <ReviewsErrorMaybe queryReviewsError={queryReviewsError} />
       <Reviews reviews={reviewsOfCustomer} />
     </div>
@@ -111,18 +113,18 @@ export const DesktopReviews = props => {
       selected: isReviewTypeProviderSelected,
       onClick: () => setShowReviewsType(REVIEW_TYPE_OF_PROVIDER),
     },
-    {
-      text: (
-        <Heading as="h3" rootClassName={css.desktopReviewsTitle}>
-          <FormattedMessage
-            id="ProfilePage.reviewsAsACustomerTitle"
-            values={{ count: reviewsOfCustomer.length }}
-          />
-        </Heading>
-      ),
-      selected: isReviewTypeCustomerSelected,
-      onClick: () => setShowReviewsType(REVIEW_TYPE_OF_CUSTOMER),
-    },
+    // {
+    //   text: (
+    //     <Heading as="h3" rootClassName={css.desktopReviewsTitle}>
+    //       <FormattedMessage
+    //         id="ProfilePage.reviewsAsACustomerTitle"
+    //         values={{ count: reviewsOfCustomer.length }}
+    //       />
+    //     </Heading>
+    //   ),
+    //   selected: isReviewTypeCustomerSelected,
+    //   onClick: () => setShowReviewsType(REVIEW_TYPE_OF_CUSTOMER),
+    // },
   ];
 
   return (
@@ -152,11 +154,16 @@ export const MainContent = props => {
     reviews,
     queryReviewsError,
     viewport,
+    businessname,
+    user,
   } = props;
 
   const hasListings = listings.length > 0;
   const isMobileLayout = viewport.width < MAX_MOBILE_SCREEN_WIDTH;
   const hasBio = !!bio;
+
+  const { publicData } = user?.attributes?.profile || {};
+  const { profileUrl = null } = publicData || {};
 
   const listingsContainerClasses = classNames(css.listingsContainer, {
     [css.withBioMissingAbove]: !hasBio,
@@ -172,8 +179,13 @@ export const MainContent = props => {
   return (
     <div>
       <H2 as="h1" className={css.desktopHeading}>
-        <FormattedMessage id="ProfilePage.desktopHeading" values={{ name: displayName }} />
+        <FormattedMessage id="ProfilePage.desktopHeading" values={{ name: businessname }} />
       </H2>
+      {profileUrl && (
+        <div className={css.profileUrl}>
+          <CopyText text={`${MARKETPLACE_URL}/${profileUrl}`} />
+        </div>
+      )}
       {hasBio ? <p className={css.bio}>{bio}</p> : null}
       {hasListings ? (
         <div className={listingsContainerClasses}>
@@ -206,6 +218,7 @@ const ProfilePageComponent = props => {
   const isCurrentUser =
     ensuredCurrentUser.id && profileUser.id && ensuredCurrentUser.id.uuid === profileUser.id.uuid;
   const { bio, displayName } = profileUser?.attributes?.profile || {};
+  const businessname = profileUser?.attributes?.profile?.publicData?.businessName;
 
   const schemaTitleVars = { name: displayName, marketplaceName: config.marketplaceName };
   const schemaTitle = intl.formatMessage({ id: 'ProfilePage.schemaTitle' }, schemaTitleVars);
@@ -227,11 +240,23 @@ const ProfilePageComponent = props => {
         sideNavClassName={css.aside}
         topbar={<TopbarContainer currentPage="ProfilePage" />}
         sideNav={
-          <AsideContent user={user} isCurrentUser={isCurrentUser} displayName={displayName} />
+          <AsideContent
+            user={user}
+            isCurrentUser={isCurrentUser}
+            displayName={displayName}
+            businessname={businessname}
+          />
         }
         footer={<FooterContainer />}
       >
-        <MainContent bio={bio} displayName={displayName} userShowError={userShowError} {...rest} />
+        <MainContent
+          bio={bio}
+          user={user}
+          displayName={displayName}
+          userShowError={userShowError}
+          businessname={businessname}
+          {...rest}
+        />
       </LayoutSideNavigation>
     </Page>
   );

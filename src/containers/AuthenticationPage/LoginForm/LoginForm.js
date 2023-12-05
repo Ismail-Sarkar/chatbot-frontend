@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
@@ -6,9 +6,11 @@ import classNames from 'classnames';
 
 import { FormattedMessage, injectIntl, intlShape } from '../../../util/reactIntl';
 import * as validators from '../../../util/validators';
-import { Form, PrimaryButton, FieldTextInput, NamedLink } from '../../../components';
+import { Form, PrimaryButton, FieldTextInput, NamedLink, H4 } from '../../../components';
 
 import css from './LoginForm.module.css';
+import axios from 'axios';
+import { apiBaseUrl } from '../../../util/api';
 
 const LoginFormComponent = props => (
   <FinalForm
@@ -22,6 +24,8 @@ const LoginFormComponent = props => (
         inProgress,
         intl,
         invalid,
+        isPartner,
+        values,
       } = fieldRenderProps;
 
       // email
@@ -62,8 +66,40 @@ const LoginFormComponent = props => (
         </NamedLink>
       );
 
+      const [loginTypeError, setLoginTypeError] = useState(null);
+      const [loginInProgress, setLoginInProgress] = useState(false);
+
       return (
-        <Form className={classes} onSubmit={handleSubmit}>
+        <Form
+          className={classes}
+          onSubmit={e => {
+            setLoginInProgress(true);
+            e.preventDefault();
+            setLoginTypeError(null);
+            axios
+              .get(`${apiBaseUrl()}/api/getUserType/${values.email}`)
+              .then(resp => {
+                setLoginInProgress(false);
+                if (resp.data.data.userType === 'partner' && !isPartner) {
+                  return setLoginTypeError('Please use the Partner login.');
+                } else if (resp.data.data.userType === 'customer' && isPartner) {
+                  return setLoginTypeError('Partner account not found');
+                } else {
+                  handleSubmit();
+                }
+              })
+              .catch(err => {
+                setLoginInProgress(false);
+                setLoginTypeError(null);
+                handleSubmit();
+              });
+          }}
+        >
+          {isPartner && (
+            <H4 as="h2" className={css.sectionTitle}>
+              <FormattedMessage id="LoginForm.partnerLogIn" />
+            </H4>
+          )}
           <div>
             <FieldTextInput
               type="email"
@@ -94,9 +130,32 @@ const LoginFormComponent = props => (
                 />
               </span>
             </p>
-            <PrimaryButton type="submit" inProgress={submitInProgress} disabled={submitDisabled}>
+
+            {loginTypeError && <div className={css.errMsg}>{loginTypeError}</div>}
+            <PrimaryButton
+              type="submit"
+              inProgress={submitInProgress || loginInProgress}
+              disabled={submitDisabled}
+            >
               <FormattedMessage id="LoginForm.logIn" />
             </PrimaryButton>
+          </div>
+
+          <div className={css.otherTypeLoginLink}>
+            {!isPartner ? (
+              <NamedLink
+                name="PartnerLoginPage"
+                className={classNames(css.signupLink, css.redLink)}
+              >
+                {/* <span className={css.signup}> */}
+                <FormattedMessage id="LoginForm.partnerLogIn" />
+                {/* </span> */}
+              </NamedLink>
+            ) : (
+              <NamedLink name="PartnerSignupPage" className={css.signupLink}>
+                <FormattedMessage id="SignupForm.partnerSignUp" />
+              </NamedLink>
+            )}
           </div>
         </Form>
       );

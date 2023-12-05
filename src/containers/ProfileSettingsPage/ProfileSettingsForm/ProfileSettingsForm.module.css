@@ -277,3 +277,45 @@
   margin-top: 24px;
   margin-bottom: 56px;
 }
+
+.errMsg {
+  color: red;
+  margin-top: 10px;
+}
+
+.info {
+  margin-top: 10px;
+}
+
+.inpField {
+  flex-grow: 1;
+  & input {
+    width: 100%;
+    padding: 10px;
+    padding-left: 6px;
+    border: 1px solid #ccc;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none;
+    color: black;
+  }
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  background-color: #fff;
+  border-radius: 6px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1px solid #ccc;
+  border-right: none;
+  padding: 14px;
+  padding-right: 0px;
+  pointer-events: none;
+  color: black !important;
+  max-width: fit-content;
+}

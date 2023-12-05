@@ -23,6 +23,11 @@ app.use(
     credentials: true,
   })
 );
+app.use(
+  bodyParser.json({
+    type: ['json', 'application/csp-report'],
+  })
+);
 app.use(cookieParser());
 app.use('/.well-known', wellKnownRouter);
 app.use('/api', apiRouter);

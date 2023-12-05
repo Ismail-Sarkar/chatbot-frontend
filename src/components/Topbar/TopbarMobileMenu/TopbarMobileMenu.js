@@ -89,7 +89,12 @@ const TopbarMobileMenu = props => {
         <NamedLink
           className={classNames(css.inbox, currentPageClass('InboxPage'))}
           name="InboxPage"
-          params={{ tab: currentUserHasListings ? 'sales' : 'orders' }}
+          params={{
+            tab:
+              currentUser?.attributes?.profile?.publicData?.userType === 'partner'
+                ? 'sales'
+                : 'orders',
+          }}
         >
           <FormattedMessage id="TopbarMobileMenu.inboxLink" />
           {notificationCountBadge}

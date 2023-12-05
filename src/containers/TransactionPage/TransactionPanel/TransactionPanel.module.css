@@ -293,6 +293,7 @@
 
 .viewOnGoogleMapsWrapper {
   white-space: nowrap;
+  margin-top: 10px;
 }
 
 .bookingLocationAddress,
@@ -300,6 +301,7 @@
   composes: h5 from global;
   margin: 0;
   display: inline-block;
+  text-decoration: underline;
 
   @media (--viewportMedium) {
     padding: 3px 0 5px 0;

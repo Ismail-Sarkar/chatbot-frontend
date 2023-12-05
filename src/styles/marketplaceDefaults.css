@@ -1317,9 +1317,9 @@ textarea {
   margin-top: 60px;
   align-self: stretch;
 
-  @media (--viewportMedium) {
+  /* @media (--viewportMedium) {
     margin-top: 96px;
-  }
+  } */
 }
 
 /* Adjust the bottomWrapper's margin to match modals without the helper text */
@@ -1523,18 +1523,18 @@ textarea {
 
 .MuiInputBase-root svg {
   fill: #737373 !important;
-  font-size:25px;
+  font-size: 25px;
 }
 ::-webkit-scrollbar {
   width: 5px;
   background-color: #f9f9f9;
   height: 4px !important;
   cursor: pointer;
-  @media(max-width:767px){
-  height: 3px !important;
+  @media (max-width: 767px) {
+    height: 3px !important;
   }
 }
 ::-webkit-scrollbar-thumb {
-  background-color:#000;
+  background-color: #000;
   border-radius: 15px;
 }

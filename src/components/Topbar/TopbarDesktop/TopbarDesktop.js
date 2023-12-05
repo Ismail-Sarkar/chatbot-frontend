@@ -64,7 +64,10 @@ const TopbarDesktop = props => {
     <NamedLink
       className={css.inboxLink}
       name="InboxPage"
-      params={{ tab: currentUserHasListings ? 'sales' : 'orders' }}
+      params={{
+        tab:
+          currentUser?.attributes?.profile?.publicData?.userType === 'partner' ? 'sales' : 'orders',
+      }}
     >
       <span className={css.inbox}>
         <FormattedMessage id="TopbarDesktop.inbox" />
@@ -85,15 +88,19 @@ const TopbarDesktop = props => {
         <Avatar className={css.avatar} user={currentUser} disableProfileLink />
       </MenuLabel>
       <MenuContent className={css.profileMenuContent}>
-        <MenuItem key="ManageListingsPage">
-          <NamedLink
-            className={classNames(css.yourListingsLink, currentPageClass('ManageListingsPage'))}
-            name="ManageListingsPage"
-          >
-            <span className={css.menuItemBorder} />
-            <FormattedMessage id="TopbarDesktop.yourListingsLink" />
-          </NamedLink>
-        </MenuItem>
+        {currentUser?.attributes?.profile?.publicData?.userType === 'partner' ? (
+          <MenuItem key="ManageListingsPage">
+            <NamedLink
+              className={classNames(css.yourListingsLink, currentPageClass('ManageListingsPage'))}
+              name="ManageListingsPage"
+            >
+              <span className={css.menuItemBorder} />
+              <FormattedMessage id="TopbarDesktop.yourListingsLink" />
+            </NamedLink>
+          </MenuItem>
+        ) : (
+          <MenuItem key=""></MenuItem>
+        )}
         <MenuItem key="ProfileSettingsPage">
           <NamedLink
             className={classNames(css.profileSettingsLink, currentPageClass('ProfileSettingsPage'))}
@@ -146,21 +153,35 @@ const TopbarDesktop = props => {
         alt={intl.formatMessage({ id: 'TopbarDesktop.logo' }, { marketplaceName })}
       />
       {/* {search} */}
-
-      <NamedLink className={classNames(css.searchLink, css.searchWithIcon)} name="SearchPage">
-        <LiaSearchSolid size={25} />
-        <div className={css.searchTitle}> Search Passes...</div>
-      </NamedLink>
+      {currentPage === 'SearchPage' ? (
+        search
+      ) : (
+        <NamedLink className={classNames(css.searchLink, css.searchWithIcon)} name="SearchPage">
+          <LiaSearchSolid size={25} />
+          <div className={css.searchTitle}> Search Passes...</div>
+        </NamedLink>
+      )}
       <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
         <span className={css.createListing}>
           <FormattedMessage id="TopbarDesktop.blog" />
         </span>
       </ExternalLink>
-      <NamedLink className={css.createListingLink} name="NewListingPage">
-        <span className={css.createListing}>
-          <FormattedMessage id="TopbarDesktop.createListing" />
-        </span>
-      </NamedLink>
+      {currentUser?.attributes?.profile?.publicData?.userType === 'partner' ? (
+        <NamedLink className={css.createListingLink} name="NewListingPage">
+          <span className={css.createListing}>
+            <FormattedMessage id="TopbarDesktop.createListing" />
+          </span>
+        </NamedLink>
+      ) : !currentUser ? (
+        <NamedLink className={css.createListingLink} name="NewListingPage">
+          <span className={css.createListing}>
+            <FormattedMessage id="TopbarDesktop.createListing" />
+          </span>
+        </NamedLink>
+      ) : (
+        ''
+      )}
+
       {inboxLink}
       {profileMenu}
       {signupLink}

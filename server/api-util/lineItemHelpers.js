@@ -209,19 +209,11 @@ exports.calculateTotalFromLineItems = lineItems => {
   return new Money(numericTotalPrice, unitPrice.currency);
 };
 
-exports.calculateCurrentPayment = lineItems => {
-  const totalPrice = lineItems.reduce((sum, lineItem) => {
-    if (lineItem.code !== 'line-item/current-pay' && !lineItem.reversal) {
-      const lineTotal = this.calculateLineTotal(lineItem);
-      return getAmountAsDecimalJS(lineTotal).add(sum);
-    }
-    return sum;
-  }, 0);
-
+exports.calculateDuePayment = lineItems => {
   const totalProviderPrice = lineItems.reduce((sum, item) => {
     if (
       item.code !== 'line-item/service-fee' &&
-      item.code !== 'line-item/current-pay' &&
+      item.code !== 'line-item/due-pay' &&
       !item.reversal
     ) {
       const lineTotal = this.calculateLineTotal(item);

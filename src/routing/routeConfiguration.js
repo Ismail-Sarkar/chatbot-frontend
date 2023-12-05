@@ -39,6 +39,9 @@ const TransactionPage = loadable(() => import(/* webpackChunkName: "TransactionP
 // Styleguide helps you to review current components and develop new ones
 const StyleguidePage = loadable(() => import(/* webpackChunkName: "StyleguidePage" */ '../containers/StyleguidePage/StyleguidePage'));
 
+const StripeSubscriptionSucessPage = loadable(() => import(/* webpackChunkName: "StripeSubscriptionSucessPage" */ '../containers/StripeSubscriptionSuccessPanel/StripeSubscriptionSuccessPanel'));
+
+
 export const ACCOUNT_SETTINGS_PAGES = [
   'ContactDetailsPage',
   'PasswordChangePage',
@@ -117,6 +120,7 @@ const routeConfiguration = (layoutConfig) => {
       path: '/l/new',
       name: 'NewListingPage',
       auth: true,
+      authPage: 'PartnerSignupPage',
       component: () => (
         <NamedRedirect
           name="EditListingPage"
@@ -178,6 +182,19 @@ const routeConfiguration = (layoutConfig) => {
     {
       path: '/signup',
       name: 'SignupPage',
+      component: AuthenticationPage,
+      extraProps: { tab: 'signup' },
+      loadData: pageDataLoadingAPI.AuthenticationPage.loadData,
+    },
+    {
+      path: '/partnerlogin',
+      name: 'PartnerLoginPage',
+      component: AuthenticationPage,
+      extraProps: { tab: 'login' },
+    },
+    {
+      path: '/partnersignup',
+      name: 'PartnerSignupPage',
       component: AuthenticationPage,
       extraProps: { tab: 'signup' },
       loadData: pageDataLoadingAPI.AuthenticationPage.loadData,
@@ -367,6 +384,21 @@ const routeConfiguration = (layoutConfig) => {
       path: '/preview',
       name: 'PreviewResolverPage',
       component: PreviewResolverPage ,
+    },
+
+    {
+      path: '/stripesubscription',
+      name: 'StripeSubscriptionSucessPage',
+      auth: true,
+      authPage: 'PartnerLoginPage',
+      component: StripeSubscriptionSucessPage,
+    },
+    {
+      path: '/:userName',
+      name: 'UserProfilePage',
+      component: ProfilePage,
+      loadData:
+        pageDataLoadingAPI.ProfilePageByUserNameLoadData.ProfilePageByUserName,
     },
   ];
 };

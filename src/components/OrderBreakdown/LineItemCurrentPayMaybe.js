@@ -33,7 +33,7 @@ function LineItemCurrentPayMaybe(props) {
     formatMoney(intl, new Money(Math.abs(lineTotal?.amount), lineTotal?.currency || 'USD'));
 
   return lineTotal && lineTotal.amount && lineTotal.currency ? (
-    <div className={css.remainingPay}>
+    <div className={isProvider ? css.providerRemainingPay : css.remainingPay}>
       {isProvider ? (
         <FormattedMessage
           id="OrderBreakdown.remainingFeeProvider"

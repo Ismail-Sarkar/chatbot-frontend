@@ -5,6 +5,7 @@ import { FormattedMessage } from '../../util/reactIntl';
 import { Heading, NamedLink, IconEmailSent, InlineTextButton, IconClose } from '../../components';
 
 import css from './AuthenticationPage.module.css';
+import classNames from 'classnames';
 
 const EmailVerificationInfo = props => {
   const {
@@ -36,8 +37,9 @@ const EmailVerificationInfo = props => {
         <IconClose rootClassName={css.closeIcon} />
       </NamedLink>
       <IconEmailSent className={css.modalIcon} />
-      <Heading as="h1" rootClassName={css.modalTitle}>
+      <Heading as="h1" rootClassName={classNames(css.modalTitle)}>
         <FormattedMessage id="AuthenticationPage.verifyEmailTitle" values={{ name }} />
+        {/* <FormattedMessage id="AuthenticationPage.verifyEmailTitleTwo" /> */}
       </Heading>
       <p className={css.modalMessage}>
         <FormattedMessage id="AuthenticationPage.verifyEmailText" values={{ email }} />

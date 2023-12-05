@@ -22,16 +22,24 @@ import {
 } from '../../../components';
 
 import css from './ProfileSettingsForm.module.css';
+import { apiBaseUrl } from '../../../util/api';
+import axios from 'axios';
 
 const ACCEPT_IMAGES = 'image/*';
 const UPLOAD_CHANGE_DELAY = 2000; // Show spinner so that browser has time to load img srcset
+
+const ROOT_URL = process.env.REACT_APP_MARKETPLACE_ROOT_URL;
 
 class ProfileSettingsFormComponent extends Component {
   constructor(props) {
     super(props);
 
     this.uploadDelayTimeoutId = null;
-    this.state = { uploadDelay: false };
+    this.state = {
+      uploadDelay: false,
+      profileUrlAvailabilityCheckInProgress: false,
+      isProfileUrlAvailable: true,
+    };
     this.submittedValues = {};
   }
 
@@ -72,6 +80,7 @@ class ProfileSettingsFormComponent extends Component {
             form,
             marketplaceName,
             values,
+            initialValues,
           } = fieldRenderProps;
 
           const user = ensureCurrentUser(currentUser);
@@ -106,6 +115,14 @@ class ProfileSettingsFormComponent extends Component {
           });
           const bioPlaceholder = intl.formatMessage({
             id: 'ProfileSettingsForm.bioPlaceholder',
+          });
+
+          const businessNamePlaceholder = intl.formatMessage({
+            id: 'ProfileSettingsForm.businessNamePlaceholder',
+          });
+
+          const profileUrlPlaceholder = intl.formatMessage({
+            id: 'ProfileSettingsForm.profileUrlPlaceholder',
           });
 
           const uploadingOverlay =
@@ -185,17 +202,46 @@ class ProfileSettingsFormComponent extends Component {
           const submittedOnce = Object.keys(this.submittedValues).length > 0;
           const pristineSinceLastSubmit = submittedOnce && isEqual(values, this.submittedValues);
           const submitDisabled =
-            invalid || pristine || pristineSinceLastSubmit || uploadInProgress || submitInProgress;
+            invalid ||
+            pristine ||
+            pristineSinceLastSubmit ||
+            uploadInProgress ||
+            submitInProgress ||
+            !this.state.isProfileUrlAvailable ||
+            this.state.profileUrlAvailabilityCheckInProgress;
 
           return (
             <Form
               className={classes}
+              // onSubmit={e => {
+              //   this.submittedValues = values;
+              //   handleSubmit(e);
+              // }}
+
               onSubmit={e => {
+                e.preventDefault();
                 this.submittedValues = values;
-                handleSubmit(e);
+                if (values.profileUrl === initialValues.profileUrl) {
+                  if (!submitDisabled) return handleSubmit(e);
+                  return;
+                }
+                axios
+                  .get(`${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${values.profileUrl}`)
+                  .then(resp => {
+                    if (resp?.status === 200) {
+                      this.setState({ isProfileUrlAvailable: true });
+                    }
+                    return handleSubmit(e);
+                  })
+                  .catch(err => {
+                    if (err?.response?.status === 409) {
+                      this.setState({ isProfileUrlAvailable: false });
+                    }
+                    return;
+                  });
               }}
             >
-              <div className={css.sectionContainer}>
+              {/* <div className={css.sectionContainer}>
                 <H4 as="h2" className={css.sectionTitle}>
                   <FormattedMessage id="ProfileSettingsForm.yourProfilePicture" />
                 </H4>
@@ -263,7 +309,7 @@ class ProfileSettingsFormComponent extends Component {
                 <div className={css.fileInfo}>
                   <FormattedMessage id="ProfileSettingsForm.fileInfo" />
                 </div>
-              </div>
+              </div> */}
               <div className={css.sectionContainer}>
                 <H4 as="h2" className={css.sectionTitle}>
                   <FormattedMessage id="ProfileSettingsForm.yourName" />
@@ -289,21 +335,107 @@ class ProfileSettingsFormComponent extends Component {
                   />
                 </div>
               </div>
+              {currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
+                <>
+                  <div className={css.sectionContainer}>
+                    <H4 as="h2" className={css.sectionTitle}>
+                      <FormattedMessage id="ProfileSettingsForm.businessNameLabel" />
+                    </H4>
+                    <FieldTextInput
+                      type="text"
+                      id="businessName"
+                      name="businessName"
+                      // label={bioLabel}
+                      placeholder={businessNamePlaceholder}
+                    />
+                  </div>
+                  <div className={classNames(css.sectionContainer)}>
+                    <H4 as="h2" className={css.sectionTitle}>
+                      <FormattedMessage id="ProfileSettingsForm.bioHeading" />
+                    </H4>
+                    <FieldTextInput
+                      type="textarea"
+                      id="bio"
+                      name="bio"
+                      label={bioLabel}
+                      placeholder={bioPlaceholder}
+                    />
+                    <p className={css.bioInfo}>
+                      <FormattedMessage
+                        id="ProfileSettingsForm.bioInfo"
+                        values={{ marketplaceName }}
+                      />
+                    </p>
+                  </div>
+                </>
+              )}
+
               <div className={classNames(css.sectionContainer, css.lastSection)}>
-                <H4 as="h2" className={css.sectionTitle}>
-                  <FormattedMessage id="ProfileSettingsForm.bioHeading" />
-                </H4>
-                <FieldTextInput
-                  type="textarea"
-                  id="bio"
-                  name="bio"
-                  label={bioLabel}
-                  placeholder={bioPlaceholder}
-                />
-                <p className={css.bioInfo}>
-                  <FormattedMessage id="ProfileSettingsForm.bioInfo" values={{ marketplaceName }} />
-                </p>
+                <h3 className={css.sectionTitle}>
+                  <FormattedMessage id="ProfileSettingsForm.profileUrlName" />
+                </h3>
+                <div className={css.inputContainer}>
+                  <div className={css.label}>{`${ROOT_URL}/@`}</div>
+                  <FieldTextInput
+                    type="text"
+                    id="profileUrl"
+                    name="profileUrl"
+                    className={css.inpField}
+                    // className={classNames(css.inputs, css.interLightSemiSmallBlack, {
+                    //   [css.invalidInputs]: touched.profileUrl && !!errors.profileUrl,
+                    //   [css.fnNonEmptyInputs]: !!values.profileUrl || active === 'profileUrl',
+                    // })}
+                    // label={profileUrlLabel}
+                    placeholder={profileUrlPlaceholder}
+                    onChange={e => {
+                      form.change('profileUrl', e.target.value.replace(/\s/g, '').toLowerCase());
+                    }}
+                    // onFocus={e =>
+                    //   this.setState({
+                    //     profileUrlAvailabilityCheckInProgress: true,
+                    //   })
+                    // }
+                    onBlur={async e => {
+                      if (initialValues.profileUrl === values.profileUrl) return;
+                      this.setState({
+                        profileUrlAvailabilityCheckInProgress: true,
+                      });
+                      axios
+                        .get(`${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${e.target.value}`)
+                        .then(resp => {
+                          if (resp?.status === 200) {
+                            this.setState({ isProfileUrlAvailable: true });
+                          }
+                          this.setState({
+                            profileUrlAvailabilityCheckInProgress: false,
+                          });
+                        })
+                        .catch(err => {
+                          this.setState({
+                            profileUrlAvailabilityCheckInProgress: false,
+                          });
+                          if (err?.response?.status === 409) {
+                            this.setState({ isProfileUrlAvailable: false });
+                          }
+                        });
+                    }}
+                  />
+                </div>
+                {!this.state.isProfileUrlAvailable ? (
+                  <div className={css.errMsg}>
+                    <FormattedMessage id="profilesettingForm.profileUrlNotAvailable" />
+                  </div>
+                ) : // <p className={css.info}>
+                //   <FormattedMessage id="ProfileSettingsForm.profileUrlInfo" />
+                // </p>
+                null}
+                <div className={css.info}>
+                  <FormattedMessage id="profilesettingForm.profileUrlInfo" />
+                  <br />
+                  <FormattedMessage id="profilesettingForm.profileUrlInfoEx" />
+                </div>
               </div>
+
               {submitError}
               <Button
                 className={css.submitButton}

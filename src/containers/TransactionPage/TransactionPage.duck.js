@@ -5,7 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import { types as sdkTypes, createImageVariantConfig } from '../../util/sdkLoader';
 import { findNextBoundary, getStartOf, monthIdString } from '../../util/dates';
 import { isTransactionsTransitionInvalidTransition, storableError } from '../../util/errors';
-import { transactionLineItems } from '../../util/api';
+import { apiBaseUrl, transactionLineItems } from '../../util/api';
 import * as log from '../../util/log';
 import {
   updatedEntities,
@@ -20,11 +20,15 @@ import {
 
 import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { fetchCurrentUserNotifications } from '../../ducks/user.duck';
+import axios from 'axios';
+import { transitions } from '../../transactions/adventurelyProcessBooking';
 
 const { UUID } = sdkTypes;
 
 const MESSAGES_PAGE_SIZE = 100;
 const REVIEW_TX_INCLUDES = ['reviews', 'reviews.author', 'reviews.subject'];
+
+const ACCEPT_BOOKING_TRANSITION = 'transition/accept';
 
 // ================ Action types ================ //
 
@@ -62,6 +66,14 @@ export const FETCH_LINE_ITEMS_REQUEST = 'app/TransactionPage/FETCH_LINE_ITEMS_RE
 export const FETCH_LINE_ITEMS_SUCCESS = 'app/TransactionPage/FETCH_LINE_ITEMS_SUCCESS';
 export const FETCH_LINE_ITEMS_ERROR = 'app/TransactionPage/FETCH_LINE_ITEMS_ERROR';
 
+export const PROVIDER_CANCEL_REQUEST = 'app/TransactionPage/PROVIDER_CANCEL_REQUEST';
+export const PROVIDER_CANCEL_SUCCESS = 'app/TransactionPage/PROVIDER_CANCEL_SUCCESS';
+export const PROVIDER_CANCEL_ERROR = 'app/TransactionPage/PROVIDER_CANCEL_ERROR';
+
+export const CUSTOMER_CANCEL_REQUEST = 'app/TransactionPage/CUSTOMER_CANCEL_REQUEST';
+export const CUSTOMER_CANCEL_SUCCESS = 'app/TransactionPage/CUSTOMER_CANCEL_SUCCESS';
+export const CUSTOMER_CANCEL_ERROR = 'app/TransactionPage/CUSTOMER_CANCEL_ERROR';
+
 // ================ Reducer ================ //
 
 const initialState = {
@@ -95,6 +107,8 @@ const initialState = {
   lineItems: null,
   fetchLineItemsInProgress: false,
   fetchLineItemsError: null,
+  cancelInProgress: false,
+  cancelBookingError: null,
 };
 
 // Merge entity arrays using ids, so that conflicting items in newer array (b) overwrite old values (a).
@@ -226,6 +240,24 @@ export default function transactionPageReducer(state = initialState, action = {}
     case FETCH_LINE_ITEMS_ERROR:
       return { ...state, fetchLineItemsInProgress: false, fetchLineItemsError: payload };
 
+    case PROVIDER_CANCEL_REQUEST:
+      return { ...state, cancelInProgress: true, cancelBookingError: null };
+
+    case PROVIDER_CANCEL_SUCCESS:
+      return { ...state, cancelInProgress: false };
+
+    case PROVIDER_CANCEL_ERROR:
+      return { ...state, cancelInProgress: false, cancelBookingError: payload };
+
+    case CUSTOMER_CANCEL_REQUEST:
+      return { ...state, cancelInProgress: true, cancelBookingError: null };
+
+    case CUSTOMER_CANCEL_SUCCESS:
+      return { ...state, cancelInProgress: false };
+
+    case CUSTOMER_CANCEL_ERROR:
+      return { ...state, cancelInProgress: false, cancelBookingError: payload };
+
     default:
       return state;
   }
@@ -235,6 +267,10 @@ export default function transactionPageReducer(state = initialState, action = {}
 
 export const transitionInProgress = state => {
   return state.TransactionPage.transitionInProgress;
+};
+
+export const cancelInProgress = state => {
+  return state.TransactionPage.cancelInProgress;
 };
 
 // ================ Action creators ================ //
@@ -300,6 +336,14 @@ export const fetchLineItemsError = error => ({
   error: true,
   payload: error,
 });
+
+const providerCancelRequest = () => ({ type: PROVIDER_CANCEL_REQUEST });
+const providerCancelSuccess = () => ({ type: PROVIDER_CANCEL_SUCCESS });
+const providerCancelError = e => ({ type: PROVIDER_CANCEL_ERROR, error: true, payload: e });
+
+const customerCancelRequest = () => ({ type: CUSTOMER_CANCEL_REQUEST });
+const customerCancelSuccess = () => ({ type: CUSTOMER_CANCEL_SUCCESS });
+const customerCancelError = e => ({ type: CUSTOMER_CANCEL_ERROR, error: true, payload: e });
 
 // ================ Thunks ================ //
 
@@ -453,14 +497,31 @@ export const fetchTransaction = (id, txRole, config) => (dispatch, getState, sdk
     });
 };
 
-export const makeTransition = (txId, transitionName, params) => (dispatch, getState, sdk) => {
+export const makeTransition = (txId, transitionName, params) => async (dispatch, getState, sdk) => {
   if (transitionInProgress(getState())) {
     return Promise.reject(new Error('Transition already in progress'));
   }
+  let finalParams = params;
   dispatch(transitionRequest(transitionName));
+  if (transitionName === ACCEPT_BOOKING_TRANSITION) {
+    try {
+      const [paymentResponse, uniqueIdResponse] = await Promise.all([
+        await axios.post(`${apiBaseUrl()}/api/transaction/capturePaymentIntent`, {
+          txId: txId.uuid,
+        }),
+        await axios.get(`${apiBaseUrl()}/api/uniqueId`),
+      ]);
+
+      const { data, status: uniqueIdStatus } = uniqueIdResponse || {};
+      const { nanoId: confirmationId } = data || {};
+      finalParams = { ...params, protectedData: { confirmationNumber: confirmationId } };
+    } catch (e) {
+      console.error('error occurred during capture payment...', e);
+    }
+  }
 
   return sdk.transactions
-    .transition({ id: txId, transition: transitionName, params }, { expand: true })
+    .transition({ id: txId, transition: transitionName, params: finalParams }, { expand: true })
     .then(response => {
       dispatch(addMarketplaceEntities(response));
       dispatch(transitionSuccess());
@@ -483,6 +544,68 @@ export const makeTransition = (txId, transitionName, params) => (dispatch, getSt
       log.error(e, `${transitionName}-failed`, {
         txId,
         transition: transitionName,
+      });
+      throw e;
+    });
+};
+
+export const cancelBookingCustomer = (id, customTransfer) => (dispatch, getState, sdk) => {
+  if (cancelInProgress(getState())) {
+    return Promise.reject(new Error('Start or Cancel already in progress'));
+  }
+  dispatch(customerCancelRequest());
+
+  return sdk.transactions
+    .transition(
+      {
+        id,
+        transition: transitions.CUSTOMER_CANCEL,
+        params: {},
+      },
+      { expand: true }
+    )
+    .then(response => {
+      dispatch(addMarketplaceEntities(response));
+      dispatch(customerCancelSuccess());
+      dispatch(fetchCurrentUserNotifications());
+      return response;
+    })
+    .catch(e => {
+      dispatch(customerCancelError(storableError(e)));
+      log.error(e, 'cancel-customer-failed', {
+        txId: id,
+        transition: transitions.CUSTOMER_CANCEL,
+      });
+      throw e;
+    });
+};
+
+export const cancelBookingProvider = (id, customTransfer) => (dispatch, getState, sdk) => {
+  if (cancelInProgress(getState())) {
+    return Promise.reject(new Error('Start or Cancel already in progress'));
+  }
+  dispatch(providerCancelRequest());
+
+  return sdk.transactions
+    .transition(
+      {
+        id,
+        transition: transitions.PROVIDER_CANCEL,
+        params: {},
+      },
+      { expand: true }
+    )
+    .then(response => {
+      dispatch(addMarketplaceEntities(response));
+      dispatch(providerCancelSuccess());
+      dispatch(fetchCurrentUserNotifications());
+      return response;
+    })
+    .catch(e => {
+      dispatch(providerCancelError(storableError(e)));
+      log.error(e, 'cancel-provider-failed', {
+        txId: id,
+        transition: transitions.PROVIDER_CANCEL,
       });
       throw e;
     });

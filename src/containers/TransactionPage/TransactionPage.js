@@ -60,6 +60,8 @@ import {
   fetchMoreMessages,
   fetchTimeSlots,
   fetchTransactionLineItems,
+  cancelBookingProvider,
+  cancelBookingCustomer,
 } from './TransactionPage.duck';
 import css from './TransactionPage.module.css';
 
@@ -126,6 +128,10 @@ export const TransactionPageComponent = props => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+    cancelInProgress,
+    cancelBookingError,
+    onCancelBookingCustomer,
+    onCancelBookingProvider,
   } = props;
 
   const { listing, provider, customer, booking } = transaction || {};
@@ -436,6 +442,10 @@ export const TransactionPageComponent = props => {
       stateData={stateData}
       transactionRole={transactionRole}
       showBookingLocation={showBookingLocation}
+      onCancelBookingCustomer={onCancelBookingCustomer}
+      onCancelBookingProvider={onCancelBookingProvider}
+      cancelInProgress={cancelInProgress}
+      cancelBookingError={cancelBookingError}
       activityFeed={
         <ActivityFeed
           messages={messages}
@@ -626,6 +636,8 @@ const mapStateToProps = state => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+    cancelInProgress,
+    cancelBookingError,
   } = state.TransactionPage;
   const { currentUser } = state.user;
 
@@ -655,6 +667,8 @@ const mapStateToProps = state => {
     lineItems,
     fetchLineItemsInProgress,
     fetchLineItemsError,
+    cancelInProgress,
+    cancelBookingError,
   };
 };
 
@@ -674,6 +688,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(fetchTransactionLineItems(orderData, listingId, isOwnListing)),
     onFetchTimeSlots: (listingId, start, end, timeZone) =>
       dispatch(fetchTimeSlots(listingId, start, end, timeZone)),
+    onCancelBookingCustomer: transactionId => dispatch(cancelBookingCustomer(transactionId)),
+    onCancelBookingProvider: transactionId => dispatch(cancelBookingProvider(transactionId)),
   };
 };
 

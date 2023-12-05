@@ -3,6 +3,7 @@ import FieldTextInput from '../FieldTextInput/FieldTextInput';
 import { convertUnitToSubUnit, unitDivisor } from '../../util/currency';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import { isNumber } from 'lodash';
+import css from './CustomPriceInput.module.css';
 
 function CustomPriceInput(props) {
   const {
@@ -16,9 +17,9 @@ function CustomPriceInput(props) {
     values,
     placeholder,
     disabled,
-    validate,
     formatedshippingCharge,
     setFormatedShippingCharge,
+    customValidationError,
     // perkPriceValidators,
     // correspondingPerkName,
   } = props;
@@ -63,8 +64,7 @@ function CustomPriceInput(props) {
         label={label}
         placeholder={placeholder}
         disabled={disabled}
-        // validate={validate}
-        // validate={perkPriceValidators(correspondingPerkName)}
+        className={customValidationError ? css.errorInputBox : null}
         // className={classNames(css.inputs, {
         //   [css.invalidInputs]: touched.shippingChargeCustom && !!errors.shippingChargeCustom,
         //   [css.fnNonEmptyInputs]: !!values.shippingChargeCustom || fieldActive.shippingChargeCustom,
@@ -84,6 +84,7 @@ function CustomPriceInput(props) {
             }
             form.change(idNameField, value);
             setFormatedShippingCharge(value);
+            form.resetFieldState(idNameField);
           }
         }}
         onFocus={e => {
@@ -99,6 +100,7 @@ function CustomPriceInput(props) {
           form.focus(idNameField);
         }}
       />
+      <div className={css.errorInput}>{customValidationError}</div>
     </div>
   );
 }

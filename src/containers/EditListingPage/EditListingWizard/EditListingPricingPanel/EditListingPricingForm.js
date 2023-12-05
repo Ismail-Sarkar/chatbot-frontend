@@ -46,6 +46,7 @@ const getPriceValidators = (listingMinimumPriceSubUnits, marketplaceCurrency, in
     ? validators.composeValidators(priceRequired, minPriceRequired)
     : priceRequired;
 };
+
 // const getPeakPriceValidators = (listingMinimumPriceSubUnits, marketplaceCurrency, intl) => {
 //   const priceRequiredMsgId = { id: 'EditListingPricingForm.priceRequired' };
 //   const priceRequiredMsg = intl.formatMessage(priceRequiredMsgId);
@@ -95,7 +96,8 @@ export const EditListingPricingFormComponent = props => (
         editListingLinkType,
       } = formRenderProps;
       // console.log(3, listingMinimumPriceSubUnits);
-      const PERK_MAX_LENGTH = 70;
+      const PERK_MAX_LENGTH = 50;
+      const VALID = undefined;
 
       const [formatedPerkNameOnePrice, setFormatedPerkNameOnePrice] = useState(null);
       const [formatedPerkNameTwoPrice, setFormatedPerkNameTwoPrice] = useState(null);
@@ -107,19 +109,92 @@ export const EditListingPricingFormComponent = props => (
         marketplaceCurrency,
         intl
       );
-      const perkPriceValidators = perkName => {
-        if (typeof perkName === 'undefined' || perkName === '') {
-          return null;
-        }
-        return getPriceValidators(1, marketplaceCurrency, intl);
-      };
+
       //
       // const perkValueRef = useRef(null);
       // useEffect(() => {
       //   perkValueRef.current = [];
       // }, []);
 
-      console.log(121, values, values.guests, values.reserVations);
+      const isNonEmptyString = val => {
+        return typeof val === 'string' && val.trim().length > 0;
+      };
+
+      const perkpriceRequired = (message, value) => {
+        if (typeof value === 'undefined' || value === null) {
+          // undefined or null values are invalid
+          return message;
+        }
+        if (typeof value === 'string') {
+          // string must be nonempty when trimmed
+          return isNonEmptyString(value) ? VALID : message;
+        }
+        return VALID;
+      };
+
+      const perkpriceValidator = (
+        perkName,
+        perkPrice,
+        listingMinimumPriceSubUnits,
+        marketplaceCurrency,
+        intl
+      ) => {
+        if (typeof perkName === 'undefined' || perkName === '') return VALID;
+        else {
+          const priceRequiredMsgId = { id: 'EditListingPricingForm.priceRequired' };
+          const priceRequiredMsg = intl.formatMessage(priceRequiredMsgId);
+          const priceRequired = perkpriceRequired(priceRequiredMsg, perkPrice);
+          const minPriceRaw = new Money(listingMinimumPriceSubUnits * 100, marketplaceCurrency);
+          const minPrice = formatMoney(intl, minPriceRaw);
+          const priceTooLowMsgId = { id: 'EditListingPricingForm.priceTooLow' };
+          const priceTooLowMsg = intl.formatMessage(priceTooLowMsgId, { minPrice });
+          const minPriceRequired =
+            perkPrice &&
+            parseFloat(perkPrice.toString().replace(/[^0-9.-]+/g, '')) >=
+              listingMinimumPriceSubUnits
+              ? VALID
+              : priceTooLowMsg;
+
+          // return listingMinimumPriceSubUnits
+          //   ? validators.composeValidators(priceRequired, minPriceRequired)
+          //   : priceRequired;
+          // return listingMinimumPriceSubUnits
+          //   ? validators.composeValidators(priceRequired, minPriceRequired)
+          //   : priceRequired;
+
+          return listingMinimumPriceSubUnits
+            ? minPriceRequired
+              ? minPriceRequired
+              : priceRequired
+            : priceRequired;
+        }
+      };
+
+      // console.log(121, values, values.guests, values.reserVations);
+
+      const perkPriceOneError = perkpriceValidator(
+        values?.perkNameOne,
+        values?.perkNameOnePrice,
+        1,
+        marketplaceCurrency,
+        intl
+      );
+
+      const perkPriceTwoError = perkpriceValidator(
+        values?.perkNameTwo,
+        values?.perkNameTwoPrice,
+        1,
+        marketplaceCurrency,
+        intl
+      );
+
+      const perkPriceThreeError = perkpriceValidator(
+        values?.perkNameThree,
+        values?.perkNameThreePrice,
+        1,
+        marketplaceCurrency,
+        intl
+      );
 
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
@@ -127,9 +202,12 @@ export const EditListingPricingFormComponent = props => (
       const submitDisabled =
         editListingLinkType !== 'edit'
           ? invalid || disabled || submitInProgress
-          : (values.perkNameOne !== undefined && values.perkNameOnePrice === null) ||
-            (values.perkNameTwo !== undefined && values.perkNameTwoPrice === null) ||
-            (values.perkNameThree !== undefined && values.perkNameThreePrice === null) ||
+          : typeof perkPriceOneError !== 'undefined' ||
+            typeof perkPriceTwoError !== 'undefined' ||
+            typeof perkPriceThreeError !== 'undefined' ||
+            // (values.perkNameOne !== undefined && values.perkNameOnePrice === null) ||
+            //   (values.perkNameTwo !== undefined && values.perkNameTwoPrice === null) ||
+            //   (values.perkNameThree !== undefined && values.perkNameThreePrice === null) ||
             values.guests === undefined ||
             values.guests === '' ||
             values.reserVations === undefined ||
@@ -158,6 +236,7 @@ export const EditListingPricingFormComponent = props => (
       };
 
       const required = validators.required('This field is required');
+      // console.log(777, updated, pristine);
 
       return (
         <Form onSubmit={handleSubmit} className={classes}>
@@ -171,26 +250,6 @@ export const EditListingPricingFormComponent = props => (
               <FormattedMessage id="EditListingPricingForm.showListingFailed" />
             </p>
           ) : null}
-          <FieldSelect
-            id="prefferedPaymentMethod"
-            name="prefferedPaymentMethod"
-            className={css.listingTypeSelect}
-            label={intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodTitle' })}
-            validate={validators.required(
-              intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodRequired' })
-            )}
-          >
-            <option disabled value="">
-              {intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodPlaceholder' })}
-            </option>
-            {paymentMethodValues.map(({ option, label }) => {
-              return (
-                <option key={option} value={option}>
-                  {label}
-                </option>
-              );
-            })}
-          </FieldSelect>
           <FieldCurrencyInput
             id={`${formId}price`}
             name="price"
@@ -204,6 +263,7 @@ export const EditListingPricingFormComponent = props => (
             currencyConfig={appSettings.getCurrencyFormatting(marketplaceCurrency)}
             validate={priceValidators}
           />
+
           <div className={css.optionalPerkFee}>
             Optional: Add up to 3 additional perks
             {/* (ex: Perk name: “unlimited coffee,” | Price:
@@ -224,13 +284,21 @@ export const EditListingPricingFormComponent = props => (
                 onChange={e => {
                   const perkNameOne = e.target.value;
                   form.change('perkNameOne', perkNameOne);
-                  console.log(234, values.perkNameOne, perkNameOne);
+
                   if (perkNameOne === '') {
                     form.change('perkNameOnePrice', undefined);
                     form.change('perkNameOnePriceVal', undefined);
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
                   }
+                  form.resetFieldState('perkNameOne');
                 }}
+                // onBlur={e => {
+                //   if ((e.target.value = '')) {
+                //     form.blur(perkNameOnePrice);
+                //     form.focus(perkNameOnePrice);
+                //   }
+                //   //   setFieldActive({ shippingChargeCustom: false });
+                // }}
               />
               {/* <FieldCurrencyInput
                 id="perkNameOnePrice"
@@ -252,9 +320,9 @@ export const EditListingPricingFormComponent = props => (
                 values={values}
                 placeholder="Price"
                 disabled={values.perkNameOne ? false : true}
-                validate={perkPriceValidators(values.perkNameOne)}
                 formatedshippingCharge={formatedPerkNameOnePrice}
                 setFormatedShippingCharge={setFormatedPerkNameOnePrice}
+                customValidationError={perkPriceOneError}
               />
             </div>
             <div className={css.perksField}>
@@ -267,12 +335,13 @@ export const EditListingPricingFormComponent = props => (
                 onChange={e => {
                   const perkNameTwo = e.target.value;
                   form.change('perkNameTwo', perkNameTwo);
-                  console.log(234, values.perkNameTwo, perkNameTwo);
+
                   if (perkNameTwo === '') {
                     form.change('perkNameTwoPrice', undefined);
                     form.change('perkNameTwoPriceVal', undefined);
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
                   }
+                  form.resetFieldState('perkNameTwo');
                 }}
               />
               {/* <FieldCurrencyInput
@@ -293,9 +362,9 @@ export const EditListingPricingFormComponent = props => (
                 values={values}
                 placeholder="Price"
                 disabled={values.perkNameTwo ? false : true}
-                validate={perkPriceValidators(values.perkNameTwo)}
                 formatedshippingCharge={formatedPerkNameTwoPrice}
                 setFormatedShippingCharge={setFormatedPerkNameTwoPrice}
+                customValidationError={perkPriceTwoError}
               />
             </div>
             <div className={css.perksField}>
@@ -308,12 +377,13 @@ export const EditListingPricingFormComponent = props => (
                 onChange={e => {
                   const perkNameThree = e.target.value;
                   form.change('perkNameThree', perkNameThree);
-                  console.log(234, values.perkNameThree, perkNameThree);
+
                   if (perkNameThree === '') {
                     form.change('perkNameThreePrice', undefined);
                     form.change('perkNameThreePriceVal', undefined);
                     // perkValueRef.current = [...(perkValueRef.current || []), 'perkNameOnePrice'];
                   }
+                  form.resetFieldState('perkNameThree');
                 }}
               />
               {/* <FieldCurrencyInput
@@ -334,9 +404,9 @@ export const EditListingPricingFormComponent = props => (
                 values={values}
                 placeholder="Price"
                 disabled={values.perkNameThree ? false : true}
-                validate={perkPriceValidators(values.perkNameThree)}
                 formatedshippingCharge={formatedPerkNameThreePrice}
                 setFormatedShippingCharge={setFormatedPerkNameThreePrice}
+                customValidationError={perkPriceThreeError}
               />
             </div>
           </div>
@@ -361,6 +431,31 @@ export const EditListingPricingFormComponent = props => (
             onChange={restrictTextReservation}
             validate={required}
           />
+
+          <div className={classNames(css.optionalPerkFee, css.GuestOption)}>
+            In person payment method
+          </div>
+
+          <FieldSelect
+            id="prefferedPaymentMethod"
+            name="prefferedPaymentMethod"
+            className={css.listingTypeSelect}
+            label={intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodTitle' })}
+            validate={validators.required(
+              intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodRequired' })
+            )}
+          >
+            <option disabled value="">
+              {intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodPlaceholder' })}
+            </option>
+            {paymentMethodValues.map(({ option, label }) => {
+              return (
+                <option key={option} value={option}>
+                  {label}
+                </option>
+              );
+            })}
+          </FieldSelect>
 
           <Button
             className={css.submitButton}

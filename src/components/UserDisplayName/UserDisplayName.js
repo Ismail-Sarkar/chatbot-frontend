@@ -17,6 +17,8 @@ const UserDisplayName = props => {
   const userIsBanned = hasAttributes && user.attributes.banned;
   const userHasProfile = hasAttributes && user.attributes.profile;
   const userDisplayName = userHasProfile && user.attributes.profile.displayName;
+  const fullName = userHasProfile && user.attributes.profile?.publicData?.fullName;
+  // user.attributes.profile.displayName;
 
   const deletedUserDisplayNameInUse = deletedUserDisplayName
     ? deletedUserDisplayName
@@ -30,7 +32,9 @@ const UserDisplayName = props => {
         id: 'UserDisplayName.banned',
       });
 
-  const displayName = userDisplayName
+  const displayName = fullName
+    ? fullName
+    : userDisplayName
     ? userDisplayName
     : userIsDeleted
     ? deletedUserDisplayNameInUse

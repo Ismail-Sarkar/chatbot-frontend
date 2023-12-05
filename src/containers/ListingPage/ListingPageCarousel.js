@@ -114,6 +114,7 @@ export const ListingPageComponent = props => {
     onInitializeCardPaymentData,
     config,
     routeConfiguration,
+    listingTimeZone,
   } = props;
 
   // prop override makes testing a bit easier
@@ -350,7 +351,10 @@ export const ListingPageComponent = props => {
               listingId={currentListing.id}
               mapsConfig={config.maps}
             />
-            {publicData.entryRules && <Rules publicData={publicData} />}
+            {publicData.rulesValOption &&
+              !Object.values(publicData.rulesValOption).every(value => value === false) && (
+                <Rules publicData={publicData} />
+              )}
 
             <SectionReviews reviews={reviews} fetchReviewsError={fetchReviewsError} />
             <SectionAuthorMaybe
@@ -402,6 +406,7 @@ export const ListingPageComponent = props => {
               marketplaceCurrency={config.currency}
               dayCountAvailableForBooking={config.stripe.dayCountAvailableForBooking}
               marketplaceName={config.marketplaceName}
+              listingTimeZone={listingTimeZone}
             />
           </div>
         </div>
@@ -510,6 +515,7 @@ const mapStateToProps = state => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
     inquiryModalOpenForListingId,
+    listingTimeZone,
   } = state.ListingPage;
   const { currentUser } = state.user;
 
@@ -541,6 +547,7 @@ const mapStateToProps = state => {
     fetchLineItemsError,
     sendInquiryInProgress,
     sendInquiryError,
+    listingTimeZone,
   };
 };
 

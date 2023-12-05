@@ -126,8 +126,20 @@ export const emailFormatValid = message => value => {
   return value && EMAIL_RE.test(value) ? VALID : message;
 };
 
+export const signupCodeValid = message => value => {
+  return value && value.toLowerCase() === 'adventurelypartner' ? VALID : message;
+};
+
 export const moneySubUnitAmountAtLeast = (message, minValue) => value => {
   return value instanceof Money && value.amount >= minValue ? VALID : message;
+};
+
+export const moneySubUnitAmountAtLeastForPerk = (message, minValue) => value => {
+  console.log(555, minValue, value);
+  // return value instanceof Money && value.amount >= minValue ? VALID : message
+  return value && parseFloat(value.toString().replace(/[^0-9.-]+/g, '')) > minValue
+    ? VALID
+    : message;
 };
 
 const parseNum = str => {

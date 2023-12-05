@@ -40,6 +40,7 @@ import css from './BookingDatesForm.module.css';
 import { SingleDatePicker } from 'react-dates';
 import MuiMultiSelect from '../../MuiMultiSelect/MuiMultiSelect';
 import moment from 'moment';
+import momentTz from 'moment-timezone';
 import { isArray } from 'lodash';
 
 const TODAY = new Date();
@@ -390,8 +391,6 @@ const handleFormSpyChange = (
     formValues.values && formValues.values.bookingDates ? formValues.values.bookingDates : {};
   const { additionalGuest, extraPerk } = formValues.values || {};
 
-  console.log(additionalGuest, guestMaxForListing, 332);
-
   if (
     startDate &&
     endDate &&
@@ -521,6 +520,7 @@ export const BookingDatesFormComponent = props => {
           form,
           listing,
           userNativeLang,
+          listingTimeZone,
         } = fieldRenderProps;
 
         const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
@@ -626,12 +626,15 @@ export const BookingDatesFormComponent = props => {
             // form.change('selectedbookingDates', { date: value.date, endDate: value.date });
             form.change('bookingDates', {
               startDate: new Date(
-                moment(value.date)
+                momentTz(value.date)
+                  .tz(listingTimeZone)
                   .clone()
                   .startOf('day')
               ),
+
               endDate: new Date(
-                moment(value.date)
+                momentTz(value.date)
+                  .tz(listingTimeZone)
                   .clone()
                   .startOf('day')
                   .add(1, 'days')
@@ -667,8 +670,6 @@ export const BookingDatesFormComponent = props => {
             guestMaxForListing > 1 ? 'guests' : 'guest'
           } can be added`
         );
-
-        console.log(334, values);
 
         return (
           <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
@@ -1036,7 +1037,7 @@ export const BookingDatesFormComponent = props => {
               id="additionalGuest"
               isDayBlocked={isDayBlocked}
               // isOutsideRange={isOutsideRange}
-              label="Additional Guests"
+              label="Additional Guests?"
               placeholder={'Enter additional guests'}
               onChange={handleAdditionalGuestChange}
               validate={validateGuestInput}
