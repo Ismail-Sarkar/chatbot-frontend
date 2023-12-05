@@ -1,9 +1,10 @@
 import pick from 'lodash/pick';
-import { initiatePrivileged, transitionPrivileged } from '../../util/api';
+import { apiBaseUrl, initiatePrivileged, transitionPrivileged } from '../../util/api';
 import { denormalisedResponseEntities } from '../../util/data';
 import { storableError } from '../../util/errors';
 import * as log from '../../util/log';
 import { fetchCurrentUserHasOrdersSuccess, fetchCurrentUser } from '../../ducks/user.duck';
+import axios from 'axios';
 
 // ================ Action types ================ //
 
@@ -263,11 +264,12 @@ export const initiateOrder = (
   }
 };
 
-export const confirmPayment = (transactionId, transitionName, transitionParams = {}) => (
-  dispatch,
-  getState,
-  sdk
-) => {
+export const confirmPayment = (
+  transactionId,
+  transitionName,
+  transitionParams = {},
+  currency
+) => async (dispatch, getState, sdk) => {
   dispatch(confirmPaymentRequest());
 
   const bodyParams = {
@@ -276,8 +278,15 @@ export const confirmPayment = (transactionId, transitionName, transitionParams =
     params: transitionParams,
   };
 
+  const { data } = await axios.get(
+    `${apiBaseUrl()}/api/currency/latestExchangeCodeOfCurrency/${currency}`
+  );
+
+  const { rate: exchangeCode } = data || {};
+  const params = { protectedData: { acceptedCurrency: currency, exchangeCode } };
+
   return sdk.transactions
-    .transition(bodyParams)
+    .transition({ ...bodyParams, params })
     .then(response => {
       const order = response.data.data;
       dispatch(confirmPaymentSuccess(order.id));

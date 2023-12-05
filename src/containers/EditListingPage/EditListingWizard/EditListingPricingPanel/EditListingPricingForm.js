@@ -489,13 +489,11 @@ export const EditListingPricingFormComponent = props => (
                   intl.formatMessage({ id: 'EditListingPricingForm.currencyRequired' })
                 )}
               >
-                <option disabled value="">
-                  {/* {intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodPlaceholder' })} */}
-                </option>
-                {currencyList.map(val => {
+                <option disabled value=""></option>
+                {currencyList.map(({ key, value }) => {
                   return (
-                    <option key={val} value={val}>
-                      {val}
+                    <option key={key} value={key}>
+                      {value}
                     </option>
                   );
                 })}

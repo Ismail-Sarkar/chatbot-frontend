@@ -49,3 +49,26 @@ module.exports.getLatestCurrencyExchangeCode = async req => {
     throw new CustomError(err);
   }
 };
+
+module.exports.getLatestCurrencyExchangeCodeOfCurrency = async currency => {
+  try {
+    const currencyExchangeData = await CurrencyExchangeCode.findOne(
+      {},
+      { _id: 0, baseCurrency: 1, rates: 1, date: 1 }
+    )
+      .sort({ createdAt: -1 })
+      .limit(1);
+
+    if (!currencyExchangeData) {
+      // Handle the case where no data is found
+      return null;
+    }
+
+    // Extract the exchange rate for the specific currency
+    const exchangeRate = currencyExchangeData.rates[currency];
+
+    return { currency: currency, rate: exchangeRate };
+  } catch (err) {
+    throw new CustomError(err);
+  }
+};
