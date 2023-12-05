@@ -112,10 +112,14 @@
 
 .currencyTitle {
   font-weight: var(--fontWeightSemiBold);
-  line-height: 16px;
+  /* line-height: 16px; */
   margin-top: 0;
   margin-bottom: 0;
   padding-top: 3px;
   padding-bottom: 13px;
+   color: #000;
+    max-width: 470px;
+    font-size: 18px;
+    line-height: 25px;
   /* font-size: 13px; */
 }
