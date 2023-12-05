@@ -24,14 +24,14 @@
   margin-bottom: 24px;
 
   @media (--viewportMedium) {
-    margin-bottom:10px;
+    margin-bottom: 10px;
   }
-  & > label{
-    margin-bottom:15px;
-    margin-top:15px;
-    padding:0 !important;
+  & > label {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 0 !important;
   }
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     margin-bottom: 15px;
   }
 }
@@ -49,7 +49,7 @@
 .perksField {
   display: flex;
   /* justify-content: space-between; */
-  column-gap:20px;
+  column-gap: 20px;
   margin-bottom: 10px;
   & div:nth-child(1) {
     flex-basis: 60%;
@@ -57,27 +57,27 @@
   & div:nth-child(2) {
     flex-basis: 30%;
   }
-  @media(max-width:767px){
-    flex-direction:column;
-    column-gap:0;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    column-gap: 0;
     /* row-gap:20px; */
     row-gap: 10px;
     margin-bottom: 15px;
   }
 }
 .optionalPerkFee {
-   font-size: 28px;
-    line-height: 40px;
-    padding: 1px 0 7px 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    font-weight: 700;
-    padding-bottom: 0;
-    margin-top: 15px;
-    @media(max-width:767px){
+  font-size: 28px;
+  line-height: 40px;
+  padding: 1px 0 7px 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: 700;
+  padding-bottom: 0;
+  margin-top: 15px;
+  @media (max-width: 767px) {
     font-size: 18px;
     line-height: 26px;
-    margin-top:20px;
+    margin-top: 20px;
   }
 }
 .guests {
@@ -85,13 +85,13 @@
   & input {
     width: 100%;
     max-width: 30%;
-    @media(max-width:767px){
-      max-width:none;
-      margin-bottom:15px;
+    @media (max-width: 767px) {
+      max-width: none;
+      margin-bottom: 15px;
     }
   }
-  & > label{
-   margin-top:0 !important;
+  & > label {
+    margin-top: 0 !important;
   }
 }
 .perkNameExample {
@@ -99,9 +99,23 @@
   font-weight: 600;
   margin-bottom: 13px;
 }
-.GuestOption{
-  margin-top:15px;
-  @media(max-width:767px){
-    margin-top:20px;
+.GuestOption {
+  margin-top: 15px;
+  @media (max-width: 767px) {
+    margin-top: 20px;
   }
+}
+
+.currencyContainer {
+  margin-top: 15px;
+}
+
+.currencyTitle {
+  font-weight: var(--fontWeightSemiBold);
+  line-height: 16px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 3px;
+  padding-bottom: 13px;
+  /* font-size: 13px; */
 }

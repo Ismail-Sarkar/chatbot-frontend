@@ -1,13 +1,13 @@
 const { default: axios } = require('axios');
 const moment = require('moment');
-const { setCurrencyExchangeCode } = require('../mongoCollections/CurrencyExchanngeCode');
+const { setCurrencyExchangeCode } = require('../models/CurrencyExchangeCode');
 const accessKey = process.env.CURRENCY_API_KEY;
 const baseCurrency = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
 
 module.exports.fecthCurrency = async () => {
   try {
     const response = await axios.get(
-      `https://api.apilayer.com/exchangerates_data/latest?base=${baseCurrency}&symbols=AUD, NZD, USD, EUR, FJD, WST, TOP`,
+      `https://api.apilayer.com/exchangerates_data/latest?base=${baseCurrency}`,
       {
         headers: {
           apikey: accessKey,
