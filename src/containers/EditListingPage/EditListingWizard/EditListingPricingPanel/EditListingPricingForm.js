@@ -19,6 +19,7 @@ import {
   FieldCurrencyInput,
   FieldTextInput,
   FieldSelect,
+  FieldRadioButton,
 } from '../../../../components';
 
 // Import modules from this directory
@@ -98,6 +99,9 @@ export const EditListingPricingFormComponent = props => (
       // console.log(3, listingMinimumPriceSubUnits);
       const PERK_MAX_LENGTH = 50;
       const VALID = undefined;
+
+      const config = useConfiguration();
+      const { currencyList } = config.listing || {};
 
       const [formatedPerkNameOnePrice, setFormatedPerkNameOnePrice] = useState(null);
       const [formatedPerkNameTwoPrice, setFormatedPerkNameTwoPrice] = useState(null);
@@ -456,6 +460,48 @@ export const EditListingPricingFormComponent = props => (
               );
             })}
           </FieldSelect>
+
+          <div className={css.currencyContainer}>
+            <div className={css.currencyTitle}>
+              What currency do you want customers to pay you the balance for this day pass in?
+            </div>
+            <FieldRadioButton
+              id={`currencyOption_USD`}
+              name="preferredCurrency"
+              label="USD"
+              value="USD"
+              // showAsRequired={showAsRequired}
+            />
+            <FieldRadioButton
+              id={`currencyOption_Other`}
+              name="preferredCurrency"
+              label="A currency that is not USD"
+              value="other"
+              // showAsRequired={showAsRequired}
+            />
+            {values?.preferredCurrency === 'other' && (
+              <FieldSelect
+                id="currency"
+                name="currency"
+                className={css.listingTypeSelect}
+                label={intl.formatMessage({ id: 'EditListingPricingForm.chooseCurrency' })}
+                validate={validators.required(
+                  intl.formatMessage({ id: 'EditListingPricingForm.currencyRequired' })
+                )}
+              >
+                <option disabled value="">
+                  {/* {intl.formatMessage({ id: 'EditListingPricingForm.paymentMethodPlaceholder' })} */}
+                </option>
+                {currencyList.map(val => {
+                  return (
+                    <option key={val} value={val}>
+                      {val}
+                    </option>
+                  );
+                })}
+              </FieldSelect>
+            )}
+          </div>
 
           <Button
             className={css.submitButton}

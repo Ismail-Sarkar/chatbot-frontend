@@ -191,7 +191,6 @@ const EditListingDetailsFormComponent = props => (
         submitInProgress ||
         values.pub_amenities === undefined ||
         values.pub_amenities.length === 0;
-      console.log(78, values.pub_amenities);
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           <ErrorMessage fetchErrors={fetchErrors} />

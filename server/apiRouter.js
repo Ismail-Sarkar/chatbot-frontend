@@ -27,12 +27,27 @@ const getUserTypeByEmail = require('./api/getUserTypeByEmail');
 const currencyExchangeCode = require('./controllers/currencyExchange');
 const { fetchByUserName, checkAvailabilityOfUserName } = require('./api/userName');
 const { getUniqueId } = require('./controllers/nanoIdController');
+const { fecthCurrency } = require('./cron-jobs/currencyUpdater');
+const { cronScheduler, cronTimers } = require('./api-util/cronSchedular');
 
 const router = express.Router();
+
+const fetchCur = async () => {
+  try {
+    const data = await fecthCurrency();
+    console.log(data);
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 //==============Mongo db connection=================//
 
 require('./mongo-config');
+
+//============cron tab scheduler =================//
+cronScheduler(cronTimers.everyMidnight, fetchCur);
+// fetchCur();
 
 // ================ API router middleware: ================ //
 
