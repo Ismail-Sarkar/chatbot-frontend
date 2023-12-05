@@ -20,6 +20,7 @@ import {
   FieldTextInput,
   FieldSelect,
   FieldRadioButton,
+  FieldCheckbox,
 } from '../../../../components';
 
 // Import modules from this directory
@@ -479,6 +480,7 @@ export const EditListingPricingFormComponent = props => (
               value="other"
               // showAsRequired={showAsRequired}
             />
+
             {values?.preferredCurrency === 'other' && (
               <FieldSelect
                 id="currency"
