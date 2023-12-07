@@ -105,10 +105,10 @@ const TransitionMessage = props => {
     </InlineTextButton>
   ) : showReviewAsSecondLink ? (
     <InlineTextButton onClick={onOpenReviewModal}>
-      <FormattedMessage
+      {/* <FormattedMessage
         id="TransactionPage.ActivityFeed.reviewAsSecondLink"
         values={{ otherUsersName }}
-      />
+      /> */}
     </InlineTextButton>
   ) : null;
 
