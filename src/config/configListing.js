@@ -945,10 +945,10 @@ export const currencyList = [
     key: 'UGX',
     value: 'UGX UGX',
   },
-  {
-    key: 'USD',
-    value: 'USD $',
-  },
+  // {
+  //   key: 'USD',
+  //   value: 'USD $',
+  // },
   {
     key: 'UYU',
     value: 'UYU $U',
