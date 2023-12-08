@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { arrayOf, bool, func, object, oneOfType, shape, string } from 'prop-types';
 
 // Import contexts and util modules
@@ -36,6 +36,8 @@ import MobileListingImage from './MobileListingImage';
 import MobileOrderBreakdown from './MobileOrderBreakdown';
 
 import css from './CheckoutPage.module.css';
+import axios from 'axios';
+import { apiBaseUrl } from '../../util/api.js';
 
 // Stripe PaymentIntent statuses, where user actions are already completed
 // https://stripe.com/docs/payments/payment-intents/status
@@ -301,6 +303,8 @@ export const CheckoutPageWithPayment = props => {
   // Initialized stripe library is saved to state - if it's needed at some point here too.
   const [stripe, setStripe] = useState(null);
 
+  const [exchangeCode, setExchangeCode] = useState(1);
+
   const {
     scrollingDisabled,
     speculateTransactionError,
@@ -333,6 +337,19 @@ export const CheckoutPageWithPayment = props => {
   const { listing, transaction, orderData } = pageData;
   const existingTransaction = ensureTransaction(transaction);
   const speculatedTransaction = ensureTransaction(speculatedTransactionMaybe, {}, listing);
+  const currency = listing?.attributes?.publicData?.currency;
+
+  useEffect(() => {
+    const loadExchangeCode = async () => {
+      const { data } = await axios.get(
+        `${apiBaseUrl()}/api/currency/latestExchangeCodeOfCurrency/${currency}`
+      );
+
+      const { rate: exchangeCode } = data || {};
+      setExchangeCode(exchangeCode);
+    };
+    loadExchangeCode();
+  }, []);
 
   // If existing transaction has line-items, it has gone through one of the request-payment transitions.
   // Otherwise, we try to rely on speculatedTransaction for order breakdown data.
@@ -354,7 +371,13 @@ export const CheckoutPageWithPayment = props => {
       <OrderBreakdown
         className={css.orderBreakdown}
         userRole="customer"
-        transaction={tx}
+        transaction={{
+          ...tx,
+          attributes: {
+            ...tx.attributes,
+            protectedData: { acceptedCurrency: currency, exchangeCode },
+          },
+        }}
         {...txBookingMaybe}
         currency={config.currency}
         marketplaceName={config.marketplaceName}

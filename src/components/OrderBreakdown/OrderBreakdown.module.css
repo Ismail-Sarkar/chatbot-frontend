@@ -175,3 +175,10 @@
   font-size: 19px;
   line-height: 20px;
 }
+
+.convertedRate {
+  margin-top: 10px;
+  text-align: center;
+  text-decoration: underline;
+  font-size: 18px;
+}

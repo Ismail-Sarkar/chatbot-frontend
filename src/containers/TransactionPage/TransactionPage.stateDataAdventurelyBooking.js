@@ -81,7 +81,7 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
         allowMessaging: true,
       };
     })
-    .cond([states.DELIVERED, _], () => {
+    .cond([states.DELIVERED, CUSTOMER], () => {
       return {
         processName,
         processState,
@@ -89,6 +89,17 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
         showReviewAsFirstLink: true,
         showActionButtons: true,
         primaryButtonProps: leaveReviewProps,
+        allowMessaging: true,
+      };
+    })
+    .cond([states.DELIVERED, PROVIDER], () => {
+      return {
+        processName,
+        processState,
+        showDetailCardHeadings: true,
+        showReviewAsFirstLink: false,
+        showActionButtons: false,
+        // primaryButtonProps: leaveReviewProps,
         allowMessaging: true,
       };
     })
@@ -109,8 +120,8 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
         processState,
         showDetailCardHeadings: true,
         showReviewAsSecondLink: true,
-        showActionButtons: true,
-        primaryButtonProps: leaveReviewProps,
+        showActionButtons: false,
+        // primaryButtonProps: leaveReviewProps,
         allowMessaging: true,
       };
     })
