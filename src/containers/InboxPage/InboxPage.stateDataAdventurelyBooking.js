@@ -25,7 +25,7 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
       return { processName, processState, actionNeeded: true, isSaleNotification: true };
     })
     .cond([states.ACCEPTED, _], () => {
-      return { processName, processState, actionNeeded: true };
+      return { processName, processState, actionNeeded: true,isAccepted:true };
     })
     .cond([states.DECLINED, _], () => {
       return { processName, processState, isFinal: true };
