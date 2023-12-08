@@ -376,6 +376,7 @@ class ProfileSettingsFormComponent extends Component {
                 </h3>
                 <div className={css.inputContainer}>
                   <div className={css.label}>{`${ROOT_URL}/@`}</div>
+                  
                   <FieldTextInput
                     type="text"
                     id="profileUrl"

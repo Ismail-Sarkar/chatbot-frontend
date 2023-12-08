@@ -97,6 +97,15 @@
         & > input{
           background-color:#fff !important;
         }
+        & > div:nth-child(3){
+          position: static;
+          top: 0;
+          & > button{
+            & > svg{
+              font-size: 16px;
+            }
+          }
+        }
       }
     }
   }
