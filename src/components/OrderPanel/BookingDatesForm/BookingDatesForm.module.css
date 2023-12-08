@@ -98,11 +98,11 @@
           background-color:#fff !important;
         }
         & > div:nth-child(3){
-          position: static;
-          top: 0;
+          position: static !important;
+          top: 0 !important;
           & > button{
             & > svg{
-              font-size: 16px;
+              font-size: 16px !important;
             }
           }
         }
