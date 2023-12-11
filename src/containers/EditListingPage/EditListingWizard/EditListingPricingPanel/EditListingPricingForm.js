@@ -223,18 +223,14 @@ export const EditListingPricingFormComponent = props => (
       // console.log(34, values.perkNameOne, values.perkNameOnePrice);
       const { updateListingError, showListingsError } = fetchErrors || {};
       const restrictText = e => {
-        const value = e.target.value;
-
-        // Use a regular expression to allow only numeric characters
-        const numericValue = value.replace(/[^0-9]/g, '');
-        form.change('guests', numericValue);
+        const updatedTargetValue = e.target.value.replace(/[^0-9\.]/, '');
+        if (updatedTargetValue === '') form.change('guests', undefined);
+        else form.change('guests', updatedTargetValue);
       };
       const restrictTextReservation = e => {
-        const value = e.target.value;
-
-        // Use a regular expression to allow only numeric characters
-        const numericValue = value.replace(/[^0-9]/g, '');
-        form.change('reserVations', numericValue);
+        const updatedTargetValue = e.target.value.replace(/[^0-9\.]/, '');
+        if (updatedTargetValue === '') form.change('reserVations', undefined);
+        else form.change('reserVations', updatedTargetValue);
       };
       const perkPriceValue = func => {
         func();
@@ -418,7 +414,7 @@ export const EditListingPricingFormComponent = props => (
           <div className={classNames(css.optionalPerkFee, css.GuestOption)}>Guests</div>
           <FieldTextInput
             className={css.guests}
-            type="number"
+            type="text"
             name="guests"
             id="guests"
             label="Enter the maximum total number of guests you’ll accept per reservation*"
@@ -428,7 +424,7 @@ export const EditListingPricingFormComponent = props => (
           />
           <FieldTextInput
             className={css.guests}
-            type="number"
+            type="text"
             name="reserVations"
             id="reserVations"
             label="Enter the maximum number of reservations you’ll accept per day*"

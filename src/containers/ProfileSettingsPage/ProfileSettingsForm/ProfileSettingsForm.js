@@ -210,6 +210,8 @@ class ProfileSettingsFormComponent extends Component {
             !this.state.isProfileUrlAvailable ||
             this.state.profileUrlAvailabilityCheckInProgress;
 
+          const isPartner = currentUser?.attributes?.profile?.publicData?.userType === 'partner';
+
           return (
             <Form
               className={classes}
@@ -335,7 +337,7 @@ class ProfileSettingsFormComponent extends Component {
                   />
                 </div>
               </div>
-              {currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
+              {isPartner && (
                 <>
                   <div className={css.sectionContainer}>
                     <H4 as="h2" className={css.sectionTitle}>
@@ -347,6 +349,31 @@ class ProfileSettingsFormComponent extends Component {
                       name="businessName"
                       // label={bioLabel}
                       placeholder={businessNamePlaceholder}
+                      validate={validators.required(
+                        intl.formatMessage({
+                          id: 'SignupForm.businessNameRequired',
+                        })
+                      )}
+                    />
+                  </div>
+                  <div className={css.sectionContainer}>
+                    <H4 as="h2" className={css.sectionTitle}>
+                      <FormattedMessage id="SignupForm.businessRoleLabel" />
+                    </H4>
+
+                    <FieldTextInput
+                      type="text"
+                      id={'businessRole'}
+                      name="businessRole"
+                      autoComplete="businessRole"
+                      placeholder={intl.formatMessage({
+                        id: 'SignupForm.businessRolePlaceholder',
+                      })}
+                      validate={validators.required(
+                        intl.formatMessage({
+                          id: 'SignupForm.businessRoleRequired',
+                        })
+                      )}
                     />
                   </div>
                   <div className={classNames(css.sectionContainer)}>
@@ -370,72 +397,74 @@ class ProfileSettingsFormComponent extends Component {
                 </>
               )}
 
-              <div className={classNames(css.sectionContainer, css.lastSection)}>
-                <h3 className={css.sectionTitle}>
-                  <FormattedMessage id="ProfileSettingsForm.profileUrlName" />
-                </h3>
-                <div className={css.inputContainer}>
-                  <div className={css.label}>{`${ROOT_URL}/@`}</div>
-                  
-                  <FieldTextInput
-                    type="text"
-                    id="profileUrl"
-                    name="profileUrl"
-                    className={css.inpField}
-                    // className={classNames(css.inputs, css.interLightSemiSmallBlack, {
-                    //   [css.invalidInputs]: touched.profileUrl && !!errors.profileUrl,
-                    //   [css.fnNonEmptyInputs]: !!values.profileUrl || active === 'profileUrl',
-                    // })}
-                    // label={profileUrlLabel}
-                    placeholder={profileUrlPlaceholder}
-                    onChange={e => {
-                      form.change('profileUrl', e.target.value.replace(/\s/g, '').toLowerCase());
-                    }}
-                    // onFocus={e =>
-                    //   this.setState({
-                    //     profileUrlAvailabilityCheckInProgress: true,
-                    //   })
-                    // }
-                    onBlur={async e => {
-                      if (initialValues.profileUrl === values.profileUrl) return;
-                      this.setState({
-                        profileUrlAvailabilityCheckInProgress: true,
-                      });
-                      axios
-                        .get(`${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${e.target.value}`)
-                        .then(resp => {
-                          if (resp?.status === 200) {
-                            this.setState({ isProfileUrlAvailable: true });
-                          }
-                          this.setState({
-                            profileUrlAvailabilityCheckInProgress: false,
-                          });
-                        })
-                        .catch(err => {
-                          this.setState({
-                            profileUrlAvailabilityCheckInProgress: false,
-                          });
-                          if (err?.response?.status === 409) {
-                            this.setState({ isProfileUrlAvailable: false });
-                          }
+              {isPartner && (
+                <div className={classNames(css.sectionContainer, css.lastSection)}>
+                  <h3 className={css.sectionTitle}>
+                    <FormattedMessage id="ProfileSettingsForm.profileUrlName" />
+                  </h3>
+                  <div className={css.inputContainer}>
+                    <div className={css.label}>{`${ROOT_URL}/@`}</div>
+
+                    <FieldTextInput
+                      type="text"
+                      id="profileUrl"
+                      name="profileUrl"
+                      className={css.inpField}
+                      // className={classNames(css.inputs, css.interLightSemiSmallBlack, {
+                      //   [css.invalidInputs]: touched.profileUrl && !!errors.profileUrl,
+                      //   [css.fnNonEmptyInputs]: !!values.profileUrl || active === 'profileUrl',
+                      // })}
+                      // label={profileUrlLabel}
+                      placeholder={profileUrlPlaceholder}
+                      onChange={e => {
+                        form.change('profileUrl', e.target.value.replace(/\s/g, '').toLowerCase());
+                      }}
+                      // onFocus={e =>
+                      //   this.setState({
+                      //     profileUrlAvailabilityCheckInProgress: true,
+                      //   })
+                      // }
+                      onBlur={async e => {
+                        if (initialValues.profileUrl === values.profileUrl) return;
+                        this.setState({
+                          profileUrlAvailabilityCheckInProgress: true,
                         });
-                    }}
-                  />
-                </div>
-                {!this.state.isProfileUrlAvailable ? (
-                  <div className={css.errMsg}>
-                    <FormattedMessage id="profilesettingForm.profileUrlNotAvailable" />
+                        axios
+                          .get(`${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${e.target.value}`)
+                          .then(resp => {
+                            if (resp?.status === 200) {
+                              this.setState({ isProfileUrlAvailable: true });
+                            }
+                            this.setState({
+                              profileUrlAvailabilityCheckInProgress: false,
+                            });
+                          })
+                          .catch(err => {
+                            this.setState({
+                              profileUrlAvailabilityCheckInProgress: false,
+                            });
+                            if (err?.response?.status === 409) {
+                              this.setState({ isProfileUrlAvailable: false });
+                            }
+                          });
+                      }}
+                    />
                   </div>
-                ) : // <p className={css.info}>
-                //   <FormattedMessage id="ProfileSettingsForm.profileUrlInfo" />
-                // </p>
-                null}
-                <div className={css.info}>
-                  <FormattedMessage id="profilesettingForm.profileUrlInfo" />
-                  <br />
-                  <FormattedMessage id="profilesettingForm.profileUrlInfoEx" />
+                  {!this.state.isProfileUrlAvailable ? (
+                    <div className={css.errMsg}>
+                      <FormattedMessage id="profilesettingForm.profileUrlNotAvailable" />
+                    </div>
+                  ) : // <p className={css.info}>
+                  //   <FormattedMessage id="ProfileSettingsForm.profileUrlInfo" />
+                  // </p>
+                  null}
+                  <div className={css.info}>
+                    <FormattedMessage id="profilesettingForm.profileUrlInfo" />
+                    <br />
+                    <FormattedMessage id="profilesettingForm.profileUrlInfoEx" />
+                  </div>
                 </div>
-              </div>
+              )}
 
               {submitError}
               <Button

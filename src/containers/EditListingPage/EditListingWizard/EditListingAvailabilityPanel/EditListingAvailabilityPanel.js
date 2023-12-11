@@ -542,7 +542,7 @@ const EditListingAvailabilityPanel = props => {
           </section>
           <section className={css.electricRules}>
             <div className={css.entryRulesTitle}>
-              Electrical outlet availability description for guests
+              Electrical outlet availability description for guests*
             </div>
             {electricalOutletOption.map(option => (
               <div>

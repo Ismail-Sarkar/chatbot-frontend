@@ -164,6 +164,7 @@ export const MainContent = props => {
 
   const { publicData } = user?.attributes?.profile || {};
   const { profileUrl = null } = publicData || {};
+  const isPartner = publicData?.userType === 'partner';
 
   const listingsContainerClasses = classNames(css.listingsContainer, {
     [css.withBioMissingAbove]: !hasBio,
@@ -179,7 +180,10 @@ export const MainContent = props => {
   return (
     <div>
       <H2 as="h1" className={css.desktopHeading}>
-        <FormattedMessage id="ProfilePage.desktopHeading" values={{ name: businessname }} />
+        <FormattedMessage
+          id="ProfilePage.desktopHeading"
+          values={{ name: businessname ?? displayName }}
+        />
       </H2>
       {profileUrl && (
         <div className={css.profileUrl}>
@@ -201,11 +205,13 @@ export const MainContent = props => {
           </ul>
         </div>
       ) : null}
-      {isMobileLayout ? (
-        <MobileReviews reviews={reviews} queryReviewsError={queryReviewsError} />
-      ) : (
-        <DesktopReviews reviews={reviews} queryReviewsError={queryReviewsError} />
-      )}
+      {isPartner ? (
+        isMobileLayout ? (
+          <MobileReviews reviews={reviews} queryReviewsError={queryReviewsError} />
+        ) : (
+          <DesktopReviews reviews={reviews} queryReviewsError={queryReviewsError} />
+        )
+      ) : null}
     </div>
   );
 };
@@ -220,7 +226,10 @@ const ProfilePageComponent = props => {
   const { bio, displayName } = profileUser?.attributes?.profile || {};
   const businessname = profileUser?.attributes?.profile?.publicData?.businessName;
 
-  const schemaTitleVars = { name: displayName, marketplaceName: config.marketplaceName };
+  const schemaTitleVars = {
+    name: businessname ?? displayName,
+    marketplaceName: config.marketplaceName,
+  };
   const schemaTitle = intl.formatMessage({ id: 'ProfilePage.schemaTitle' }, schemaTitleVars);
 
   if (userShowError && userShowError.status === 404) {
