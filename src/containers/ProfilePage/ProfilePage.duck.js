@@ -30,6 +30,7 @@ export const QUERY_REVIEWS_ERROR = 'app/ProfilePage/QUERY_REVIEWS_ERROR';
 const initialState = {
   userId: null,
   userListingRefs: [],
+  userShowSuccess: false,
   userShowError: null,
   queryListingsError: null,
   reviews: [],
@@ -44,7 +45,7 @@ export default function profilePageReducer(state = initialState, action = {}) {
     case SHOW_USER_REQUEST:
       return { ...state, userShowError: null, userId: payload.userId };
     case SHOW_USER_SUCCESS:
-      return state;
+      return { ...state, userShowSuccess: true };
     case SHOW_USER_ERROR:
       return { ...state, userShowError: payload };
 

@@ -1,1 +1,1 @@
-Your booking request was accepted
+Your booking request for a remote workday pass on {{marketplace.name}} has been accepted
