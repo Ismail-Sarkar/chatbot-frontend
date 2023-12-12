@@ -243,75 +243,77 @@ class ProfileSettingsFormComponent extends Component {
                   });
               }}
             >
-              {/* <div className={css.sectionContainer}>
-                <H4 as="h2" className={css.sectionTitle}>
-                  <FormattedMessage id="ProfileSettingsForm.yourProfilePicture" />
-                </H4>
-                <Field
-                  accept={ACCEPT_IMAGES}
-                  id="profileImage"
-                  name="profileImage"
-                  label={chooseAvatarLabel}
-                  type="file"
-                  form={null}
-                  uploadImageError={uploadImageError}
-                  disabled={uploadInProgress}
-                >
-                  {fieldProps => {
-                    const { accept, id, input, label, disabled, uploadImageError } = fieldProps;
-                    const { name, type } = input;
-                    const onChange = e => {
-                      const file = e.target.files[0];
-                      form.change(`profileImage`, file);
-                      form.blur(`profileImage`);
-                      if (file != null) {
-                        const tempId = `${file.name}_${Date.now()}`;
-                        onImageUpload({ id: tempId, file });
+              {isPartner && (
+                <div className={css.sectionContainer}>
+                  <H4 as="h2" className={css.sectionTitle}>
+                    <FormattedMessage id="ProfileSettingsForm.yourProfilePicture" />
+                  </H4>
+                  <Field
+                    accept={ACCEPT_IMAGES}
+                    id="profileImage"
+                    name="profileImage"
+                    label={chooseAvatarLabel}
+                    type="file"
+                    form={null}
+                    uploadImageError={uploadImageError}
+                    disabled={uploadInProgress}
+                  >
+                    {fieldProps => {
+                      const { accept, id, input, label, disabled, uploadImageError } = fieldProps;
+                      const { name, type } = input;
+                      const onChange = e => {
+                        const file = e.target.files[0];
+                        form.change(`profileImage`, file);
+                        form.blur(`profileImage`);
+                        if (file != null) {
+                          const tempId = `${file.name}_${Date.now()}`;
+                          onImageUpload({ id: tempId, file });
+                        }
+                      };
+
+                      let error = null;
+
+                      if (isUploadImageOverLimitError(uploadImageError)) {
+                        error = (
+                          <div className={css.error}>
+                            <FormattedMessage id="ProfileSettingsForm.imageUploadFailedFileTooLarge" />
+                          </div>
+                        );
+                      } else if (uploadImageError) {
+                        error = (
+                          <div className={css.error}>
+                            <FormattedMessage id="ProfileSettingsForm.imageUploadFailed" />
+                          </div>
+                        );
                       }
-                    };
 
-                    let error = null;
-
-                    if (isUploadImageOverLimitError(uploadImageError)) {
-                      error = (
-                        <div className={css.error}>
-                          <FormattedMessage id="ProfileSettingsForm.imageUploadFailedFileTooLarge" />
+                      return (
+                        <div className={css.uploadAvatarWrapper}>
+                          <label className={css.photoLabel} htmlFor={id}>
+                            {label}
+                          </label>
+                          <input
+                            accept={accept}
+                            id={id}
+                            name={name}
+                            className={css.uploadAvatarInput}
+                            disabled={disabled}
+                            onChange={onChange}
+                            type={type}
+                          />
+                          {error}
                         </div>
                       );
-                    } else if (uploadImageError) {
-                      error = (
-                        <div className={css.error}>
-                          <FormattedMessage id="ProfileSettingsForm.imageUploadFailed" />
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <div className={css.uploadAvatarWrapper}>
-                        <label className={css.label} htmlFor={id}>
-                          {label}
-                        </label>
-                        <input
-                          accept={accept}
-                          id={id}
-                          name={name}
-                          className={css.uploadAvatarInput}
-                          disabled={disabled}
-                          onChange={onChange}
-                          type={type}
-                        />
-                        {error}
-                      </div>
-                    );
-                  }}
-                </Field>
-                <div className={css.tip}>
-                  <FormattedMessage id="ProfileSettingsForm.tip" />
+                    }}
+                  </Field>
+                  {/* <div className={css.tip}>
+                    <FormattedMessage id="ProfileSettingsForm.tip" />
+                  </div> */}
+                  <div className={css.fileInfo}>
+                    <FormattedMessage id="ProfileSettingsForm.fileInfo" />
+                  </div>
                 </div>
-                <div className={css.fileInfo}>
-                  <FormattedMessage id="ProfileSettingsForm.fileInfo" />
-                </div>
-              </div> */}
+              )}
               <div className={css.sectionContainer}>
                 <H4 as="h2" className={css.sectionTitle}>
                   <FormattedMessage id="ProfileSettingsForm.yourName" />

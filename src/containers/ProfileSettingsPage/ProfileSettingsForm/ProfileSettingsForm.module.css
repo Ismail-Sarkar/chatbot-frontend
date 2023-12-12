@@ -322,3 +322,16 @@
   word-break: break-all;
   font-size: 14px;
 }
+
+.photoLabel {
+  background-color: #fff;
+  word-break: break-word;
+
+  padding: 14px;
+  padding-right: 0px;
+  pointer-events: none;
+  color: black !important;
+  max-width: fit-content;
+  width: 100%;
+  font-size: 14px;
+}

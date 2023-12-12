@@ -497,7 +497,7 @@
   "OrderBreakdown.refund": "Refund",
   "OrderBreakdown.refundCustomerFee": "Refund {marketplaceName} fee",
   "OrderBreakdown.refundProviderFee": "Refund {marketplaceName} fee",
-  "OrderBreakdown.remainingFeeCustomer": "Pay the balance {remainingFee} USD directly to the host on your arrival date",
+  "OrderBreakdown.remainingFeeCustomer": "Pay the balance {remainingFee} USD directly to the host on your arrival date in the local currency (via today's exchange rate):",
   "OrderBreakdown.remainingFeeProvider": "You will make {remainingFee} directly from customer on arrival date",
   "OrderBreakdown.shippingFee": "Shipping",
   "OrderBreakdown.subTotal": "Subtotal",

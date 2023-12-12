@@ -17,7 +17,7 @@ function UpperLocation(props) {
 
   return (
     <div className={css.upperAddress}>
-      {manualAddress ? <div>{`${country}`}</div> : <div>{`${district}${state}${country}`}</div>}
+      {manualAddress ? <div>{`${country}`}</div> : <div>{`${district} ${state} ${country}`}</div>}
     </div>
   );
 }
