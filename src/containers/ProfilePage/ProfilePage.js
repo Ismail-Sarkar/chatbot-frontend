@@ -252,13 +252,15 @@ const ProfilePageComponent = props => {
   const { publicData } = user?.attributes?.profile || {};
   const isPartner = publicData?.userType === 'partner';
 
-  if (isEmpty(currentUser) && !isPartner && userShowSuccess && currentUserShowSuccess) {
+  if (!isPartner && userShowSuccess) {
     history.push({
-      pathname: '/login',
-      state: { from: `${location.pathname}${location.search}${location.hash}` },
+      pathname: '/',
     });
+    // history.push({
+    //   pathname: '/login',
+    //   state: { from: `${location.pathname}${location.search}${location.hash}` },
+    // });
   }
-  console.log('1566', isEmpty(currentUser), isPartner, userShowSuccess, currentUserShowSuccess);
   return userShowSuccess ? (
     <Page
       scrollingDisabled={scrollingDisabled}
