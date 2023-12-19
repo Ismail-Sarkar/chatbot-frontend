@@ -156,12 +156,25 @@ export const EditListingLocationFormComponent = props => (
             validClassName={css.validLocation}
             autoFocus={autoFocus}
             name="location"
-            label={intl.formatMessage({
-              id: 'EditListingLocationForm.address',
-            })}
-            placeholder={intl.formatMessage({
-              id: 'EditListingLocationForm.addressPlaceholder',
-            })}
+            label={
+              manualAddressState
+                ? intl.formatMessage(
+                    { id: 'EditListingLocationForm.manualAddress' },
+                    { optionalText }
+                  )
+                : intl.formatMessage({
+                    id: 'EditListingLocationForm.address',
+                  })
+            }
+            placeholder={
+              manualAddressState
+                ? intl.formatMessage({
+                    id: 'EditListingLocationForm.manualAddressPlaceholder',
+                  })
+                : intl.formatMessage({
+                    id: 'EditListingLocationForm.addressPlaceholder',
+                  })
+            }
             useDefaultPredictions={false}
             format={identity}
             valueFromForm={values.location}
@@ -174,16 +187,21 @@ export const EditListingLocationFormComponent = props => (
             manualAddressState={manualAddressState}
             handlecityStateCountryName={handlecityStateCountryName}
           />
-          <FieldTextInput
-            className={css.building}
-            type="text"
-            name="building"
-            id={`${formId}building`}
-            label={intl.formatMessage({ id: 'EditListingLocationForm.building' }, { optionalText })}
-            placeholder={intl.formatMessage({
-              id: 'EditListingLocationForm.buildingPlaceholder',
-            })}
-          />
+          {!manualAddressState && (
+            <FieldTextInput
+              className={css.building}
+              type="text"
+              name="building"
+              id={`${formId}building`}
+              label={intl.formatMessage(
+                { id: 'EditListingLocationForm.building' },
+                { optionalText }
+              )}
+              placeholder={intl.formatMessage({
+                id: 'EditListingLocationForm.buildingPlaceholder',
+              })}
+            />
+          )}
 
           {manualAddressState && (
             <div className={css.AddressWrap}>

@@ -73,6 +73,5 @@ LocationAutocompleteInputComponent.propTypes = {
 export default LocationAutocompleteInputImpl;
 
 export const FieldLocationAutocompleteInput = props => {
-  console.log(8877, props);
   return <Field component={LocationAutocompleteInputComponent} {...props} />;
 };
