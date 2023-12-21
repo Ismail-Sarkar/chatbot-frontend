@@ -113,12 +113,12 @@ const dateFormattingOptions = { month: 'short', day: 'numeric', weekday: 'short'
 
 const PriceMaybe = props => {
   const { price, publicData, validListingTypes, intl } = props;
-  const {
-    listingType,
-    unitType,
-    availableStartTime: { label: startTimeLabel },
-    availableEndTime: { label: endTimeLabel },
-  } = publicData || { availableStartTime: {}, availableEndTime: {} };
+  const { listingType, unitType, availableStartTime, availableEndTime } = publicData || {
+    availableStartTime: { label: {} },
+    availableEndTime: { label: {} },
+  };
+  const { label: startTimeLabel } = availableStartTime || {};
+  const { label: endTimeLabel } = availableEndTime || {};
 
   const foundListingTypeConfig = validListingTypes.find(conf => conf.listingType === listingType);
   const showPrice = displayPrice(foundListingTypeConfig);
