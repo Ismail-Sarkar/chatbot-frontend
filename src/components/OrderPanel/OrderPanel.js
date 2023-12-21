@@ -113,7 +113,12 @@ const dateFormattingOptions = { month: 'short', day: 'numeric', weekday: 'short'
 
 const PriceMaybe = props => {
   const { price, publicData, validListingTypes, intl } = props;
-  const { listingType, unitType } = publicData || {};
+  const {
+    listingType,
+    unitType,
+    availableStartTime: { label: startTimeLabel },
+    availableEndTime: { label: endTimeLabel },
+  } = publicData || { availableStartTime: {}, availableEndTime: {} };
 
   const foundListingTypeConfig = validListingTypes.find(conf => conf.listingType === listingType);
   const showPrice = displayPrice(foundListingTypeConfig);
@@ -129,12 +134,14 @@ const PriceMaybe = props => {
           <FormattedMessage id="OrderPanel.perUnit" values={{ unitType }} />
         </div> */}
       </div>
-      <div className={css.durationMainDiv}>
-        <div className={css.timeDuration}>Duration</div>
-        <div
-          className={css.timeDuration}
-        >{`${publicData.availableStartTime?.label}-${publicData.availableEndTime?.label}`}</div>
-      </div>
+      {startTimeLabel && endTimeLabel && (
+        <div className={css.durationMainDiv}>
+          <div className={css.timeDuration}>Duration</div>
+          <div
+            className={css.timeDuration}
+          >{`${publicData.availableStartTime?.label}-${publicData.availableEndTime?.label}`}</div>
+        </div>
+      )}
     </>
   );
 };

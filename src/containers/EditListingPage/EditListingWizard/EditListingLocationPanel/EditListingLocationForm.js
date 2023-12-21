@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { bool, func, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
@@ -60,6 +60,10 @@ export const EditListingLocationFormComponent = props => (
       const [manualAddressState, setManualAddressState] = useState(
         initialValues.manualAddress || false
       );
+      useEffect(() => {
+        setManualAddressState(initialValues?.manualAddress);
+      }, [initialValues]);
+
       const changeCheckBoxValue = (formName, state) => {
         setManualAddressState(state);
         form.change(formName, state);
@@ -203,11 +207,10 @@ export const EditListingLocationFormComponent = props => (
             />
           )}
 
-          {manualAddressState && (
+          {manualAddressState && values?.location?.selectedPlace && (
             <div className={css.AddressWrap}>
               <div className={css.AddressDiv}>
                 <span className={css.manualAddress}>
-                  {' '}
                   Manually enter the address for your remote work day pass*
                 </span>
               </div>
