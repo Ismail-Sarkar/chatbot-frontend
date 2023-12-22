@@ -13,7 +13,7 @@ function ManualAddress(props) {
   return (
     <div className={css.mannualAddressOuter}>
       <div className={css.mannualAddressInner}>
-        <div>{`${street}${country}${zip}`}</div>
+        <div>{`${street} ${country} ${zip}`}</div>
       </div>
     </div>
   );

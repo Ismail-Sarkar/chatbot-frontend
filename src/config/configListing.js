@@ -294,7 +294,7 @@ export const enforceValidListingType = false;
 export const availablePaymentMethods = [
   {
     key: 'creditDebitCash',
-    label: 'Credit/debit card or cash',
+    label: 'Credit/debit card and cash',
     value: 'creditDebitCash',
     option: 'creditDebitCash',
   },

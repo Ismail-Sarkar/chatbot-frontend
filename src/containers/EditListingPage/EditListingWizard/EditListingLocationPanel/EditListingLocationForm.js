@@ -11,6 +11,7 @@ import {
   autocompleteSearchRequired,
   autocompletePlaceSelected,
   composeValidators,
+  required,
 } from '../../../../util/validators';
 
 // Import shared components
@@ -93,9 +94,9 @@ export const EditListingLocationFormComponent = props => (
       const handleZipChange = e => {
         const value = e.target.value;
 
-        // Use a regular expression to allow only numeric characters
-        const numericValue = value.replace(/[^0-9]/g, '');
-        form.change('zip', numericValue);
+        // Use a regular expression to allow only alphanumeric characters and limit the length to 9 characters
+        const alphanumericValue = value.replace(/[^a-zA-Z0-9]/g, '').substring(0, 9);
+        form.change('zip', alphanumericValue);
       };
       const handlecityStateCountryName = valueFromMap => {
         const { context } = valueFromMap;
@@ -221,6 +222,11 @@ export const EditListingLocationFormComponent = props => (
                 id="street"
                 // label="Street Address"
                 placeholder="Street"
+                validate={required(
+                  intl.formatMessage({
+                    id: 'EditListingDetailsForm.streetRequired',
+                  })
+                )}
               />
               <FieldTextInput
                 className={css.building}
@@ -229,6 +235,11 @@ export const EditListingLocationFormComponent = props => (
                 id="cityStateCountry"
                 // label="City State and Country"
                 placeholder="City State and Country"
+                validate={required(
+                  intl.formatMessage({
+                    id: 'EditListingDetailsForm.countryRequired',
+                  })
+                )}
               />
               <FieldTextInput
                 className={css.building}
@@ -238,6 +249,11 @@ export const EditListingLocationFormComponent = props => (
                 // label="Zipcode"
                 placeholder="Zipcode"
                 onChange={handleZipChange}
+                validate={required(
+                  intl.formatMessage({
+                    id: 'EditListingDetailsForm.zipRequired',
+                  })
+                )}
               />
             </div>
           )}
@@ -247,7 +263,7 @@ export const EditListingLocationFormComponent = props => (
             inProgress={submitInProgress}
             // disabled={values?. ? false : !values?.location?.selectedPlace?.address}
             disabled={
-              values?.location?.selectedPlace?.address
+              invalid || values?.location?.selectedPlace?.address
                 ? !values?.location?.selectedPlace?.address
                 : values?.manualAddress
                 ? isEqual(
