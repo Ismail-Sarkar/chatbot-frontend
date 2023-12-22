@@ -263,7 +263,9 @@ export const EditListingLocationFormComponent = props => (
             inProgress={submitInProgress}
             // disabled={values?. ? false : !values?.location?.selectedPlace?.address}
             disabled={
-              invalid || values?.location?.selectedPlace?.address
+              invalid
+                ? invalid
+                : values?.location?.selectedPlace?.address
                 ? !values?.location?.selectedPlace?.address
                 : values?.manualAddress
                 ? isEqual(
