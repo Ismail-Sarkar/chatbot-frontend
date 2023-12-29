@@ -108,11 +108,12 @@ export const ProfileSettingsPageComponent = props => {
         footer={<FooterContainer />}
       >
         <div className={css.content}>
+          {/* {console.log('USER', user.attributes?.profile?.publicData?.userType)} */}
           <div className={css.headingContainer}>
             <H3 as="h1" className={css.heading}>
               <FormattedMessage id="ProfileSettingsPage.heading" />
             </H3>
-            {user.id ? (
+            {user.id && user.attributes?.profile?.publicData?.userType === 'partner' ? (
               <NamedLink
                 className={css.profileLink}
                 name="ProfilePage"
