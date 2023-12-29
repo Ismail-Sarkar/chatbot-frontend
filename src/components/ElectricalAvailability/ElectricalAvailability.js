@@ -68,7 +68,7 @@ const ElectricalAvailability = props => {
               <IconCheck isVisible={true} />
             </span>
             <div className={css.labelWrapper}>
-              Several outlets are available - arrive with your laptop/phone charge
+              Several outlets are available - you can charge your laptop/phone
             </div>
           </div>
         ) : null}
