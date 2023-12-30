@@ -1071,7 +1071,9 @@ export const BookingDatesFormComponent = props => {
               <PrimaryButton
                 type="submit"
                 inProgress={fetchLineItemsInProgress}
-                disabled={parseInt(values?.additionalGuest) > parseInt(guestMaxForListing)}
+                disabled={
+                  parseInt(values?.additionalGuest) > parseInt(guestMaxForListing) || isOwnListing
+                }
               >
                 <FormattedMessage id="BookingDatesForm.requestToBook" />
               </PrimaryButton>
