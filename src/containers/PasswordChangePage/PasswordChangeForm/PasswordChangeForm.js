@@ -10,7 +10,7 @@ import * as validators from '../../../util/validators';
 import { ensureCurrentUser } from '../../../util/data';
 import { isChangePasswordWrongPassword } from '../../../util/errors';
 
-import { Form, PrimaryButton, FieldTextInput, H4 } from '../../../components';
+import { Form, PrimaryButton, FieldTextInput, H4, Button } from '../../../components';
 
 import css from './PasswordChangeForm.module.css';
 
@@ -231,14 +231,14 @@ class PasswordChangeFormComponent extends Component {
               </div>
               <div className={css.bottomWrapper}>
                 {genericFailure}
-                <PrimaryButton
+                <Button
                   type="submit"
                   inProgress={inProgress}
                   ready={ready}
                   disabled={submitDisabled}
                 >
                   <FormattedMessage id="PasswordChangeForm.saveChanges" />
-                </PrimaryButton>
+                </Button>
               </div>
             </Form>
           );

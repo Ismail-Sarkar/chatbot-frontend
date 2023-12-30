@@ -11,7 +11,14 @@ import classNames from 'classnames';
 import { useConfiguration } from '../../../context/configurationContext';
 import { FormattedMessage, useIntl, intlShape } from '../../../util/reactIntl';
 
-import { Form, PrimaryButton, FieldTextInput, StripePaymentAddress, H4 } from '../../../components';
+import {
+  Form,
+  PrimaryButton,
+  FieldTextInput,
+  StripePaymentAddress,
+  H4,
+  Button,
+} from '../../../components';
 
 import css from './PaymentMethodsForm.module.css';
 
@@ -271,14 +278,14 @@ class PaymentMethodsForm extends Component {
               {hasErrors.message ? hasErrors.message : errorMessage}
             </span>
           ) : null}
-          <PrimaryButton
+          <Button
             className={css.submitButton}
             type="submit"
             inProgress={submitInProgress}
             disabled={submitDisabled}
           >
             <FormattedMessage id="PaymentMethodsForm.submitPaymentInfo" />
-          </PrimaryButton>
+          </Button>
         </div>
       </Form>
     ) : (
