@@ -153,6 +153,9 @@ export class TransactionPanelComponent extends Component {
     const isCustomer = transactionRole === 'customer';
     const isProvider = transactionRole === 'provider';
 
+    const otherUserPartner =
+      customer?.attributes?.profile?.publicData?.userType === 'partner' ? true : false;
+
     const listingDeleted = !!listing?.attributes?.deleted;
     const isCustomerBanned = !!customer?.attributes?.banned;
     const isCustomerDeleted = !!customer?.attributes?.deleted;
@@ -226,7 +229,11 @@ export class TransactionPanelComponent extends Component {
             />
             {isProvider ? (
               <div className={css.avatarWrapperProviderDesktop}>
-                <AvatarLarge user={customer} className={css.avatarDesktop} />
+                <AvatarLarge
+                  user={customer}
+                  className={css.avatarDesktop}
+                  disableProfileLink={!otherUserPartner && true}
+                />
               </div>
             ) : null}
             <PanelHeading
