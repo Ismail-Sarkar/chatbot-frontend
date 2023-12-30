@@ -461,7 +461,7 @@ const OrderPanel = props => {
               history,
               location
             )}
-            disabled={isOutOfStock}
+            disabled={isOutOfStock || isOwnListing}
           >
             {isBooking ? (
               <FormattedMessage id="OrderPanel.ctaButtonMessageBooking" />
