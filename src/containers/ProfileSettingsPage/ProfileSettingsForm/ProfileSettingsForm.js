@@ -39,9 +39,48 @@ class ProfileSettingsFormComponent extends Component {
       uploadDelay: false,
       profileUrlAvailabilityCheckInProgress: false,
       isProfileUrlAvailable: true,
+      isFocused: false,
     };
     this.submittedValues = {};
   }
+
+  handleFocus = () => {
+    this.setState({
+      isFocused: true,
+    });
+  };
+
+  handleBlur = async e => {
+    if (this.props.initialValues.profileUrl === e.target.value) {
+      this.setState({
+        isFocused: false,
+        profileUrlAvailabilityCheckInProgress: false,
+      });
+      return;
+    }
+
+    this.setState({
+      isFocused: false,
+      profileUrlAvailabilityCheckInProgress: true,
+    });
+
+    try {
+      const resp = await axios.get(
+        `${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${e.target.value}`
+      );
+      if (resp?.status === 200) {
+        this.setState({ isProfileUrlAvailable: true });
+      }
+    } catch (err) {
+      if (err?.response?.status === 409) {
+        this.setState({ isProfileUrlAvailable: false });
+      }
+    } finally {
+      this.setState({
+        profileUrlAvailabilityCheckInProgress: false,
+      });
+    }
+  };
 
   componentDidUpdate(prevProps) {
     // Upload delay is additional time window where Avatar is added to the DOM,
@@ -208,7 +247,8 @@ class ProfileSettingsFormComponent extends Component {
             uploadInProgress ||
             submitInProgress ||
             !this.state.isProfileUrlAvailable ||
-            this.state.profileUrlAvailabilityCheckInProgress;
+            this.state.profileUrlAvailabilityCheckInProgress ||
+            this.state.isFocused;
 
           const isPartner = currentUser?.attributes?.profile?.publicData?.userType === 'partner';
 
@@ -426,30 +466,8 @@ class ProfileSettingsFormComponent extends Component {
                       //     profileUrlAvailabilityCheckInProgress: true,
                       //   })
                       // }
-                      onBlur={async e => {
-                        if (initialValues.profileUrl === values.profileUrl) return;
-                        this.setState({
-                          profileUrlAvailabilityCheckInProgress: true,
-                        });
-                        axios
-                          .get(`${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${e.target.value}`)
-                          .then(resp => {
-                            if (resp?.status === 200) {
-                              this.setState({ isProfileUrlAvailable: true });
-                            }
-                            this.setState({
-                              profileUrlAvailabilityCheckInProgress: false,
-                            });
-                          })
-                          .catch(err => {
-                            this.setState({
-                              profileUrlAvailabilityCheckInProgress: false,
-                            });
-                            if (err?.response?.status === 409) {
-                              this.setState({ isProfileUrlAvailable: false });
-                            }
-                          });
-                      }}
+                      onFocus={this.handleFocus}
+                      onBlur={this.handleBlur}
                     />
                   </div>
                   {!this.state.isProfileUrlAvailable ? (
