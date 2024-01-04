@@ -304,7 +304,7 @@ export const availablePaymentMethods = [
     value: 'creditDebit',
     option: 'creditDebit',
   },
-  { key: 'cash', label: 'Cash only', value: 'cash', option: 'cash' },
+  { key: 'cash', label: 'cash only', value: 'cash', option: 'cash' },
 ];
 export const electricalOutletOption = [
   {
