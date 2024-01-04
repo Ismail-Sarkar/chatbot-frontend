@@ -321,7 +321,8 @@ export const electricalOutletOption = [
   },
   {
     key: 'severalOutletsAvailable',
-    label: 'Several outlets are available - you can charge your laptop/phone',
+    label:
+      'Several outlets are available - but it’s recommended to still arrive with your laptop charged',
     value: 'severalOutletsAvailable',
     option: 'severalOutletsAvailable',
   },
