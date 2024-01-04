@@ -287,9 +287,19 @@ export class SearchPageComponent extends Component {
       listingFieldsConfig,
       activeListingTypes
     );
-    const availablePrimaryFilters = [...customPrimaryFilters, ...defaultFilters];
+    const customDataWithoutAmenities =
+      customPrimaryFilters?.filter(({ key }) => key !== 'amenities') || [];
+    const hostedAmenities = customPrimaryFilters?.find(({ key }) => key === 'amenities') || [];
+
+    const modifiedAmenities = {
+      ...hostedAmenities,
+      filterConfig: { ...hostedAmenities.filterConfig, searchMode: 'has_any' },
+    };
+
+    const modifiedCustomPrimaryFilters = [modifiedAmenities, ...customDataWithoutAmenities];
+    const availablePrimaryFilters = [...modifiedCustomPrimaryFilters, ...defaultFilters];
     const availableFilters = [
-      ...customPrimaryFilters,
+      ...modifiedCustomPrimaryFilters,
       ...defaultFilters,
       ...customSecondaryFilters,
     ];
@@ -640,11 +650,6 @@ const mapDispatchToProps = dispatch => ({
 // lifecycle hook.
 //
 // See: https://github.com/ReactTraining/react-router/issues/4671
-const SearchPage = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-)(EnhancedSearchPage);
+const SearchPage = compose(connect(mapStateToProps, mapDispatchToProps))(EnhancedSearchPage);
 
 export default SearchPage;
