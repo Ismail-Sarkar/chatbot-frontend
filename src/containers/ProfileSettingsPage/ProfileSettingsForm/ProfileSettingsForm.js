@@ -428,6 +428,11 @@ class ProfileSettingsFormComponent extends Component {
                       name="bio"
                       label={bioLabel}
                       placeholder={bioPlaceholder}
+                      validate={validators.required(
+                        intl.formatMessage({
+                          id: 'ProfileSettingsForm.bioIsRequired',
+                        })
+                      )}
                     />
                     <p className={css.bioInfo}>
                       <FormattedMessage
