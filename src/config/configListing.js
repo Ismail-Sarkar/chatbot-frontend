@@ -294,13 +294,13 @@ export const enforceValidListingType = false;
 export const availablePaymentMethods = [
   {
     key: 'creditDebitCash',
-    label: 'Credit/debit card and cash',
+    label: 'credit/debit card and cash',
     value: 'creditDebitCash',
     option: 'creditDebitCash',
   },
   {
     key: 'creditDebit',
-    label: 'Credit/debit card only',
+    label: 'credit/debit card only',
     value: 'creditDebit',
     option: 'creditDebit',
   },
