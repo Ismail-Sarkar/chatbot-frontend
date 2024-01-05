@@ -294,17 +294,17 @@ export const enforceValidListingType = false;
 export const availablePaymentMethods = [
   {
     key: 'creditDebitCash',
-    label: 'credit/debit card and cash',
+    label: 'Credit/debit card and cash',
     value: 'creditDebitCash',
     option: 'creditDebitCash',
   },
   {
     key: 'creditDebit',
-    label: 'credit/debit card only',
+    label: 'Credit/debit card only',
     value: 'creditDebit',
     option: 'creditDebit',
   },
-  { key: 'cash', label: 'cash only', value: 'cash', option: 'cash' },
+  { key: 'cash', label: 'Cash only', value: 'cash', option: 'cash' },
 ];
 export const electricalOutletOption = [
   {
