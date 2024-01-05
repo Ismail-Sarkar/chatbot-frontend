@@ -34,7 +34,9 @@ const UserDisplayName = props => {
         id: 'UserDisplayName.banned',
       });
 
-  const displayName = fullName
+  const displayName = userHasBusinessName
+    ? userHasBusinessName
+    : fullName
     ? fullName
     : userDisplayName
     ? userDisplayName
