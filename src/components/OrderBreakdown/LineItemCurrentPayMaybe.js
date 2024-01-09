@@ -70,10 +70,18 @@ function LineItemCurrentPayMaybe(props) {
         )
       ) : (
         <>
-          <FormattedMessage
-            id="OrderBreakdown.remainingFeeCustomer"
-            values={{ remainingFee: formattedMoneyLabel }}
-          />
+          {exchangeCode && currency && currencyLabel && currency !== 'USD' ? (
+            <FormattedMessage
+              id="OrderBreakdown.remainingFeeCustomerForeignCurrency"
+              values={{ remainingFee: formattedMoneyLabel }}
+            />
+          ) : (
+            <FormattedMessage
+              id="OrderBreakdown.remainingFeeCustomer"
+              values={{ remainingFee: formattedMoneyLabel }}
+            />
+          )}
+
           <br />
           {exchangeCode && currency && currencyLabel && currency !== 'USD' && (
             <div className={css.convertedRate}>
