@@ -189,7 +189,8 @@ export const MainContent = props => {
       </H2>
       {profileUrl && (
         <div className={css.profileUrl}>
-          <CopyText text={`${MARKETPLACE_URL}/${profileUrl}`} />
+          <a href={`${MARKETPLACE_URL}/${profileUrl}`}>{profileUrl}</a>
+          {/* <CopyText text={`${MARKETPLACE_URL}/${profileUrl}`} /> */}
         </div>
       )}
       {hasBio ? <p className={css.bio}>{bio}</p> : null}
