@@ -70,6 +70,7 @@ export const EditListingLocationFormComponent = props => (
         form.change(formName, state);
 
         form.change('location', {});
+        form.change('building', null);
       };
 
       const addressRequiredMessage = intl.formatMessage({
@@ -99,7 +100,7 @@ export const EditListingLocationFormComponent = props => (
         form.change('zip', alphanumericValue);
       };
       const handlecityStateCountryName = valueFromMap => {
-        const { context } = valueFromMap;
+        const { context = [] } = valueFromMap;
         const country = context.find(c => {
           const cId = c.id.split('.')[0];
           return cId === 'country';
@@ -207,7 +208,6 @@ export const EditListingLocationFormComponent = props => (
               })}
             />
           )}
-
           {manualAddressState && values?.location?.selectedPlace && (
             <div className={css.AddressWrap}>
               <div className={css.AddressDiv}>

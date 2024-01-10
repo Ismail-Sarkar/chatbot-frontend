@@ -114,9 +114,9 @@ const EditListingLocationPanel = props => {
                   building,
                 },
                 mapLocation: {
-                  country: mapLocation.country ? mapLocation.country.text : null,
-                  state: mapLocation.state ? mapLocation.state.text : null,
-                  district: mapLocation.district ? mapLocation.district.text : null,
+                  country: mapLocation?.country ? mapLocation?.country.text : null,
+                  state: mapLocation?.state ? mapLocation?.state.text : null,
+                  district: mapLocation?.district ? mapLocation?.district.text : null,
                 },
                 manualAddress: false,
                 fullManualAddress: null,
