@@ -352,7 +352,7 @@ export const ListingPageComponent = props => {
             />
 
             <SectionMapMaybe
-              geolocation={publicData?.manualAddress ? defaultLocation : geolocation}
+              geolocation={geolocation}
               publicData={publicData}
               listingId={currentListing.id}
               mapsConfig={config.maps}
