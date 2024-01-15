@@ -273,7 +273,7 @@ const EditListingDetailsPanel = props => {
 
             // New values for listing attributes
             const updateValues = {
-              title: title.trim(),
+              title: `Remote work + ${title.trim()}`,
               description,
               publicData: {
                 listingType,

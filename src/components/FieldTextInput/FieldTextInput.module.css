@@ -4,3 +4,10 @@
 .inputError {
   border: var(--borderErrorField);
 }
+.outerDiv {
+  display: flex;
+}
+.innerRemoteDiv {
+  width: 20%;
+  margin: auto;
+}

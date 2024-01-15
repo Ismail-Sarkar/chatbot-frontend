@@ -23,7 +23,7 @@
 
 .formMargins {
   margin-bottom: 15px;
-/* 
+  /* 
   @media (--viewportMedium) {
     margin-bottom: 32px;
   } */
@@ -72,10 +72,13 @@
   @media (--viewportLarge) {
     display: inline-block;
     width: 241px;
-    margin-top:50px;
-    margin-bottom:0;
+    margin-top: 50px;
+    margin-bottom: 0;
   }
-  @media(max-width:767px){
-    margin-bottom:0;
+  @media (max-width: 767px) {
+    margin-bottom: 0;
   }
+}
+.exampleTips {
+  text-decoration: underline !important;
 }
