@@ -520,6 +520,7 @@ export const TransactionPageComponent = props => {
           onManageDisableScrolling={onManageDisableScrolling}
           onSubmitReview={onSubmitReview}
           revieweeName={otherUserDisplayName}
+          provider={provider}
           reviewSent={reviewSubmitted}
           sendReviewInProgress={sendReviewInProgress}
           sendReviewError={sendReviewError}

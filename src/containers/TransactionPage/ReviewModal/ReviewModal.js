@@ -22,6 +22,7 @@ const ReviewModal = props => {
     onManageDisableScrolling,
     onSubmitReview,
     revieweeName,
+    provider,
     reviewSent,
     sendReviewInProgress,
     sendReviewError,
@@ -54,6 +55,7 @@ const ReviewModal = props => {
         reviewSent={reviewSent}
         sendReviewInProgress={sendReviewInProgress}
         sendReviewError={sendReviewError}
+        provider={provider}
       />
     </Modal>
   );

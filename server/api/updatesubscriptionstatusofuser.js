@@ -6,7 +6,7 @@ const integrationSdk = getIntegrationSdk();
 exports.updatesubscriptionstatusofuser = async (req, res) => {
   try {
     const { data } = req.body;
-    console.log(556, req.body, data.object.customer_details, data.object);
+
     // console.log('WebHook status: Hitted', req.body);
     if (data) {
       if (
