@@ -40,6 +40,9 @@ exports.updatesubscriptionstatusofuser = async (req, res) => {
 
               return accumulator;
             }, {});
+            integrationSdk.users.show({ id: data.object.client_reference_id }).then(res => {
+              console.log(res);
+            });
 
             const dataToUpdate = {
               id: data.object.client_reference_id,
