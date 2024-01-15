@@ -12,20 +12,25 @@ const marketplaceCurrency =
   process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
 
 const { createCustomPaymentIntent } = require('../api-util/stripeHelper');
+const { addTransactionDetails } = require('../api-util/transactionHelper');
 const integrationSdk = getIntegrationSdk();
 module.exports = (req, res) => {
   const { isSpeculative, orderData, bodyParams, queryParams } = req.body;
 
   const sdk = getSdk(req, res);
   let lineItems = null;
-  let stripePaymentIntents = {};
+  let stripePaymentIntents = {},
+    transactionResp,
+    customer,
+    provider;
+  const bookingStart = bodyParams.params.bookingStart;
   const paymentMethod = bodyParams?.params?.paymentMethod;
 
   const currentUserPromise = () => sdk.currentUser.show();
 
   const listingPromise = () =>
     integrationSdk.listings.show({
-      id: bodyParams?.params?.listingId,
+      id: bodyParams?.params?.listingId.uuid,
       include: ['author'],
     });
 
@@ -38,11 +43,10 @@ module.exports = (req, res) => {
       ]) => {
         const listing = showListingResponse.data.data;
         const commissionAsset = fetchAssetsResponse.data.data[0];
-        const provider = showListingResponse.data.included[0];
-        const customer = currentUserResponse.data.data;
+        provider = showListingResponse.data.included[0];
+        customer = currentUserResponse.data.data;
         const providerId = provider.id.uuid;
         const customerId = customer.id.uuid;
-        console.log(provider, customer);
 
         const providerCommission =
           commissionAsset?.type === 'jsonAsset'
@@ -99,7 +103,20 @@ module.exports = (req, res) => {
       return trustedSdk.transactions.initiate(body, queryParams);
     })
     .then(apiResponse => {
-      const { status, statusText, data } = apiResponse;
+      transactionResp = apiResponse;
+      if (isSpeculative) {
+        return Promise.resolve();
+      } else {
+        return addTransactionDetails(
+          customer,
+          provider,
+          transactionResp.data.data,
+          bookingStart
+        );
+      }
+    })
+    .then(() => {
+      const { status, statusText, data } = transactionResp;
       res
         .status(status)
         .set('Content-Type', 'application/transit+json')
