@@ -40,6 +40,7 @@ const log = require('./log');
 const { sitemapStructure } = require('./sitemap');
 const csp = require('./csp');
 const sdkUtils = require('./api-util/sdk');
+require('./mongoseConnecter').mongooseContect();
 
 const buildPath = path.resolve(__dirname, '..', 'build');
 const dev = process.env.REACT_APP_ENV === 'development';
@@ -201,7 +202,13 @@ app.get('*', (req, res) => {
   dataLoader
     .loadData(req.url, sdk, appInfo)
     .then(data => {
-      const html = renderer.render(req.url, context, data, renderApp, webExtractor);
+      const html = renderer.render(
+        req.url,
+        context,
+        data,
+        renderApp,
+        webExtractor
+      );
 
       if (dev) {
         const debugData = {
