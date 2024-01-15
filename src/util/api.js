@@ -6,6 +6,8 @@ import appSettings from '../config/settings';
 import { types as sdkTypes, transit } from './sdkLoader';
 import Decimal from 'decimal.js';
 
+const ROOT_URL = process.env.REACT_APP_MARKETPLACE_ROOT_URL;
+
 export const apiBaseUrl = () => {
   const port = process.env.REACT_APP_DEV_API_SERVER_PORT;
   const useDevApiServer = process.env.NODE_ENV === 'development' && !!port;
@@ -13,6 +15,10 @@ export const apiBaseUrl = () => {
   // In development, the dev API server is running in a different port
   if (useDevApiServer) {
     return `http://localhost:${port}`;
+  }
+
+  if (!port || typeof window == 'undefined') {
+    return `${ROOT_URL}`;
   }
 
   // Otherwise, use the same domain and port as the frontend

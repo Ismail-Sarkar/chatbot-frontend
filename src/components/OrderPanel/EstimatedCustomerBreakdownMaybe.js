@@ -25,7 +25,7 @@
  * currently the API doesn't support that for logged out users, and we
  * are forced to estimate the information here.
  */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Decimal from 'decimal.js';
 
 import { types as sdkTypes } from '../../util/sdkLoader';
@@ -44,6 +44,8 @@ import { getProcess, TX_TRANSITION_ACTOR_CUSTOMER } from '../../transactions/tra
 import { OrderBreakdown } from '../../components';
 
 import css from './OrderPanel.module.css';
+import axios from 'axios';
+import { apiBaseUrl } from '../../util/api';
 
 const { Money, UUID } = sdkTypes;
 
@@ -91,7 +93,8 @@ const estimatedCustomerTransaction = (
   process,
   processName,
   marketplaceCurrency,
-  listing
+  listing,
+  exchangeCode
 ) => {
   const transitions = process?.transitions;
   const now = new Date();
@@ -99,6 +102,7 @@ const estimatedCustomerTransaction = (
   const providerLineItems = lineItems.filter(item => item.includeFor.includes('provider'));
   const payinTotal = estimatedTotalPrice(customerLineItems, marketplaceCurrency);
   const payoutTotal = estimatedTotalPrice(providerLineItems, marketplaceCurrency);
+  const currency = listing?.attributes?.publicData?.currency;
 
   const bookingMaybe =
     bookingStart && bookingEnd
@@ -123,6 +127,10 @@ const estimatedCustomerTransaction = (
           transition: transitions.REQUEST_PAYMENT,
         },
       ],
+      protectedData: {
+        exchangeCode,
+        acceptedCurrency: currency,
+      },
     },
     listing,
     ...bookingMaybe,
@@ -140,6 +148,21 @@ const EstimatedCustomerBreakdownMaybe = props => {
     listing,
   } = props;
   const { startDate, endDate } = breakdownData;
+
+  const [exchangeCode, setExchangeCode] = useState(1);
+
+  useEffect(() => {
+    const loadExchangeCode = async () => {
+      const currency = listing?.attributes?.publicData?.currency;
+      const { data } = await axios.get(
+        `${apiBaseUrl()}/api/currency/latestExchangeCodeOfCurrency/${currency}`
+      );
+
+      const { rate: exchangeCode } = data || {};
+      setExchangeCode(exchangeCode);
+    };
+    loadExchangeCode();
+  }, []);
 
   let process = null;
   try {
@@ -171,7 +194,8 @@ const EstimatedCustomerBreakdownMaybe = props => {
           process,
           processName,
           currency,
-          listing
+          listing,
+          exchangeCode
         )
       : null;
 

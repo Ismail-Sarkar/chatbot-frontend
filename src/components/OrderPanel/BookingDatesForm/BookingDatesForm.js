@@ -303,6 +303,8 @@ const fetchMonthData = (
 ) => {
   const endOfRangeDate = endOfRange(TODAY, dayCountAvailableForBooking, timeZone);
 
+  // console.log('55555', endOfRangeDate, dayCountAvailableForBooking);
+
   // Don't fetch timeSlots for past months or too far in the future
   if (isInRange(date, TODAY, endOfRangeDate)) {
     // Use "today", if the first day of given month is in the past
@@ -328,6 +330,7 @@ const handleMonthClick = (
   listingId,
   onFetchTimeSlots
 ) => monthFn => {
+  // console.log('6666');
   // Callback function after month has been updated.
   // react-dates component has next and previous months ready (but inivisible).
   // we try to populate those invisible months before user advances there.
@@ -391,8 +394,6 @@ const handleFormSpyChange = (
     formValues.values && formValues.values.bookingDates ? formValues.values.bookingDates : {};
   const { additionalGuest, extraPerk } = formValues.values || {};
 
-  console.log(additionalGuest, guestMaxForListing, 332);
-
   if (
     startDate &&
     endDate &&
@@ -444,6 +445,13 @@ const Prev = props => {
   const { currentMonth, timeZone } = props;
   const prevMonthDate = prevMonthFn(currentMonth, timeZone);
   const currentMonthDate = getStartOf(TODAY, 'month', timeZone);
+
+  // console.log(
+  //   '7777',
+  //   prevMonthDate,
+  //   currentMonthDate,
+  //   isDateSameOrAfter(prevMonthDate, currentMonthDate)
+  // );
 
   return isDateSameOrAfter(prevMonthDate, currentMonthDate) ? <PrevIcon /> : null;
 };
@@ -515,7 +523,7 @@ export const BookingDatesFormComponent = props => {
           intl,
           lineItemUnitType,
           values,
-          monthlyTimeSlots,
+          monthlyTimeSlots = [],
           lineItems,
           fetchLineItemsError,
           onFetchTimeSlots,
@@ -524,6 +532,8 @@ export const BookingDatesFormComponent = props => {
           userNativeLang,
           listingTimeZone,
         } = fieldRenderProps;
+
+        // console.log('7777', monthlyTimeSlots);
 
         const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
         const startDateErrorMessage = intl.formatMessage({
@@ -994,28 +1004,28 @@ export const BookingDatesFormComponent = props => {
               //   return v ? { startDate: parsedStart, endDate: parsedEnd } : v;
               // }}
               initialVisibleMonth={initialVisibleMonth(startDate || startOfToday, timeZone)}
-              // navNext={
-              //   <Next
-              //     currentMonth={currentMonth}
-              //     timeZone={timeZone}
-              //     dayCountAvailableForBooking={dayCountAvailableForBooking}
-              //   />
-              // }
-              // navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
-              // onPrevMonthClick={() => {
-              //   setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
-              //   onMonthClick(prevMonthFn);
-              // }}
-              // onNextMonthClick={() => {
-              //   setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
-              //   onMonthClick(nextMonthFn);
-              // }}
+              navNext={
+                <Next
+                  currentMonth={currentMonth}
+                  timeZone={timeZone}
+                  dayCountAvailableForBooking={dayCountAvailableForBooking}
+                />
+              }
+              navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
+              onPrevMonthClick={() => {
+                setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
+                onMonthClick(prevMonthFn);
+              }}
+              onNextMonthClick={() => {
+                setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
+                onMonthClick(nextMonthFn);
+              }}
               //
               // isBlockedBetween={isBlockedBetween(monthlyTimeSlots, timeZone)}
               // disabled={fetchLineItemsInProgress}
-              onClose={event =>
-                setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
-              }
+              // onClose={event =>
+              //   setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
+              // }
             />
             {extraParkValues.length > 0 && (
               <div className={css.muiselectcontainer}>
@@ -1073,7 +1083,9 @@ export const BookingDatesFormComponent = props => {
               <PrimaryButton
                 type="submit"
                 inProgress={fetchLineItemsInProgress}
-                disabled={parseInt(values?.additionalGuest) > parseInt(guestMaxForListing)}
+                disabled={
+                  parseInt(values?.additionalGuest) > parseInt(guestMaxForListing) || isOwnListing
+                }
               >
                 <FormattedMessage id="BookingDatesForm.requestToBook" />
               </PrimaryButton>

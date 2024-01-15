@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { bool, func, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
@@ -11,6 +11,7 @@ import {
   autocompleteSearchRequired,
   autocompletePlaceSelected,
   composeValidators,
+  required,
 } from '../../../../util/validators';
 
 // Import shared components
@@ -26,6 +27,7 @@ import css from './EditListingLocationForm.module.css';
 import { useSelector } from 'react-redux';
 import { manualAddressChecked } from '../../EditListingPage.duck';
 import { isEqual } from 'lodash';
+import { createResourceLocatorString } from '../../../../util/routes';
 // import { useState } from 'react';
 
 const identity = v => v;
@@ -59,11 +61,16 @@ export const EditListingLocationFormComponent = props => (
       const [manualAddressState, setManualAddressState] = useState(
         initialValues.manualAddress || false
       );
+      useEffect(() => {
+        setManualAddressState(initialValues?.manualAddress);
+      }, [initialValues]);
+
       const changeCheckBoxValue = (formName, state) => {
         setManualAddressState(state);
         form.change(formName, state);
 
         form.change('location', {});
+        form.change('building', null);
       };
 
       const addressRequiredMessage = intl.formatMessage({
@@ -88,12 +95,12 @@ export const EditListingLocationFormComponent = props => (
       const handleZipChange = e => {
         const value = e.target.value;
 
-        // Use a regular expression to allow only numeric characters
-        const numericValue = value.replace(/[^0-9]/g, '');
-        form.change('zip', numericValue);
+        // Use a regular expression to allow only alphanumeric characters and limit the length to 9 characters
+        const alphanumericValue = value.replace(/[^a-zA-Z0-9]/g, '').substring(0, 9);
+        form.change('zip', alphanumericValue);
       };
       const handlecityStateCountryName = valueFromMap => {
-        const { context } = valueFromMap;
+        const { context = [] } = valueFromMap;
         const country = context.find(c => {
           const cId = c.id.split('.')[0];
           return cId === 'country';
@@ -119,6 +126,20 @@ export const EditListingLocationFormComponent = props => (
           onSubmit={e => {
             e.preventDefault();
             props.onSubmit(values);
+            // editListingLinkType === 'edit' &&
+            //   history.push(
+            //     createResourceLocatorString(
+            //       'EditListingPage',
+            //       routeConfiguration,
+            //       {
+            //         id,
+            //         slug,
+            //         type: editListingLinkType,
+            //         tab: 'location',
+            //       },
+            //       {}
+            //     )
+            //   );
           }}
         >
           {updateListingError ? (
@@ -141,12 +162,25 @@ export const EditListingLocationFormComponent = props => (
             validClassName={css.validLocation}
             autoFocus={autoFocus}
             name="location"
-            label={intl.formatMessage({
-              id: 'EditListingLocationForm.address',
-            })}
-            placeholder={intl.formatMessage({
-              id: 'EditListingLocationForm.addressPlaceholder',
-            })}
+            label={
+              manualAddressState
+                ? intl.formatMessage(
+                    { id: 'EditListingLocationForm.manualAddress' },
+                    { optionalText }
+                  )
+                : intl.formatMessage({
+                    id: 'EditListingLocationForm.address',
+                  })
+            }
+            placeholder={
+              manualAddressState
+                ? intl.formatMessage({
+                    id: 'EditListingLocationForm.manualAddressPlaceholder',
+                  })
+                : intl.formatMessage({
+                    id: 'EditListingLocationForm.addressPlaceholder',
+                  })
+            }
             useDefaultPredictions={false}
             format={identity}
             valueFromForm={values.location}
@@ -159,22 +193,25 @@ export const EditListingLocationFormComponent = props => (
             manualAddressState={manualAddressState}
             handlecityStateCountryName={handlecityStateCountryName}
           />
-          <FieldTextInput
-            className={css.building}
-            type="text"
-            name="building"
-            id={`${formId}building`}
-            label={intl.formatMessage({ id: 'EditListingLocationForm.building' }, { optionalText })}
-            placeholder={intl.formatMessage({
-              id: 'EditListingLocationForm.buildingPlaceholder',
-            })}
-          />
-
-          {manualAddressState && (
+          {!manualAddressState && (
+            <FieldTextInput
+              className={css.building}
+              type="text"
+              name="building"
+              id={`${formId}building`}
+              label={intl.formatMessage(
+                { id: 'EditListingLocationForm.building' },
+                { optionalText }
+              )}
+              placeholder={intl.formatMessage({
+                id: 'EditListingLocationForm.buildingPlaceholder',
+              })}
+            />
+          )}
+          {manualAddressState && values?.location?.selectedPlace && (
             <div className={css.AddressWrap}>
               <div className={css.AddressDiv}>
                 <span className={css.manualAddress}>
-                  {' '}
                   Manually enter the address for your remote work day pass*
                 </span>
               </div>
@@ -185,6 +222,11 @@ export const EditListingLocationFormComponent = props => (
                 id="street"
                 // label="Street Address"
                 placeholder="Street"
+                validate={required(
+                  intl.formatMessage({
+                    id: 'EditListingDetailsForm.streetRequired',
+                  })
+                )}
               />
               <FieldTextInput
                 className={css.building}
@@ -193,6 +235,11 @@ export const EditListingLocationFormComponent = props => (
                 id="cityStateCountry"
                 // label="City State and Country"
                 placeholder="City State and Country"
+                validate={required(
+                  intl.formatMessage({
+                    id: 'EditListingDetailsForm.countryRequired',
+                  })
+                )}
               />
               <FieldTextInput
                 className={css.building}
@@ -202,6 +249,11 @@ export const EditListingLocationFormComponent = props => (
                 // label="Zipcode"
                 placeholder="Zipcode"
                 onChange={handleZipChange}
+                validate={required(
+                  intl.formatMessage({
+                    id: 'EditListingDetailsForm.zipRequired',
+                  })
+                )}
               />
             </div>
           )}
@@ -211,7 +263,9 @@ export const EditListingLocationFormComponent = props => (
             inProgress={submitInProgress}
             // disabled={values?. ? false : !values?.location?.selectedPlace?.address}
             disabled={
-              values?.location?.selectedPlace?.address
+              invalid
+                ? invalid
+                : values?.location?.selectedPlace?.address
                 ? !values?.location?.selectedPlace?.address
                 : values?.manualAddress
                 ? isEqual(

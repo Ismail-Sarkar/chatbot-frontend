@@ -42,13 +42,13 @@ const SectionDetailsMaybe = props => {
 
   return existingListingFields.length > 0 ? (
     <div className={css.sectionDetails}>
-      <Heading as="h2" rootClassName={css.sectionHeading}>
+      {/* <Heading as="h2" rootClassName={css.sectionHeading}>
         <FormattedMessage id="ListingPage.detailsTitle" />
-      </Heading>
+      </Heading> */}
       <ul className={css.details}>
         {existingListingFields.map(detail => (
           <li key={detail.key} className={css.detailsRow}>
-            <span className={css.detailLabel}>{detail.label}</span>
+            {/* <span className={css.detailLabel}>{detail.label}</span> */}
             <span>{detail.value}</span>
           </li>
         ))}

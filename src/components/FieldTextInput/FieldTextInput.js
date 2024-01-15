@@ -22,9 +22,10 @@ const FieldTextInputComponent = props => {
     isUncontrolled,
     inputRef,
     hideErrorMessage,
+    showDiv,
     ...rest
   } = props;
-
+  console.log(233, showDiv);
   if (label && !id) {
     throw new Error('id required when a label is given');
   }
@@ -81,7 +82,12 @@ const FieldTextInputComponent = props => {
   return (
     <div className={classes}>
       {label ? <label htmlFor={id}>{label}</label> : null}
-      {isTextarea ? <ExpandingTextarea {...inputProps} /> : <input {...inputProps} />}
+
+      <div className={css.outerDiv}>
+        {showDiv ? <div className={css.innerRemoteDiv}>Remote work +</div> : null}
+        {isTextarea ? <ExpandingTextarea {...inputProps} /> : <input {...inputProps} />}
+      </div>
+
       {hideErrorMessage ? null : <ValidationError fieldMeta={fieldMeta} />}
     </div>
   );

@@ -19,6 +19,8 @@ import {
   FieldCurrencyInput,
   FieldTextInput,
   FieldSelect,
+  FieldRadioButton,
+  FieldCheckbox,
 } from '../../../../components';
 
 // Import modules from this directory
@@ -98,6 +100,9 @@ export const EditListingPricingFormComponent = props => (
       // console.log(3, listingMinimumPriceSubUnits);
       const PERK_MAX_LENGTH = 50;
       const VALID = undefined;
+
+      const config = useConfiguration();
+      const { currencyList } = config.listing || {};
 
       const [formatedPerkNameOnePrice, setFormatedPerkNameOnePrice] = useState(null);
       const [formatedPerkNameTwoPrice, setFormatedPerkNameTwoPrice] = useState(null);
@@ -218,18 +223,14 @@ export const EditListingPricingFormComponent = props => (
       // console.log(34, values.perkNameOne, values.perkNameOnePrice);
       const { updateListingError, showListingsError } = fetchErrors || {};
       const restrictText = e => {
-        const value = e.target.value;
-
-        // Use a regular expression to allow only numeric characters
-        const numericValue = value.replace(/[^0-9]/g, '');
-        form.change('guests', numericValue);
+        const updatedTargetValue = e.target.value.replace(/[^0-9\.]/, '');
+        if (updatedTargetValue === '') form.change('guests', undefined);
+        else form.change('guests', updatedTargetValue);
       };
       const restrictTextReservation = e => {
-        const value = e.target.value;
-
-        // Use a regular expression to allow only numeric characters
-        const numericValue = value.replace(/[^0-9]/g, '');
-        form.change('reserVations', numericValue);
+        const updatedTargetValue = e.target.value.replace(/[^0-9\.]/, '');
+        if (updatedTargetValue === '') form.change('reserVations', undefined);
+        else form.change('reserVations', updatedTargetValue);
       };
       const perkPriceValue = func => {
         func();
@@ -413,7 +414,7 @@ export const EditListingPricingFormComponent = props => (
           <div className={classNames(css.optionalPerkFee, css.GuestOption)}>Guests</div>
           <FieldTextInput
             className={css.guests}
-            type="number"
+            type="text"
             name="guests"
             id="guests"
             label="Enter the maximum total number of guests you’ll accept per reservation*"
@@ -423,7 +424,7 @@ export const EditListingPricingFormComponent = props => (
           />
           <FieldTextInput
             className={css.guests}
-            type="number"
+            type="text"
             name="reserVations"
             id="reserVations"
             label="Enter the maximum number of reservations you’ll accept per day*"
@@ -456,6 +457,47 @@ export const EditListingPricingFormComponent = props => (
               );
             })}
           </FieldSelect>
+
+          <div className={css.currencyContainer}>
+            <div className={css.currencyTitle}>
+              What currency do you want customers to pay you the balance for this day pass in?
+            </div>
+            <FieldRadioButton
+              id={`currencyOption_USD`}
+              name="preferredCurrency"
+              label="USD"
+              value="USD"
+              // showAsRequired={showAsRequired}
+            />
+            <FieldRadioButton
+              id={`currencyOption_Other`}
+              name="preferredCurrency"
+              label="A currency that is not USD"
+              value="other"
+              // showAsRequired={showAsRequired}
+            />
+
+            {values?.preferredCurrency === 'other' && (
+              <FieldSelect
+                id="currency"
+                name="currency"
+                className={css.listingTypeSelect}
+                label={intl.formatMessage({ id: 'EditListingPricingForm.chooseCurrency' })}
+                validate={validators.required(
+                  intl.formatMessage({ id: 'EditListingPricingForm.currencyRequired' })
+                )}
+              >
+                <option disabled value=""></option>
+                {currencyList.map(({ key, value }) => {
+                  return (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  );
+                })}
+              </FieldSelect>
+            )}
+          </div>
 
           <Button
             className={css.submitButton}

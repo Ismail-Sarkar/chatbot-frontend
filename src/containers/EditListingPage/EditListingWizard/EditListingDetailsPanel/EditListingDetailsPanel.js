@@ -188,7 +188,7 @@ const getInitialValues = (props, existingListingType, listingTypes, listingField
 
   // Initial values for the form
   return {
-    title,
+    title: title?.replace('Remote work +', '').trim(),
     description,
     // Transaction type info: listingType, transactionProcessAlias, unitType
     ...getTransactionInfo(listingTypes, existingListingType),
@@ -273,7 +273,7 @@ const EditListingDetailsPanel = props => {
 
             // New values for listing attributes
             const updateValues = {
-              title: title.trim(),
+              title: `Remote work + ${title.trim()}`,
               description,
               publicData: {
                 listingType,

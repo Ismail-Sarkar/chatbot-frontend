@@ -217,9 +217,13 @@ export const AuthenticationForms = props => {
     <div className={css.content}>
       <LinkTabNavHorizontal className={css.tabs} tabs={tabs} />
       {loginOrSignupError}
-
       {isLogin ? (
-        <LoginForm className={css.loginForm} onSubmit={submitLogin} inProgress={authInProgress} />
+        <LoginForm
+          className={css.loginForm}
+          onSubmit={submitLogin}
+          inProgress={authInProgress}
+          isPartner={isPartner}
+        />
       ) : (
         <SignupForm
           className={css.signupForm}
@@ -228,13 +232,14 @@ export const AuthenticationForms = props => {
           termsAndConditions={termsAndConditions}
         />
       )}
-
-      <SocialLoginButtonsMaybe
-        isLogin={isLogin}
-        showFacebookLogin={showFacebookLogin}
-        showGoogleLogin={showGoogleLogin}
-        from={from}
-      />
+      {/* {isPartner ? null : (
+        <SocialLoginButtonsMaybe
+          isLogin={isLogin}
+          showFacebookLogin={showFacebookLogin}
+          showGoogleLogin={showGoogleLogin}
+          from={from}
+        />
+      )} */}
     </div>
   );
 };
@@ -416,7 +421,6 @@ export const AuthenticationPageComponent = props => {
   // (i.e. `from` is present). We must also check the `emailVerified`
   // flag only when the current user is fully loaded.
   const showEmailVerification = !isLogin && currentUserLoaded && !user.attributes.emailVerified;
-
   // Already authenticated, redirect away from auth page
   if (isAuthenticated && from) {
     return <Redirect to={from} />;

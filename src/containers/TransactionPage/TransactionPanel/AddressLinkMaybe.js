@@ -34,17 +34,18 @@ const AddressLinkMaybe = props => {
   return showAddress && hrefToGoogleMaps ? (
     manualAddress ? (
       <p className={classes}>
-        {fullManualAddress?.street} <br />
+        {`${fullManualAddress?.street}, ${fullManualAddress?.cityStateCountry}, ${fullManualAddress?.zip}`}{' '}
+        <br />
       </p>
     ) : (
-      <p className={classes}>
+      <div className={classes}>
         {fullAddress} <br />
-        <span className={css.viewOnGoogleMapsWrapper}>
+        <div className={css.viewOnGoogleMapsWrapper}>
           <ExternalLink className={linkRootClassName} href={hrefToGoogleMaps}>
             <FormattedMessage id="AddressLinkMaybe.viewOnGoogleMaps" />
           </ExternalLink>
-        </span>
-      </p>
+        </div>
+      </div>
     )
   ) : null;
 };

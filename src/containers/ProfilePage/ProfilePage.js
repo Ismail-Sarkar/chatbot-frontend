@@ -29,17 +29,21 @@ import FooterContainer from '../../containers/FooterContainer/FooterContainer';
 import NotFoundPage from '../../containers/NotFoundPage/NotFoundPage';
 
 import css from './ProfilePage.module.css';
+import CopyText from '../../components/CopyText/CopyText';
+import { isEmpty } from 'lodash';
+import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 
 const MAX_MOBILE_SCREEN_WIDTH = 768;
+const MARKETPLACE_URL = process.env.REACT_APP_MARKETPLACE_ROOT_URL;
 
 export const AsideContent = props => {
-  const { user, displayName, isCurrentUser } = props;
+  const { user, displayName, isCurrentUser, businessname } = props;
   return (
     <div className={css.asideContent}>
       <AvatarLarge className={css.avatar} user={user} disableProfileLink />
       <H2 as="h1" className={css.mobileHeading}>
-        {displayName ? (
-          <FormattedMessage id="ProfilePage.mobileHeading" values={{ name: displayName }} />
+        {businessname ? (
+          <FormattedMessage id="ProfilePage.mobileHeading" values={{ name: businessname }} />
         ) : null}
       </H2>
       {isCurrentUser ? (
@@ -79,12 +83,12 @@ export const MobileReviews = props => {
       </H4>
       <ReviewsErrorMaybe queryReviewsError={queryReviewsError} />
       <Reviews reviews={reviewsOfProvider} />
-      <H4 as="h2" className={css.mobileReviewsTitle}>
+      {/* <H4 as="h2" className={css.mobileReviewsTitle}>
         <FormattedMessage
           id="ProfilePage.reviewsAsACustomerTitle"
           values={{ count: reviewsOfCustomer.length }}
         />
-      </H4>
+      </H4> */}
       <ReviewsErrorMaybe queryReviewsError={queryReviewsError} />
       <Reviews reviews={reviewsOfCustomer} />
     </div>
@@ -111,18 +115,18 @@ export const DesktopReviews = props => {
       selected: isReviewTypeProviderSelected,
       onClick: () => setShowReviewsType(REVIEW_TYPE_OF_PROVIDER),
     },
-    {
-      text: (
-        <Heading as="h3" rootClassName={css.desktopReviewsTitle}>
-          <FormattedMessage
-            id="ProfilePage.reviewsAsACustomerTitle"
-            values={{ count: reviewsOfCustomer.length }}
-          />
-        </Heading>
-      ),
-      selected: isReviewTypeCustomerSelected,
-      onClick: () => setShowReviewsType(REVIEW_TYPE_OF_CUSTOMER),
-    },
+    // {
+    //   text: (
+    //     <Heading as="h3" rootClassName={css.desktopReviewsTitle}>
+    //       <FormattedMessage
+    //         id="ProfilePage.reviewsAsACustomerTitle"
+    //         values={{ count: reviewsOfCustomer.length }}
+    //       />
+    //     </Heading>
+    //   ),
+    //   selected: isReviewTypeCustomerSelected,
+    //   onClick: () => setShowReviewsType(REVIEW_TYPE_OF_CUSTOMER),
+    // },
   ];
 
   return (
@@ -152,11 +156,17 @@ export const MainContent = props => {
     reviews,
     queryReviewsError,
     viewport,
+    businessname,
+    user,
   } = props;
 
   const hasListings = listings.length > 0;
   const isMobileLayout = viewport.width < MAX_MOBILE_SCREEN_WIDTH;
   const hasBio = !!bio;
+
+  const { publicData } = user?.attributes?.profile || {};
+  const { profileUrl = null } = publicData || {};
+  const isPartner = publicData?.userType === 'partner';
 
   const listingsContainerClasses = classNames(css.listingsContainer, {
     [css.withBioMissingAbove]: !hasBio,
@@ -172,8 +182,17 @@ export const MainContent = props => {
   return (
     <div>
       <H2 as="h1" className={css.desktopHeading}>
-        <FormattedMessage id="ProfilePage.desktopHeading" values={{ name: displayName }} />
+        <FormattedMessage
+          id="ProfilePage.desktopHeading"
+          values={{ name: businessname ?? displayName }}
+        />
       </H2>
+      {profileUrl && (
+        <div className={css.profileUrl}>
+          <a href={`${MARKETPLACE_URL}/${profileUrl}`}>{profileUrl}</a>
+          {/* <CopyText text={`${MARKETPLACE_URL}/${profileUrl}`} /> */}
+        </div>
+      )}
       {hasBio ? <p className={css.bio}>{bio}</p> : null}
       {hasListings ? (
         <div className={listingsContainerClasses}>
@@ -189,31 +208,61 @@ export const MainContent = props => {
           </ul>
         </div>
       ) : null}
-      {isMobileLayout ? (
-        <MobileReviews reviews={reviews} queryReviewsError={queryReviewsError} />
-      ) : (
-        <DesktopReviews reviews={reviews} queryReviewsError={queryReviewsError} />
-      )}
+      {isPartner ? (
+        isMobileLayout ? (
+          <MobileReviews reviews={reviews} queryReviewsError={queryReviewsError} />
+        ) : (
+          <DesktopReviews reviews={reviews} queryReviewsError={queryReviewsError} />
+        )
+      ) : null}
     </div>
   );
 };
 
 const ProfilePageComponent = props => {
   const config = useConfiguration();
-  const { scrollingDisabled, currentUser, userShowError, user, intl, ...rest } = props;
+  const {
+    scrollingDisabled,
+    currentUser,
+    userShowError,
+    user,
+    intl,
+    userShowSuccess,
+    currentUserShowSuccess,
+    history,
+    location,
+    ...rest
+  } = props;
   const ensuredCurrentUser = ensureCurrentUser(currentUser);
   const profileUser = ensureUser(user);
   const isCurrentUser =
     ensuredCurrentUser.id && profileUser.id && ensuredCurrentUser.id.uuid === profileUser.id.uuid;
   const { bio, displayName } = profileUser?.attributes?.profile || {};
+  const businessname = profileUser?.attributes?.profile?.publicData?.businessName;
 
-  const schemaTitleVars = { name: displayName, marketplaceName: config.marketplaceName };
+  const schemaTitleVars = {
+    name: businessname ?? displayName,
+    marketplaceName: config.marketplaceName,
+  };
   const schemaTitle = intl.formatMessage({ id: 'ProfilePage.schemaTitle' }, schemaTitleVars);
 
   if (userShowError && userShowError.status === 404) {
     return <NotFoundPage />;
   }
-  return (
+
+  const { publicData } = user?.attributes?.profile || {};
+  const isPartner = publicData?.userType === 'partner';
+
+  if (!isPartner && userShowSuccess) {
+    history.push({
+      pathname: '/',
+    });
+    // history.push({
+    //   pathname: '/login',
+    //   state: { from: `${location.pathname}${location.search}${location.hash}` },
+    // });
+  }
+  return userShowSuccess ? (
     <Page
       scrollingDisabled={scrollingDisabled}
       title={schemaTitle}
@@ -227,13 +276,27 @@ const ProfilePageComponent = props => {
         sideNavClassName={css.aside}
         topbar={<TopbarContainer currentPage="ProfilePage" />}
         sideNav={
-          <AsideContent user={user} isCurrentUser={isCurrentUser} displayName={displayName} />
+          <AsideContent
+            user={user}
+            isCurrentUser={isCurrentUser}
+            displayName={displayName}
+            businessname={businessname}
+          />
         }
         footer={<FooterContainer />}
       >
-        <MainContent bio={bio} displayName={displayName} userShowError={userShowError} {...rest} />
+        <MainContent
+          bio={bio}
+          user={user}
+          displayName={displayName}
+          userShowError={userShowError}
+          businessname={businessname}
+          {...rest}
+        />
       </LayoutSideNavigation>
     </Page>
+  ) : (
+    <></>
   );
 };
 
@@ -267,7 +330,7 @@ ProfilePageComponent.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { currentUser } = state.user;
+  const { currentUser, currentUserShowSuccess } = state.user;
   const {
     userId,
     userShowError,
@@ -275,6 +338,7 @@ const mapStateToProps = state => {
     userListingRefs,
     reviews,
     queryReviewsError,
+    userShowSuccess,
   } = state.ProfilePage;
   const userMatches = getMarketplaceEntities(state, [{ type: 'user', id: userId }]);
   const user = userMatches.length === 1 ? userMatches[0] : null;
@@ -288,13 +352,16 @@ const mapStateToProps = state => {
     listings,
     reviews,
     queryReviewsError,
+    userShowSuccess,
+    currentUserShowSuccess,
   };
 };
 
 const ProfilePage = compose(
   connect(mapStateToProps),
   withViewport,
-  injectIntl
+  injectIntl,
+  withRouter
 )(ProfilePageComponent);
 
 export default ProfilePage;

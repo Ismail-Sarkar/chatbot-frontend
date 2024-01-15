@@ -294,7 +294,7 @@ export const enforceValidListingType = false;
 export const availablePaymentMethods = [
   {
     key: 'creditDebitCash',
-    label: 'Credit/debit card & cash',
+    label: 'Credit/debit card and cash',
     value: 'creditDebitCash',
     option: 'creditDebitCash',
   },
@@ -305,4 +305,725 @@ export const availablePaymentMethods = [
     option: 'creditDebit',
   },
   { key: 'cash', label: 'Cash only', value: 'cash', option: 'cash' },
+];
+export const electricalOutletOption = [
+  {
+    key: 'noOutletsAvailable',
+    label: 'No outlets available - arrive with your laptop/phone charged',
+    value: 'noOutletsAvailable',
+    option: 'noOutletsAvailable',
+  },
+  {
+    key: 'smallAmountOfOutletAvailable',
+    label: 'A small amount of outlets available - arrive with your laptop/phone charged',
+    value: 'smallAmountOfOutletAvailable',
+    option: 'smallAmountOfOutletAvailable',
+  },
+  {
+    key: 'severalOutletsAvailable',
+    label:
+      'Several outlets are available - but it’s recommended to still arrive with your laptop charged',
+    value: 'severalOutletsAvailable',
+    option: 'severalOutletsAvailable',
+  },
+];
+export const rules = [
+  {
+    key: 'noPhoneLaptopWorkCalls',
+    label: 'No phone or laptop work calls permitted while using your pass',
+    value: 'noPhoneLaptopWorkCalls',
+    option: 'noPhoneLaptopWorkCalls',
+  },
+  {
+    key: 'headphoneMust',
+    label:
+      'Headphones must be used for streaming music/audio from your phone or laptop while using your pass',
+    value: 'headphoneMust',
+    option: 'headphoneMust',
+  },
+  {
+    key: 'other',
+    label: 'Other',
+    value: 'other',
+    option: 'other',
+  },
+];
+
+export const currencyList = [
+  {
+    key: 'AED',
+    value: 'AED د.إ',
+  },
+  {
+    key: 'AFN',
+    value: 'AFN ؋',
+  },
+  {
+    key: 'ALL',
+    value: 'ALL L',
+  },
+  {
+    key: 'AMD',
+    value: 'AMD ֏',
+  },
+  {
+    key: 'ANG',
+    value: 'ANG ƒ',
+  },
+  {
+    key: 'AOA',
+    value: 'AOA Kz',
+  },
+  {
+    key: 'ARS',
+    value: 'ARS $',
+  },
+  {
+    key: 'AUD',
+    value: 'AUD $',
+  },
+  {
+    key: 'AWG',
+    value: 'AWG ƒ',
+  },
+  {
+    key: 'AZN',
+    value: 'AZN ₼',
+  },
+  {
+    key: 'BAM',
+    value: 'BAM KM',
+  },
+  {
+    key: 'BBD',
+    value: 'BBD $',
+  },
+  {
+    key: 'BDT',
+    value: 'BDT ৳',
+  },
+  {
+    key: 'BGN',
+    value: 'BGN лв',
+  },
+  {
+    key: 'BHD',
+    value: 'BHD .د.ب',
+  },
+  {
+    key: 'BIF',
+    value: 'BIF FBu',
+  },
+  {
+    key: 'BMD',
+    value: 'BMD $',
+  },
+  {
+    key: 'BND',
+    value: 'BND $',
+  },
+  {
+    key: 'BOB',
+    value: 'BOB Bs.',
+  },
+  {
+    key: 'BRL',
+    value: 'BRL R$',
+  },
+  {
+    key: 'BSD',
+    value: 'BSD $',
+  },
+  {
+    key: 'BTC',
+    value: 'BTC ₿',
+  },
+  {
+    key: 'BTN',
+    value: 'BTN Nu.',
+  },
+  {
+    key: 'BWP',
+    value: 'BWP P',
+  },
+  {
+    key: 'BYN',
+    value: 'BYN Br',
+  },
+  {
+    key: 'BYR',
+    value: 'BYR Br',
+  },
+  {
+    key: 'BZD',
+    value: 'BZD BZ$',
+  },
+  {
+    key: 'CAD',
+    value: 'CAD $',
+  },
+  {
+    key: 'CDF',
+    value: 'CDF FC',
+  },
+  {
+    key: 'CHF',
+    value: 'CHF CHF',
+  },
+  {
+    key: 'CLF',
+    value: 'CLF UF',
+  },
+  {
+    key: 'CLP',
+    value: 'CLP $',
+  },
+  {
+    key: 'CNY',
+    value: 'CNY ¥',
+  },
+  {
+    key: 'COP',
+    value: 'COP $',
+  },
+  {
+    key: 'CRC',
+    value: 'CRC ₡',
+  },
+  {
+    key: 'CUC',
+    value: 'CUC $',
+  },
+  {
+    key: 'CUP',
+    value: 'CUP ₱',
+  },
+  {
+    key: 'CVE',
+    value: 'CVE $',
+  },
+  {
+    key: 'CZK',
+    value: 'CZK Kč',
+  },
+  {
+    key: 'DJF',
+    value: 'DJF Fdj',
+  },
+  {
+    key: 'DKK',
+    value: 'DKK kr',
+  },
+  {
+    key: 'DOP',
+    value: 'DOP RD$',
+  },
+  {
+    key: 'DZD',
+    value: 'DZD دج',
+  },
+  {
+    key: 'EGP',
+    value: 'EGP £',
+  },
+  {
+    key: 'ERN',
+    value: 'ERN Nfk',
+  },
+  {
+    key: 'ETB',
+    value: 'ETB Br',
+  },
+  {
+    key: 'EUR',
+    value: 'EUR €',
+  },
+  {
+    key: 'FJD',
+    value: 'FJD $',
+  },
+  {
+    key: 'FKP',
+    value: 'FKP £',
+  },
+  {
+    key: 'GBP',
+    value: 'GBP £',
+  },
+  {
+    key: 'GEL',
+    value: 'GEL ₾',
+  },
+  {
+    key: 'GGP',
+    value: 'GGP £',
+  },
+  {
+    key: 'GHS',
+    value: 'GHS ₵',
+  },
+  {
+    key: 'GIP',
+    value: 'GIP £',
+  },
+  {
+    key: 'GMD',
+    value: 'GMD D',
+  },
+  {
+    key: 'GNF',
+    value: 'GNF FG',
+  },
+  {
+    key: 'GTQ',
+    value: 'GTQ Q',
+  },
+  {
+    key: 'GYD',
+    value: 'GYD $',
+  },
+  {
+    key: 'HKD',
+    value: 'HKD $',
+  },
+  {
+    key: 'HNL',
+    value: 'HNL L',
+  },
+  {
+    key: 'HRK',
+    value: 'HRK kn',
+  },
+  {
+    key: 'HTG',
+    value: 'HTG G',
+  },
+  {
+    key: 'HUF',
+    value: 'HUF Ft',
+  },
+  {
+    key: 'IDR',
+    value: 'IDR Rp',
+  },
+  {
+    key: 'ILS',
+    value: 'ILS ₪',
+  },
+  {
+    key: 'IMP',
+    value: 'IMP £',
+  },
+  {
+    key: 'INR',
+    value: 'INR ₹',
+  },
+  {
+    key: 'IQD',
+    value: 'IQD ع.د',
+  },
+  {
+    key: 'IRR',
+    value: 'IRR ﷼',
+  },
+  {
+    key: 'ISK',
+    value: 'ISK kr',
+  },
+  {
+    key: 'JEP',
+    value: 'JEP £',
+  },
+  {
+    key: 'JMD',
+    value: 'JMD $',
+  },
+  {
+    key: 'JOD',
+    value: 'JOD د.ا',
+  },
+  {
+    key: 'JPY',
+    value: 'JPY ¥',
+  },
+  {
+    key: 'KES',
+    value: 'KES KSh',
+  },
+  {
+    key: 'KGS',
+    value: 'KGS сом',
+  },
+  {
+    key: 'KHR',
+    value: 'KHR ៛',
+  },
+  {
+    key: 'KMF',
+    value: 'KMF CF',
+  },
+  {
+    key: 'KPW',
+    value: 'KPW ₩',
+  },
+  {
+    key: 'KRW',
+    value: 'KRW ₩',
+  },
+  {
+    key: 'KWD',
+    value: 'KWD د.ك',
+  },
+  {
+    key: 'KYD',
+    value: 'KYD $',
+  },
+  {
+    key: 'KZT',
+    value: 'KZT ₸',
+  },
+  {
+    key: 'LAK',
+    value: 'LAK ₭',
+  },
+  {
+    key: 'LBP',
+    value: 'LBP £',
+  },
+  {
+    key: 'LKR',
+    value: 'LKR Rs',
+  },
+  {
+    key: 'LRD',
+    value: 'LRD $',
+  },
+  {
+    key: 'LSL',
+    value: 'LSL L',
+  },
+  {
+    key: 'LTL',
+    value: 'LTL Lt',
+  },
+  {
+    key: 'LVL',
+    value: 'LVL Ls',
+  },
+  {
+    key: 'LYD',
+    value: 'LYD ل.د',
+  },
+  {
+    key: 'MAD',
+    value: 'MAD د.م.',
+  },
+  {
+    key: 'MDL',
+    value: 'MDL lei',
+  },
+  {
+    key: 'MGA',
+    value: 'MGA Ar',
+  },
+  {
+    key: 'MKD',
+    value: 'MKD ден',
+  },
+  {
+    key: 'MMK',
+    value: 'MMK Ks',
+  },
+  {
+    key: 'MNT',
+    value: 'MNT ₮',
+  },
+  {
+    key: 'MOP',
+    value: 'MOP MOP$',
+  },
+  {
+    key: 'MRO',
+    value: 'MRO UM',
+  },
+  {
+    key: 'MUR',
+    value: 'MUR ₨',
+  },
+  {
+    key: 'MVR',
+    value: 'MVR Rf',
+  },
+  {
+    key: 'MWK',
+    value: 'MWK MK',
+  },
+  {
+    key: 'MXN',
+    value: 'MXN $',
+  },
+  {
+    key: 'MYR',
+    value: 'MYR RM',
+  },
+  {
+    key: 'MZN',
+    value: 'MZN MT',
+  },
+  {
+    key: 'NAD',
+    value: 'NAD $',
+  },
+  {
+    key: 'NGN',
+    value: 'NGN ₦',
+  },
+  {
+    key: 'NIO',
+    value: 'NIO C$',
+  },
+  {
+    key: 'NOK',
+    value: 'NOK kr',
+  },
+  {
+    key: 'NPR',
+    value: 'NPR ₨',
+  },
+  {
+    key: 'NZD',
+    value: 'NZD $',
+  },
+  {
+    key: 'OMR',
+    value: 'OMR ﷼',
+  },
+  {
+    key: 'PAB',
+    value: 'PAB B/.',
+  },
+  {
+    key: 'PEN',
+    value: 'PEN S/.',
+  },
+  {
+    key: 'PGK',
+    value: 'PGK K',
+  },
+  {
+    key: 'PHP',
+    value: 'PHP ₱',
+  },
+  {
+    key: 'PKR',
+    value: 'PKR ₨',
+  },
+  {
+    key: 'PLN',
+    value: 'PLN zł',
+  },
+  {
+    key: 'PYG',
+    value: 'PYG ₲',
+  },
+  {
+    key: 'QAR',
+    value: 'QAR ر.ق',
+  },
+  {
+    key: 'RON',
+    value: 'RON lei',
+  },
+  {
+    key: 'RSD',
+    value: 'RSD Дин.',
+  },
+  {
+    key: 'RUB',
+    value: 'RUB ₽',
+  },
+  {
+    key: 'RWF',
+    value: 'RWF RF',
+  },
+  {
+    key: 'SAR',
+    value: 'SAR ﷼',
+  },
+  {
+    key: 'SBD',
+    value: 'SBD $',
+  },
+  {
+    key: 'SCR',
+    value: 'SCR ₨',
+  },
+  {
+    key: 'SDG',
+    value: 'SDG £',
+  },
+  {
+    key: 'SEK',
+    value: 'SEK kr',
+  },
+  {
+    key: 'SGD',
+    value: 'SGD $',
+  },
+  {
+    key: 'SHP',
+    value: 'SHP £',
+  },
+  {
+    key: 'SLE',
+    value: 'SLE Le',
+  },
+  {
+    key: 'SLL',
+    value: 'SLL Le',
+  },
+  {
+    key: 'SOS',
+    value: 'SOS S',
+  },
+  {
+    key: 'SRD',
+    value: 'SRD $',
+  },
+  {
+    key: 'STD',
+    value: 'STD Db',
+  },
+  {
+    key: 'SYP',
+    value: 'SYP £',
+  },
+  {
+    key: 'SZL',
+    value: 'SZL L',
+  },
+  {
+    key: 'THB',
+    value: 'THB ฿',
+  },
+  {
+    key: 'TJS',
+    value: 'TJS ЅМ',
+  },
+  {
+    key: 'TMT',
+    value: 'TMT T',
+  },
+  {
+    key: 'TND',
+    value: 'TND د.ت',
+  },
+  {
+    key: 'TOP',
+    value: 'TOP T$',
+  },
+  {
+    key: 'TRY',
+    value: 'TRY ₺',
+  },
+  {
+    key: 'TTD',
+    value: 'TTD TT$',
+  },
+  {
+    key: 'TWD',
+    value: 'TWD NT$',
+  },
+  {
+    key: 'TZS',
+    value: 'TZS TSh',
+  },
+  {
+    key: 'UAH',
+    value: 'UAH ₴',
+  },
+  {
+    key: 'UGX',
+    value: 'UGX UGX',
+  },
+  // {
+  //   key: 'USD',
+  //   value: 'USD $',
+  // },
+  {
+    key: 'UYU',
+    value: 'UYU $U',
+  },
+  {
+    key: 'UZS',
+    value: 'UZS soʻm',
+  },
+  {
+    key: 'VEF',
+    value: 'VEF Bs F',
+  },
+  {
+    key: 'VES',
+    value: 'VES Bs.S',
+  },
+  {
+    key: 'VND',
+    value: 'VND ₫',
+  },
+  {
+    key: 'VUV',
+    value: 'VUV Vt',
+  },
+  {
+    key: 'WST',
+    value: 'WST WS$',
+  },
+  {
+    key: 'XAF',
+    value: 'XAF FCFA',
+  },
+  {
+    key: 'XAG',
+    value: 'XAG oz',
+  },
+  {
+    key: 'XAU',
+    value: 'XAU oz',
+  },
+  {
+    key: 'XCD',
+    value: 'XCD $',
+  },
+  {
+    key: 'XDR',
+    value: 'XDR SDR',
+  },
+  {
+    key: 'XOF',
+    value: 'XOF CFA',
+  },
+  {
+    key: 'XPF',
+    value: 'XPF ₣',
+  },
+  {
+    key: 'YER',
+    value: 'YER ﷼',
+  },
+  {
+    key: 'ZAR',
+    value: 'ZAR R',
+  },
+  {
+    key: 'ZMK',
+    value: 'ZMK ZK',
+  },
+  {
+    key: 'ZMW',
+    value: 'ZMW ZK',
+  },
+  {
+    key: 'ZWL',
+    value: 'ZWL $',
+  },
 ];

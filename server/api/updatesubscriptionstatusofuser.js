@@ -6,6 +6,7 @@ const integrationSdk = getIntegrationSdk();
 exports.updatesubscriptionstatusofuser = async (req, res) => {
   try {
     const { data } = req.body;
+    console.log(556, req.body, data.object.customer_details, data.object);
     // console.log('WebHook status: Hitted', req.body);
     if (data) {
       if (
@@ -39,9 +40,18 @@ exports.updatesubscriptionstatusofuser = async (req, res) => {
 
               return accumulator;
             }, {});
+            integrationSdk.users.show({ id: data.object.client_reference_id }).then(res => {
+              console.log(res);
+            });
 
             const dataToUpdate = {
               id: data.object.client_reference_id,
+              publicData: {
+                subScriptionOn: {
+                  subscriptionStart: startDate,
+                  subscriptionEnd: endDate,
+                },
+              },
               privateData: {
                 subscriptionDetails: {
                   subscriptionId: data.object.subscription,

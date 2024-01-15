@@ -12,7 +12,8 @@ const SectionMultiEnumMaybe = props => {
   return (
     <div className={css.sectionMultiEnum}>
       <Heading as="h2" rootClassName={css.sectionHeading}>
-        {heading}
+        {/* {heading} */}
+        Amenities
       </Heading>
       <PropertyGroup
         id="ListingPage.amenities"

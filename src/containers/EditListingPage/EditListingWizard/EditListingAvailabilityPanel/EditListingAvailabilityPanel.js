@@ -1,15 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { arrayOf, bool, func, object, string } from 'prop-types';
 import classNames from 'classnames';
+import { EditorState, convertFromHTML, ContentState, convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 
 // Import configs and util modules
 import { FormattedMessage } from '../../../../util/reactIntl';
 import { getDefaultTimeZoneOnBrowser, timestampToDate } from '../../../../util/dates';
 import { LISTING_STATE_DRAFT, propTypes } from '../../../../util/types';
+import * as validators from '../../../../util/validators';
+
 import { DAY, isFullDay } from '../../../../transactions/transaction';
 
 // Import shared components
-import { Button, H3, InlineTextButton, ListingLink, Modal } from '../../../../components';
+import {
+  Button,
+  FieldCheckboxGroup,
+  H3,
+  InlineTextButton,
+  ListingLink,
+  Modal,
+} from '../../../../components';
 
 // Import modules from this directory
 import EditListingAvailabilityPlanForm from './EditListingAvailabilityPlanForm';
@@ -24,6 +35,8 @@ import {
   createSlug,
 } from '../../../../util/urlHelpers';
 import { createResourceLocatorString } from '../../../../util/routes';
+// import TextEditor from './TextEditor';
+const TextEditor = lazy(() => import('./TextEditor'));
 // This is the order of days as JavaScript understands them
 // The number returned by "new Date().getDay()" refers to day of week starting from sunday.
 const WEEKDAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -134,10 +147,49 @@ const EditListingAvailabilityPanel = props => {
     history,
   } = props;
   // Hooks
+  const { electricalOutletOption, rules } = config.listing || {};
+
   const [isEditPlanModalOpen, setIsEditPlanModalOpen] = useState(false);
   const [isEditExceptionsModalOpen, setIsEditExceptionsModalOpen] = useState(false);
   const [valuesFromLastSubmit, setValuesFromLastSubmit] = useState(null);
-  const [entryRules, setEntryRules] = useState(listing.attributes.publicData.entryRules || null);
+  const [showOtherEntryRules, setShowOtherEntryRules] = useState(
+    listing?.attributes?.publicData?.rulesValOption
+      ? listing?.attributes?.publicData?.rulesValOption?.other
+      : false
+  );
+  const [editorState, setEditorState] = useState(
+    listing.attributes.publicData.entryRules
+      ? EditorState.createWithContent(
+          ContentState.createFromBlockArray(
+            convertFromHTML(listing.attributes.publicData.entryRules)
+          )
+        )
+      : EditorState.createEmpty()
+  );
+  // const [entryRules, setEntryRules] = useState(listing.attributes.publicData.entryRules || null);
+  const [rulesVal, setRulesVal] = useState(
+    rules.reduce((acc, value) => {
+      acc[value.key] = listing?.attributes?.publicData?.rulesValOption
+        ? listing?.attributes?.publicData?.rulesValOption[value.key]
+        : false;
+      return acc;
+    }, {})
+  );
+  const [checkBoxVal, setCheckBoxVal] = useState(
+    electricalOutletOption.reduce((acc, value) => {
+      acc[value.key] = listing?.attributes?.publicData?.electricalOutletOption
+        ? listing?.attributes?.publicData?.electricalOutletOption[value.key]
+        : false;
+      return acc;
+    }, {})
+  );
+  const [allValuesFalseRef, setAllValuesFalseRef] = useState(
+    Object.values(checkBoxVal).every(value => value === false)
+  );
+  useEffect(() => {
+    const isAllFalse = Object.values(checkBoxVal).every(value => value === false);
+    setAllValuesFalseRef(isAllFalse);
+  }, [checkBoxVal]);
   const [startTime, setStartTime] = useState(
     listing.attributes.publicData.availableStartTime || { value: '00:00am', label: '00:00am' }
   );
@@ -154,8 +206,11 @@ const EditListingAvailabilityPanel = props => {
 
   for (let hour = 0; hour < 24; hour++) {
     for (let minute = 0; minute < 60; minute += 60) {
-      if (hour < 13) {
+      if (hour < 12) {
         const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}am`;
+        timeOptions.push({ value: time, label: time });
+      } else if (hour === 12) {
+        const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}pm`;
         timeOptions.push({ value: time, label: time });
       } else {
         const newHour = hour - 12;
@@ -174,10 +229,15 @@ const EditListingAvailabilityPanel = props => {
         const starthour = parts[0]; // This will give you '10' as a string
         const startminute = parts[1].slice(0, 2);
         if (hour > starthour) {
-          if (hour < 13) {
+          if (hour < 12) {
             const time = `${hour.toString().padStart(2, '0')}:${minute
               .toString()
               .padStart(2, '0')}am`;
+            endTimeOptions.push({ value: time, label: time });
+          } else if (hour === 12) {
+            const time = `${hour.toString().padStart(2, '0')}:${minute
+              .toString()
+              .padStart(2, '0')}pm`;
             endTimeOptions.push({ value: time, label: time });
           } else {
             const newHour = hour - 12;
@@ -203,8 +263,15 @@ const EditListingAvailabilityPanel = props => {
       }
     }
   }
-
-  // console.log(65, timeOptions, startTime);
+  const handleCheckboxChange = option => {
+    setCheckBoxVal(checkBoxVal => ({ ...checkBoxVal, [option]: !checkBoxVal[option] }));
+  };
+  const handleRulesChange = option => {
+    setRulesVal(rulesVal => ({ ...rulesVal, [option]: !rulesVal[option] }));
+    if (option === 'other') {
+      setShowOtherEntryRules(!showOtherEntryRules);
+    }
+  };
   const changeStartTime = startTime => {
     setStartTime(startTime);
   };
@@ -219,11 +286,16 @@ const EditListingAvailabilityPanel = props => {
           publicData: {
             availableStartTime: startTime ? startTime : null,
             availableEndTime: endTime ? endTime : null,
-            entryRules: entryRules ? entryRules : null,
+            electricalOutletOption: checkBoxVal,
+            rulesValOption: rulesVal,
+            entryRules:
+              showOtherEntryRules && editorState
+                ? draftToHtml(convertToRaw(editorState.getCurrentContent()))
+                : null,
+            // entryRules: showOtherEntryRules && entryRules ? entryRules : null,
           },
         })
         .then(res => {
-          // console.log(144, editListingLinkType);
           editListingLinkType === 'edit'
             ? history.push(
                 createResourceLocatorString(
@@ -282,7 +354,6 @@ const EditListingAvailabilityPanel = props => {
   };
   const availabilityPlan = listingAttributes?.availabilityPlan || defaultAvailabilityPlan;
 
-  console.log(777, availabilityPlan, listing);
   const initialValues = valuesFromLastSubmit
     ? valuesFromLastSubmit
     : createInitialValues(availabilityPlan);
@@ -431,19 +502,62 @@ const EditListingAvailabilityPanel = props => {
           </section>
           <section className={css.entryRulesSection}>
             <div className={css.entryRulesTitle}>
-              Optional: Enter any rules for guests to follow during use of their remote work day
-              pass
+              Optional: Add any rules for guests to follow during their remote work day pass
             </div>
-            <textarea
-              className={css.entryRulesInput}
-              id="entryRules"
-              name="entryRules"
-              rows={4}
-              cols={50}
-              placeholder="Ex: No work phone calls/laptop calls permitted."
-              value={entryRules}
-              onChange={e => handleEntryRules(e)}
-            />
+            {rules.map(option => (
+              <div>
+                {' '}
+                <label key={option.value} className={css.checkBoxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={rulesVal[option.value]}
+                    onChange={() => handleRulesChange(option.value)}
+                    className={css.checkBox}
+                  />
+                  <span className={css.label}> {option.label}</span>
+                </label>
+              </div>
+            ))}
+            {showOtherEntryRules && (
+              // <textarea
+              //   className={css.entryRulesInput}
+              //   id="entryRules"
+              //   name="entryRules"
+              //   rows={4}
+              //   cols={50}
+              //   placeholder="Ex: No work phone calls/laptop calls permitted."
+              //   value={entryRules}
+              //   onChange={e => handleEntryRules(e)}
+              // />
+              <Suspense fallback={<div>Loading...</div>}>
+                <div className={css.editor}>
+                  <TextEditor
+                    name="entryRules"
+                    setEditorState={setEditorState}
+                    editorState={editorState}
+                  />
+                </div>
+              </Suspense>
+            )}
+          </section>
+          <section className={css.electricRules}>
+            <div className={css.entryRulesTitle}>
+              Electrical outlet availability description for guests*
+            </div>
+            {electricalOutletOption.map(option => (
+              <div>
+                {' '}
+                <label key={option.value} className={css.checkBoxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={checkBoxVal[option.value]}
+                    onChange={() => handleCheckboxChange(option.value)}
+                    className={css.checkBox}
+                  />
+                  <span className={css.label}> {option.label}</span>
+                </label>
+              </div>
+            ))}
           </section>
         </>
       ) : null}
@@ -461,7 +575,8 @@ const EditListingAvailabilityPanel = props => {
         onClick={() => {
           updateAndNextTab(id, slug, editListingLinkType);
         }}
-        disabled={!hasAvailabilityPlan}
+        // disabled={!hasAvailabilityPlan}
+        disabled={allValuesFalseRef}
       >
         {submitButtonText}
       </Button>

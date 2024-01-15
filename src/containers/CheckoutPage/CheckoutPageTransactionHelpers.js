@@ -205,6 +205,8 @@ export const processCheckoutWithPayment = (orderParams, extraPaymentParams) => {
   const ensuredStripeCustomer = ensureStripeCustomer(stripeCustomer);
   const processAlias = pageData?.listing?.attributes?.publicData?.transactionProcessAlias;
 
+  const currency = pageData?.listing?.attributes?.publicData?.currency;
+
   let createdPaymentIntent = null;
 
   ////////////////////////////////////////////////
@@ -292,7 +294,7 @@ export const processCheckoutWithPayment = (orderParams, extraPaymentParams) => {
     const isTransitionedAlready = storedTx?.attributes?.lastTransition === transitionName;
     const orderPromise = isTransitionedAlready
       ? Promise.resolve(storedTx)
-      : onConfirmPayment(transactionId, transitionName, {});
+      : onConfirmPayment(transactionId, transitionName, {}, currency);
 
     orderPromise.then(order => {
       // Store the returned transaction (order)

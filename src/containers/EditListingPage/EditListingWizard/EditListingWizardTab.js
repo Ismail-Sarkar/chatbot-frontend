@@ -226,7 +226,7 @@ const EditListingWizardTab = props => {
       );
     }
     case LOCATION: {
-      return <EditListingLocationPanel {...panelProps(LOCATION)} tab={tab} />;
+      return <EditListingLocationPanel {...panelProps(LOCATION)} tab={tab} history={history} />;
     }
     case AVAILABILITY: {
       return (

@@ -42,7 +42,13 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
       return { processName, processState, showDetailCardHeadings: true };
     })
     .cond([states.PREAUTHORIZED, CUSTOMER], () => {
-      return { processName, processState, showDetailCardHeadings: true, showExtraInfo: true };
+      return {
+        processName,
+        processState,
+        showDetailCardHeadings: true,
+        showExtraInfo: true,
+        allowMessaging: true,
+      };
     })
     .cond([states.PREAUTHORIZED, PROVIDER], () => {
       const primary = isCustomerBanned ? null : actionButtonProps(transitions.ACCEPT, PROVIDER);
@@ -54,9 +60,28 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
         showActionButtons: true,
         primaryButtonProps: primary,
         secondaryButtonProps: secondary,
+        allowMessaging: true,
       };
     })
-    .cond([states.DELIVERED, _], () => {
+    .cond([states.ACCEPTED, PROVIDER], () => {
+      return {
+        processName,
+        processState,
+        showDetailCardHeadings: true,
+        showCancelButtons: true,
+        allowMessaging: true,
+      };
+    })
+    .cond([states.ACCEPTED, CUSTOMER], () => {
+      return {
+        processName,
+        processState,
+        showDetailCardHeadings: true,
+        showCancelButtons: true,
+        allowMessaging: true,
+      };
+    })
+    .cond([states.DELIVERED, CUSTOMER], () => {
       return {
         processName,
         processState,
@@ -64,6 +89,18 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
         showReviewAsFirstLink: true,
         showActionButtons: true,
         primaryButtonProps: leaveReviewProps,
+        allowMessaging: true,
+      };
+    })
+    .cond([states.DELIVERED, PROVIDER], () => {
+      return {
+        processName,
+        processState,
+        showDetailCardHeadings: true,
+        showReviewAsFirstLink: false,
+        showActionButtons: false,
+        // primaryButtonProps: leaveReviewProps,
+        allowMessaging: true,
       };
     })
     .cond([states.REVIEWED_BY_PROVIDER, CUSTOMER], () => {
@@ -74,6 +111,7 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
         showReviewAsSecondLink: true,
         showActionButtons: true,
         primaryButtonProps: leaveReviewProps,
+        allowMessaging: true,
       };
     })
     .cond([states.REVIEWED_BY_CUSTOMER, PROVIDER], () => {
@@ -82,8 +120,9 @@ export const getStateDataForAdventurelyBookingProcess = (txInfo, processInfo) =>
         processState,
         showDetailCardHeadings: true,
         showReviewAsSecondLink: true,
-        showActionButtons: true,
-        primaryButtonProps: leaveReviewProps,
+        showActionButtons: false,
+        // primaryButtonProps: leaveReviewProps,
+        allowMessaging: true,
       };
     })
     .cond([states.REVIEWED, _], () => {

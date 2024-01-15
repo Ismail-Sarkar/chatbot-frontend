@@ -430,6 +430,7 @@ class LocationAutocompleteInputImplementation extends Component {
   finalizeSelection() {
     this.setState({ inputHasFocus: false, highlightedIndex: -1 });
     this.props.input.onBlur(currentValue(this.props));
+    this.input.blur();
   }
 
   handleOnBlur() {
@@ -459,7 +460,6 @@ class LocationAutocompleteInputImplementation extends Component {
   }
 
   handlePredictionsSelectEnd(prediction) {
-    console.log(6677, typeof this.props.handlecityStateCountryName);
     if (typeof this.props.handlecityStateCountryName === 'function') {
       this.props.handlecityStateCountryName(prediction);
     }

@@ -155,25 +155,44 @@ const SignupFormComponent = props => (
               />
             </div>
             {isPartner && (
-              <FieldTextInput
-                className={css.fieldGrp}
-                type="text"
-                id={formId ? `${formId}.businessRole` : 'businessRole'}
-                name="businessRole"
-                autoComplete="businessRole"
-                label={intl.formatMessage({
-                  id: 'SignupForm.businessRoleLabel',
-                })}
-                placeholder={intl.formatMessage({
-                  id: 'SignupForm.businessRolePlaceholder',
-                })}
-                // validate={validators.composeValidators(emailRequired, emailValid)}
-                validate={validators.required(
-                  intl.formatMessage({
-                    id: 'SignupForm.businessRoleRequired',
-                  })
-                )}
-              />
+              <>
+                <FieldTextInput
+                  type="text"
+                  id="businessName"
+                  name="businessName"
+                  className={css.fieldGrp}
+                  label={intl.formatMessage({
+                    id: 'SignupForm.businessNameLabel',
+                  })}
+                  placeholder={intl.formatMessage({
+                    id: 'SignupForm.businessNamePlaceholder',
+                  })}
+                  validate={validators.required(
+                    intl.formatMessage({
+                      id: 'SignupForm.businessNameRequired',
+                    })
+                  )}
+                />
+                <FieldTextInput
+                  className={css.fieldGrp}
+                  type="text"
+                  id={formId ? `${formId}.businessRole` : 'businessRole'}
+                  name="businessRole"
+                  autoComplete="businessRole"
+                  label={intl.formatMessage({
+                    id: 'SignupForm.businessRoleLabel',
+                  })}
+                  placeholder={intl.formatMessage({
+                    id: 'SignupForm.businessRolePlaceholder',
+                  })}
+                  // validate={validators.composeValidators(emailRequired, emailValid)}
+                  validate={validators.required(
+                    intl.formatMessage({
+                      id: 'SignupForm.businessRoleRequired',
+                    })
+                  )}
+                />
+              </>
             )}
             <FieldTextInput
               className={css.password}
@@ -213,6 +232,14 @@ const SignupFormComponent = props => (
               <FormattedMessage id="SignupForm.signUp" />
             </PrimaryButton>
           </div>
+          {isPartner && (
+            <div className={css.bottomMessage}>
+              Don’t have the code? Apply to list your space{' '}
+              <a href="http://www.adventurely.pro/vendors" target="_blank">
+                here
+              </a>
+            </div>
+          )}
 
           {/* <div className={css.otherTypeSignupLink}>
             {isPartner ? (

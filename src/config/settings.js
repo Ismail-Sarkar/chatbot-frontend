@@ -32,6 +32,5 @@ const appSettings = {
   // If webapp is using SSL (i.e. it's behind 'https' protocol)
   usingSSL: process.env.REACT_APP_SHARETRIBE_USING_SSL === 'true',
 };
-console.log(123, appSettings, process.env);
 
 export default appSettings;

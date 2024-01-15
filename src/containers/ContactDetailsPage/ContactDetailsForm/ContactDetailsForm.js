@@ -21,6 +21,7 @@ import {
   PrimaryButton,
   FieldTextInput,
   H4,
+  Button,
 } from '../../../components';
 
 import css from './ContactDetailsForm.module.css';
@@ -363,14 +364,14 @@ class ContactDetailsFormComponent extends Component {
               </div>
               <div className={css.bottomWrapper}>
                 {genericError}
-                <PrimaryButton
+                <Button
                   type="submit"
                   inProgress={inProgress}
                   ready={pristineSinceLastSubmit}
                   disabled={submitDisabled}
                 >
                   <FormattedMessage id="ContactDetailsForm.saveChanges" />
-                </PrimaryButton>
+                </Button>
               </div>
             </Form>
           );

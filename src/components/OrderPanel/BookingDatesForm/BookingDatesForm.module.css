@@ -93,9 +93,18 @@
     width: 100% !important;
     & > div{
       & > div{
-        padding:2px !important;
+        padding-right:65px!important;
         & > input{
           background-color:#fff !important;
+        }
+        & > div:nth-child(3){
+          /* position: static !important; */
+          /* top: 0 !important; */
+          & > button{
+            & > svg{
+              /* font-size: 16px !important; */
+            }
+          }
         }
       }
     }

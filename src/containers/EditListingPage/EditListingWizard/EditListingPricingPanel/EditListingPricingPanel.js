@@ -41,6 +41,8 @@ const getInitialValues = params => {
     guests,
     reserVations,
     prefferedPaymentMethod,
+    preferredCurrency,
+    currency,
   } = listing?.attributes?.publicData;
 
   // const selectedPrefferedPaymentMethod = paymentMethodvalues.find((elem)=>elem.value===)
@@ -62,6 +64,8 @@ const getInitialValues = params => {
     guests,
     reserVations,
     prefferedPaymentMethod: prefferedPaymentMethod,
+    preferredCurrency: preferredCurrency ?? 'USD',
+    currency: preferredCurrency === 'USD' ? 'USD' : currency,
   };
 };
 
@@ -137,6 +141,8 @@ const EditListingPricingPanel = props => {
               guests,
               reserVations,
               prefferedPaymentMethod,
+              preferredCurrency,
+              currency,
             } = values;
             // console.log(445, values, prefferedPaymentMethod);
             // New values for listing attributes
@@ -160,6 +166,8 @@ const EditListingPricingPanel = props => {
               availabilityPlan: newAvailabitiyPlan,
               publicData: {
                 prefferedPaymentMethod: prefferedPaymentMethod,
+                preferredCurrency,
+                currency: preferredCurrency === 'USD' ? 'USD' : currency,
                 listingPrice: {
                   amount: price.amount,
                   currency: price.currency,

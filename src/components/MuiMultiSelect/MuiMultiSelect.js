@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Chip, Typography } from '@mui/material';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -42,6 +43,15 @@ export default function MuiMultiSelect(props) {
             {option.label}
           </li>
         )}
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip
+              label={<Typography style={{ whiteSpace: 'normal' }}>{option.label}</Typography>}
+              {...getTagProps({ index })}
+              style={{ height: '100%' }}
+            />
+          ))
+        }
         style={{ width: 500 }}
         renderInput={params => (
           <TextField {...params} label={labeltext} placeholder={placeholdertext} />

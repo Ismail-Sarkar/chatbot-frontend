@@ -27,6 +27,7 @@ import DiminishedActionButtonMaybe from './DiminishedActionButtonMaybe';
 import PanelHeading from './PanelHeading';
 
 import css from './TransactionPanel.module.css';
+import CancelButtonMaybe from './CancelButtonMaybe';
 
 // Helper function to get display names for different roles
 const displayNames = (currentUser, provider, customer, intl) => {
@@ -142,10 +143,18 @@ export class TransactionPanelComponent extends Component {
       orderBreakdown,
       orderPanel,
       config,
+      cancelInProgress,
+      cancelBookingError,
+      onCancelBookingCustomer,
+      onCancelBookingProvider,
+      transactionId,
     } = this.props;
 
     const isCustomer = transactionRole === 'customer';
     const isProvider = transactionRole === 'provider';
+
+    const otherUserPartner =
+      customer?.attributes?.profile?.publicData?.userType === 'partner' ? true : false;
 
     const listingDeleted = !!listing?.attributes?.deleted;
     const isCustomerBanned = !!customer?.attributes?.banned;
@@ -177,13 +186,29 @@ export class TransactionPanelComponent extends Component {
       />
     );
 
+    const CancelButtons = (
+      <CancelButtonMaybe
+        showButtons={stateData.showCancelButtons}
+        cancelInProgress={cancelInProgress}
+        cancelBookingError={cancelBookingError}
+        isProvider={isProvider}
+        onCancelBookingCustomer={() => onCancelBookingCustomer(transactionId)}
+        onCancelBookingProvider={() => onCancelBookingProvider(transactionId)}
+      />
+    );
+
     const listingType = listing?.attributes?.publicData?.listingType;
     const listingTypeConfigs = config.listing.listingTypes;
     const listingTypeConfig = listingTypeConfigs.find(conf => conf.listingType === listingType);
     const showPrice = isInquiryProcess && displayPrice(listingTypeConfig);
 
     const showSendMessageForm =
-      !isCustomerBanned && !isCustomerDeleted && !isProviderBanned && !isProviderDeleted;
+      !isCustomerBanned &&
+      !isCustomerDeleted &&
+      !isProviderBanned &&
+      !isProviderDeleted &&
+      stateData.allowMessaging &&
+      (isProvider || (isCustomer && messages.length));
 
     const deliveryMethod = protectedData?.deliveryMethod;
 
@@ -204,10 +229,13 @@ export class TransactionPanelComponent extends Component {
             />
             {isProvider ? (
               <div className={css.avatarWrapperProviderDesktop}>
-                <AvatarLarge user={customer} className={css.avatarDesktop} />
+                <AvatarLarge
+                  user={customer}
+                  className={css.avatarDesktop}
+                  disableProfileLink={!otherUserPartner && true}
+                />
               </div>
             ) : null}
-
             <PanelHeading
               processName={stateData.processName}
               processState={stateData.processState}
@@ -225,13 +253,11 @@ export class TransactionPanelComponent extends Component {
               listingTitle={listingTitle}
               listingDeleted={listingDeleted}
             />
-
             <InquiryMessageMaybe
               protectedData={protectedData}
               showInquiryMessage={isInquiryProcess}
               isCustomer={isCustomer}
             />
-
             {!isInquiryProcess ? (
               <div className={css.orderDetails}>
                 <div className={css.orderDetailsMobileSection}>
@@ -269,16 +295,19 @@ export class TransactionPanelComponent extends Component {
                   className={css.deliveryInfoSection}
                   listing={listing}
                   showBookingLocation={showBookingLocation}
+                  provider={provider}
+                  isCustomer={isCustomer}
+                  protectedData={protectedData}
                 />
               </div>
             ) : null}
-
-            {transactionStatus==='transition/accept' && isCustomer &&<div className={css.msgDiv}>
-              <p>
-              <FormattedMessage id="Transactionpanel.bookingMessage" />
-              </p>
-            </div>}
-
+            {transactionStatus === 'transition/accept' && isCustomer && (
+              <div className={css.msgDiv}>
+                <p>
+                  <FormattedMessage id="Transactionpanel.bookingMessage" />
+                </p>
+              </div>
+            )}
             <FeedSection
               rootClassName={css.feedContainer}
               hasMessages={messages.length > 0}
@@ -288,7 +317,7 @@ export class TransactionPanelComponent extends Component {
               activityFeed={activityFeed}
               isConversation={isInquiryProcess}
             />
-            {/* {showSendMessageForm ? (
+            {showSendMessageForm ? (
               <SendMessageForm
                 formId={this.sendMessageFormName}
                 rootClassName={css.sendMessageForm}
@@ -302,16 +331,22 @@ export class TransactionPanelComponent extends Component {
                 onBlur={this.onSendMessageFormBlur}
                 onSubmit={this.onMessageSubmit}
               />
-            ) : (
-              <div className={css.sendingMessageNotAllowed}>
-                <FormattedMessage id="TransactionPanel.sendingMessageNotAllowed" />
-              </div>
-            )} */}
-
+            ) : null
+            // <div className={css.sendingMessageNotAllowed}>
+            //   <FormattedMessage id="TransactionPanel.sendingMessageNotAllowed" />
+            // </div>
+            }
             {stateData.showActionButtons ? (
               <>
                 <div className={css.mobileActionButtonSpacer}></div>
                 <div className={css.mobileActionButtons}>{actionButtons}</div>
+              </>
+            ) : null}
+            {stateData.showCancelButtons ? (
+              <>
+                <div className={css.mobileActionButtonSpacer}></div>
+
+                <div className={css.mobileActionButtons}>{CancelButtons}</div>
               </>
             ) : null}
           </div>
@@ -327,7 +362,6 @@ export class TransactionPanelComponent extends Component {
                   isCustomer={isCustomer}
                   listingImageConfig={config.layout.listingImage}
                 />
-
                 <DetailCardHeadingsMaybe
                   showDetailCardHeadings={stateData.showDetailCardHeadings}
                   listingTitle={
@@ -352,9 +386,13 @@ export class TransactionPanelComponent extends Component {
                   orderBreakdown={orderBreakdown}
                   processName={stateData.processName}
                 />
-
                 {stateData.showActionButtons ? (
                   <div className={css.desktopActionButtons}>{actionButtons}</div>
+                ) : null}
+                {stateData.showCancelButtons ? (
+                  <>
+                    <div className={css.desktopActionButtons}>{CancelButtons}</div>
+                  </>
                 ) : null}
               </div>
               <DiminishedActionButtonMaybe

@@ -260,7 +260,7 @@ export const loadData = (params, search, config) => {
         'publicData.pickupEnabled',
         'publicData.shippingEnabled',
       ],
-      'fields.user': ['profile.displayName', 'profile.abbreviatedName'],
+      'fields.user': ['profile.displayName', 'profile.abbreviatedName', 'profile.publicData'],
       'fields.image': [
         'variants.scaled-small',
         'variants.scaled-medium',

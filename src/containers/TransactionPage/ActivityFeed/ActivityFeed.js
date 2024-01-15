@@ -22,9 +22,15 @@ import css from './ActivityFeed.module.css';
 
 const Message = props => {
   const { message, formattedDate } = props;
+  const otherUserPartner =
+    message?.sender?.attributes?.profile?.publicData?.userType === 'partner' ? true : false;
   return (
     <div className={css.message}>
-      <Avatar className={css.avatar} user={message.sender} />
+      <Avatar
+        className={css.avatar}
+        user={message.sender}
+        disableProfileLink={!otherUserPartner && true}
+      />
       <div>
         <p className={css.messageContent}>{message.attributes.content}</p>
         <p className={css.messageDate}>{formattedDate}</p>
@@ -105,10 +111,10 @@ const TransitionMessage = props => {
     </InlineTextButton>
   ) : showReviewAsSecondLink ? (
     <InlineTextButton onClick={onOpenReviewModal}>
-      <FormattedMessage
+      {/* <FormattedMessage
         id="TransactionPage.ActivityFeed.reviewAsSecondLink"
         values={{ otherUsersName }}
-      />
+      /> */}
     </InlineTextButton>
   ) : null;
 

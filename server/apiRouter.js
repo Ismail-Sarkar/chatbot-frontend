@@ -22,8 +22,32 @@ const { authenticateFacebook, authenticateFacebookCallback } = require('./api/au
 const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/google');
 const transactionsRouter = require('./api/transactions');
 const { updatesubscriptionstatusofuser } = require('./api/updatesubscriptionstatusofuser');
+const fetchUserEmail = require('./api/fetchUserEmail');
+const getUserTypeByEmail = require('./api/getUserTypeByEmail');
+const currencyExchangeCode = require('./controllers/currencyExchange');
+const { fetchByUserName, checkAvailabilityOfUserName } = require('./api/userName');
+const { getUniqueId } = require('./controllers/nanoIdController');
+const { fecthCurrency } = require('./cron-jobs/currencyUpdater');
+const { cronScheduler, cronTimers } = require('./api-util/cronSchedular');
 
 const router = express.Router();
+
+const fetchCur = async () => {
+  try {
+    const data = await fecthCurrency();
+    console.log(data);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+//==============Mongo db connection=================//
+
+require('./mongo-config');
+
+//============cron tab scheduler =================//
+cronScheduler(cronTimers.everyMidnight, fetchCur);
+// fetchCur();
 
 // ================ API router middleware: ================ //
 
@@ -87,5 +111,20 @@ router.post('/updatesubscriptionstatusofuser', updatesubscriptionstatusofuser);
 //transactionRouter
 
 router.use('/transaction', transactionsRouter);
+
+//fetch user email
+
+router.get('/getProviderMail/:userId', fetchUserEmail);
+router.get('/getUserType/:email', getUserTypeByEmail);
+
+//User name
+router.get('/fetchByUserName/:slug', fetchByUserName);
+router.get('/checkAvailabilityOfUserName/:slug', checkAvailabilityOfUserName);
+
+//currency exchange
+router.use('/currency', currencyExchangeCode);
+
+//uniqe id
+router.get('/uniqueId', getUniqueId);
 
 module.exports = router;

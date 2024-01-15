@@ -50,7 +50,7 @@
   line-height: 24px;
   padding-top: 2px;
   padding-bottom: 4px;
-  font-size:14px;
+  font-size: 14px;
   @media (--viewportMedium) {
     padding: 0;
   }
@@ -133,8 +133,8 @@
   color: #000;
   padding-top: 4px;
   padding-bottom: 14px;
-  font-size:14px;
-  line-height:20px;
+  font-size: 14px;
+  line-height: 20px;
   @media (--viewportMedium) {
     /* padding-top: 11px;
     padding-bottom: 21px; */
@@ -148,20 +148,37 @@
 .reservationLabel {
   font-size: 19px;
   font-weight: 700;
-  margin-bottom:0;
+  margin-bottom: 0;
   color: #000;
-   & span {
+  /* font-size: 14px;
+
+  margin-bottom: 0; */
+
+  & span {
     text-decoration: underline;
   }
 }
-.reservationInfo{
-  font-size:14px;
-
+.reservationInfo {
+  font-size: 14px;
 }
 .remainingPay {
   color: #ff0000;
   margin-top: 15px;
-  font-weight:400;
-  font-size:14px;
-  line-height:20px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+}
+.providerRemainingPay {
+  color: green;
+  margin-top: 15px;
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 20px;
+}
+
+.convertedRate {
+  margin-top: 10px;
+  text-align: center;
+  text-decoration: underline;
+  font-size: 18px;
 }

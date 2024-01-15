@@ -1,0 +1,9 @@
+.icon {
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.copySuccess {
+  font-size: 14px;
+  color: green;
+}

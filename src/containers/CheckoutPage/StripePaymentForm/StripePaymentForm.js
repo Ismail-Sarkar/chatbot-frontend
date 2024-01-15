@@ -232,7 +232,9 @@ const LocationOrShippingDetails = props => {
       <Heading as="h3" rootClassName={css.heading}>
         <FormattedMessage id="StripePaymentForm.locationDetailsTitle" />
       </Heading>
-      <p className={css.locationDetails}>{fullManualAddress?.street}</p>
+      <p
+        className={css.locationDetails}
+      >{`${fullManualAddress?.street}, ${fullManualAddress?.cityStateCountry}, ${fullManualAddress?.zip}`}</p>
     </div>
   ) : (
     <div className={css.locationWrapper}>

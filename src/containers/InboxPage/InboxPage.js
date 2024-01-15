@@ -116,7 +116,14 @@ BookingTimeInfoMaybe.propTypes = {
 export const InboxItem = props => {
   const { transactionRole, tx, intl, stateData, isBooking, stockType = 'multipleItems' } = props;
   const { customer, provider, listing } = tx;
-  const { processName, processState, actionNeeded, isSaleNotification, isFinal } = stateData;
+  const {
+    processName,
+    processState,
+    actionNeeded,
+    isSaleNotification,
+    isFinal,
+    isAccepted,
+  } = stateData;
   const isCustomer = transactionRole === TX_TRANSITION_ACTOR_CUSTOMER;
 
   const lineItems = tx.attributes?.lineItems;
@@ -126,6 +133,8 @@ export const InboxItem = props => {
   const showStock = stockType === 'multipleItems' || (quantity && unitLineItem.quantity > 1);
 
   const otherUser = isCustomer ? provider : customer;
+  const otherUserPartner =
+    otherUser?.attributes?.profile?.publicData?.userType === 'partner' ? true : false;
   const otherUserDisplayName = <UserDisplayName user={otherUser} intl={intl} />;
   const isOtherUserBanned = otherUser.attributes.banned;
 
@@ -138,12 +147,13 @@ export const InboxItem = props => {
     [css.stateConcluded]: isFinal,
     [css.stateActionNeeded]: actionNeeded,
     [css.stateNoActionNeeded]: !actionNeeded,
+    [css.accepted]: isAccepted,
   });
 
   return (
     <div className={css.item}>
       <div className={css.itemAvatar}>
-        <Avatar user={otherUser} />
+        <Avatar user={otherUser} disableProfileLink={!otherUserPartner && true} />
       </div>
       <NamedLink
         className={linkClasses}

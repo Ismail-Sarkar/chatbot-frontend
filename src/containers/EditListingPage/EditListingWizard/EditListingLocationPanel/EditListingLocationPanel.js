@@ -12,6 +12,11 @@ import { H3, ListingLink } from '../../../../components';
 // Import modules from this directory
 import EditListingLocationForm from './EditListingLocationForm';
 import css from './EditListingLocationPanel.module.css';
+import {
+  LISTING_PAGE_PARAM_TYPE_DRAFT,
+  LISTING_PAGE_PARAM_TYPE_EDIT,
+  createSlug,
+} from '../../../../util/urlHelpers';
 
 const getInitialValues = props => {
   const { listing } = props;
@@ -56,9 +61,17 @@ const EditListingLocationPanel = props => {
     updateInProgress,
     errors,
     tab,
+    history,
   } = props;
   const classes = classNames(rootClassName || css.root, className);
   const isPublished = listing?.id && listing?.attributes.state !== LISTING_STATE_DRAFT;
+  // const isDraft = listing?.attributes.state === LISTING_STATE_DRAFT;
+  // const id = listing.id.uuid;
+  const { title = '' } = listing.attributes;
+  // const slug = createSlug(title);
+  // const editListingLinkType = isDraft
+  //   ? LISTING_PAGE_PARAM_TYPE_DRAFT
+  //   : LISTING_PAGE_PARAM_TYPE_EDIT;
   return (
     <div className={classes}>
       <H3 as="h1">
@@ -87,11 +100,11 @@ const EditListingLocationPanel = props => {
             cityStateCountry,
             zip,
           } = values;
-          if (Object.keys(location || {}).length !== 0) {
-            const {
-              selectedPlace: { address, origin },
-            } = location;
-
+          const {
+            selectedPlace: { address, origin },
+          } = location;
+          // if (Object.keys(location || {}).length !== 0) {
+          if (!manualAddress) {
             // New values for listing attributes
             const updateValues = {
               geolocation: origin,
@@ -101,9 +114,9 @@ const EditListingLocationPanel = props => {
                   building,
                 },
                 mapLocation: {
-                  country: mapLocation.country ? mapLocation.country.text : null,
-                  state: mapLocation.state ? mapLocation.state.text : null,
-                  district: mapLocation.district ? mapLocation.district.text : null,
+                  country: mapLocation?.country ? mapLocation?.country.text : null,
+                  state: mapLocation?.state ? mapLocation?.state.text : null,
+                  district: mapLocation?.district ? mapLocation?.district.text : null,
                 },
                 manualAddress: false,
                 fullManualAddress: null,
@@ -121,9 +134,17 @@ const EditListingLocationPanel = props => {
             onSubmit(updateValues);
           } else {
             const updateValues = {
+              geolocation: origin,
               publicData: {
-                location: null,
-                mapLocation: null,
+                location: {
+                  address,
+                  building,
+                },
+                mapLocation: {
+                  country: mapLocation?.country ? mapLocation?.country.text : null,
+                  state: mapLocation?.state ? mapLocation?.state.text : null,
+                  district: mapLocation?.district ? mapLocation?.district.text : null,
+                },
                 manualAddress,
                 fullManualAddress: manualAddress
                   ? {
@@ -136,6 +157,8 @@ const EditListingLocationPanel = props => {
             };
             setState({
               initialValues: {
+                location: { search: address, selectedPlace: { address, origin } },
+
                 manualAddress: manualAddress,
                 fullManualAddress: {
                   street: street,
@@ -146,7 +169,7 @@ const EditListingLocationPanel = props => {
                 street: street ? street : null,
                 cityStateCountry: cityStateCountry ? cityStateCountry : null,
                 zip: zip ? zip : null,
-                // manualAddress: manualAddress ? manualAddress : false,
+                manualAddress,
               },
             });
             onSubmit(updateValues);
@@ -167,6 +190,8 @@ const EditListingLocationPanel = props => {
         fetchErrors={errors}
         tab={tab}
         autoFocus
+        // id={id}
+        // slug={slug}
       />
     </div>
   );

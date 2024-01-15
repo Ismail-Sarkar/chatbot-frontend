@@ -4,6 +4,7 @@ import { isTooManyEmailVerificationRequestsError } from '../../util/errors';
 import { IconEmailAttention, InlineTextButton, NamedLink } from '../../components';
 
 import css from './ModalMissingInformation.module.css';
+import classNames from 'classnames';
 
 const EmailReminder = props => {
   const {
@@ -42,8 +43,9 @@ const EmailReminder = props => {
   return (
     <div className={className}>
       <IconEmailAttention className={css.modalIcon} />
-      <p className={css.modalTitle}>
-        <FormattedMessage id="ModalMissingInformation.verifyEmailTitle" />
+      <p className={classNames(css.modalTitle, css.colors)}>
+        {/* <FormattedMessage id="ModalMissingInformation.verifyEmailTitle" /> */}
+        <FormattedMessage id="ModalMissingInformation.verifyEmailTitleNew" />
       </p>
       <p className={css.modalMessage}>
         <FormattedMessage id="ModalMissingInformation.verifyEmailText" />

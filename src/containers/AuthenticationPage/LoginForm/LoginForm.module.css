@@ -41,3 +41,13 @@
   margin-top: -15px;
   margin-bottom: 25px;
 }
+.redLink {
+  color: red;
+}
+
+.errMsg {
+  font-size: 16px;
+  letter-spacing: 0px;
+  margin: 5px 0 10px 14px;
+  color: red;
+}

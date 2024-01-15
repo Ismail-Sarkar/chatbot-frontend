@@ -328,6 +328,10 @@
   /* This class is empty on purpose, it is used below for banned users */
 }
 
+.accepted{
+  color:green !important;
+}
+
 .stateActionNeeded {
   font-weight: var(--fontWeightMedium);
   color: var(--colorAttention);

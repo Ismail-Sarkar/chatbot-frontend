@@ -113,7 +113,12 @@ const dateFormattingOptions = { month: 'short', day: 'numeric', weekday: 'short'
 
 const PriceMaybe = props => {
   const { price, publicData, validListingTypes, intl } = props;
-  const { listingType, unitType } = publicData || {};
+  const { listingType, unitType, availableStartTime, availableEndTime } = publicData || {
+    availableStartTime: { label: {} },
+    availableEndTime: { label: {} },
+  };
+  const { label: startTimeLabel } = availableStartTime || {};
+  const { label: endTimeLabel } = availableEndTime || {};
 
   const foundListingTypeConfig = validListingTypes.find(conf => conf.listingType === listingType);
   const showPrice = displayPrice(foundListingTypeConfig);
@@ -124,17 +129,21 @@ const PriceMaybe = props => {
   return (
     <>
       <div className={css.priceContainer}>
-        <p className={css.price}>{formatMoney(intl, price)}</p>
+        <p className={css.price}>
+          {formatMoney(intl, price)} {price?.currency}
+        </p>
         {/* <div className={css.perUnit}>
           <FormattedMessage id="OrderPanel.perUnit" values={{ unitType }} />
         </div> */}
       </div>
-      <div className={css.durationMainDiv}>
-        <div className={css.timeDuration}>Duration</div>
-        <div
-          className={css.timeDuration}
-        >{`${publicData.availableStartTime?.label}-${publicData.availableEndTime?.label}`}</div>
-      </div>
+      {startTimeLabel && endTimeLabel && (
+        <div className={css.durationMainDiv}>
+          <div className={css.timeDuration}>Duration</div>
+          <div
+            className={css.timeDuration}
+          >{`${publicData.availableStartTime?.label}-${publicData.availableEndTime?.label}`}</div>
+        </div>
+      )}
     </>
   );
 };
@@ -454,7 +463,7 @@ const OrderPanel = props => {
               history,
               location
             )}
-            disabled={isOutOfStock}
+            disabled={isOutOfStock || isOwnListing}
           >
             {isBooking ? (
               <FormattedMessage id="OrderPanel.ctaButtonMessageBooking" />

@@ -44,3 +44,6 @@
 .reminderModalLinkButton {
   composes: buttonPrimary from global;
 }
+.colors {
+  color: red;
+}

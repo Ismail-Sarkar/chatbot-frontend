@@ -9,3 +9,4 @@ src/containers/ListingPage/ImageCarousel/image-gallery.css
 src/examples.js
 src/forms/index.js
 src/routing/routeConfiguration.js
+process/
