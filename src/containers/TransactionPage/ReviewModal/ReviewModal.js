@@ -46,9 +46,9 @@ const ReviewModal = props => {
       <p className={css.modalTitle}>
         <FormattedMessage id="ReviewModal.title" values={{ revieweeName: reviewee }} />
       </p>
-      <p className={css.modalMessage}>
+      {/* <p className={css.modalMessage}>
         <FormattedMessage id="ReviewModal.description" values={{ marketplaceName }} />
-      </p>
+      </p> */}
       <ReviewForm
         onSubmit={onSubmitReview}
         reviewSent={reviewSent}

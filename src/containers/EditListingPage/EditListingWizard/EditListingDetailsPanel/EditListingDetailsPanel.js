@@ -188,7 +188,7 @@ const getInitialValues = (props, existingListingType, listingTypes, listingField
 
   // Initial values for the form
   return {
-    title,
+    title: title?.replace('Remote work +', '').trim(),
     description,
     // Transaction type info: listingType, transactionProcessAlias, unitType
     ...getTransactionInfo(listingTypes, existingListingType),

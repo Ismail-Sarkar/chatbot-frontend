@@ -122,7 +122,7 @@
   {:name :transition/complete,
    :at
    {:fn/plus
-    [{:fn/timepoint [:time/booking-end]} {:fn/period ["P2D"]}]},
+    [{:fn/timepoint [:time/booking-end]} {:fn/period ["P2M"]}]},
    :actions [
     ;; {:name :action/stripe-create-payout}
     ],
