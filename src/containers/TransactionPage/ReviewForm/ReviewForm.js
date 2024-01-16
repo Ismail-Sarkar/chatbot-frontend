@@ -76,8 +76,8 @@ const ReviewFormComponent = props => (
           />
           {provider &&
           today.isBetween(
-            provider.attributes.profile.publicData.subScriptionOn.subscriptionStart,
-            provider.attributes.profile.publicData.subScriptionOn.subscriptionEnd
+            provider.attributes.profile.publicData?.subScriptionOn?.subscriptionStart,
+            provider.attributes.profile.publicData?.subScriptionOn?.subscriptionEnd
           ) ? null : (
             <FieldTextInput
               className={css.reviewContent}
