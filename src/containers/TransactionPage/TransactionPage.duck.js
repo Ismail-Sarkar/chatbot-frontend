@@ -2,9 +2,15 @@ import pick from 'lodash/pick';
 import pickBy from 'lodash/pickBy';
 import isEmpty from 'lodash/isEmpty';
 
-import { types as sdkTypes, createImageVariantConfig } from '../../util/sdkLoader';
+import {
+  types as sdkTypes,
+  createImageVariantConfig,
+} from '../../util/sdkLoader';
 import { findNextBoundary, getStartOf, monthIdString } from '../../util/dates';
-import { isTransactionsTransitionInvalidTransition, storableError } from '../../util/errors';
+import {
+  isTransactionsTransitionInvalidTransition,
+  storableError,
+} from '../../util/errors';
 import { apiBaseUrl, transactionLineItems } from '../../util/api';
 import * as log from '../../util/log';
 import {
@@ -34,20 +40,28 @@ const ACCEPT_BOOKING_TRANSITION = 'transition/accept';
 
 export const SET_INITIAL_VALUES = 'app/TransactionPage/SET_INITIAL_VALUES';
 
-export const FETCH_TRANSACTION_REQUEST = 'app/TransactionPage/FETCH_TRANSACTION_REQUEST';
-export const FETCH_TRANSACTION_SUCCESS = 'app/TransactionPage/FETCH_TRANSACTION_SUCCESS';
-export const FETCH_TRANSACTION_ERROR = 'app/TransactionPage/FETCH_TRANSACTION_ERROR';
+export const FETCH_TRANSACTION_REQUEST =
+  'app/TransactionPage/FETCH_TRANSACTION_REQUEST';
+export const FETCH_TRANSACTION_SUCCESS =
+  'app/TransactionPage/FETCH_TRANSACTION_SUCCESS';
+export const FETCH_TRANSACTION_ERROR =
+  'app/TransactionPage/FETCH_TRANSACTION_ERROR';
 
-export const FETCH_TRANSITIONS_REQUEST = 'app/TransactionPage/FETCH_TRANSITIONS_REQUEST';
-export const FETCH_TRANSITIONS_SUCCESS = 'app/TransactionPage/FETCH_TRANSITIONS_SUCCESS';
-export const FETCH_TRANSITIONS_ERROR = 'app/TransactionPage/FETCH_TRANSITIONS_ERROR';
+export const FETCH_TRANSITIONS_REQUEST =
+  'app/TransactionPage/FETCH_TRANSITIONS_REQUEST';
+export const FETCH_TRANSITIONS_SUCCESS =
+  'app/TransactionPage/FETCH_TRANSITIONS_SUCCESS';
+export const FETCH_TRANSITIONS_ERROR =
+  'app/TransactionPage/FETCH_TRANSITIONS_ERROR';
 
 export const TRANSITION_REQUEST = 'app/TransactionPage/MARK_RECEIVED_REQUEST';
 export const TRANSITION_SUCCESS = 'app/TransactionPage/TRANSITION_SUCCESS';
 export const TRANSITION_ERROR = 'app/TransactionPage/TRANSITION_ERROR';
 
-export const FETCH_MESSAGES_REQUEST = 'app/TransactionPage/FETCH_MESSAGES_REQUEST';
-export const FETCH_MESSAGES_SUCCESS = 'app/TransactionPage/FETCH_MESSAGES_SUCCESS';
+export const FETCH_MESSAGES_REQUEST =
+  'app/TransactionPage/FETCH_MESSAGES_REQUEST';
+export const FETCH_MESSAGES_SUCCESS =
+  'app/TransactionPage/FETCH_MESSAGES_SUCCESS';
 export const FETCH_MESSAGES_ERROR = 'app/TransactionPage/FETCH_MESSAGES_ERROR';
 
 export const SEND_MESSAGE_REQUEST = 'app/TransactionPage/SEND_MESSAGE_REQUEST';
@@ -58,21 +72,33 @@ export const SEND_REVIEW_REQUEST = 'app/TransactionPage/SEND_REVIEW_REQUEST';
 export const SEND_REVIEW_SUCCESS = 'app/TransactionPage/SEND_REVIEW_SUCCESS';
 export const SEND_REVIEW_ERROR = 'app/TransactionPage/SEND_REVIEW_ERROR';
 
-export const FETCH_TIME_SLOTS_REQUEST = 'app/TransactionPage/FETCH_TIME_SLOTS_REQUEST';
-export const FETCH_TIME_SLOTS_SUCCESS = 'app/TransactionPage/FETCH_TIME_SLOTS_SUCCESS';
-export const FETCH_TIME_SLOTS_ERROR = 'app/TransactionPage/FETCH_TIME_SLOTS_ERROR';
+export const FETCH_TIME_SLOTS_REQUEST =
+  'app/TransactionPage/FETCH_TIME_SLOTS_REQUEST';
+export const FETCH_TIME_SLOTS_SUCCESS =
+  'app/TransactionPage/FETCH_TIME_SLOTS_SUCCESS';
+export const FETCH_TIME_SLOTS_ERROR =
+  'app/TransactionPage/FETCH_TIME_SLOTS_ERROR';
 
-export const FETCH_LINE_ITEMS_REQUEST = 'app/TransactionPage/FETCH_LINE_ITEMS_REQUEST';
-export const FETCH_LINE_ITEMS_SUCCESS = 'app/TransactionPage/FETCH_LINE_ITEMS_SUCCESS';
-export const FETCH_LINE_ITEMS_ERROR = 'app/TransactionPage/FETCH_LINE_ITEMS_ERROR';
+export const FETCH_LINE_ITEMS_REQUEST =
+  'app/TransactionPage/FETCH_LINE_ITEMS_REQUEST';
+export const FETCH_LINE_ITEMS_SUCCESS =
+  'app/TransactionPage/FETCH_LINE_ITEMS_SUCCESS';
+export const FETCH_LINE_ITEMS_ERROR =
+  'app/TransactionPage/FETCH_LINE_ITEMS_ERROR';
 
-export const PROVIDER_CANCEL_REQUEST = 'app/TransactionPage/PROVIDER_CANCEL_REQUEST';
-export const PROVIDER_CANCEL_SUCCESS = 'app/TransactionPage/PROVIDER_CANCEL_SUCCESS';
-export const PROVIDER_CANCEL_ERROR = 'app/TransactionPage/PROVIDER_CANCEL_ERROR';
+export const PROVIDER_CANCEL_REQUEST =
+  'app/TransactionPage/PROVIDER_CANCEL_REQUEST';
+export const PROVIDER_CANCEL_SUCCESS =
+  'app/TransactionPage/PROVIDER_CANCEL_SUCCESS';
+export const PROVIDER_CANCEL_ERROR =
+  'app/TransactionPage/PROVIDER_CANCEL_ERROR';
 
-export const CUSTOMER_CANCEL_REQUEST = 'app/TransactionPage/CUSTOMER_CANCEL_REQUEST';
-export const CUSTOMER_CANCEL_SUCCESS = 'app/TransactionPage/CUSTOMER_CANCEL_SUCCESS';
-export const CUSTOMER_CANCEL_ERROR = 'app/TransactionPage/CUSTOMER_CANCEL_ERROR';
+export const CUSTOMER_CANCEL_REQUEST =
+  'app/TransactionPage/CUSTOMER_CANCEL_REQUEST';
+export const CUSTOMER_CANCEL_SUCCESS =
+  'app/TransactionPage/CUSTOMER_CANCEL_SUCCESS';
+export const CUSTOMER_CANCEL_ERROR =
+  'app/TransactionPage/CUSTOMER_CANCEL_ERROR';
 
 // ================ Reducer ================ //
 
@@ -117,32 +143,57 @@ const initialState = {
 // mergeEntityArrays(a, b)
 // => [{ id: { uuid: 3 } }, { id: : { uuid: 2 } }, { id: : { uuid: 1 } }]
 const mergeEntityArrays = (a, b) => {
-  return a.filter(aEntity => !b.find(bEntity => aEntity.id.uuid === bEntity.id.uuid)).concat(b);
+  return a
+    .filter(aEntity => !b.find(bEntity => aEntity.id.uuid === bEntity.id.uuid))
+    .concat(b);
 };
 
-export default function transactionPageReducer(state = initialState, action = {}) {
+export default function transactionPageReducer(
+  state = initialState,
+  action = {}
+) {
   const { type, payload } = action;
   switch (type) {
     case SET_INITIAL_VALUES:
       return { ...initialState, ...payload };
 
     case FETCH_TRANSACTION_REQUEST:
-      return { ...state, fetchTransactionInProgress: true, fetchTransactionError: null };
+      return {
+        ...state,
+        fetchTransactionInProgress: true,
+        fetchTransactionError: null,
+      };
     case FETCH_TRANSACTION_SUCCESS: {
       const transactionRef = { id: payload.data.data.id, type: 'transaction' };
       return { ...state, fetchTransactionInProgress: false, transactionRef };
     }
     case FETCH_TRANSACTION_ERROR:
       console.error(payload); // eslint-disable-line
-      return { ...state, fetchTransactionInProgress: false, fetchTransactionError: payload };
+      return {
+        ...state,
+        fetchTransactionInProgress: false,
+        fetchTransactionError: payload,
+      };
 
     case FETCH_TRANSITIONS_REQUEST:
-      return { ...state, fetchTransitionsInProgress: true, fetchTransitionsError: null };
+      return {
+        ...state,
+        fetchTransitionsInProgress: true,
+        fetchTransitionsError: null,
+      };
     case FETCH_TRANSITIONS_SUCCESS:
-      return { ...state, fetchTransitionsInProgress: false, processTransitions: payload };
+      return {
+        ...state,
+        fetchTransitionsInProgress: false,
+        processTransitions: payload,
+      };
     case FETCH_TRANSITIONS_ERROR:
       console.error(payload); // eslint-disable-line
-      return { ...state, fetchTransitionsInProgress: false, fetchTransitionsError: payload };
+      return {
+        ...state,
+        fetchTransitionsInProgress: false,
+        fetchTransitionsError: payload,
+      };
 
     case TRANSITION_REQUEST:
       return {
@@ -160,7 +211,11 @@ export default function transactionPageReducer(state = initialState, action = {}
       };
 
     case FETCH_MESSAGES_REQUEST:
-      return { ...state, fetchMessagesInProgress: true, fetchMessagesError: null };
+      return {
+        ...state,
+        fetchMessagesInProgress: true,
+        fetchMessagesError: null,
+      };
     case FETCH_MESSAGES_SUCCESS: {
       const oldestMessagePageFetched =
         state.oldestMessagePageFetched > payload.page
@@ -176,7 +231,11 @@ export default function transactionPageReducer(state = initialState, action = {}
       };
     }
     case FETCH_MESSAGES_ERROR:
-      return { ...state, fetchMessagesInProgress: false, fetchMessagesError: payload };
+      return {
+        ...state,
+        fetchMessagesInProgress: false,
+        fetchMessagesError: payload,
+      };
 
     case SEND_MESSAGE_REQUEST:
       return {
@@ -188,14 +247,22 @@ export default function transactionPageReducer(state = initialState, action = {}
     case SEND_MESSAGE_SUCCESS:
       return { ...state, sendMessageInProgress: false };
     case SEND_MESSAGE_ERROR:
-      return { ...state, sendMessageInProgress: false, sendMessageError: payload };
+      return {
+        ...state,
+        sendMessageInProgress: false,
+        sendMessageError: payload,
+      };
 
     case SEND_REVIEW_REQUEST:
       return { ...state, sendReviewInProgress: true, sendReviewError: null };
     case SEND_REVIEW_SUCCESS:
       return { ...state, sendReviewInProgress: false };
     case SEND_REVIEW_ERROR:
-      return { ...state, sendReviewInProgress: false, sendReviewError: payload };
+      return {
+        ...state,
+        sendReviewInProgress: false,
+        sendReviewError: payload,
+      };
 
     case FETCH_TIME_SLOTS_REQUEST: {
       const monthlyTimeSlots = {
@@ -234,11 +301,19 @@ export default function transactionPageReducer(state = initialState, action = {}
     }
 
     case FETCH_LINE_ITEMS_REQUEST:
-      return { ...state, fetchLineItemsInProgress: true, fetchLineItemsError: null };
+      return {
+        ...state,
+        fetchLineItemsInProgress: true,
+        fetchLineItemsError: null,
+      };
     case FETCH_LINE_ITEMS_SUCCESS:
       return { ...state, fetchLineItemsInProgress: false, lineItems: payload };
     case FETCH_LINE_ITEMS_ERROR:
-      return { ...state, fetchLineItemsInProgress: false, fetchLineItemsError: payload };
+      return {
+        ...state,
+        fetchLineItemsInProgress: false,
+        fetchLineItemsError: payload,
+      };
 
     case PROVIDER_CANCEL_REQUEST:
       return { ...state, cancelInProgress: true, cancelBookingError: null };
@@ -284,33 +359,60 @@ const fetchTransactionSuccess = response => ({
   type: FETCH_TRANSACTION_SUCCESS,
   payload: response,
 });
-const fetchTransactionError = e => ({ type: FETCH_TRANSACTION_ERROR, error: true, payload: e });
+const fetchTransactionError = e => ({
+  type: FETCH_TRANSACTION_ERROR,
+  error: true,
+  payload: e,
+});
 
 const fetchTransitionsRequest = () => ({ type: FETCH_TRANSITIONS_REQUEST });
 const fetchTransitionsSuccess = response => ({
   type: FETCH_TRANSITIONS_SUCCESS,
   payload: response,
 });
-const fetchTransitionsError = e => ({ type: FETCH_TRANSITIONS_ERROR, error: true, payload: e });
+const fetchTransitionsError = e => ({
+  type: FETCH_TRANSITIONS_ERROR,
+  error: true,
+  payload: e,
+});
 
-const transitionRequest = transitionName => ({ type: TRANSITION_REQUEST, payload: transitionName });
+const transitionRequest = transitionName => ({
+  type: TRANSITION_REQUEST,
+  payload: transitionName,
+});
 const transitionSuccess = () => ({ type: TRANSITION_SUCCESS });
-const transitionError = e => ({ type: TRANSITION_ERROR, error: true, payload: e });
+const transitionError = e => ({
+  type: TRANSITION_ERROR,
+  error: true,
+  payload: e,
+});
 
 const fetchMessagesRequest = () => ({ type: FETCH_MESSAGES_REQUEST });
 const fetchMessagesSuccess = (messages, pagination) => ({
   type: FETCH_MESSAGES_SUCCESS,
   payload: { messages, ...pagination },
 });
-const fetchMessagesError = e => ({ type: FETCH_MESSAGES_ERROR, error: true, payload: e });
+const fetchMessagesError = e => ({
+  type: FETCH_MESSAGES_ERROR,
+  error: true,
+  payload: e,
+});
 
 const sendMessageRequest = () => ({ type: SEND_MESSAGE_REQUEST });
 const sendMessageSuccess = () => ({ type: SEND_MESSAGE_SUCCESS });
-const sendMessageError = e => ({ type: SEND_MESSAGE_ERROR, error: true, payload: e });
+const sendMessageError = e => ({
+  type: SEND_MESSAGE_ERROR,
+  error: true,
+  payload: e,
+});
 
 const sendReviewRequest = () => ({ type: SEND_REVIEW_REQUEST });
 const sendReviewSuccess = () => ({ type: SEND_REVIEW_SUCCESS });
-const sendReviewError = e => ({ type: SEND_REVIEW_ERROR, error: true, payload: e });
+const sendReviewError = e => ({
+  type: SEND_REVIEW_ERROR,
+  error: true,
+  payload: e,
+});
 
 export const fetchTimeSlotsRequest = monthId => ({
   type: FETCH_TIME_SLOTS_REQUEST,
@@ -339,11 +441,19 @@ export const fetchLineItemsError = error => ({
 
 const providerCancelRequest = () => ({ type: PROVIDER_CANCEL_REQUEST });
 const providerCancelSuccess = () => ({ type: PROVIDER_CANCEL_SUCCESS });
-const providerCancelError = e => ({ type: PROVIDER_CANCEL_ERROR, error: true, payload: e });
+const providerCancelError = e => ({
+  type: PROVIDER_CANCEL_ERROR,
+  error: true,
+  payload: e,
+});
 
 const customerCancelRequest = () => ({ type: CUSTOMER_CANCEL_REQUEST });
 const customerCancelSuccess = () => ({ type: CUSTOMER_CANCEL_SUCCESS });
-const customerCancelError = e => ({ type: CUSTOMER_CANCEL_ERROR, error: true, payload: e });
+const customerCancelError = e => ({
+  type: CUSTOMER_CANCEL_ERROR,
+  error: true,
+  payload: e,
+});
 
 // ================ Thunks ================ //
 
@@ -353,7 +463,11 @@ const timeSlotsRequest = params => (dispatch, getState, sdk) => {
   });
 };
 
-export const fetchTimeSlots = (listingId, start, end, timeZone) => (dispatch, getState, sdk) => {
+export const fetchTimeSlots = (listingId, start, end, timeZone) => (
+  dispatch,
+  getState,
+  sdk
+) => {
   const monthId = monthIdString(start, timeZone);
 
   dispatch(fetchTimeSlotsRequest(monthId));
@@ -379,7 +493,9 @@ const fetchMonthlyTimeSlots = (dispatch, listing) => {
   const attributes = listing.attributes;
   // Listing could be ownListing entity too, so we just check if attributes key exists
   const hasTimeZone =
-    attributes && attributes.availabilityPlan && attributes.availabilityPlan.timezone;
+    attributes &&
+    attributes.availabilityPlan &&
+    attributes.availabilityPlan.timezone;
 
   // Fetch time-zones on client side only.
   if (hasWindow && listing.id && hasTimeZone) {
@@ -401,7 +517,11 @@ const fetchMonthlyTimeSlots = (dispatch, listing) => {
 
 // Helper to fetch correct image variants for different thunk calls
 const getImageVariants = listingImageConfig => {
-  const { aspectWidth = 1, aspectHeight = 1, variantPrefix = 'listing-card' } = listingImageConfig;
+  const {
+    aspectWidth = 1,
+    aspectHeight = 1,
+    variantPrefix = 'listing-card',
+  } = listingImageConfig;
   const aspectRatio = aspectHeight / aspectWidth;
   return {
     'fields.image': [
@@ -422,7 +542,11 @@ const listingRelationship = txResponse => {
   return txResponse.data.data.relationships.listing.data;
 };
 
-export const fetchTransaction = (id, txRole, config) => (dispatch, getState, sdk) => {
+export const fetchTransaction = (id, txRole, config) => (
+  dispatch,
+  getState,
+  sdk
+) => {
   dispatch(fetchTransactionRequest());
   let txResponse = null;
 
@@ -452,13 +576,19 @@ export const fetchTransaction = (id, txRole, config) => (dispatch, getState, sdk
       const entities = updatedEntities({}, response.data);
       const listingRef = { id: listingId, type: 'listing' };
       const transactionRef = { id, type: 'transaction' };
-      const denormalised = denormalisedEntities(entities, [listingRef, transactionRef]);
+      const denormalised = denormalisedEntities(entities, [
+        listingRef,
+        transactionRef,
+      ]);
       const listing = denormalised[0];
       const transaction = denormalised[1];
-      const processName = resolveLatestProcessName(transaction.attributes.processName);
+      const processName = resolveLatestProcessName(
+        transaction.attributes.processName
+      );
       try {
         const process = getProcess(processName);
-        const isInquiry = process.getState(transaction) === process.states.INQUIRY;
+        const isInquiry =
+          process.getState(transaction) === process.states.INQUIRY;
 
         // Fetch time slots for transactions that are in inquired state
         const canFetchTimeslots =
@@ -471,7 +601,8 @@ export const fetchTransaction = (id, txRole, config) => (dispatch, getState, sdk
         console.log(`transaction process (${processName}) was not recognized`);
       }
 
-      const canFetchListing = listing && listing.attributes && !listing.attributes.deleted;
+      const canFetchListing =
+        listing && listing.attributes && !listing.attributes.deleted;
       if (canFetchListing) {
         return sdk.listings.show({
           id: listingId,
@@ -497,33 +628,54 @@ export const fetchTransaction = (id, txRole, config) => (dispatch, getState, sdk
     });
 };
 
-export const makeTransition = (txId, transitionName, params) => async (dispatch, getState, sdk) => {
+export const makeTransition = (txId, transitionName, params) => async (
+  dispatch,
+  getState,
+  sdk
+) => {
   if (transitionInProgress(getState())) {
     return Promise.reject(new Error('Transition already in progress'));
   }
-  let finalParams = params;
+  let finalParams = params,
+    confirmationNumber,
+    txResponse;
   dispatch(transitionRequest(transitionName));
   if (transitionName === ACCEPT_BOOKING_TRANSITION) {
     try {
       const [paymentResponse, uniqueIdResponse] = await Promise.all([
-        await axios.post(`${apiBaseUrl()}/api/transaction/capturePaymentIntent`, {
-          txId: txId.uuid,
-        }),
+        await axios.post(
+          `${apiBaseUrl()}/api/transaction/capturePaymentIntent`,
+          {
+            txId: txId.uuid,
+          }
+        ),
         await axios.get(`${apiBaseUrl()}/api/uniqueId`),
       ]);
 
       const { data, status: uniqueIdStatus } = uniqueIdResponse || {};
       const { nanoId: confirmationId } = data || {};
-      finalParams = { ...params, protectedData: { confirmationNumber: confirmationId } };
+      confirmationNumber = confirmationId;
+      finalParams = { ...params, protectedData: { confirmationNumber } };
     } catch (e) {
       console.error('error occurred during capture payment...', e);
     }
   }
 
   return sdk.transactions
-    .transition({ id: txId, transition: transitionName, params: finalParams }, { expand: true })
+    .transition(
+      { id: txId, transition: transitionName, params: finalParams },
+      { expand: true }
+    )
     .then(response => {
-      dispatch(addMarketplaceEntities(response));
+      txResponse = response;
+      const url = `${apiBaseUrl()}/api/transaction/update`;
+      return axios.post(url, {
+        id: txId.uuid,
+        confirmNumber: confirmationNumber,
+      });
+    })
+    .then(() => {
+      dispatch(addMarketplaceEntities(txResponse));
       dispatch(transitionSuccess());
       dispatch(fetchCurrentUserNotifications());
 
@@ -537,7 +689,7 @@ export const makeTransition = (txId, transitionName, params) => async (dispatch,
         });
       }, 3000);
 
-      return response;
+      return txResponse;
     })
     .catch(e => {
       dispatch(transitionError(storableError(e)));
@@ -549,7 +701,11 @@ export const makeTransition = (txId, transitionName, params) => async (dispatch,
     });
 };
 
-export const cancelBookingCustomer = (id, customTransfer) => (dispatch, getState, sdk) => {
+export const cancelBookingCustomer = (id, customTransfer) => (
+  dispatch,
+  getState,
+  sdk
+) => {
   if (cancelInProgress(getState())) {
     return Promise.reject(new Error('Start or Cancel already in progress'));
   }
@@ -580,7 +736,11 @@ export const cancelBookingCustomer = (id, customTransfer) => (dispatch, getState
     });
 };
 
-export const cancelBookingProvider = (id, customTransfer) => (dispatch, getState, sdk) => {
+export const cancelBookingProvider = (id, customTransfer) => (
+  dispatch,
+  getState,
+  sdk
+) => {
   if (cancelInProgress(getState())) {
     return Promise.reject(new Error('Start or Cancel already in progress'));
   }
@@ -652,18 +812,28 @@ const fetchMessages = (txId, page, config) => (dispatch, getState, sdk) => {
     });
 };
 
-export const fetchMoreMessages = (txId, config) => (dispatch, getState, sdk) => {
+export const fetchMoreMessages = (txId, config) => (
+  dispatch,
+  getState,
+  sdk
+) => {
   const state = getState();
   const { oldestMessagePageFetched, totalMessagePages } = state.TransactionPage;
   const hasMoreOldMessages = totalMessagePages > oldestMessagePageFetched;
 
   // In case there're no more old pages left we default to fetching the current cursor position
-  const nextPage = hasMoreOldMessages ? oldestMessagePageFetched + 1 : oldestMessagePageFetched;
+  const nextPage = hasMoreOldMessages
+    ? oldestMessagePageFetched + 1
+    : oldestMessagePageFetched;
 
   return dispatch(fetchMessages(txId, nextPage, config));
 };
 
-export const sendMessage = (txId, message, config) => (dispatch, getState, sdk) => {
+export const sendMessage = (txId, message, config) => (
+  dispatch,
+  getState,
+  sdk
+) => {
   dispatch(sendMessageRequest());
 
   return sdk.messages
@@ -692,7 +862,14 @@ export const sendMessage = (txId, message, config) => (dispatch, getState, sdk) 
 
 // If other party has already sent a review, we need to make transition to
 // transitions.REVIEW_2_BY_<CUSTOMER/PROVIDER>
-const sendReviewAsSecond = (txId, transition, params, dispatch, sdk, config) => {
+const sendReviewAsSecond = (
+  txId,
+  transition,
+  params,
+  dispatch,
+  sdk,
+  config
+) => {
   const include = REVIEW_TX_INCLUDES;
 
   return sdk.transactions
@@ -751,7 +928,11 @@ export const sendReview = (tx, transitionOptionsInfo, params, config) => (
   getState,
   sdk
 ) => {
-  const { reviewAsFirst, reviewAsSecond, hasOtherPartyReviewedFirst } = transitionOptionsInfo;
+  const {
+    reviewAsFirst,
+    reviewAsSecond,
+    hasOtherPartyReviewedFirst,
+  } = transitionOptionsInfo;
   dispatch(sendReviewRequest());
 
   return hasOtherPartyReviewedFirst
@@ -760,7 +941,9 @@ export const sendReview = (tx, transitionOptionsInfo, params, config) => (
 };
 
 const isNonEmpty = value => {
-  return typeof value === 'object' || Array.isArray(value) ? !isEmpty(value) : !!value;
+  return typeof value === 'object' || Array.isArray(value)
+    ? !isEmpty(value)
+    : !!value;
 };
 
 export const fetchNextTransitions = id => (dispatch, getState, sdk) => {
@@ -776,7 +959,11 @@ export const fetchNextTransitions = id => (dispatch, getState, sdk) => {
     });
 };
 
-export const fetchTransactionLineItems = ({ orderData, listingId, isOwnListing }) => dispatch => {
+export const fetchTransactionLineItems = ({
+  orderData,
+  listingId,
+  isOwnListing,
+}) => dispatch => {
   dispatch(fetchLineItemsRequest());
   transactionLineItems({ orderData, listingId, isOwnListing })
     .then(response => {

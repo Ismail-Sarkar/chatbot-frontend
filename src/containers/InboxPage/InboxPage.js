@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { arrayOf, bool, number, oneOf, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -46,6 +46,8 @@ import NotFoundPage from '../../containers/NotFoundPage/NotFoundPage';
 
 import { stateDataShape, getStateData } from './InboxPage.stateData';
 import css from './InboxPage.module.css';
+import { searchTransactions } from './InboxPage.duck';
+import { useCallback } from 'react';
 
 // Check if the transaction line-items use booking-related units
 const getUnitLineItem = lineItems => {
@@ -219,6 +221,49 @@ InboxItem.propTypes = {
   stateData: stateDataShape.isRequired,
 };
 
+const SearchForm = props => {
+  const { showFrom, intl, handleOnChange, onChangeKey } = props;
+  const [searchText, setSearchText] = useState('');
+
+  const debounceCallback = func => {
+    let timeoutId = null;
+    return function delayedCallback(...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(...args);
+        clearTimeout(timeoutId);
+      }, 1000);
+    };
+  };
+
+  const debounceHandleOnChange = useCallback(
+    debounceCallback(handleOnChange),
+    []
+  );
+
+  const onChangeText = e => {
+    const value = e.target.value;
+    setSearchText(value);
+    debounceHandleOnChange(onChangeKey, value);
+  };
+
+  return showFrom ? (
+    <div className={css.formWrapper}>
+      <form>
+        <input
+          type="text"
+          value={searchText}
+          onChange={onChangeText}
+          id="seachtext"
+          placeholder={intl.formatMessage({ id: 'InboxPage.seachPlaceholder' })}
+        />
+      </form>
+    </div>
+  ) : null;
+};
+
 export const InboxPageComponent = props => {
   const config = useConfiguration();
   const {
@@ -231,9 +276,31 @@ export const InboxPageComponent = props => {
     providerNotificationCount,
     scrollingDisabled,
     transactions,
+    onSearchTransactions,
   } = props;
+  const [transactionSearchDetails, setTransactionSearchDetails] = useState({
+    userNameAndConfirmNumber: '',
+    bookingStart: '',
+  });
   const { tab } = params;
   const validTab = tab === 'orders' || tab === 'sales';
+  const searchTransactionBy = (keyName, value) => {
+    setTransactionSearchDetails(transactionDetails => ({
+      ...transactionDetails,
+      [keyName]: value,
+    }));
+  };
+  useEffect(() => {
+    const type = tab === 'orders' ? 'customer' : 'provider';
+    onSearchTransactions(
+      transactionSearchDetails.userNameAndConfirmNumber,
+      transactionSearchDetails.bookingStart,
+      type
+    );
+  }, [
+    transactionSearchDetails.userNameAndConfirmNumber,
+    transactionSearchDetails.bookingStart,
+  ]);
   if (!validTab) {
     return <NotFoundPage />;
   }
@@ -365,7 +432,12 @@ export const InboxPageComponent = props => {
             <FormattedMessage id="InboxPage.fetchFailed" />
           </p>
         ) : null}
-        {isOrders ? null : !fetchInProgress && <div>Search</div>}
+        <SearchForm
+          showFrom={!isOrders}
+          intl={intl}
+          handleOnChange={searchTransactionBy}
+          onChangeKey={'userNameAndConfirmNumber'}
+        />
         <ul className={css.itemList}>
           {!fetchInProgress ? (
             transactions.map(toTxItem)
@@ -446,9 +518,13 @@ const mapStateToProps = state => {
     transactions: getMarketplaceEntities(state, transactionRefs),
   };
 };
+const mapDispatchToProps = dispatch => ({
+  onSearchTransactions: (userNameAndConfirmNumber, bookingStart, type) =>
+    dispatch(searchTransactions(userNameAndConfirmNumber, bookingStart, type)),
+});
 
 const InboxPage = compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   injectIntl
 )(InboxPageComponent);
 
