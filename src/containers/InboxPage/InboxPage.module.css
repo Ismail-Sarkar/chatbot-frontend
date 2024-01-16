@@ -89,10 +89,15 @@
 
 .tabs {
   padding-top: 2px;
-
+  width: 340px;
   display: flex;
   flex-direction: row;
   overflow-x: auto;
+  & div:first-child {
+    & a {
+      width: 340px;
+    }
+  }
 
   @media (--viewportMedium) {
     padding-top: 12px;
@@ -328,8 +333,8 @@
   /* This class is empty on purpose, it is used below for banned users */
 }
 
-.accepted{
-  color:green !important;
+.accepted {
+  color: green !important;
 }
 
 .stateActionNeeded {
@@ -372,5 +377,32 @@
   &:hover .itemUsername,
   & .stateName {
     color: var(--colorGrey300);
+  }
+}
+.bookingDates {
+  /* background-color: aquamarine; */
+  & div:first-child {
+    & label:nth-child(2) {
+      display: none;
+    }
+  }
+  & div:nth-child(2) {
+    & div:first-child {
+      & div:first-child {
+        & div:first-child {
+          & div:nth-child(1) {
+            & input {
+              width: 339px;
+            }
+          }
+          & div:nth-child(3) {
+            display: none;
+          }
+          & div:nth-child(4) {
+            display: none;
+          }
+        }
+      }
+    }
   }
 }
