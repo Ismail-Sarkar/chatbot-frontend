@@ -3,6 +3,7 @@ import { arrayOf, bool, number, oneOf, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { Form as FinalForm, FormSpy } from 'react-final-form';
 
 import { useConfiguration } from '../../context/configurationContext';
 
@@ -15,7 +16,7 @@ import {
   LINE_ITEM_HOUR,
   LISTING_UNIT_TYPES,
 } from '../../util/types';
-import { subtractTime } from '../../util/dates';
+import { subtractTime, getStartOf, addTime } from '../../util/dates';
 import {
   TX_TRANSITION_ACTOR_CUSTOMER,
   TX_TRANSITION_ACTOR_PROVIDER,
@@ -27,6 +28,7 @@ import {
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { isScrollingDisabled } from '../../ducks/ui.duck';
 import {
+  Form,
   H2,
   Avatar,
   NamedLink,
@@ -38,7 +40,13 @@ import {
   TimeRange,
   UserDisplayName,
   LayoutSideNavigation,
+  FieldDateRangeInput,
 } from '../../components';
+import {
+  required,
+  bookingDatesRequired,
+  composeValidators,
+} from '../../util/validators';
 
 import TopbarContainer from '../../containers/TopbarContainer/TopbarContainer';
 import FooterContainer from '../../containers/FooterContainer/FooterContainer';
@@ -265,8 +273,12 @@ const SearchForm = props => {
 };
 
 export const InboxPageComponent = props => {
+  const [focusedInput, setFocusedInput] = useState(null);
+
   const config = useConfiguration();
   const {
+    rootClassName,
+    className,
     currentUser,
     fetchInProgress,
     fetchOrdersOrSalesError,
@@ -277,6 +289,7 @@ export const InboxPageComponent = props => {
     scrollingDisabled,
     transactions,
     onSearchTransactions,
+    ...rest
   } = props;
   const [transactionSearchDetails, setTransactionSearchDetails] = useState({
     userNameAndConfirmNumber: '',
@@ -401,6 +414,9 @@ export const InboxPageComponent = props => {
             },
           },
         ];
+  const handleSubmit = values => {
+    console.log(values);
+  };
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
       <LayoutSideNavigation
@@ -422,7 +438,173 @@ export const InboxPageComponent = props => {
               rootClassName={css.tabs}
               tabRootClassName={css.tab}
               tabs={tabs}
-            />{' '}
+            />
+            {currentUser &&
+              currentUser?.attributes?.profile?.publicData?.userType ===
+                'partner' && (
+                <FinalForm
+                  {...rest}
+                  // unitPrice={unitPrice}
+                  intl={intl}
+                  onSubmit={handleSubmit}
+                  render={fieldRenderProps => {
+                    const {
+                      endDatePlaceholder,
+                      startDatePlaceholder,
+                      formId,
+                      handleSubmit,
+
+                      submitButtonWrapperClassName,
+                      unitType,
+                      values,
+                      timeSlots,
+                      fetchTimeSlotsError,
+                      lineItems,
+                      fetchLineItemsInProgress,
+                      fetchLineItemsError,
+                    } = fieldRenderProps;
+                    const handleFocusedInputChange = setFocusedInput => focusedInput => {
+                      setFocusedInput(focusedInput);
+                    };
+                    const classes = classNames(
+                      rootClassName || css.root,
+                      className
+                    );
+                    const onFocusedInputChange = handleFocusedInputChange(
+                      setFocusedInput
+                    );
+
+                    const { startDate, endDate } =
+                      values && values.bookingDates ? values.bookingDates : {};
+
+                    const bookingStartLabel = intl.formatMessage({
+                      id: 'BookingDatesForm.bookingStartTitle',
+                    });
+                    const bookingEndLabel = intl.formatMessage({
+                      id: 'BookingDatesForm.bookingEndTitle',
+                    });
+                    const requiredMessage = intl.formatMessage({
+                      id: 'BookingDatesForm.requiredDate',
+                    });
+                    const startDateErrorMessage = intl.formatMessage({
+                      id: 'FieldDateRangeInput.invalidStartDate',
+                    });
+                    const endDateErrorMessage = intl.formatMessage({
+                      id: 'FieldDateRangeInput.invalidEndDate',
+                    });
+                    const timeSlotsError = fetchTimeSlotsError ? (
+                      <p className={css.sideBarError}>
+                        <FormattedMessage id="BookingDatesForm.timeSlotsError" />
+                      </p>
+                    ) : null;
+
+                    // This is the place to collect breakdown estimation data.
+                    // Note: lineItems are calculated and fetched from FTW backend
+                    // so we need to pass only booking data that is needed otherwise
+                    // If you have added new fields to the form that will affect to pricing,
+                    // you need to add the values to handleOnChange function
+                    const breakdownData =
+                      startDate && endDate
+                        ? {
+                            startDate,
+                            endDate,
+                          }
+                        : null;
+
+                    const showEstimatedBreakdown =
+                      breakdownData &&
+                      lineItems &&
+                      !fetchLineItemsInProgress &&
+                      !fetchLineItemsError;
+
+                    const bookingInfoMaybe = showEstimatedBreakdown ? (
+                      <div className={css.priceBreakdownContainer}>
+                        <h3 className={css.priceBreakdownTitle}>
+                          <FormattedMessage id="BookingDatesForm.priceBreakdownTitle" />
+                        </h3>
+                        <EstimatedCustomerBreakdownMaybe
+                          unitType={unitType}
+                          breakdownData={breakdownData}
+                          lineItems={lineItems}
+                        />
+                      </div>
+                    ) : null;
+
+                    const loadingSpinnerMaybe = fetchLineItemsInProgress ? (
+                      <IconSpinner className={css.spinner} />
+                    ) : null;
+
+                    const bookingInfoErrorMaybe = fetchLineItemsError ? (
+                      <span className={css.sideBarError}>
+                        <FormattedMessage id="BookingDatesForm.fetchLineItemsError" />
+                      </span>
+                    ) : null;
+
+                    const dateFormatOptions = {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                    };
+
+                    const now = new Date();
+                    const today = getStartOf(now);
+                    const tomorrow = addTime(today, 1, 'days');
+                    const startDatePlaceholderText =
+                      startDatePlaceholder ||
+                      intl.formatDate(today, dateFormatOptions);
+                    const endDatePlaceholderText =
+                      endDatePlaceholder ||
+                      intl.formatDate(tomorrow, dateFormatOptions);
+                    const submitButtonClasses = classNames(
+                      submitButtonWrapperClassName || css.submitButtonWrapper
+                    );
+                    const handleOnChange = formValues => {
+                      console.log(formValues);
+                    };
+
+                    return (
+                      <Form
+                        onSubmit={handleSubmit}
+                        className={classes}
+                        enforcePagePreloadFor="CheckoutPage"
+                      >
+                        {timeSlotsError}
+                        <FormSpy
+                          subscription={{ values: true }}
+                          onChange={values => {
+                            handleOnChange(values);
+                          }}
+                        />
+                        <FieldDateRangeInput
+                          className={css.bookingDates}
+                          name="bookingDates"
+                          unitType={unitType}
+                          startDateId={`${formId}.bookingStartDate`}
+                          startDateLabel={bookingStartLabel}
+                          startDatePlaceholderText={startDatePlaceholderText}
+                          endDateId={`${formId}.bookingEndDate`}
+                          endDateLabel={bookingEndLabel}
+                          endDatePlaceholderText={endDatePlaceholderText}
+                          focusedInput={focusedInput}
+                          onFocusedInputChange={onFocusedInputChange}
+                          isOutsideRange={() => {}}
+                          // format={identity}
+                          timeSlots={timeSlots}
+                          useMobileMargins
+                          validate={composeValidators(
+                            required(requiredMessage),
+                            bookingDatesRequired(
+                              startDateErrorMessage,
+                              endDateErrorMessage
+                            )
+                          )}
+                          disabled={fetchLineItemsInProgress}
+                        />
+                      </Form>
+                    );
+                  }}
+                />
+              )}
           </>
         }
         footer={<FooterContainer />}
