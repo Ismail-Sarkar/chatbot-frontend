@@ -19,12 +19,9 @@ const sortedTransactions = txs =>
 
 // ================ Action types ================ //
 
-export const FETCH_ORDERS_OR_SALES_REQUEST =
-  'app/InboxPage/FETCH_ORDERS_OR_SALES_REQUEST';
-export const FETCH_ORDERS_OR_SALES_SUCCESS =
-  'app/InboxPage/FETCH_ORDERS_OR_SALES_SUCCESS';
-export const FETCH_ORDERS_OR_SALES_ERROR =
-  'app/InboxPage/FETCH_ORDERS_OR_SALES_ERROR';
+export const FETCH_ORDERS_OR_SALES_REQUEST = 'app/InboxPage/FETCH_ORDERS_OR_SALES_REQUEST';
+export const FETCH_ORDERS_OR_SALES_SUCCESS = 'app/InboxPage/FETCH_ORDERS_OR_SALES_SUCCESS';
+export const FETCH_ORDERS_OR_SALES_ERROR = 'app/InboxPage/FETCH_ORDERS_OR_SALES_ERROR';
 
 // ================ Reducer ================ //
 
@@ -87,11 +84,11 @@ const fetchOrdersOrSalesError = e => ({
 
 const INBOX_PAGE_SIZE = 10;
 
-export const searchTransactions = (
-  userNameAndConfirmNumber,
-  bookingStart,
-  type
-) => (dispatch, getState, sdk) => {
+export const searchTransactions = (userNameAndConfirmNumber, bookingStart, type) => (
+  dispatch,
+  getState,
+  sdk
+) => {
   const queryArr = [];
   if (!!userNameAndConfirmNumber) {
     queryArr.push(`userNameAndConfirmNumber=${userNameAndConfirmNumber}`);
@@ -127,11 +124,7 @@ export const searchTransactions = (
       'lineItems',
     ],
     'fields.listing': ['title', 'availabilityPlan', 'publicData.listingType'],
-    'fields.user': [
-      'profile.displayName',
-      'profile.abbreviatedName',
-      'profile',
-    ],
+    'fields.user': ['profile.displayName', 'profile.abbreviatedName', 'profile'],
     'fields.image': ['variants.square-small', 'variants.square-small2x'],
   };
   axios
@@ -139,9 +132,7 @@ export const searchTransactions = (
     .then(resp => {
       const data = resp.data || [];
       return Promise.all(
-        data.map(d =>
-          sdk.transactions.show({ id: new UUID(d.id), ...apiQueryParams })
-        )
+        data.map(d => sdk.transactions.show({ id: new UUID(d.id), ...apiQueryParams }))
       );
     })
     .then(resp => {
@@ -211,13 +202,10 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
       'payinTotal',
       'payoutTotal',
       'lineItems',
+      'protectedData.confirmationNumber',
     ],
     'fields.listing': ['title', 'availabilityPlan', 'publicData.listingType'],
-    'fields.user': [
-      'profile.displayName',
-      'profile.abbreviatedName',
-      'profile',
-    ],
+    'fields.user': ['profile.displayName', 'profile.abbreviatedName', 'profile'],
     'fields.image': ['variants.square-small', 'variants.square-small2x'],
     page,
     perPage: INBOX_PAGE_SIZE,
