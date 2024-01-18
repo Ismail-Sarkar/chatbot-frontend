@@ -138,6 +138,7 @@ class DateInputComponent extends Component {
       value,
       children,
       render,
+      keepOpenCalender,
       ...datePickerProps
     } = this.props;
     /* eslint-enable no-unused-vars */
@@ -145,11 +146,15 @@ class DateInputComponent extends Component {
     const initialMoment = initialDate ? moment(initialDate) : null;
 
     const date =
-      value && value.date instanceof Date && value.date.toString() !== 'Invalid Date'
+      value &&
+      value.date instanceof Date &&
+      value.date.toString() !== 'Invalid Date'
         ? moment(value.date)
         : initialMoment;
 
-    const placeholder = placeholderText || intl.formatMessage({ id: 'FieldDateInput.placeholder' });
+    const placeholder =
+      placeholderText ||
+      intl.formatMessage({ id: 'FieldDateInput.placeholder' });
 
     const screenReaderInputText =
       screenReaderInputMessage ||
@@ -163,12 +168,13 @@ class DateInputComponent extends Component {
       <div className={classes}>
         <SingleDatePicker
           {...datePickerProps}
-          focused={this.state.focused}
+          focused={this.state.focused || keepOpenCalender}
           onFocusChange={this.onFocusChange}
           date={date}
           onDateChange={this.onDateChange}
           placeholder={placeholder}
           screenReaderInputMessage={screenReaderInputText}
+          enableOutsideDays={true}
         />
       </div>
     );

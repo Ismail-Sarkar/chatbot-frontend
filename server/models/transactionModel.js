@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { getUserBySharetribeId } = require('./userModel');
 
 const TransactionSchema = new mongoose.Schema(
   {
@@ -49,6 +50,7 @@ module.exports.searchTransactionsBy = async (
   userNameAndConfirmNumber,
   bookingStart,
   bookingEnd,
+  userId,
   isCustomer = false
 ) => {
   const userNameAndConfirmNumberAndQuery = !!userNameAndConfirmNumber
@@ -59,25 +61,37 @@ module.exports.searchTransactionsBy = async (
         ],
       }
     : {};
+
+  const user = await getUserBySharetribeId(userId);
+  if (!user) throw new Error('User not found');
+
+  const queryFor = isCustomer
+    ? { customerId: user._id }
+    : { providerId: user._id };
+  const bookingStartDate = bookingStart && new Date(bookingStart);
+  const bookingEndDate = bookingEnd && new Date(bookingEnd);
   const bookingStartQuery =
     !!bookingStart && !!bookingEnd
       ? {
           $and: [
-            { bookingStartDate: { $gte: bookingStart } },
-            { bookingStartDate: { $lte: bookingEnd } },
+            { bookingStartDate: { $gte: bookingStartDate } },
+            { bookingStartDate: { $lte: bookingEndDate } },
           ],
         }
       : !!bookingStart
-      ? { bookingStartDate: bookingStart }
+      ? { bookingStartDate: bookingStartDate }
       : !!bookingEnd
-      ? { bookingStartDate: bookingEnd }
+      ? { bookingStartDate: bookingEndDate }
       : {};
+
   const query = {
     ...userNameAndConfirmNumberAndQuery,
     ...bookingStartQuery,
   };
+
   const localFieldName = isCustomer ? 'providerId' : 'customerId';
   const transactions = await Transaction.aggregate([
+    { $match: queryFor },
     {
       $lookup: {
         from: 'users',
@@ -96,7 +110,13 @@ module.exports.searchTransactionsBy = async (
       },
     },
     { $match: query },
-    { $project: { _id: 0, transactionId: 1, id: '$transactionId' } },
+    {
+      $project: {
+        _id: 0,
+        id: '$transactionId',
+        bookingStartDate: 1,
+      },
+    },
   ]).exec();
   return transactions;
 };

@@ -36,6 +36,11 @@ const capturePaymentIntent = async (req, res) => {
 const transactionSearch = async (req, res) => {
   try {
     const { type } = req.params;
+    const sdk = await getSdk(req, res);
+    const currentUser = (
+      await sdk.currentUser.show({ 'fields.currentUser': [] })
+    ).data.data;
+    const userId = currentUser.id.uuid;
 
     if (!['customer', 'provider'].includes(type)) {
       return res.status(400).send('Invalid details.');
@@ -43,6 +48,7 @@ const transactionSearch = async (req, res) => {
     const isCustomer = type === 'customer';
 
     const { bookingStart, userNameAndConfirmNumber, bookingEnd } = req.query;
+
     if (!bookingStart && !userNameAndConfirmNumber && !bookingEnd) {
       return res.status(400).send('Invalid details.');
     }
@@ -50,6 +56,7 @@ const transactionSearch = async (req, res) => {
       userNameAndConfirmNumber,
       bookingStart,
       bookingEnd,
+      userId,
       isCustomer
     );
     res.status(200).send(transactionsId || []);

@@ -26,3 +26,10 @@ module.exports.updatedUserName = async (sharetribeId, userName) => {
   ).exec();
   return user;
 };
+
+module.exports.getUserBySharetribeId = async sharetribeId => {
+  const user = await User.findOne({ sharetribeId }, null, {
+    lean: true,
+  }).exec();
+  return user;
+};

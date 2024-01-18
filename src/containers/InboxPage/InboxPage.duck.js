@@ -7,6 +7,7 @@ import { addMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { apiBaseUrl } from '../../util/api';
 import axios from 'axios';
 import { types as sdkTypes } from '../../util/sdkLoader';
+import moment from 'moment';
 
 const { UUID } = sdkTypes;
 
@@ -19,9 +20,19 @@ const sortedTransactions = txs =>
 
 // ================ Action types ================ //
 
-export const FETCH_ORDERS_OR_SALES_REQUEST = 'app/InboxPage/FETCH_ORDERS_OR_SALES_REQUEST';
-export const FETCH_ORDERS_OR_SALES_SUCCESS = 'app/InboxPage/FETCH_ORDERS_OR_SALES_SUCCESS';
-export const FETCH_ORDERS_OR_SALES_ERROR = 'app/InboxPage/FETCH_ORDERS_OR_SALES_ERROR';
+export const FETCH_ORDERS_OR_SALES_REQUEST =
+  'app/InboxPage/FETCH_ORDERS_OR_SALES_REQUEST';
+export const FETCH_ORDERS_OR_SALES_SUCCESS =
+  'app/InboxPage/FETCH_ORDERS_OR_SALES_SUCCESS';
+export const FETCH_ORDERS_OR_SALES_ERROR =
+  'app/InboxPage/FETCH_ORDERS_OR_SALES_ERROR';
+
+export const FETCH_PER_DAY_ORDERS_OR_SALES_REQUEST =
+  'app/InboxPage/FETCH_PER_DAY_ORDERS_OR_SALES_REQUEST';
+export const FETCH_PER_DAY_ORDERS_OR_SALES_SUCCESS =
+  'app/InboxPage/FETCH_PER_DAY_ORDERS_OR_SALES_SUCCESS';
+export const FETCH_PER_DAY_ORDERS_OR_SALES_ERROR =
+  'app/InboxPage/FETCH_PER_DAY_ORDERS_OR_SALES_ERROR';
 
 // ================ Reducer ================ //
 
@@ -36,6 +47,9 @@ const initialState = {
   fetchOrdersOrSalesError: null,
   pagination: null,
   transactionRefs: [],
+  perDayTransaction: {},
+  perDayTransactionError: null,
+  perDayTransactionFetchInProgress: false,
 };
 
 export default function inboxPageReducer(state = initialState, action = {}) {
@@ -60,6 +74,25 @@ export default function inboxPageReducer(state = initialState, action = {}) {
         fetchOrdersOrSalesError: payload,
       };
 
+    case FETCH_PER_DAY_ORDERS_OR_SALES_REQUEST:
+      return {
+        ...state,
+        perDayTransactionFetchInProgress: true,
+        perDayTransactionError: null,
+      };
+    case FETCH_PER_DAY_ORDERS_OR_SALES_SUCCESS:
+      return {
+        ...state,
+        perDayTransactionFetchInProgress: false,
+        perDayTransaction: { ...state.perDayTransaction, ...payload },
+      };
+    case FETCH_PER_DAY_ORDERS_OR_SALES_ERROR:
+      return {
+        ...state,
+        perDayTransactionError: payload,
+        perDayTransactionFetchInProgress: false,
+      };
+
     default:
       return state;
   }
@@ -80,23 +113,46 @@ const fetchOrdersOrSalesError = e => ({
   payload: e,
 });
 
+const fetchPerDayOrdersOrSalesRequest = () => ({
+  type: FETCH_PER_DAY_ORDERS_OR_SALES_REQUEST,
+});
+const fetchPerDayOrdersOrSalesSuccess = response => ({
+  type: FETCH_PER_DAY_ORDERS_OR_SALES_SUCCESS,
+  payload: response,
+});
+const fetchPerDayOrdersOrSalesError = e => ({
+  type: FETCH_PER_DAY_ORDERS_OR_SALES_ERROR,
+  error: true,
+  payload: e,
+});
+
 // ================ Thunks ================ //
 
 const INBOX_PAGE_SIZE = 10;
 
-export const searchTransactions = (userNameAndConfirmNumber, bookingStart, type) => (
-  dispatch,
-  getState,
-  sdk
-) => {
+export const searchTransactions = (
+  userNameAndConfirmNumber,
+  bookingStart,
+  bookingEnd,
+  type
+) => (dispatch, getState, sdk) => {
   const queryArr = [];
   if (!!userNameAndConfirmNumber) {
-    queryArr.push(`userNameAndConfirmNumber=${userNameAndConfirmNumber}`);
+    queryArr.push(
+      `userNameAndConfirmNumber=${userNameAndConfirmNumber.replace(/\s/g, '')}`
+    );
   }
   if (!!bookingStart) {
     queryArr.push(`bookingStart=${bookingStart}`);
   }
-  if (queryArr.length <= 0) return;
+  if (!!bookingEnd) {
+    queryArr.push(`bookingEnd=${bookingEnd}`);
+  }
+  if (queryArr.length <= 0) {
+    const params = { tab: type === 'customer' ? 'orders' : 'sales' };
+    dispatch(loadData(params));
+    return;
+  }
   dispatch(fetchOrdersOrSalesRequest());
   const query = queryArr.reduce((acc, val, indx) => {
     if (indx > 0) {
@@ -124,15 +180,21 @@ export const searchTransactions = (userNameAndConfirmNumber, bookingStart, type)
       'lineItems',
     ],
     'fields.listing': ['title', 'availabilityPlan', 'publicData.listingType'],
-    'fields.user': ['profile.displayName', 'profile.abbreviatedName', 'profile'],
+    'fields.user': [
+      'profile.displayName',
+      'profile.abbreviatedName',
+      'profile',
+    ],
     'fields.image': ['variants.square-small', 'variants.square-small2x'],
   };
   axios
-    .get(url)
+    .get(url, { withCredentials: true })
     .then(resp => {
       const data = resp.data || [];
       return Promise.all(
-        data.map(d => sdk.transactions.show({ id: new UUID(d.id), ...apiQueryParams }))
+        data.map(d =>
+          sdk.transactions.show({ id: new UUID(d.id), ...apiQueryParams })
+        )
       );
     })
     .then(resp => {
@@ -163,6 +225,49 @@ export const searchTransactions = (userNameAndConfirmNumber, bookingStart, type)
     })
     .catch(err => {
       dispatch(fetchOrdersOrSalesError(err));
+    });
+};
+
+export const fetchPerDayTransactions = (bookingStart, bookingEnd, type) => (
+  dispatch,
+  getState,
+  sdk
+) => {
+  const queryArr = [];
+  if (!!bookingStart) {
+    queryArr.push(`bookingStart=${bookingStart}`);
+  }
+  if (!!bookingEnd) {
+    queryArr.push(`bookingEnd=${bookingEnd}`);
+  }
+
+  if (queryArr.length <= 0) {
+    return;
+  }
+  dispatch(fetchPerDayOrdersOrSalesRequest());
+  const query = queryArr.reduce((acc, val, indx) => {
+    if (indx > 0) {
+      return acc + `&${val}`;
+    }
+    return acc + val;
+  }, '');
+  const url = `${apiBaseUrl()}/api/transaction/${type}?${query}`;
+  axios
+    .get(url, { withCredentials: true })
+    .then(resp => {
+      const data = resp.data;
+      const perDayTransaction = data.reduce((acc, d) => {
+        const formatedDate = moment(d.bookingStartDate).format('YYYY-MM-DD');
+        if (acc[formatedDate] === undefined) {
+          acc[formatedDate] = 0;
+        }
+        acc[formatedDate] += 1;
+        return acc;
+      }, {});
+      dispatch(fetchPerDayOrdersOrSalesSuccess(perDayTransaction));
+    })
+    .catch(err => {
+      dispatch(fetchPerDayOrdersOrSalesError(storableError(err)));
     });
 };
 
@@ -205,21 +310,35 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
       'protectedData.confirmationNumber',
     ],
     'fields.listing': ['title', 'availabilityPlan', 'publicData.listingType'],
-    'fields.user': ['profile.displayName', 'profile.abbreviatedName', 'profile'],
+    'fields.user': [
+      'profile.displayName',
+      'profile.abbreviatedName',
+      'profile',
+    ],
     'fields.image': ['variants.square-small', 'variants.square-small2x'],
     page,
     perPage: INBOX_PAGE_SIZE,
   };
 
-  return sdk.transactions
-    .query(apiQueryParams)
-    .then(response => {
-      dispatch(addMarketplaceEntities(response));
-      dispatch(fetchOrdersOrSalesSuccess(response));
-      return response;
-    })
-    .catch(e => {
-      dispatch(fetchOrdersOrSalesError(storableError(e)));
-      throw e;
-    });
+  const momentStartDay = moment();
+  const momentEndDay = moment();
+  const startDay = momentStartDay.startOf('month').toISOString();
+  const endDay = momentEndDay.endOf('month').toISOString();
+
+  const type = tab === 'orders' ? 'customer' : 'provider';
+
+  return Promise.all([
+    sdk.transactions
+      .query(apiQueryParams)
+      .then(response => {
+        dispatch(addMarketplaceEntities(response));
+        dispatch(fetchOrdersOrSalesSuccess(response));
+        return response;
+      })
+      .catch(e => {
+        dispatch(fetchOrdersOrSalesError(storableError(e)));
+        throw e;
+      }),
+    dispatch(fetchPerDayTransactions(startDay, endDay, type)),
+  ]);
 };

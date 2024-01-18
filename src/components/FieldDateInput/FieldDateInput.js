@@ -42,6 +42,7 @@ class FieldDateInputComponent extends Component {
       useMobileMargins,
       showErrorMessage,
       onChange: parentOnChange,
+      dateClassName,
       ...rest
     } = this.props;
 
@@ -63,14 +64,24 @@ class FieldDateInputComponent extends Component {
       [css.pickerError]: hasError,
     });
 
-    const { onBlur, onFocus, onChange: inputOnChange, type, checked, ...restOfInput } = input;
+    const {
+      onBlur,
+      onFocus,
+      onChange: inputOnChange,
+      type,
+      checked,
+      ...restOfInput
+    } = input;
     const inputProps = {
       onBlur: input.onBlur,
       onFocus: input.onFocus,
       onChange: handleChange(parentOnChange, inputOnChange),
       useMobileMargins,
       id,
-      readOnly: typeof window !== 'undefined' && window.innerWidth < MAX_MOBILE_SCREEN_WIDTH,
+      readOnly:
+        typeof window !== 'undefined' &&
+        window.innerWidth < MAX_MOBILE_SCREEN_WIDTH,
+      className: dateClassName,
       ...restOfInput,
       ...rest,
     };
@@ -91,7 +102,9 @@ class FieldDateInputComponent extends Component {
           </label>
         ) : null}
         <DateInput className={inputClasses} {...inputProps} />
-        {showErrorMessage ? <ValidationError className={errorClasses} fieldMeta={meta} /> : null}
+        {showErrorMessage ? (
+          <ValidationError className={errorClasses} fieldMeta={meta} />
+        ) : null}
       </div>
     );
   }
@@ -140,7 +153,7 @@ const FieldDateInput = props => {
     <Field
       component={FieldDateInputComponent}
       isOutsideRange={isOutsideRange || defaultIsOutSideRange}
-      firstDayOfWeek={firstDayOfWeek || defaultFirstDayOfWeek}
+      firstDayOfWeek={firstDayOfWeek ?? defaultFirstDayOfWeek}
       {...rest}
     />
   );
