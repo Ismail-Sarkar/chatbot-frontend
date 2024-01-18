@@ -242,7 +242,7 @@ InboxItem.propTypes = {
 };
 
 const SearchForm = props => {
-  const { showFrom, intl, handleOnChange, onChangeKey } = props;
+  const { showFrom, intl, handleOnChange, onChangeKey, className } = props;
   const [searchText, setSearchText] = useState('');
 
   const debounceCallback = func => {
@@ -270,7 +270,7 @@ const SearchForm = props => {
   };
 
   return showFrom ? (
-    <div className={css.formWrapper}>
+    <div className={classNames(css.formWrapper, className)}>
       <form>
         <input
           type="text"
@@ -476,7 +476,9 @@ export const InboxPageComponent = props => {
                 <FinalForm
                   {...rest}
                   initialValues={{
-                    startDate: transactionSearchDetails.bookingStart,
+                    startDate: {
+                      date: new Date(transactionSearchDetails.bookingStart),
+                    },
                   }}
                   handleDateOnChange={value =>
                     setTransactionSearchDetails(details => ({
@@ -572,6 +574,7 @@ export const InboxPageComponent = props => {
           </p>
         ) : null}
         <SearchForm
+          className={css.searchForm}
           showFrom={!isOrders}
           intl={intl}
           handleOnChange={searchTransactionBy}

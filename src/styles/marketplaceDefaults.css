@@ -55,9 +55,14 @@
 
   --colorLightTransparent: rgba(255, 255, 255, 0.65);
 
+  --color-black: #858585;
+  --color-white: #fff;
+  --color-blue: #40a8f1;
+  --color-blocked: #999999;
+
   /* ================ Font ================ */
-  --fontFamily: -apple-system, BlinkMacSystemFont, 'Inter', Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --fontFamily: -apple-system, BlinkMacSystemFont, 'Inter', Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
   --fontWeightRegular: 400;
   --fontWeightMedium: 500;

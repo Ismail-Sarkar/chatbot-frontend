@@ -49,12 +49,13 @@
   border-top-style: solid;
   background-color: var(--colorWhite);
   box-shadow: var(--boxShadow);
-  min-height: 560px;
   @media (--viewportMedium) {
     padding: 24px 24px 0 24px;
   }
 
   @media (--viewportLarge) {
+    min-height: 560px;
+
     flex-wrap: unset;
     padding: 40px 0 82px 36px;
     flex-direction: column;
@@ -417,10 +418,6 @@
 }
 
 .inboxPageCalender {
-  --color-black: #858585;
-  --color-white: #fff;
-  --color-blue: #40a8f1;
-  --color-blocked: #999999;
   margin-top: -16px;
 
   & :global(.DayPicker) {
@@ -515,6 +512,15 @@
       border-radius: 8px !important;
     }
   }
+  & :global(.CalendarDay__selected) {
+    background-color: #000 !important;
+    color: #fff !important;
+    & :global(.renderedDay) {
+      background-color: #000 !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+    }
+  }
 }
 
 .dateLoader {
@@ -526,9 +532,13 @@
   justify-content: center;
   align-items: center;
   color: #858585;
-
+  position: absolute;
   & .icon {
     width: 48px;
     height: 48px;
   }
+}
+
+.searchForm {
+  margin-bottom: 16px;
 }
