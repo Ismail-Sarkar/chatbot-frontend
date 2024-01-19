@@ -16,7 +16,12 @@ import {
   LINE_ITEM_HOUR,
   LISTING_UNIT_TYPES,
 } from '../../util/types';
-import { subtractTime, getStartOf, addTime } from '../../util/dates';
+import {
+  subtractTime,
+  getStartOf,
+  addTime,
+  getDefaultTimeZoneOnBrowser,
+} from '../../util/dates';
 import {
   TX_TRANSITION_ACTOR_CUSTOMER,
   TX_TRANSITION_ACTOR_PROVIDER,
@@ -518,7 +523,9 @@ export const InboxPageComponent = props => {
                   {...rest}
                   initialValues={{
                     startDate: {
-                      date: new Date(transactionSearchDetails.bookingStart),
+                      date: moment(transactionSearchDetails.bookingStart)
+                        .tz(getDefaultTimeZoneOnBrowser())
+                        .toDate(),
                     },
                   }}
                   handleDateOnChange={value =>
@@ -577,10 +584,9 @@ export const InboxPageComponent = props => {
                                 : false;
                             }}
                             onChange={value => {
+                              console.log(value.date);
                               handleDateOnChange(
-                                moment(value.date)
-                                  .startOf('day')
-                                  .toISOString()
+                                moment(value.date).format('YYYY-MM-DD')
                               );
                             }}
                             keepOpenCalender={true}

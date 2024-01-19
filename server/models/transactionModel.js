@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 const { getUserBySharetribeId } = require('./userModel');
 const moment = require('moment');
-const PER_PAGE = 10;
 
+const PER_PAGE = 10;
 const TransactionSchema = new mongoose.Schema(
   {
     transactionId: { type: String, unique: true },
     customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     providerId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     transactionConfirmNumber: { type: String },
+    timeZone: { type: String },
     bookingStartDate: { type: Date },
   },
   { timestamps: true }
@@ -21,7 +22,8 @@ module.exports.addTransaction = async (
   customerId,
   providerId,
   transactionConfirmNumber,
-  bookingStartDate
+  bookingStartDate,
+  timeZone
 ) => {
   const savedTransaction = await Transaction.findOne({ transactionId }, null, {
     lean: true,
@@ -33,6 +35,7 @@ module.exports.addTransaction = async (
     providerId,
     bookingStartDate,
     transactionConfirmNumber,
+    timeZone,
   });
   return transaction;
 };
@@ -60,10 +63,10 @@ module.exports.searchTransactionsBy = async (
   const hasPage = page && typeof page === 'number';
   const pageMaybe = hasPage
     ? { $skip: (page - 1) * PER_PAGE }
-    : { $project: { id: 1, bookingStartDate: 1 } };
+    : { $project: { id: 1, bookingStartDate: 1, timeZone: 1 } };
   const perPageMaybe = hasPage
     ? { $limit: perPage }
-    : { $project: { id: 1, bookingStartDate: 1 } };
+    : { $project: { id: 1, bookingStartDate: 1, timeZone: 1 } };
 
   const userNameAndConfirmNumberAndQuery = !!userNameAndConfirmNumber
     ? {
@@ -83,16 +86,26 @@ module.exports.searchTransactionsBy = async (
 
   const bookingStartDate =
     bookingStart &&
-    moment
-      .utc(bookingStart)
+    moment(bookingStart)
+      .tz('Etc/UTC')
       .startOf('day')
       .toDate();
   const bookingEndDate =
     bookingEnd &&
-    moment
-      .utc(bookingEnd)
+    moment(bookingEnd)
+      .tz('Etc/UTC')
       .endOf('day')
       .toDate();
+  console.log(
+    moment(bookingStart)
+      .tz('Etc/UTC')
+      .startOf('day')
+      .format('YYYY-MM-DD')
+  );
+  const formattedBookingStart = moment(bookingStart)
+    .tz('Etc/UTC')
+    .startOf('day')
+    .format('YYYY-MM-DD');
   const bookingStartQuery =
     !!bookingStart && !!bookingEnd
       ? {
@@ -111,8 +124,8 @@ module.exports.searchTransactionsBy = async (
             },
             {
               bookingStartDate: {
-                $lte: moment
-                  .utc(bookingStart)
+                $lte: moment(bookingStart)
+                  .tz('Etc/UTC')
                   .endOf('day')
                   .toDate(),
               },
@@ -124,8 +137,8 @@ module.exports.searchTransactionsBy = async (
           $and: [
             {
               bookingStartDate: {
-                $gte: moment
-                  .utc(bookingEnd)
+                $gte: moment(bookingEnd)
+                  .tz('Etc/UTC')
                   .startOf('day')
                   .toDate(),
               },
@@ -142,7 +155,6 @@ module.exports.searchTransactionsBy = async (
     ...userNameAndConfirmNumberAndQuery,
     ...bookingStartQuery,
   };
-  console.log(bookingStartQuery['$and']);
   const localFieldName = isCustomer ? 'providerId' : 'customerId';
   const aqgregateQuery = [
     { $match: queryFor },
@@ -159,6 +171,7 @@ module.exports.searchTransactionsBy = async (
         transactionId: 1,
         bookingStartDate: 1,
         transactionConfirmNumber: 1,
+        timeZone: 1,
         createdAt: 1,
         user: { $arrayElemAt: ['$users', 0] },
       },
@@ -169,9 +182,20 @@ module.exports.searchTransactionsBy = async (
         _id: 0,
         id: '$transactionId',
         bookingStartDate: 1,
+        timeZone: 1,
       },
     },
   ];
+  console.log(
+    bookingStartQuery['$and'],
+    moment(bookingStart)
+      .tz('Etc/UTC')
+      .startOf('day')
+      .toDate(),
+    moment('2024-01-18T18:30:00.000Z')
+      .tz('America/Cancun')
+      .format('DD.MM.YYYY')
+  );
   let totalTransactions = 0;
   if (hasPage) {
     const transactions = await Transaction.aggregate(aqgregateQuery).exec();

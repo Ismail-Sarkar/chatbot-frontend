@@ -22,7 +22,8 @@ module.exports = (req, res) => {
   let stripePaymentIntents = {},
     transactionResp,
     customer,
-    provider;
+    provider,
+    timeZone;
   const bookingStart = bodyParams.params.bookingStart;
   const paymentMethod = bodyParams?.params?.paymentMethod;
 
@@ -42,6 +43,7 @@ module.exports = (req, res) => {
         currentUserResponse,
       ]) => {
         const listing = showListingResponse.data.data;
+        timeZone = listing.attributes?.availabilityPlan.timezone;
         const commissionAsset = fetchAssetsResponse.data.data[0];
         provider = showListingResponse.data.included[0];
         customer = currentUserResponse.data.data;
@@ -111,7 +113,8 @@ module.exports = (req, res) => {
           customer,
           provider,
           transactionResp.data.data,
-          bookingStart
+          bookingStart,
+          timeZone
         );
       }
     })

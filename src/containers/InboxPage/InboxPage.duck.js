@@ -8,6 +8,7 @@ import { apiBaseUrl } from '../../util/api';
 import axios from 'axios';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import moment from 'moment';
+import { getDefaultTimeZoneOnBrowser } from '../../util/dates';
 
 const { UUID } = sdkTypes;
 
@@ -139,6 +140,17 @@ export const searchTransactions = (
 ) => (dispatch, getState, sdk) => {
   let meta = {};
   const queryArr = [];
+  const modifiedBookingStart =
+    bookingStart &&
+    moment(bookingStart)
+      .tz(getDefaultTimeZoneOnBrowser())
+      .startOf('day')
+      .toISOString();
+  console.log(
+    modifiedBookingStart,
+    getDefaultTimeZoneOnBrowser(),
+    bookingStart
+  );
   if (!!userNameAndConfirmNumber) {
     queryArr.push(
       `userNameAndConfirmNumber=${userNameAndConfirmNumber.replace(/\s/g, '')}`
@@ -265,14 +277,16 @@ export const fetchPerDayTransactions = (bookingStart, bookingEnd, type) => (
     .get(url, { withCredentials: true })
     .then(resp => {
       const { data } = resp.data;
-      const perDayTransaction = data.reduce((acc, d) => {
-        const formatedDate = moment(d.bookingStartDate).format('YYYY-MM-DD');
-        if (acc[formatedDate] === undefined) {
-          acc[formatedDate] = 0;
+      const perDayTransaction = {};
+      for (let d of data) {
+        const formatedDate = moment(d.bookingStartDate)
+          .tz(d.timeZone)
+          .format('YYYY-MM-DD');
+        if (perDayTransaction[formatedDate] === undefined) {
+          perDayTransaction[formatedDate] = 0;
         }
-        acc[formatedDate] += 1;
-        return acc;
-      }, {});
+        perDayTransaction[formatedDate] += 1;
+      }
       dispatch(fetchPerDayOrdersOrSalesSuccess(perDayTransaction));
     })
     .catch(err => {

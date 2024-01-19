@@ -5,7 +5,8 @@ module.exports.addTransactionDetails = async (
   customerDetails,
   providerDetails,
   transactionDetails,
-  bookingStartDate
+  bookingStartDate,
+  timeZone
 ) => {
   const {
     id: { uuid: customerId },
@@ -36,7 +37,8 @@ module.exports.addTransactionDetails = async (
     mongoCustomer._id,
     mongoProvider._id,
     confirmationNumber,
-    bookingStartDate
+    bookingStartDate,
+    timeZone
   );
   return transaction;
 };
