@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { getUserBySharetribeId } = require('./userModel');
 const moment = require('moment');
-const PER_PAGE = 1;
+const PER_PAGE = 10;
 
 const TransactionSchema = new mongoose.Schema(
   {
@@ -80,8 +80,19 @@ module.exports.searchTransactionsBy = async (
   const queryFor = isCustomer
     ? { customerId: user._id }
     : { providerId: user._id };
-  const bookingStartDate = bookingStart && new Date(bookingStart);
-  const bookingEndDate = bookingEnd && new Date(bookingEnd);
+
+  const bookingStartDate =
+    bookingStart &&
+    moment
+      .utc(bookingStart)
+      .startOf('day')
+      .toDate();
+  const bookingEndDate =
+    bookingEnd &&
+    moment
+      .utc(bookingEnd)
+      .endOf('day')
+      .toDate();
   const bookingStartQuery =
     !!bookingStart && !!bookingEnd
       ? {
@@ -95,10 +106,7 @@ module.exports.searchTransactionsBy = async (
           $and: [
             {
               bookingStartDate: {
-                $gte: moment
-                  .utc(bookingStart)
-                  .startOf('day')
-                  .toDate(),
+                $gte: bookingStartDate,
               },
             },
             {
@@ -124,10 +132,7 @@ module.exports.searchTransactionsBy = async (
             },
             {
               bookingStartDate: {
-                $lte: moment
-                  .utc(bookingEnd)
-                  .endOf('day')
-                  .toDate(),
+                $lte: bookingEndDate,
               },
             },
           ],
@@ -137,6 +142,7 @@ module.exports.searchTransactionsBy = async (
     ...userNameAndConfirmNumberAndQuery,
     ...bookingStartQuery,
   };
+  console.log(bookingStartQuery['$and']);
   const localFieldName = isCustomer ? 'providerId' : 'customerId';
   const aqgregateQuery = [
     { $match: queryFor },

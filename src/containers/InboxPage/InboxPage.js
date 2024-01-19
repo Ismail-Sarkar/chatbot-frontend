@@ -319,6 +319,7 @@ export const InboxPageComponent = props => {
     ...rest
   } = props;
   const searchParams = parse(location?.search || '');
+
   const [transactionSearchDetails, setTransactionSearchDetails] = useState({
     userNameAndConfirmNumber: searchParams?.userNameAndConfirmNumber || '',
     bookingStart: searchParams?.bookingStart || '',
@@ -352,6 +353,15 @@ export const InboxPageComponent = props => {
     setIsFirstLoad(false);
   }, []);
 
+  useEffect(() => {
+    if (location) {
+      const searchParams = parse(location?.search || '');
+      setTransactionSearchDetails({
+        userNameAndConfirmNumber: searchParams?.userNameAndConfirmNumber || '',
+        bookingStart: searchParams?.bookingStart || '',
+      });
+    }
+  }, [location]);
   if (!validTab) {
     return <NotFoundPage />;
   }
@@ -537,8 +547,6 @@ export const InboxPageComponent = props => {
                       rootClassName || css.root,
                       className
                     );
-
-                    const { startDate } = values;
 
                     return (
                       <Form
