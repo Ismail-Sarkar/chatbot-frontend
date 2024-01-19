@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const { getUserBySharetribeId } = require('./userModel');
+const moment = require('moment');
+const PER_PAGE = 1;
 
 const TransactionSchema = new mongoose.Schema(
   {
@@ -51,8 +53,18 @@ module.exports.searchTransactionsBy = async (
   bookingStart,
   bookingEnd,
   userId,
-  isCustomer = false
+  page,
+  isCustomer = false,
+  perPage = PER_PAGE
 ) => {
+  const hasPage = page && typeof page === 'number';
+  const pageMaybe = hasPage
+    ? { $skip: (page - 1) * PER_PAGE }
+    : { $project: { id: 1, bookingStartDate: 1 } };
+  const perPageMaybe = hasPage
+    ? { $limit: perPage }
+    : { $project: { id: 1, bookingStartDate: 1 } };
+
   const userNameAndConfirmNumberAndQuery = !!userNameAndConfirmNumber
     ? {
         $or: [
@@ -79,18 +91,54 @@ module.exports.searchTransactionsBy = async (
           ],
         }
       : !!bookingStart
-      ? { bookingStartDate: bookingStartDate }
+      ? {
+          $and: [
+            {
+              bookingStartDate: {
+                $gte: moment
+                  .utc(bookingStart)
+                  .startOf('day')
+                  .toDate(),
+              },
+            },
+            {
+              bookingStartDate: {
+                $lte: moment
+                  .utc(bookingStart)
+                  .endOf('day')
+                  .toDate(),
+              },
+            },
+          ],
+        }
       : !!bookingEnd
-      ? { bookingStartDate: bookingEndDate }
+      ? {
+          $and: [
+            {
+              bookingStartDate: {
+                $gte: moment
+                  .utc(bookingEnd)
+                  .startOf('day')
+                  .toDate(),
+              },
+            },
+            {
+              bookingStartDate: {
+                $lte: moment
+                  .utc(bookingEnd)
+                  .endOf('day')
+                  .toDate(),
+              },
+            },
+          ],
+        }
       : {};
-
   const query = {
     ...userNameAndConfirmNumberAndQuery,
     ...bookingStartQuery,
   };
-
   const localFieldName = isCustomer ? 'providerId' : 'customerId';
-  const transactions = await Transaction.aggregate([
+  const aqgregateQuery = [
     { $match: queryFor },
     {
       $lookup: {
@@ -117,6 +165,25 @@ module.exports.searchTransactionsBy = async (
         bookingStartDate: 1,
       },
     },
+  ];
+  let totalTransactions = 0;
+  if (hasPage) {
+    const transactions = await Transaction.aggregate(aqgregateQuery).exec();
+    totalTransactions = transactions.length;
+  }
+  const transactions = await Transaction.aggregate([
+    ...aqgregateQuery,
+    pageMaybe,
+    perPageMaybe,
   ]).exec();
-  return transactions;
+
+  const meta = {
+    totalItems: hasPage ? totalTransactions : transactions.length,
+    totalPages: hasPage ? Math.round(totalTransactions / perPage) : 1,
+    ...(hasPage ? { page, perPage } : {}),
+  };
+  return {
+    data: transactions,
+    meta,
+  };
 };

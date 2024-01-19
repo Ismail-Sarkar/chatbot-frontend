@@ -59,6 +59,8 @@ import { fetchPerDayTransactions, searchTransactions } from './InboxPage.duck';
 import { useCallback } from 'react';
 import moment from 'moment';
 import { isEmpty } from 'lodash';
+import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
+import { parse } from 'query-string';
 
 // Check if the transaction line-items use booking-related units
 const getUnitLineItem = lineItems => {
@@ -242,8 +244,15 @@ InboxItem.propTypes = {
 };
 
 const SearchForm = props => {
-  const { showFrom, intl, handleOnChange, onChangeKey, className } = props;
-  const [searchText, setSearchText] = useState('');
+  const {
+    showFrom,
+    intl,
+    handleOnChange,
+    onChangeKey,
+    className,
+    value,
+  } = props;
+  const [searchText, setSearchText] = useState(value || '');
 
   const debounceCallback = func => {
     let timeoutId = null;
@@ -254,7 +263,7 @@ const SearchForm = props => {
       timeoutId = setTimeout(() => {
         func(...args);
         clearTimeout(timeoutId);
-      }, 1000);
+      }, 500);
     };
   };
 
@@ -268,10 +277,13 @@ const SearchForm = props => {
     setSearchText(value);
     debounceHandleOnChange(onChangeKey, value);
   };
+  const handleSubmit = e => {
+    e.preventDefault();
+  };
 
   return showFrom ? (
     <div className={classNames(css.formWrapper, className)}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={searchText}
@@ -303,11 +315,13 @@ export const InboxPageComponent = props => {
     perDayTransactionError,
     perDayTransactionFetchInProgress,
     onfetchPerDayTransactions,
+    location,
     ...rest
   } = props;
+  const searchParams = parse(location?.search || '');
   const [transactionSearchDetails, setTransactionSearchDetails] = useState({
-    userNameAndConfirmNumber: '',
-    bookingStart: '',
+    userNameAndConfirmNumber: searchParams?.userNameAndConfirmNumber || '',
+    bookingStart: searchParams?.bookingStart || '',
   });
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const { tab } = params;
@@ -318,6 +332,7 @@ export const InboxPageComponent = props => {
       [keyName]: value,
     }));
   };
+
   useEffect(() => {
     const type = tab === 'orders' ? 'customer' : 'provider';
     if (!isFirstLoad) {
@@ -347,6 +362,22 @@ export const InboxPageComponent = props => {
   const ordersTitle = intl.formatMessage({ id: 'InboxPage.ordersTitle' });
   const salesTitle = intl.formatMessage({ id: 'InboxPage.salesTitle' });
   const title = isOrders ? ordersTitle : salesTitle;
+  const searchParamsMaybe =
+    transactionSearchDetails.userNameAndConfirmNumber &&
+    transactionSearchDetails.bookingStart
+      ? {
+          userNameAndConfirmNumber:
+            transactionSearchDetails.userNameAndConfirmNumber,
+          bookingStart: transactionSearchDetails.booking,
+        }
+      : transactionSearchDetails.userNameAndConfirmNumber
+      ? {
+          userNameAndConfirmNumber:
+            transactionSearchDetails.userNameAndConfirmNumber,
+        }
+      : transactionSearchDetails.bookingStart
+      ? { bookingStart: transactionSearchDetails.bookingStart }
+      : {};
 
   const pickType = lt => conf => conf.listingType === lt;
   const findListingTypeConfig = publicData => {
@@ -579,6 +610,7 @@ export const InboxPageComponent = props => {
           intl={intl}
           handleOnChange={searchTransactionBy}
           onChangeKey={'userNameAndConfirmNumber'}
+          value={transactionSearchDetails.userNameAndConfirmNumber}
         />
         <ul className={css.itemList}>
           {!fetchInProgress ? (
@@ -600,12 +632,14 @@ export const InboxPageComponent = props => {
             </li>
           ) : null}
         </ul>
+
         {hasTransactions && pagination && pagination.totalPages > 1 ? (
           <PaginationLinks
             className={css.pagination}
             pageName="InboxPage"
             pagePathParams={params}
             pagination={pagination}
+            pageSearchParams={searchParamsMaybe}
           />
         ) : null}
       </LayoutSideNavigation>

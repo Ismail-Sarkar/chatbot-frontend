@@ -47,7 +47,13 @@ const transactionSearch = async (req, res) => {
     }
     const isCustomer = type === 'customer';
 
-    const { bookingStart, userNameAndConfirmNumber, bookingEnd } = req.query;
+    const {
+      bookingStart,
+      userNameAndConfirmNumber,
+      bookingEnd,
+      page,
+      perPage,
+    } = req.query;
 
     if (!bookingStart && !userNameAndConfirmNumber && !bookingEnd) {
       return res.status(400).send('Invalid details.');
@@ -57,7 +63,9 @@ const transactionSearch = async (req, res) => {
       bookingStart,
       bookingEnd,
       userId,
-      isCustomer
+      page ? parseInt(page) : page,
+      isCustomer,
+      perPage
     );
     res.status(200).send(transactionsId || []);
   } catch (err) {

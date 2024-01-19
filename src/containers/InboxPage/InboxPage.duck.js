@@ -134,8 +134,10 @@ export const searchTransactions = (
   userNameAndConfirmNumber,
   bookingStart,
   bookingEnd,
-  type
+  type,
+  page = 1
 ) => (dispatch, getState, sdk) => {
+  let meta = {};
   const queryArr = [];
   if (!!userNameAndConfirmNumber) {
     queryArr.push(
@@ -148,10 +150,18 @@ export const searchTransactions = (
   if (!!bookingEnd) {
     queryArr.push(`bookingEnd=${bookingEnd}`);
   }
+
   if (queryArr.length <= 0) {
+    if (typeof window !== 'undefined') {
+      const tab = type === 'customer' ? 'orders' : 'sales';
+      window.history.pushState(null, '', `/inbox/${tab}`);
+    }
     const params = { tab: type === 'customer' ? 'orders' : 'sales' };
     dispatch(loadData(params));
     return;
+  }
+  if (!!page && typeof page === 'number') {
+    queryArr.push(`page=${page}`);
   }
   dispatch(fetchOrdersOrSalesRequest());
   const query = queryArr.reduce((acc, val, indx) => {
@@ -160,6 +170,7 @@ export const searchTransactions = (
     }
     return acc + val;
   }, '');
+
   const url = `${apiBaseUrl()}/api/transaction/${type}?${query}`;
   const apiQueryParams = {
     include: [
@@ -187,10 +198,11 @@ export const searchTransactions = (
     ],
     'fields.image': ['variants.square-small', 'variants.square-small2x'],
   };
-  axios
+  return axios
     .get(url, { withCredentials: true })
     .then(resp => {
-      const data = resp.data || [];
+      meta = resp.data.meta;
+      const { data } = resp.data || [];
       return Promise.all(
         data.map(d =>
           sdk.transactions.show({ id: new UUID(d.id), ...apiQueryParams })
@@ -198,12 +210,6 @@ export const searchTransactions = (
       );
     })
     .then(resp => {
-      const meta = {
-        totalItems: resp.length,
-        totalPages: 1,
-        page: 1,
-        perPage: resp.length,
-      };
       const formatedData = resp.reduce(
         (acc, r) => {
           const { data, included } = r.data;
@@ -221,6 +227,9 @@ export const searchTransactions = (
       };
       dispatch(addMarketplaceEntities(finalData));
       dispatch(fetchOrdersOrSalesSuccess(finalData));
+      if (typeof window !== 'undefined') {
+        window.history.pushState(null, '', `?${query}`);
+      }
       return finalData;
     })
     .catch(err => {
@@ -252,10 +261,10 @@ export const fetchPerDayTransactions = (bookingStart, bookingEnd, type) => (
     return acc + val;
   }, '');
   const url = `${apiBaseUrl()}/api/transaction/${type}?${query}`;
-  axios
+  return axios
     .get(url, { withCredentials: true })
     .then(resp => {
-      const data = resp.data;
+      const { data } = resp.data;
       const perDayTransaction = data.reduce((acc, d) => {
         const formatedDate = moment(d.bookingStartDate).format('YYYY-MM-DD');
         if (acc[formatedDate] === undefined) {
@@ -286,7 +295,7 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
 
   dispatch(fetchOrdersOrSalesRequest());
 
-  const { page = 1 } = parse(search);
+  const { page = 1, userNameAndConfirmNumber, bookingStart } = parse(search);
 
   const apiQueryParams = {
     only: onlyFilter,
@@ -326,9 +335,19 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
   const endDay = momentEndDay.endOf('month').toISOString();
 
   const type = tab === 'orders' ? 'customer' : 'provider';
-
-  return Promise.all([
-    sdk.transactions
+  let transactionLoadPromise = Promise.resolve();
+  if (!!userNameAndConfirmNumber || !!bookingStart) {
+    transactionLoadPromise = dispatch(
+      searchTransactions(
+        userNameAndConfirmNumber,
+        bookingStart,
+        undefined,
+        type,
+        page
+      )
+    );
+  } else {
+    transactionLoadPromise = sdk.transactions
       .query(apiQueryParams)
       .then(response => {
         dispatch(addMarketplaceEntities(response));
@@ -338,7 +357,11 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
       .catch(e => {
         dispatch(fetchOrdersOrSalesError(storableError(e)));
         throw e;
-      }),
+      });
+  }
+
+  return Promise.all([
+    transactionLoadPromise,
     dispatch(fetchPerDayTransactions(startDay, endDay, type)),
   ]);
 };

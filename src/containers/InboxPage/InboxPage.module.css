@@ -435,6 +435,13 @@
       color: var(--color-black) !important;
     }
   }
+  & :global(.CalendarDay_default) {
+    border-width: 0px !important;
+    & :hover,
+    & :focus {
+      border-width: 0px !important;
+    }
+  }
   & :global(.SingleDatePicker_picker),
   & :global(.SingleDatePicker_picker__directionLeft),
   & :global(.DayPicker__horizontal) {
@@ -463,11 +470,14 @@
 
   & :global(.DayPicker_weekHeader) {
     color: var(--color-black) !important;
+    top: 54px !important;
     /* border-bottom: 1px solid #000; */
   }
 
   & :global(.DayPicker_weekHeader_ul) {
     border-bottom: 1px solid var(--color-black);
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
   }
 
   & :global(.CalendarDay) {
@@ -514,6 +524,7 @@
   }
   & :global(.CalendarDay__selected) {
     background-color: #000 !important;
+    border-radius: 8px !important;
     color: #fff !important;
     & :global(.renderedDay) {
       background-color: #000 !important;
