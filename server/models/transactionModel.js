@@ -80,38 +80,54 @@ module.exports.searchTransactionsBy = async (
   const user = await getUserBySharetribeId(userId);
   if (!user) throw new Error('User not found');
 
-  const queryFor = isCustomer
-    ? { customerId: user._id }
-    : { providerId: user._id };
+  const queryFor = isCustomer ? { customerId: user._id } : { providerId: user._id };
 
-  const bookingStartDate =
+  const bookingRangeStartDate =
     bookingStart &&
     moment(bookingStart)
       .tz('Etc/UTC')
       .startOf('day')
       .toDate();
-  const bookingEndDate =
+
+  const bookingRangeEndDate =
     bookingEnd &&
     moment(bookingEnd)
       .tz('Etc/UTC')
       .endOf('day')
       .toDate();
-  console.log(
+
+  const bookingStartDate =
+    bookingStart &&
     moment(bookingStart)
       .tz('Etc/UTC')
-      .startOf('day')
-      .format('YYYY-MM-DD')
-  );
-  const formattedBookingStart = moment(bookingStart)
-    .tz('Etc/UTC')
-    .startOf('day')
-    .format('YYYY-MM-DD');
+      .toDate();
+
+  const bookingStartDateEnd =
+    bookingStart &&
+    moment(bookingStart)
+      .add(1, 'day')
+      .subtract(1, 'minute')
+      .toDate();
+
+  const bookingEndDate =
+    bookingEnd &&
+    moment(bookingEnd)
+      .tz('Etc/UTC')
+      .subtract(1, 'minute')
+      .toDate();
+
+  const bookingEndDateStart =
+    bookingEnd &&
+    moment(bookingEnd)
+      .subtract(1, 'day')
+      .toDate();
+
   const bookingStartQuery =
     !!bookingStart && !!bookingEnd
       ? {
           $and: [
-            { bookingStartDate: { $gte: bookingStartDate } },
-            { bookingStartDate: { $lte: bookingEndDate } },
+            { bookingStartDate: { $gte: bookingRangeStartDate } },
+            { bookingStartDate: { $lte: bookingRangeEndDate } },
           ],
         }
       : !!bookingStart
@@ -124,10 +140,7 @@ module.exports.searchTransactionsBy = async (
             },
             {
               bookingStartDate: {
-                $lte: moment(bookingStart)
-                  .tz('Etc/UTC')
-                  .endOf('day')
-                  .toDate(),
+                $lte: bookingStartDateEnd,
               },
             },
           ],
@@ -137,10 +150,7 @@ module.exports.searchTransactionsBy = async (
           $and: [
             {
               bookingStartDate: {
-                $gte: moment(bookingEnd)
-                  .tz('Etc/UTC')
-                  .startOf('day')
-                  .toDate(),
+                $gte: bookingEndDateStart,
               },
             },
             {
@@ -151,6 +161,7 @@ module.exports.searchTransactionsBy = async (
           ],
         }
       : {};
+
   const query = {
     ...userNameAndConfirmNumberAndQuery,
     ...bookingStartQuery,
@@ -186,16 +197,6 @@ module.exports.searchTransactionsBy = async (
       },
     },
   ];
-  console.log(
-    bookingStartQuery['$and'],
-    moment(bookingStart)
-      .tz('Etc/UTC')
-      .startOf('day')
-      .toDate(),
-    moment('2024-01-18T18:30:00.000Z')
-      .tz('America/Cancun')
-      .format('DD.MM.YYYY')
-  );
   let totalTransactions = 0;
   if (hasPage) {
     const transactions = await Transaction.aggregate(aqgregateQuery).exec();
