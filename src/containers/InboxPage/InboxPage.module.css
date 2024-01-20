@@ -532,6 +532,10 @@
       border-radius: 8px !important;
     }
   }
+
+  & :global(.CalendarDay__default) {
+    border: none !important;
+  }
 }
 
 .dateLoader {

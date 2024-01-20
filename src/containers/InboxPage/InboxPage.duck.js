@@ -21,12 +21,9 @@ const sortedTransactions = txs =>
 
 // ================ Action types ================ //
 
-export const FETCH_ORDERS_OR_SALES_REQUEST =
-  'app/InboxPage/FETCH_ORDERS_OR_SALES_REQUEST';
-export const FETCH_ORDERS_OR_SALES_SUCCESS =
-  'app/InboxPage/FETCH_ORDERS_OR_SALES_SUCCESS';
-export const FETCH_ORDERS_OR_SALES_ERROR =
-  'app/InboxPage/FETCH_ORDERS_OR_SALES_ERROR';
+export const FETCH_ORDERS_OR_SALES_REQUEST = 'app/InboxPage/FETCH_ORDERS_OR_SALES_REQUEST';
+export const FETCH_ORDERS_OR_SALES_SUCCESS = 'app/InboxPage/FETCH_ORDERS_OR_SALES_SUCCESS';
+export const FETCH_ORDERS_OR_SALES_ERROR = 'app/InboxPage/FETCH_ORDERS_OR_SALES_ERROR';
 
 export const FETCH_PER_DAY_ORDERS_OR_SALES_REQUEST =
   'app/InboxPage/FETCH_PER_DAY_ORDERS_OR_SALES_REQUEST';
@@ -140,21 +137,8 @@ export const searchTransactions = (
 ) => (dispatch, getState, sdk) => {
   let meta = {};
   const queryArr = [];
-  const modifiedBookingStart =
-    bookingStart &&
-    moment(bookingStart)
-      .tz(getDefaultTimeZoneOnBrowser())
-      .startOf('day')
-      .toISOString();
-  console.log(
-    modifiedBookingStart,
-    getDefaultTimeZoneOnBrowser(),
-    bookingStart
-  );
   if (!!userNameAndConfirmNumber) {
-    queryArr.push(
-      `userNameAndConfirmNumber=${userNameAndConfirmNumber.replace(/\s/g, '')}`
-    );
+    queryArr.push(`userNameAndConfirmNumber=${userNameAndConfirmNumber.replace(/\s/g, '')}`);
   }
   if (!!bookingStart) {
     queryArr.push(`bookingStart=${bookingStart}`);
@@ -203,11 +187,7 @@ export const searchTransactions = (
       'lineItems',
     ],
     'fields.listing': ['title', 'availabilityPlan', 'publicData.listingType'],
-    'fields.user': [
-      'profile.displayName',
-      'profile.abbreviatedName',
-      'profile',
-    ],
+    'fields.user': ['profile.displayName', 'profile.abbreviatedName', 'profile'],
     'fields.image': ['variants.square-small', 'variants.square-small2x'],
   };
   return axios
@@ -216,9 +196,7 @@ export const searchTransactions = (
       meta = resp.data.meta;
       const { data } = resp.data || [];
       return Promise.all(
-        data.map(d =>
-          sdk.transactions.show({ id: new UUID(d.id), ...apiQueryParams })
-        )
+        data.map(d => sdk.transactions.show({ id: new UUID(d.id), ...apiQueryParams }))
       );
     })
     .then(resp => {
@@ -333,11 +311,7 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
       'protectedData.confirmationNumber',
     ],
     'fields.listing': ['title', 'availabilityPlan', 'publicData.listingType'],
-    'fields.user': [
-      'profile.displayName',
-      'profile.abbreviatedName',
-      'profile',
-    ],
+    'fields.user': ['profile.displayName', 'profile.abbreviatedName', 'profile'],
     'fields.image': ['variants.square-small', 'variants.square-small2x'],
     page,
     perPage: INBOX_PAGE_SIZE,
@@ -352,13 +326,7 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
   let transactionLoadPromise = Promise.resolve();
   if (!!userNameAndConfirmNumber || !!bookingStart) {
     transactionLoadPromise = dispatch(
-      searchTransactions(
-        userNameAndConfirmNumber,
-        bookingStart,
-        undefined,
-        type,
-        page
-      )
+      searchTransactions(userNameAndConfirmNumber, bookingStart, undefined, type, page)
     );
   } else {
     transactionLoadPromise = sdk.transactions
