@@ -25,7 +25,6 @@ const FieldTextInputComponent = props => {
     showDiv,
     ...rest
   } = props;
-  console.log(233, showDiv);
   if (label && !id) {
     throw new Error('id required when a label is given');
   }
