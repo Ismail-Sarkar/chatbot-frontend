@@ -123,8 +123,20 @@ module.exports.searchTransactionsBy = async (
       .tz('Etc/UTC')
       .subtract(1, 'day')
       .toDate();
+  const timezone = moment.tz.guess();
 
-  console.log(bookingStart, bookingStartDate, bookingStartDateEnd);
+  console.log(
+    bookingStart,
+    bookingStartDate,
+    bookingStartDateEnd,
+    moment(bookingStart)
+      .tz('Etc/UTC')
+      .toDate(),
+    moment(bookingStart)
+      .tz(timezone)
+      .toDate(),
+    timezone
+  );
 
   const bookingStartQuery =
     !!bookingStart && !!bookingEnd
