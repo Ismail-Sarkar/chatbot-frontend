@@ -24,17 +24,11 @@ module.exports = (req, res) => {
     customer,
     provider,
     timeZone;
-  const bookingStart = bodyParams.params.bookingStart;
   const offset = moment().utcOffset();
-  console.log(
-    moment(bodyParams.params.bookingStart)
-      .add(offset, 'minutes')
-      .toDate(),
-    moment(bodyParams.params.bookingStart).toDate(),
-    bookingStart,
-    offset,
-    moment.tz.guess()
-  );
+  const bookingStart = moment(bodyParams.params.bookingStart)
+    .add(offset, 'minutes')
+    .toISOString();
+  console.log(bookingStart, offset, moment.tz.guess());
   const paymentMethod = bodyParams?.params?.paymentMethod;
 
   const currentUserPromise = () => sdk.currentUser.show();
