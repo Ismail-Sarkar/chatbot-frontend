@@ -105,6 +105,7 @@ module.exports.searchTransactionsBy = async (
   const bookingStartDateEnd =
     bookingStart &&
     moment(bookingStart)
+      .tz('Etc/UTC')
       .add(1, 'day')
       .subtract(1, 'minute')
       .toDate();
@@ -119,8 +120,11 @@ module.exports.searchTransactionsBy = async (
   const bookingEndDateStart =
     bookingEnd &&
     moment(bookingEnd)
+      .tz('Etc/UTC')
       .subtract(1, 'day')
       .toDate();
+
+  console.log(bookingStart, bookingStartDate, bookingStartDateEnd);
 
   const bookingStartQuery =
     !!bookingStart && !!bookingEnd
