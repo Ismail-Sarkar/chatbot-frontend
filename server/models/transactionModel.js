@@ -81,63 +81,54 @@ module.exports.searchTransactionsBy = async (
   if (!user) throw new Error('User not found');
 
   const queryFor = isCustomer ? { customerId: user._id } : { providerId: user._id };
-
+  const timezone = moment.tz.guess();
+  const offset = moment.tz.zone(timezone).utcOffset();
   const bookingRangeStartDate =
     bookingStart &&
     moment(bookingStart)
-      .tz('Etc/UTC')
       .startOf('day')
+      .subtract(offset, 'minutes')
       .toDate();
 
   const bookingRangeEndDate =
     bookingEnd &&
     moment(bookingEnd)
-      .tz('Etc/UTC')
       .endOf('day')
+      .subtract(offset, 'minutes')
       .toDate();
 
   const bookingStartDate =
     bookingStart &&
     moment(bookingStart)
-      .tz('Etc/UTC')
+      .subtract(offset, 'minutes')
       .toDate();
 
   const bookingStartDateEnd =
     bookingStart &&
     moment(bookingStart)
-      .tz('Etc/UTC')
       .add(1, 'day')
-      .subtract(1, 'minute')
+      .subtract(offset + 1, 'minutes')
       .toDate();
 
   const bookingEndDate =
     bookingEnd &&
     moment(bookingEnd)
-      .tz('Etc/UTC')
-      .subtract(1, 'minute')
+      .subtract(offset + 1, 'minute')
       .toDate();
 
   const bookingEndDateStart =
     bookingEnd &&
     moment(bookingEnd)
-      .tz('Etc/UTC')
       .subtract(1, 'day')
+      .subtract(offset, 'minutes')
       .toDate();
-  const timezone = moment.tz.guess();
 
   console.log(
     bookingStart,
     bookingStartDate,
     bookingStartDateEnd,
-    moment(bookingStart)
-      .tz('Etc/UTC')
-      .toDate(),
-    moment(bookingStart)
-      .tz(timezone)
-      .toDate(),
-    moment.utc().toDate(),
-
-    timezone
+    bookingRangeStartDate,
+    bookingRangeEndDate
   );
 
   const bookingStartQuery =

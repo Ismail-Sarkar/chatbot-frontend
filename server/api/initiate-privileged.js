@@ -48,7 +48,7 @@ module.exports = (req, res) => {
       customer = currentUserResponse.data.data;
       const providerId = provider.id.uuid;
       const customerId = customer.id.uuid;
-      const offset = moment.tz.zone(timeZone).offset();
+      const offset = moment.tz.zone(timeZone).utcOffset();
       bookingStart = moment(bodyParams.params.bookingStart)
         .subtract(offset, 'minutes')
         .toISOString();
