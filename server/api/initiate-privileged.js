@@ -8,8 +8,8 @@ const {
   fetchCommission,
   getIntegrationSdk,
 } = require('../api-util/sdk');
-const marketplaceCurrency =
-  process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
+const moment = require('moment');
+const marketplaceCurrency = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
 
 const { createCustomPaymentIntent } = require('../api-util/stripeHelper');
 const { addTransactionDetails } = require('../api-util/transactionHelper');
@@ -25,6 +25,16 @@ module.exports = (req, res) => {
     provider,
     timeZone;
   const bookingStart = bodyParams.params.bookingStart;
+  const offset = moment().utcOffset();
+  console.log(
+    moment(bodyParams.params.bookingStart)
+      .add(offset, 'minutes')
+      .toDate(),
+    moment(bodyParams.params.bookingStart).toDate(),
+    bookingStart,
+    offset,
+    moment.tz.guess()
+  );
   const paymentMethod = bodyParams?.params?.paymentMethod;
 
   const currentUserPromise = () => sdk.currentUser.show();
@@ -36,54 +46,48 @@ module.exports = (req, res) => {
     });
 
   Promise.all([listingPromise(), fetchCommission(sdk), currentUserPromise()])
-    .then(
-      async ([
-        showListingResponse,
-        fetchAssetsResponse,
-        currentUserResponse,
-      ]) => {
-        const listing = showListingResponse.data.data;
-        timeZone = listing.attributes?.availabilityPlan.timezone;
-        const commissionAsset = fetchAssetsResponse.data.data[0];
-        provider = showListingResponse.data.included[0];
-        customer = currentUserResponse.data.data;
-        const providerId = provider.id.uuid;
-        const customerId = customer.id.uuid;
+    .then(async ([showListingResponse, fetchAssetsResponse, currentUserResponse]) => {
+      const listing = showListingResponse.data.data;
+      timeZone = listing.attributes?.availabilityPlan.timezone;
+      const commissionAsset = fetchAssetsResponse.data.data[0];
+      provider = showListingResponse.data.included[0];
+      customer = currentUserResponse.data.data;
+      const providerId = provider.id.uuid;
+      const customerId = customer.id.uuid;
 
-        const providerCommission =
-          commissionAsset?.type === 'jsonAsset'
-            ? commissionAsset.attributes.data.providerCommission
-            : null;
-        lineItems = transactionLineItems(
-          listing,
-          { ...orderData, ...bodyParams.params },
-          providerCommission
-        );
+      const providerCommission =
+        commissionAsset?.type === 'jsonAsset'
+          ? commissionAsset.attributes.data.providerCommission
+          : null;
+      lineItems = transactionLineItems(
+        listing,
+        { ...orderData, ...bodyParams.params },
+        providerCommission
+      );
 
-        const { amount } = calculateTotalForCustomer(lineItems);
+      const { amount } = calculateTotalForCustomer(lineItems);
 
-        const paymentIntent = await createCustomPaymentIntent({
-          paymentMethodId: paymentMethod,
-          listingId: listing.id.uuid,
-          providerId,
-          customerId,
-          currency: marketplaceCurrency,
-          description: listing.attributes.title,
-          amount,
-        });
-        const { id, client_secret } = paymentIntent;
-        stripePaymentIntents = {
-          stripePaymentIntents: {
-            default: {
-              stripePaymentIntentId: id,
-              stripePaymentIntentClientSecret: client_secret,
-            },
+      const paymentIntent = await createCustomPaymentIntent({
+        paymentMethodId: paymentMethod,
+        listingId: listing.id.uuid,
+        providerId,
+        customerId,
+        currency: marketplaceCurrency,
+        description: listing.attributes.title,
+        amount,
+      });
+      const { id, client_secret } = paymentIntent;
+      stripePaymentIntents = {
+        stripePaymentIntents: {
+          default: {
+            stripePaymentIntentId: id,
+            stripePaymentIntentClientSecret: client_secret,
           },
-        };
+        },
+      };
 
-        return getTrustedSdk(req);
-      }
-    )
+      return getTrustedSdk(req);
+    })
     .then(trustedSdk => {
       const { params } = bodyParams;
 

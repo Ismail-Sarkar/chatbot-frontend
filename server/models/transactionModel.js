@@ -135,6 +135,8 @@ module.exports.searchTransactionsBy = async (
     moment(bookingStart)
       .tz(timezone)
       .toDate(),
+    moment.utc().toDate(),
+
     timezone
   );
 
