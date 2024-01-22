@@ -123,14 +123,6 @@ module.exports.searchTransactionsBy = async (
       .subtract(offset, 'minutes')
       .toDate();
 
-  console.log(
-    bookingStart,
-    bookingStartDate,
-    bookingStartDateEnd,
-    bookingRangeStartDate,
-    bookingRangeEndDate
-  );
-
   const bookingStartQuery =
     !!bookingStart && !!bookingEnd
       ? {

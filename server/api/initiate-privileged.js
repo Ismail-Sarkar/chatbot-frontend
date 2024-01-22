@@ -52,7 +52,6 @@ module.exports = (req, res) => {
       bookingStart = moment(bodyParams.params.bookingStart)
         .subtract(offset, 'minutes')
         .toISOString();
-      console.log(bookingStart, offset, timeZone, bodyParams.params.bookingStart);
       const providerCommission =
         commissionAsset?.type === 'jsonAsset'
           ? commissionAsset.attributes.data.providerCommission
