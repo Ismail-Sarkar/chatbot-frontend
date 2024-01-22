@@ -242,7 +242,7 @@ export const signup = params => (dispatch, getState, sdk) => {
   return sdk.currentUser
     .create(createUserParams)
     .then(() => dispatch(signupSuccess()))
-    .then(() => userType !== 'partner' && dispatch(login(email, password)))
+    .then(() => dispatch(login(email, password)))
     .catch(e => {
       dispatch(signupError(storableError(e)));
       log.error(e, 'signup-failed', {
