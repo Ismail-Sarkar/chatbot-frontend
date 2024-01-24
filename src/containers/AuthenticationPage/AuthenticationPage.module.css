@@ -16,7 +16,7 @@
 .content {
   composes: marketplaceModalBaseStyles from global;
   padding-top: 29px;
-
+  padding:30px;
   @media (--viewportMedium) {
     margin-top: 5vh;
     margin-bottom: 7.5vh;
@@ -27,9 +27,9 @@
 /* ================ Tabs & Form ================ */
 
 .tabs {
-  @media (--viewportMedium) {
+  /* @media (--viewportMedium) {
     margin-top: 6px;
-  }
+  } */
 }
 
 .tab {

@@ -109,6 +109,12 @@
 
   &:first-child {
     padding: 0 32px;
+    @media(max-width:575px){
+      padding:0 15px;
+    }
+  }
+  @media(max-width:1199px){
+    padding: 35px 32px 0 32px;
   }
 }
 

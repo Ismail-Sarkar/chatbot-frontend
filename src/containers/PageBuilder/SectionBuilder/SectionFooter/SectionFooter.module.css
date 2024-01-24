@@ -2,6 +2,9 @@
 
 .root {
   border-top: 1px solid var(--colorGrey100);
+  & > div{
+    padding:40px 0 !important;
+  }
 }
 
 .footer {
@@ -10,7 +13,7 @@
   grid-template-columns: repeat(1, 1fr);
   gap: 32px;
   margin: 0 auto;
-  padding: 24px 32px;
+  padding: 0 32px;
 }
 
 .footer ul {
@@ -70,6 +73,9 @@
   @media (--viewportLarge) {
     display: none;
   }
+  @media(max-width:991px){
+    padding-bottom:0;
+  }
 }
 .sloganDesktop {
   display: none;
@@ -121,26 +127,26 @@
   object-position: center;
 }
 
-@media (min-width: 350px) {
+/* @media (min-width: 350px) {
   .gridCol2,
   .gridCol3,
   .gridCol4 {
     grid-template-columns: repeat(2, 1fr);
   }
-}
+} */
 
-@media (min-width: 600px) {
+/* @media (min-width: 600px) {
   .gridCol3,
   .gridCol4 {
     grid-template-columns: repeat(3, 1fr);
   }
-}
+} */
 
-@media (--viewportMedium) {
+/* @media (--viewportMedium) {
   .gridCol4 {
     grid-template-columns: repeat(4, 1fr);
   }
-}
+} */
 
 @media (--viewportLarge) {
   .detailsInfo {
