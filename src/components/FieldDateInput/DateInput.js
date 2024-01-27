@@ -139,6 +139,7 @@ class DateInputComponent extends Component {
       children,
       render,
       keepOpenCalender,
+      enableOutsideDays,
       ...datePickerProps
     } = this.props;
     /* eslint-enable no-unused-vars */
@@ -146,15 +147,11 @@ class DateInputComponent extends Component {
     const initialMoment = initialDate ? moment(initialDate) : null;
 
     const date =
-      value &&
-      value.date instanceof Date &&
-      value.date.toString() !== 'Invalid Date'
+      value && value.date instanceof Date && value.date.toString() !== 'Invalid Date'
         ? moment(value.date)
         : initialMoment;
 
-    const placeholder =
-      placeholderText ||
-      intl.formatMessage({ id: 'FieldDateInput.placeholder' });
+    const placeholder = placeholderText || intl.formatMessage({ id: 'FieldDateInput.placeholder' });
 
     const screenReaderInputText =
       screenReaderInputMessage ||
@@ -174,7 +171,7 @@ class DateInputComponent extends Component {
           onDateChange={this.onDateChange}
           placeholder={placeholder}
           screenReaderInputMessage={screenReaderInputText}
-          enableOutsideDays={true}
+          enableOutsideDays={enableOutsideDays}
         />
       </div>
     );

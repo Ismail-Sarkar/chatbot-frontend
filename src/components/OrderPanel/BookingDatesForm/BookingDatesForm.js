@@ -523,7 +523,6 @@ export const BookingDatesFormComponent = props => {
           intl,
           lineItemUnitType,
           values,
-          monthlyTimeSlots = [],
           lineItems,
           fetchLineItemsError,
           onFetchTimeSlots,
@@ -532,8 +531,6 @@ export const BookingDatesFormComponent = props => {
           userNativeLang,
           listingTimeZone,
         } = fieldRenderProps;
-
-        // console.log('7777', monthlyTimeSlots);
 
         const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
         const startDateErrorMessage = intl.formatMessage({
@@ -950,21 +947,21 @@ export const BookingDatesFormComponent = props => {
               //  errorClassName={errorTextField}
               // isOutsideRange={date => moment().diff(date, 'days') <= 0}
 
-              isDayBlocked={day => {
-                const monthlyTimeSlots = props.monthlyTimeSlots;
-                const key = moment(day)?.format('YYYY-MM');
-                const matchedData = monthlyTimeSlots[key]?.timeSlots;
-                const dataMatchedArray = matchedData?.filter(
-                  slot =>
-                    moment(day).isBetween(slot.attributes.start, slot.attributes.end, 'day') ||
-                    moment(day).isSame(slot.attributes.start, 'day')
-                );
-                if (dataMatchedArray?.length > 0) {
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
+              // isDayBlocked={day => {
+              //   const monthlyTimeSlots = props.monthlyTimeSlots;
+              //   const key = moment(day)?.format('YYYY-MM');
+              //   const matchedData = monthlyTimeSlots[key]?.timeSlots;
+              //   const dataMatchedArray = matchedData?.filter(
+              //     slot =>
+              //       moment(day).isBetween(slot.attributes.start, slot.attributes.end, 'day') ||
+              //       moment(day).isSame(slot.attributes.start, 'day')
+              //   );
+              //   if (dataMatchedArray?.length > 0) {
+              //     return false;
+              //   } else {
+              //     return true;
+              //   }
+              // }}
               // isOutsideRange={isOutsideRange}
               onChange={value => singleDateChange(value, form, props)}
               // format={v => {
@@ -1020,12 +1017,16 @@ export const BookingDatesFormComponent = props => {
                 setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
                 onMonthClick(nextMonthFn);
               }}
+              isDayBlocked={isDayBlocked()}
+              isOutsideRange={isOutsideRange()}
+              isBlockedBetween={isBlockedBetween(monthlyTimeSlots, timeZone)}
               //
               // isBlockedBetween={isBlockedBetween(monthlyTimeSlots, timeZone)}
               // disabled={fetchLineItemsInProgress}
               // onClose={event =>
               //   setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
               // }
+              enableOutsideDays={false}
             />
             {extraParkValues.length > 0 && (
               <div className={css.muiselectcontainer}>
