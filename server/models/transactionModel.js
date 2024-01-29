@@ -60,6 +60,7 @@ module.exports.searchTransactionsBy = async (
   isCustomer = false,
   perPage = PER_PAGE
 ) => {
+  console.log(moment(bookingStart).toDate());
   const hasPage = page && typeof page === 'number';
   const pageMaybe = hasPage
     ? { $skip: (page - 1) * PER_PAGE }
@@ -136,12 +137,16 @@ module.exports.searchTransactionsBy = async (
           $and: [
             {
               bookingStartDate: {
-                $gte: bookingStartDate,
+                $gte: moment(bookingStart).toDate(),
               },
             },
             {
               bookingStartDate: {
-                $lte: bookingStartDateEnd,
+                $lte: moment(bookingStart)
+                  .clone()
+                  .add(1, 'day')
+                  .subtract(1, 'minute')
+                  .toDate(),
               },
             },
           ],

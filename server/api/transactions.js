@@ -1,10 +1,7 @@
 const router = require('express').Router();
 const { getIntegrationSdk, getSdk } = require('../api-util/sdk');
 
-const {
-  captureCustomPaymentIntent,
-  updatePaymentIntent,
-} = require('../api-util/stripeHelper');
+const { captureCustomPaymentIntent, updatePaymentIntent } = require('../api-util/stripeHelper');
 const {
   searchTransactionsBy,
   updateTransactionConfirmNumber,
@@ -20,8 +17,7 @@ const capturePaymentIntent = async (req, res) => {
     });
     const { data } = tx.data;
     const { protectedData } = data.attributes;
-    const paymentId =
-      protectedData.stripePaymentIntents.default.stripePaymentIntentId; //needs to be replace later with modified id
+    const paymentId = protectedData.stripePaymentIntents.default.stripePaymentIntentId; //needs to be replace later with modified id
 
     const updatedPaymentIntent = await updatePaymentIntent(paymentId, txId);
     const payment = await captureCustomPaymentIntent(paymentId);
@@ -37,9 +33,7 @@ const transactionSearch = async (req, res) => {
   try {
     const { type } = req.params;
     const sdk = await getSdk(req, res);
-    const currentUser = (
-      await sdk.currentUser.show({ 'fields.currentUser': [] })
-    ).data.data;
+    const currentUser = (await sdk.currentUser.show({ 'fields.currentUser': [] })).data.data;
     const userId = currentUser.id.uuid;
 
     if (!['customer', 'provider'].includes(type)) {
@@ -47,13 +41,8 @@ const transactionSearch = async (req, res) => {
     }
     const isCustomer = type === 'customer';
 
-    const {
-      bookingStart,
-      userNameAndConfirmNumber,
-      bookingEnd,
-      page,
-      perPage,
-    } = req.query;
+    const { bookingStart, userNameAndConfirmNumber, bookingEnd, page, perPage } = req.query;
+    console.log(bookingStart);
 
     if (!bookingStart && !userNameAndConfirmNumber && !bookingEnd) {
       return res.status(400).send('Invalid details.');
