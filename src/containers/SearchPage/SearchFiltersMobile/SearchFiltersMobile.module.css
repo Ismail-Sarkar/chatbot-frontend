@@ -123,5 +123,13 @@
   border-radius: 3px;
 }
 .SearchMobile{
-  
+  & > div{
+    & > div{
+      & > button{
+        @media(max-width:767px){
+          position:absolute;
+        }
+      }
+    }
+  }
 }

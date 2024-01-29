@@ -100,7 +100,7 @@ const LoginFormComponent = props => (
               <FormattedMessage id="LoginForm.partnerLogIn" />
             </H4>
           )}
-          <div>
+          <div className={css.LoginMiddleContainer}>
             <FieldTextInput
               type="email"
               id={formId ? `${formId}.email` : 'email'}

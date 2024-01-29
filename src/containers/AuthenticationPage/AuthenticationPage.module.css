@@ -11,6 +11,9 @@
   @media (--viewportMedium) {
     height: unset;
   }
+  @media(max-width:767px){
+    height:auto;
+  }
 }
 
 .content {
@@ -20,7 +23,19 @@
   @media (--viewportMedium) {
     margin-top: 5vh;
     margin-bottom: 7.5vh;
-    min-height: 700px;
+    /* min-height: 700px; */
+  }
+  @media(max-width:767px){
+    padding:15px;
+  }
+  & > nav{
+    & > div{
+      & > a{
+        @media(max-width:767px){
+          padding-bottom: 5px;
+        }
+      }
+    }
   }
 }
 
@@ -42,6 +57,9 @@
     padding: 0;
     margin-top: 0;
   }
+  @media(max-width:767px){
+    font-size:25px;
+  }
 }
 
 .form {
@@ -54,7 +72,7 @@
 }
 
 .loginForm {
-  margin-top: 24px;
+  margin-top: 15px;
 
   /* We don't want the form to take the whole space so that on mobile view
   the social login buttons will be after the sign up button
@@ -63,16 +81,17 @@
   whole form correctly.  */
   flex-grow: 0;
   flex-basis: 260px;
-
+  padding-top:0;
   @media (--viewportMedium) {
-    flex-basis: 330px;
-    margin-top: 30px;
-    padding-top: 2px;
+    /* flex-basis: 330px; */
+    /* margin-top: 30px; */
+    /* padding-top: 2px; */
   }
+  
 }
 
 .signupForm {
-  margin-top: 24px;
+  margin-top: 15px;
 
   /* We don't want the form to take the whole space so that on mobile view
   the social login buttons will be after the sign up button
@@ -83,15 +102,16 @@
   flex-basis: 340px;
 
   @media (--viewportMedium) {
-    flex-basis: 410px;
-    margin-top: 30px;
-    padding-top: 2px;
+    /* flex-basis: 410px; */
+    /* margin-top: 30px; */
+    /* padding-top: 2px; */
   }
+
 }
 
 .bottomWrapper {
   composes: marketplaceModalBottomWrapper from global;
-
+  margin-top: 20px;
   /* Align the helper links to the left since there isn't a Primary Button anymore */
   text-align: left;
 }
@@ -126,6 +146,9 @@
 
   /* This is not a real modal, z-index should not be modal's z-index */
   z-index: 1;
+  @media(max-width:575px){
+    position:absolute;
+  }
 }
 
 .closeText {
@@ -141,11 +164,18 @@
 /* Title of the modal */
 .modalTitle {
   composes: marketplaceModalTitleStyles from global;
+  font-size: 24px;
+  line-height: 30px;
 }
 
 /* Paragraph for the Modal */
 .modalMessage {
   composes: marketplaceModalParagraphStyles from global;
+  margin: 10px 0 0 0;
+  & > span{
+    font-size: 16px;
+    line-height: 26px;
+  }
 }
 
 /* Make the email pop */
@@ -175,7 +205,7 @@
 
   /* Align the icon and rest of the content in the modal. Sign & Login doesn't use an icon, maybe we should add one? */
   margin-top: 47px;
-
+  margin-bottom: 10px;
   @media (--viewportMedium) {
     margin-top: 0;
   }
@@ -186,6 +216,7 @@
 .error {
   composes: marketplaceModalPasswordMargins from global;
   color: red;
+  margin-top: 15px;
 }
 
 /* ================ Social logins & SSO ================ */

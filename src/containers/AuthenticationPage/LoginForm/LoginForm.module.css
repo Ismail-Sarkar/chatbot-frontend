@@ -13,14 +13,19 @@
 .otherTypeLoginLink {
   margin: 25px auto 0;
   text-align: center;
+  @media(max-width:767px){
+    margin:15px auto 0;
+  }
 }
 
 .password {
   composes: marketplaceModalPasswordMargins from global;
+  margin-top:15px;
 }
 
 .bottomWrapper {
   composes: marketplaceModalBottomWrapper from global;
+  margin-top:40px;
 }
 
 /* Adjust the bottomWrapper's margin to match modals without the helper text */
@@ -50,4 +55,11 @@
   letter-spacing: 0px;
   margin: 5px 0 10px 14px;
   color: red;
+}
+.LoginMiddleContainer{
+  & > div{
+    & > label{
+      padding:0 0 5px 0;
+    }
+  }
 }

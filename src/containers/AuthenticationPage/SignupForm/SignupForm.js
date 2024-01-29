@@ -97,7 +97,7 @@ const SignupFormComponent = props => (
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
-          <div>
+          <div className={css.middleContainer}>
             {isPartner && (
               <H4 as="h2" className={css.sectionTitle}>
                 <FormattedMessage id="SignupForm.partnerSignUp" />
@@ -189,7 +189,6 @@ const SignupFormComponent = props => (
               })}
               validate={passwordValidators}
             />
-
             {isPartner && (
               <FieldTextInput
                 className={css.fieldGrp}

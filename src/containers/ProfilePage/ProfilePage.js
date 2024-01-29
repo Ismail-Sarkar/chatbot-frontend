@@ -236,6 +236,7 @@ const ProfilePageComponent = props => {
         name: schemaTitle,
       }}
     >
+      <div className={css.profilepagewrap}>
       <LayoutSideNavigation
         sideNavClassName={css.aside}
         topbar={<TopbarContainer currentPage="ProfilePage" />}
@@ -258,6 +259,7 @@ const ProfilePageComponent = props => {
           {...rest}
         />
       </LayoutSideNavigation>
+      </div>
     </Page>
   );
 };
