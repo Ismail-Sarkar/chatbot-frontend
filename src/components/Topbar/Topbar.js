@@ -378,13 +378,14 @@ const EnhancedTopbar = props => {
   );
 };
 
-const mapStateToProps = state => {
-  const { isAuthenticated } = state.auth;
-  console.log(isAuthenticated);
-  return { isAuthenticated };
-};
+// const mapStateToProps = state => {
+//   const { isAuthenticated } = state.auth;
+//   console.log(isAuthenticated);
+//   return { isAuthenticated };
+// };
 
-const Topbar = compose(withViewport, connect(mapStateToProps))(EnhancedTopbar);
+// const Topbar = compose(withViewport, connect(mapStateToProps))(EnhancedTopbar);
+const Topbar = withViewport(EnhancedTopbar);
 Topbar.displayName = 'Topbar';
 
 export default Topbar;
