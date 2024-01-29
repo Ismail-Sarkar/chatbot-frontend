@@ -515,7 +515,7 @@ export const InboxPageComponent = props => {
                             return !!perDayTransaction[formatedDate];
                           }}
                           useMobileMargins
-                          enableOutsideDays={true}
+                          enableOutsideDays={false}
                         />
                       )}
                     </Form>
