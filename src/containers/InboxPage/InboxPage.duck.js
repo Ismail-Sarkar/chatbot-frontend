@@ -260,7 +260,11 @@ export const fetchPerDayTransactions = (bookingStart, bookingEnd, type) => (
         const formatedDate = moment(d.bookingStartDate)
           .tz(d.timeZone)
           .format('YYYY-MM-DD');
-        console.log(formatedDate);
+        console.log(
+          moment(d.bookingStartDate)
+            .tz(d.timeZone)
+            .toDate()
+        );
         if (perDayTransaction[formatedDate] === undefined) {
           perDayTransaction[formatedDate] = 0;
         }

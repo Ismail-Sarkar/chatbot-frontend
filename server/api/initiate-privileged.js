@@ -29,6 +29,8 @@ module.exports = (req, res) => {
   //   .add(offset, 'minutes')
   //   .toISOString();
 
+  console.log(bookingStart);
+
   const paymentMethod = bodyParams?.params?.paymentMethod;
 
   const currentUserPromise = () => sdk.currentUser.show();
@@ -49,9 +51,17 @@ module.exports = (req, res) => {
       const providerId = provider.id.uuid;
       const customerId = customer.id.uuid;
       const offset = moment.tz.zone(timeZone).utcOffset();
-      bookingStart = moment(bodyParams.params.bookingStart)
-        .subtract(offset, 'minutes')
-        .toISOString();
+      bookingStart = bodyParams.params.bookingStart;
+      // moment(bodyParams.params.bookingStart)
+      //   .subtract(offset, 'minutes')
+      //   .toISOString();
+
+      console.log(
+        bookingStart,
+        moment(bodyParams.params.bookingStart)
+          .subtract(offset, 'minutes')
+          .toISOString()
+      );
       const providerCommission =
         commissionAsset?.type === 'jsonAsset'
           ? commissionAsset.attributes.data.providerCommission
