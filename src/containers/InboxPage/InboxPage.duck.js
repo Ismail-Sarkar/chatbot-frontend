@@ -257,13 +257,24 @@ export const fetchPerDayTransactions = (bookingStart, bookingEnd, type) => (
       const { data } = resp.data;
       const perDayTransaction = {};
       for (let d of data) {
+        // const formatedDate = moment(d.bookingStartDate)
+        //   // .tz(d.timeZone)
+        //   // .tz(d.timeZone)
+        //   .format('YYYY-MM-DD');
+
         const formatedDate = moment(d.bookingStartDate)
-          .tz(d.timeZone)
-          .format('YYYY-MM-DD');
+          .toISOString()
+          .split('T')[0];
         console.log(
+          212,
+          d.bookingStartDate,
           moment(d.bookingStartDate)
-            .tz(d.timeZone)
-            .toDate()
+            .toISOString()
+            .split('T')[0],
+          new Date(d.bookingStartDate).getDate(),
+          new Date(d.bookingStartDate).getUTCMonth(),
+          new Date(d.bookingStartDate).getFullYear(),
+          moment(d.bookingStartDate).format('YYYY-MM-DD')
         );
         if (perDayTransaction[formatedDate] === undefined) {
           perDayTransaction[formatedDate] = 0;

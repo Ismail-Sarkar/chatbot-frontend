@@ -29,8 +29,6 @@ module.exports = (req, res) => {
   //   .add(offset, 'minutes')
   //   .toISOString();
 
-  console.log(bookingStart);
-
   const paymentMethod = bodyParams?.params?.paymentMethod;
 
   const currentUserPromise = () => sdk.currentUser.show();
