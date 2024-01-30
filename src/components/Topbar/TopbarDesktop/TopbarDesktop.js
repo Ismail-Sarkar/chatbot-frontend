@@ -174,7 +174,7 @@ const TopbarDesktop = props => {
         </NamedLink>
       ) : !isAuthenticated ? (
         // <NamedLink className={css.createListingLink} name="NewListingPage">
-        <NamedLink name="LoginPage" className={css.loginLink}>
+        <NamedLink name="PartnerSignupPage" className={css.loginLink}>
           <span className={css.createListing}>
             <FormattedMessage id="TopbarDesktop.createListing" />
           </span>

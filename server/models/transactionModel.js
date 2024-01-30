@@ -137,16 +137,18 @@ module.exports.searchTransactionsBy = async (
           $and: [
             {
               bookingStartDate: {
-                $gte: moment(bookingStart).toDate(),
+                // $gte: moment(bookingStart).toDate(),
+                $gte: bookingStartDate,
               },
             },
             {
               bookingStartDate: {
-                $lte: moment(bookingStart)
-                  .clone()
-                  .add(1, 'day')
-                  .subtract(1, 'minute')
-                  .toDate(),
+                $lte: bookingStartDateEnd,
+                // $lte: moment(bookingStart)
+                //   .clone()
+                //   .add(1, 'day')
+                //   .subtract(1, 'minute')
+                //   .toDate(),
               },
             },
           ],
