@@ -42,7 +42,7 @@ export const ProfileSettingsPageComponent = props => {
   } = props;
 
   const handleSubmit = values => {
-    const { firstName, lastName, bio: rawBio, businessName, profileUrl } = values;
+    const { firstName, lastName, bio: rawBio, businessName, businessRole, profileUrl } = values;
     // Ensure that the optional bio is a string
     const bio = rawBio || '';
 
@@ -50,7 +50,7 @@ export const ProfileSettingsPageComponent = props => {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       bio,
-      publicData: { businessName, profileUrl: profileUrl && `@${profileUrl}` },
+      publicData: { businessName, businessRole, profileUrl: profileUrl && `@${profileUrl}` },
     };
     const uploadedImage = props.image;
 
@@ -80,6 +80,7 @@ export const ProfileSettingsPageComponent = props => {
         bio,
         profileImage: user.profileImage,
         businessName: user.attributes.profile.publicData.businessName,
+        businessRole: user.attributes.profile.publicData.businessRole,
         profileUrl: intialProfileUrl || null,
       }}
       profileImage={profileImage}
@@ -107,11 +108,12 @@ export const ProfileSettingsPageComponent = props => {
         footer={<FooterContainer />}
       >
         <div className={css.content}>
+          {/* {console.log('USER', user.attributes?.profile?.publicData?.userType)} */}
           <div className={css.headingContainer}>
             <H3 as="h1" className={css.heading}>
               <FormattedMessage id="ProfileSettingsPage.heading" />
             </H3>
-            {user.id ? (
+            {user.id && user.attributes?.profile?.publicData?.userType === 'partner' ? (
               <NamedLink
                 className={css.profileLink}
                 name="ProfilePage"

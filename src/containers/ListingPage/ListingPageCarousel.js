@@ -76,6 +76,7 @@ import css from './ListingPage.module.css';
 import ManualAddress from './ManualAddress';
 import Rules from './Rules';
 import UpperLocation from './UpperLocation';
+import ElectricalAvailability from '../../components/ElectricalAvailability/ElectricalAvailability.js';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
@@ -345,8 +346,13 @@ export const ListingPageComponent = props => {
               <ManualAddress publicData={publicData} listingId={currentListing.id} />
             )} */}
 
+            <ElectricalAvailability
+              publicDataElectric={publicData.electricalOutletOption}
+              heading={'Electrical outlet availability'}
+            />
+
             <SectionMapMaybe
-              geolocation={publicData?.manualAddress ? defaultLocation : geolocation}
+              geolocation={geolocation}
               publicData={publicData}
               listingId={currentListing.id}
               mapsConfig={config.maps}

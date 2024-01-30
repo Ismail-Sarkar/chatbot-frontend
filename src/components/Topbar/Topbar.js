@@ -29,6 +29,8 @@ import TopbarMobileMenu from './TopbarMobileMenu/TopbarMobileMenu';
 import TopbarDesktop from './TopbarDesktop/TopbarDesktop';
 
 import css from './Topbar.module.css';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 
 const MAX_MOBILE_SCREEN_WIDTH = 768;
 
@@ -376,6 +378,13 @@ const EnhancedTopbar = props => {
   );
 };
 
+// const mapStateToProps = state => {
+//   const { isAuthenticated } = state.auth;
+//   console.log(isAuthenticated);
+//   return { isAuthenticated };
+// };
+
+// const Topbar = compose(withViewport, connect(mapStateToProps))(EnhancedTopbar);
 const Topbar = withViewport(EnhancedTopbar);
 Topbar.displayName = 'Topbar';
 

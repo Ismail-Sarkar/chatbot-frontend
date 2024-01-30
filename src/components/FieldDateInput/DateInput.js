@@ -138,6 +138,8 @@ class DateInputComponent extends Component {
       value,
       children,
       render,
+      keepOpenCalender,
+      enableOutsideDays,
       ...datePickerProps
     } = this.props;
     /* eslint-enable no-unused-vars */
@@ -163,12 +165,13 @@ class DateInputComponent extends Component {
       <div className={classes}>
         <SingleDatePicker
           {...datePickerProps}
-          focused={this.state.focused}
+          focused={this.state.focused || keepOpenCalender}
           onFocusChange={this.onFocusChange}
           date={date}
           onDateChange={this.onDateChange}
           placeholder={placeholder}
           screenReaderInputMessage={screenReaderInputText}
+          enableOutsideDays={enableOutsideDays}
         />
       </div>
     );

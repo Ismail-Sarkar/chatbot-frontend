@@ -12,6 +12,7 @@ import { required } from '../../../util/validators';
 import { FieldReviewRating, Form, PrimaryButton, FieldTextInput } from '../../../components';
 
 import css from './ReviewForm.module.css';
+import moment from 'moment';
 
 const ReviewFormComponent = props => (
   <FinalForm
@@ -28,7 +29,9 @@ const ReviewFormComponent = props => (
         reviewSent,
         sendReviewError,
         sendReviewInProgress,
+        provider,
       } = fieldRenderProps;
+      const today = moment();
 
       const reviewRating = intl.formatMessage({ id: 'ReviewForm.reviewRatingLabel' });
       const reviewRatingRequiredMessage = intl.formatMessage({
@@ -71,16 +74,21 @@ const ReviewFormComponent = props => (
             label={reviewRating}
             validate={required(reviewRatingRequiredMessage)}
           />
-
-          <FieldTextInput
-            className={css.reviewContent}
-            type="textarea"
-            id={formId ? `${formId}.reviewContent` : 'reviewContent'}
-            name="reviewContent"
-            label={reviewContent}
-            placeholder={reviewContentPlaceholderMessage}
-            validate={required(reviewContentRequiredMessage)}
-          />
+          {provider &&
+          today.isBetween(
+            provider.attributes.profile.publicData?.subScriptionOn?.subscriptionStart,
+            provider.attributes.profile.publicData?.subScriptionOn?.subscriptionEnd
+          ) ? null : (
+            <FieldTextInput
+              className={css.reviewContent}
+              type="textarea"
+              id={formId ? `${formId}.reviewContent` : 'reviewContent'}
+              name="reviewContent"
+              label={reviewContent}
+              placeholder={reviewContentPlaceholderMessage}
+              validate={required(reviewContentRequiredMessage)}
+            />
+          )}
 
           {errorArea}
           <PrimaryButton

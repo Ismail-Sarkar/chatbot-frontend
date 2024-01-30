@@ -189,9 +189,9 @@ export const OrderBreakdownComponent = props => {
           <FormattedMessage
             id="OrderBreakdown.hostPaymentMethod"
             values={{
-              paymentMethod: availablePaymentMethods.find(
-                ({ key }) => key === prefferedPaymentMethod
-              ).label,
+              paymentMethod: availablePaymentMethods
+                .find(({ key }) => key === prefferedPaymentMethod)
+                .label.toLowerCase(),
             }}
           />
         </span>

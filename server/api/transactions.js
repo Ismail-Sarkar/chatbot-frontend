@@ -2,6 +2,10 @@ const router = require('express').Router();
 const { getIntegrationSdk, getSdk } = require('../api-util/sdk');
 
 const { captureCustomPaymentIntent, updatePaymentIntent } = require('../api-util/stripeHelper');
+const {
+  searchTransactionsBy,
+  updateTransactionConfirmNumber,
+} = require('../models/transactionModel');
 const integrationSdk = getIntegrationSdk();
 
 const capturePaymentIntent = async (req, res) => {
@@ -25,6 +29,53 @@ const capturePaymentIntent = async (req, res) => {
   }
 };
 
+const transactionSearch = async (req, res) => {
+  try {
+    const { type } = req.params;
+    const sdk = await getSdk(req, res);
+    const currentUser = (await sdk.currentUser.show({ 'fields.currentUser': [] })).data.data;
+    const userId = currentUser.id.uuid;
+
+    if (!['customer', 'provider'].includes(type)) {
+      return res.status(400).send('Invalid details.');
+    }
+    const isCustomer = type === 'customer';
+
+    const { bookingStart, userNameAndConfirmNumber, bookingEnd, page, perPage } = req.query;
+    console.log(bookingStart);
+
+    if (!bookingStart && !userNameAndConfirmNumber && !bookingEnd) {
+      return res.status(400).send('Invalid details.');
+    }
+    const transactionsId = await searchTransactionsBy(
+      userNameAndConfirmNumber,
+      bookingStart,
+      bookingEnd,
+      userId,
+      page ? parseInt(page) : page,
+      isCustomer,
+      perPage
+    );
+    res.status(200).send(transactionsId || []);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+const updateTransactionDetails = async (req, res) => {
+  try {
+    const { id, confirmNumber } = req.body;
+    if (id && confirmNumber) {
+      await updateTransactionConfirmNumber(id, confirmNumber);
+    }
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
 router.post('/capturePaymentIntent', capturePaymentIntent);
+router.get('/:type', transactionSearch);
+router.post('/update', updateTransactionDetails);
 
 module.exports = router;

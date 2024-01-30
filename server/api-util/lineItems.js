@@ -37,8 +37,10 @@ const getItemQuantityAndLineItems = (orderData, publicData, currency) => {
   const deliveryMethod = orderData && orderData.deliveryMethod;
   const isShipping = deliveryMethod === 'shipping';
   const isPickup = deliveryMethod === 'pickup';
-  const { shippingPriceInSubunitsOneItem, shippingPriceInSubunitsAdditionalItems } =
-    publicData || {};
+  const {
+    shippingPriceInSubunitsOneItem,
+    shippingPriceInSubunitsAdditionalItems,
+  } = publicData || {};
 
   // Calculate shipping fee if applicable
   const shippingFee = isShipping
@@ -83,7 +85,9 @@ const getItemQuantityAndLineItems = (orderData, publicData, currency) => {
 const getHourQuantityAndLineItems = orderData => {
   const { bookingStart, bookingEnd } = orderData || {};
   const quantity =
-    bookingStart && bookingEnd ? calculateQuantityFromHours(bookingStart, bookingEnd) : null;
+    bookingStart && bookingEnd
+      ? calculateQuantityFromHours(bookingStart, bookingEnd)
+      : null;
 
   return { quantity, extraLineItems: [] };
 };
@@ -98,7 +102,9 @@ const getDateRangeQuantityAndLineItems = (orderData, code) => {
   // bookingStart & bookingend are used with day-based bookings (how many days / nights)
   const { bookingStart, bookingEnd } = orderData || {};
   const quantity =
-    bookingStart && bookingEnd ? calculateQuantityFromDates(bookingStart, bookingEnd, code) : null;
+    bookingStart && bookingEnd
+      ? calculateQuantityFromDates(bookingStart, bookingEnd, code)
+      : null;
 
   return { quantity, extraLineItems: [] };
 };
@@ -131,7 +137,10 @@ const getDateRangeQuantityAndLineItems = (orderData, code) => {
  */
 exports.transactionLineItems = (listing, orderData, providerCommission) => {
   const publicData = listing.attributes.publicData;
-  const unitPrice = listing.attributes.price;
+  const unitPrice = new Money(
+    listing.attributes.price.amount,
+    listing.attributes.price.currency
+  );
   const currency = unitPrice.currency;
 
   const { extraPerk = [], additionalGuest = 0 } = orderData || {};
@@ -219,7 +228,10 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
       ? [
           {
             code: `line-item/custom-guest-price`,
-            unitPrice: resolveGuestPrice(listing, additionalGuest, [order, ...extraPerkFees]),
+            unitPrice: resolveGuestPrice(listing, additionalGuest, [
+              order,
+              ...extraPerkFees,
+            ]),
             quantity: additionalGuest * 1 + quantity,
             includeFor: ['customer', 'provider'],
           },
@@ -227,7 +239,10 @@ exports.transactionLineItems = (listing, orderData, providerCommission) => {
       : [
           {
             code: `line-item/custom-guest-price`,
-            unitPrice: resolveGuestPrice(listing, quantity, [order, ...extraPerkFees]),
+            unitPrice: resolveGuestPrice(listing, quantity, [
+              order,
+              ...extraPerkFees,
+            ]),
             quantity,
             includeFor: ['customer', 'provider'],
           },

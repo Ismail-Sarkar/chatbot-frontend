@@ -39,9 +39,48 @@ class ProfileSettingsFormComponent extends Component {
       uploadDelay: false,
       profileUrlAvailabilityCheckInProgress: false,
       isProfileUrlAvailable: true,
+      isFocused: false,
     };
     this.submittedValues = {};
   }
+
+  handleFocus = () => {
+    this.setState({
+      isFocused: true,
+    });
+  };
+
+  handleBlur = async e => {
+    if (this.props.initialValues.profileUrl === e.target.value) {
+      this.setState({
+        isFocused: false,
+        profileUrlAvailabilityCheckInProgress: false,
+      });
+      return;
+    }
+
+    this.setState({
+      isFocused: false,
+      profileUrlAvailabilityCheckInProgress: true,
+    });
+
+    try {
+      const resp = await axios.get(
+        `${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${e.target.value}`
+      );
+      if (resp?.status === 200) {
+        this.setState({ isProfileUrlAvailable: true });
+      }
+    } catch (err) {
+      if (err?.response?.status === 409) {
+        this.setState({ isProfileUrlAvailable: false });
+      }
+    } finally {
+      this.setState({
+        profileUrlAvailabilityCheckInProgress: false,
+      });
+    }
+  };
 
   componentDidUpdate(prevProps) {
     // Upload delay is additional time window where Avatar is added to the DOM,
@@ -208,7 +247,10 @@ class ProfileSettingsFormComponent extends Component {
             uploadInProgress ||
             submitInProgress ||
             !this.state.isProfileUrlAvailable ||
-            this.state.profileUrlAvailabilityCheckInProgress;
+            this.state.profileUrlAvailabilityCheckInProgress ||
+            this.state.isFocused;
+
+          const isPartner = currentUser?.attributes?.profile?.publicData?.userType === 'partner';
 
           return (
             <Form
@@ -241,75 +283,77 @@ class ProfileSettingsFormComponent extends Component {
                   });
               }}
             >
-              {/* <div className={css.sectionContainer}>
-                <H4 as="h2" className={css.sectionTitle}>
-                  <FormattedMessage id="ProfileSettingsForm.yourProfilePicture" />
-                </H4>
-                <Field
-                  accept={ACCEPT_IMAGES}
-                  id="profileImage"
-                  name="profileImage"
-                  label={chooseAvatarLabel}
-                  type="file"
-                  form={null}
-                  uploadImageError={uploadImageError}
-                  disabled={uploadInProgress}
-                >
-                  {fieldProps => {
-                    const { accept, id, input, label, disabled, uploadImageError } = fieldProps;
-                    const { name, type } = input;
-                    const onChange = e => {
-                      const file = e.target.files[0];
-                      form.change(`profileImage`, file);
-                      form.blur(`profileImage`);
-                      if (file != null) {
-                        const tempId = `${file.name}_${Date.now()}`;
-                        onImageUpload({ id: tempId, file });
+              {isPartner && (
+                <div className={css.sectionContainer}>
+                  <H4 as="h2" className={css.sectionTitle}>
+                    <FormattedMessage id="ProfileSettingsForm.yourProfilePicture" />
+                  </H4>
+                  <Field
+                    accept={ACCEPT_IMAGES}
+                    id="profileImage"
+                    name="profileImage"
+                    label={chooseAvatarLabel}
+                    type="file"
+                    form={null}
+                    uploadImageError={uploadImageError}
+                    disabled={uploadInProgress}
+                  >
+                    {fieldProps => {
+                      const { accept, id, input, label, disabled, uploadImageError } = fieldProps;
+                      const { name, type } = input;
+                      const onChange = e => {
+                        const file = e.target.files[0];
+                        form.change(`profileImage`, file);
+                        form.blur(`profileImage`);
+                        if (file != null) {
+                          const tempId = `${file.name}_${Date.now()}`;
+                          onImageUpload({ id: tempId, file });
+                        }
+                      };
+
+                      let error = null;
+
+                      if (isUploadImageOverLimitError(uploadImageError)) {
+                        error = (
+                          <div className={css.error}>
+                            <FormattedMessage id="ProfileSettingsForm.imageUploadFailedFileTooLarge" />
+                          </div>
+                        );
+                      } else if (uploadImageError) {
+                        error = (
+                          <div className={css.error}>
+                            <FormattedMessage id="ProfileSettingsForm.imageUploadFailed" />
+                          </div>
+                        );
                       }
-                    };
 
-                    let error = null;
-
-                    if (isUploadImageOverLimitError(uploadImageError)) {
-                      error = (
-                        <div className={css.error}>
-                          <FormattedMessage id="ProfileSettingsForm.imageUploadFailedFileTooLarge" />
+                      return (
+                        <div className={css.uploadAvatarWrapper}>
+                          <label className={css.photoLabel} htmlFor={id}>
+                            {label}
+                          </label>
+                          <input
+                            accept={accept}
+                            id={id}
+                            name={name}
+                            className={css.uploadAvatarInput}
+                            disabled={disabled}
+                            onChange={onChange}
+                            type={type}
+                          />
+                          {error}
                         </div>
                       );
-                    } else if (uploadImageError) {
-                      error = (
-                        <div className={css.error}>
-                          <FormattedMessage id="ProfileSettingsForm.imageUploadFailed" />
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <div className={css.uploadAvatarWrapper}>
-                        <label className={css.label} htmlFor={id}>
-                          {label}
-                        </label>
-                        <input
-                          accept={accept}
-                          id={id}
-                          name={name}
-                          className={css.uploadAvatarInput}
-                          disabled={disabled}
-                          onChange={onChange}
-                          type={type}
-                        />
-                        {error}
-                      </div>
-                    );
-                  }}
-                </Field>
-                <div className={css.tip}>
-                  <FormattedMessage id="ProfileSettingsForm.tip" />
+                    }}
+                  </Field>
+                  {/* <div className={css.tip}>
+                    <FormattedMessage id="ProfileSettingsForm.tip" />
+                  </div> */}
+                  <div className={css.fileInfo}>
+                    <FormattedMessage id="ProfileSettingsForm.fileInfo" />
+                  </div>
                 </div>
-                <div className={css.fileInfo}>
-                  <FormattedMessage id="ProfileSettingsForm.fileInfo" />
-                </div>
-              </div> */}
+              )}
               <div className={css.sectionContainer}>
                 <H4 as="h2" className={css.sectionTitle}>
                   <FormattedMessage id="ProfileSettingsForm.yourName" />
@@ -335,7 +379,7 @@ class ProfileSettingsFormComponent extends Component {
                   />
                 </div>
               </div>
-              {currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
+              {isPartner && (
                 <>
                   <div className={css.sectionContainer}>
                     <H4 as="h2" className={css.sectionTitle}>
@@ -347,6 +391,31 @@ class ProfileSettingsFormComponent extends Component {
                       name="businessName"
                       // label={bioLabel}
                       placeholder={businessNamePlaceholder}
+                      validate={validators.required(
+                        intl.formatMessage({
+                          id: 'SignupForm.businessNameRequired',
+                        })
+                      )}
+                    />
+                  </div>
+                  <div className={css.sectionContainer}>
+                    <H4 as="h2" className={css.sectionTitle}>
+                      <FormattedMessage id="SignupForm.businessRoleLabel" />
+                    </H4>
+
+                    <FieldTextInput
+                      type="text"
+                      id={'businessRole'}
+                      name="businessRole"
+                      autoComplete="businessRole"
+                      placeholder={intl.formatMessage({
+                        id: 'SignupForm.businessRolePlaceholder',
+                      })}
+                      validate={validators.required(
+                        intl.formatMessage({
+                          id: 'SignupForm.businessRoleRequired',
+                        })
+                      )}
                     />
                   </div>
                   <div className={classNames(css.sectionContainer)}>
@@ -359,6 +428,11 @@ class ProfileSettingsFormComponent extends Component {
                       name="bio"
                       label={bioLabel}
                       placeholder={bioPlaceholder}
+                      validate={validators.required(
+                        intl.formatMessage({
+                          id: 'ProfileSettingsForm.bioIsRequired',
+                        })
+                      )}
                     />
                     <p className={css.bioInfo}>
                       <FormattedMessage
@@ -370,72 +444,52 @@ class ProfileSettingsFormComponent extends Component {
                 </>
               )}
 
-              <div className={classNames(css.sectionContainer, css.lastSection)}>
-                <h3 className={css.sectionTitle}>
-                  <FormattedMessage id="ProfileSettingsForm.profileUrlName" />
-                </h3>
-                <div className={css.inputContainer}>
-                  <div className={css.label}>{`${ROOT_URL}/@`}</div>
-                  
-                  <FieldTextInput
-                    type="text"
-                    id="profileUrl"
-                    name="profileUrl"
-                    className={css.inpField}
-                    // className={classNames(css.inputs, css.interLightSemiSmallBlack, {
-                    //   [css.invalidInputs]: touched.profileUrl && !!errors.profileUrl,
-                    //   [css.fnNonEmptyInputs]: !!values.profileUrl || active === 'profileUrl',
-                    // })}
-                    // label={profileUrlLabel}
-                    placeholder={profileUrlPlaceholder}
-                    onChange={e => {
-                      form.change('profileUrl', e.target.value.replace(/\s/g, '').toLowerCase());
-                    }}
-                    // onFocus={e =>
-                    //   this.setState({
-                    //     profileUrlAvailabilityCheckInProgress: true,
-                    //   })
-                    // }
-                    onBlur={async e => {
-                      if (initialValues.profileUrl === values.profileUrl) return;
-                      this.setState({
-                        profileUrlAvailabilityCheckInProgress: true,
-                      });
-                      axios
-                        .get(`${apiBaseUrl()}/api/checkAvailabilityOfUserName/@${e.target.value}`)
-                        .then(resp => {
-                          if (resp?.status === 200) {
-                            this.setState({ isProfileUrlAvailable: true });
-                          }
-                          this.setState({
-                            profileUrlAvailabilityCheckInProgress: false,
-                          });
-                        })
-                        .catch(err => {
-                          this.setState({
-                            profileUrlAvailabilityCheckInProgress: false,
-                          });
-                          if (err?.response?.status === 409) {
-                            this.setState({ isProfileUrlAvailable: false });
-                          }
-                        });
-                    }}
-                  />
-                </div>
-                {!this.state.isProfileUrlAvailable ? (
-                  <div className={css.errMsg}>
-                    <FormattedMessage id="profilesettingForm.profileUrlNotAvailable" />
+              {isPartner && (
+                <div className={classNames(css.sectionContainer, css.lastSection)}>
+                  <h3 className={css.sectionTitle}>
+                    <FormattedMessage id="ProfileSettingsForm.profileUrlName" />
+                  </h3>
+                  <div className={css.inputContainer}>
+                    <div className={css.label}>{`${ROOT_URL}/@`}</div>
+
+                    <FieldTextInput
+                      type="text"
+                      id="profileUrl"
+                      name="profileUrl"
+                      className={css.inpField}
+                      // className={classNames(css.inputs, css.interLightSemiSmallBlack, {
+                      //   [css.invalidInputs]: touched.profileUrl && !!errors.profileUrl,
+                      //   [css.fnNonEmptyInputs]: !!values.profileUrl || active === 'profileUrl',
+                      // })}
+                      // label={profileUrlLabel}
+                      placeholder={profileUrlPlaceholder}
+                      onChange={e => {
+                        form.change('profileUrl', e.target.value.replace(/\s/g, '').toLowerCase());
+                      }}
+                      // onFocus={e =>
+                      //   this.setState({
+                      //     profileUrlAvailabilityCheckInProgress: true,
+                      //   })
+                      // }
+                      onFocus={this.handleFocus}
+                      onBlur={this.handleBlur}
+                    />
                   </div>
-                ) : // <p className={css.info}>
-                //   <FormattedMessage id="ProfileSettingsForm.profileUrlInfo" />
-                // </p>
-                null}
-                <div className={css.info}>
-                  <FormattedMessage id="profilesettingForm.profileUrlInfo" />
-                  <br />
-                  <FormattedMessage id="profilesettingForm.profileUrlInfoEx" />
+                  {!this.state.isProfileUrlAvailable ? (
+                    <div className={css.errMsg}>
+                      <FormattedMessage id="profilesettingForm.profileUrlNotAvailable" />
+                    </div>
+                  ) : // <p className={css.info}>
+                  //   <FormattedMessage id="ProfileSettingsForm.profileUrlInfo" />
+                  // </p>
+                  null}
+                  <div className={css.info}>
+                    <FormattedMessage id="profilesettingForm.profileUrlInfo" />
+                    <br />
+                    <FormattedMessage id="profilesettingForm.profileUrlInfoEx" />
+                  </div>
                 </div>
-              </div>
+              )}
 
               {submitError}
               <Button

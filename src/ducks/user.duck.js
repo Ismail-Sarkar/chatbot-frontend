@@ -67,6 +67,7 @@ const initialState = {
   currentUserHasOrdersError: null,
   sendVerificationEmailInProgress: false,
   sendVerificationEmailError: null,
+  currentUserShowSuccess: false,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -75,7 +76,11 @@ export default function reducer(state = initialState, action = {}) {
     case CURRENT_USER_SHOW_REQUEST:
       return { ...state, currentUserShowError: null };
     case CURRENT_USER_SHOW_SUCCESS:
-      return { ...state, currentUser: mergeCurrentUser(state.currentUser, payload) };
+      return {
+        ...state,
+        currentUser: mergeCurrentUser(state.currentUser, payload),
+        currentUserShowSuccess: true,
+      };
     case CURRENT_USER_SHOW_ERROR:
       // eslint-disable-next-line no-console
       console.error(payload);

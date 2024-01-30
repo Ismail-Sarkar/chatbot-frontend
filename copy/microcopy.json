@@ -200,7 +200,7 @@
   "EditListingDetailsForm.listingTypeRequired": "You need to select listing type.",
   "EditListingDetailsForm.maxLength": "Must be {maxLength} characters or less",
   "EditListingDetailsForm.showListingFailed": "Fetching listing data failed.",
-  "EditListingDetailsForm.title": "Listing title*",
+  "EditListingDetailsForm.title": "Enter a Listing title* {tipsLink}",
   "EditListingDetailsForm.titlePlaceholder": "Name your listing.",
   "EditListingDetailsForm.titleRequired": "You need to add a title.",
   "EditListingDetailsForm.updateFailed": "Failed to update listing. Please try again.",

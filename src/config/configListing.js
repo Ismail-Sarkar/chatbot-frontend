@@ -294,7 +294,7 @@ export const enforceValidListingType = false;
 export const availablePaymentMethods = [
   {
     key: 'creditDebitCash',
-    label: 'Credit/debit card & cash',
+    label: 'Credit/debit card and cash',
     value: 'creditDebitCash',
     option: 'creditDebitCash',
   },
@@ -321,7 +321,8 @@ export const electricalOutletOption = [
   },
   {
     key: 'severalOutletsAvailable',
-    label: 'Several outlets are available - arrive with your laptop/phone charge',
+    label:
+      'Several outlets are available - but it’s recommended to still arrive with your laptop charged',
     value: 'severalOutletsAvailable',
     option: 'severalOutletsAvailable',
   },

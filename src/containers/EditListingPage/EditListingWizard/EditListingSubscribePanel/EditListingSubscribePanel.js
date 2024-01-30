@@ -244,24 +244,24 @@ const EditListingSubscribePanel = props => {
 
   //   console.log(
   //     2222,
-  //     currentUser.attributes.profile.privateData.subscriptionDetails?.subscriptionStatus
+  //     currentUser?.attributes.profile.privateData.subscriptionDetails?.subscriptionStatus
   //   );
   const canSubscribe =
-    typeof currentUser.attributes.profile.privateData.subscriptionDetails !== 'undefined'
-      ? currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStatus !==
+    typeof currentUser?.attributes.profile.privateData.subscriptionDetails !== 'undefined'
+      ? currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionStatus !==
           'active' &&
         !(
           moment(new Date()).isBetween(
-            currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
-            currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+            currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
+            currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
             'day'
           ) ||
           moment(new Date()).isSame(
-            currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
+            currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
             'day'
           ) ||
           moment(new Date()).isSame(
-            currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+            currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
             'day'
           )
         )

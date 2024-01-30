@@ -30,6 +30,8 @@ import NotFoundPage from '../../containers/NotFoundPage/NotFoundPage';
 
 import css from './ProfilePage.module.css';
 import CopyText from '../../components/CopyText/CopyText';
+import { isEmpty } from 'lodash';
+import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 
 const MAX_MOBILE_SCREEN_WIDTH = 768;
 const MARKETPLACE_URL = process.env.REACT_APP_MARKETPLACE_ROOT_URL;
@@ -164,6 +166,7 @@ export const MainContent = props => {
 
   const { publicData } = user?.attributes?.profile || {};
   const { profileUrl = null } = publicData || {};
+  const isPartner = publicData?.userType === 'partner';
 
   const listingsContainerClasses = classNames(css.listingsContainer, {
     [css.withBioMissingAbove]: !hasBio,
@@ -179,11 +182,15 @@ export const MainContent = props => {
   return (
     <div>
       <H2 as="h1" className={css.desktopHeading}>
-        <FormattedMessage id="ProfilePage.desktopHeading" values={{ name: businessname }} />
+        <FormattedMessage
+          id="ProfilePage.desktopHeading"
+          values={{ name: businessname ?? displayName }}
+        />
       </H2>
       {profileUrl && (
         <div className={css.profileUrl}>
-          <CopyText text={`${MARKETPLACE_URL}/${profileUrl}`} />
+          <a href={`${MARKETPLACE_URL}/${profileUrl}`}>{profileUrl}</a>
+          {/* <CopyText text={`${MARKETPLACE_URL}/${profileUrl}`} /> */}
         </div>
       )}
       {hasBio ? <p className={css.bio}>{bio}</p> : null}
@@ -201,18 +208,31 @@ export const MainContent = props => {
           </ul>
         </div>
       ) : null}
-      {isMobileLayout ? (
-        <MobileReviews reviews={reviews} queryReviewsError={queryReviewsError} />
-      ) : (
-        <DesktopReviews reviews={reviews} queryReviewsError={queryReviewsError} />
-      )}
+      {isPartner ? (
+        isMobileLayout ? (
+          <MobileReviews reviews={reviews} queryReviewsError={queryReviewsError} />
+        ) : (
+          <DesktopReviews reviews={reviews} queryReviewsError={queryReviewsError} />
+        )
+      ) : null}
     </div>
   );
 };
 
 const ProfilePageComponent = props => {
   const config = useConfiguration();
-  const { scrollingDisabled, currentUser, userShowError, user, intl, ...rest } = props;
+  const {
+    scrollingDisabled,
+    currentUser,
+    userShowError,
+    user,
+    intl,
+    userShowSuccess,
+    currentUserShowSuccess,
+    history,
+    location,
+    ...rest
+  } = props;
   const ensuredCurrentUser = ensureCurrentUser(currentUser);
   const profileUser = ensureUser(user);
   const isCurrentUser =
@@ -220,13 +240,29 @@ const ProfilePageComponent = props => {
   const { bio, displayName } = profileUser?.attributes?.profile || {};
   const businessname = profileUser?.attributes?.profile?.publicData?.businessName;
 
-  const schemaTitleVars = { name: displayName, marketplaceName: config.marketplaceName };
+  const schemaTitleVars = {
+    name: businessname ?? displayName,
+    marketplaceName: config.marketplaceName,
+  };
   const schemaTitle = intl.formatMessage({ id: 'ProfilePage.schemaTitle' }, schemaTitleVars);
 
   if (userShowError && userShowError.status === 404) {
     return <NotFoundPage />;
   }
-  return (
+
+  const { publicData } = user?.attributes?.profile || {};
+  const isPartner = publicData?.userType === 'partner';
+
+  if (!isPartner && userShowSuccess) {
+    history.push({
+      pathname: '/',
+    });
+    // history.push({
+    //   pathname: '/login',
+    //   state: { from: `${location.pathname}${location.search}${location.hash}` },
+    // });
+  }
+  return userShowSuccess ? (
     <Page
       scrollingDisabled={scrollingDisabled}
       title={schemaTitle}
@@ -261,6 +297,8 @@ const ProfilePageComponent = props => {
       </LayoutSideNavigation>
       </div>
     </Page>
+  ) : (
+    <></>
   );
 };
 
@@ -294,7 +332,7 @@ ProfilePageComponent.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { currentUser } = state.user;
+  const { currentUser, currentUserShowSuccess } = state.user;
   const {
     userId,
     userShowError,
@@ -302,6 +340,7 @@ const mapStateToProps = state => {
     userListingRefs,
     reviews,
     queryReviewsError,
+    userShowSuccess,
   } = state.ProfilePage;
   const userMatches = getMarketplaceEntities(state, [{ type: 'user', id: userId }]);
   const user = userMatches.length === 1 ? userMatches[0] : null;
@@ -315,13 +354,16 @@ const mapStateToProps = state => {
     listings,
     reviews,
     queryReviewsError,
+    userShowSuccess,
+    currentUserShowSuccess,
   };
 };
 
 const ProfilePage = compose(
   connect(mapStateToProps),
   withViewport,
-  injectIntl
+  injectIntl,
+  withRouter
 )(ProfilePageComponent);
 
 export default ProfilePage;

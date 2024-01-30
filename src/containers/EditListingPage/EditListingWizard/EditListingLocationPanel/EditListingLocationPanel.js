@@ -100,11 +100,11 @@ const EditListingLocationPanel = props => {
             cityStateCountry,
             zip,
           } = values;
-          if (Object.keys(location || {}).length !== 0) {
-            const {
-              selectedPlace: { address, origin },
-            } = location;
-
+          const {
+            selectedPlace: { address, origin },
+          } = location;
+          // if (Object.keys(location || {}).length !== 0) {
+          if (!manualAddress) {
             // New values for listing attributes
             const updateValues = {
               geolocation: origin,
@@ -114,9 +114,9 @@ const EditListingLocationPanel = props => {
                   building,
                 },
                 mapLocation: {
-                  country: mapLocation.country ? mapLocation.country.text : null,
-                  state: mapLocation.state ? mapLocation.state.text : null,
-                  district: mapLocation.district ? mapLocation.district.text : null,
+                  country: mapLocation?.country ? mapLocation?.country.text : null,
+                  state: mapLocation?.state ? mapLocation?.state.text : null,
+                  district: mapLocation?.district ? mapLocation?.district.text : null,
                 },
                 manualAddress: false,
                 fullManualAddress: null,
@@ -134,9 +134,17 @@ const EditListingLocationPanel = props => {
             onSubmit(updateValues);
           } else {
             const updateValues = {
+              geolocation: origin,
               publicData: {
-                location: null,
-                mapLocation: null,
+                location: {
+                  address,
+                  building,
+                },
+                mapLocation: {
+                  country: mapLocation?.country ? mapLocation?.country.text : null,
+                  state: mapLocation?.state ? mapLocation?.state.text : null,
+                  district: mapLocation?.district ? mapLocation?.district.text : null,
+                },
                 manualAddress,
                 fullManualAddress: manualAddress
                   ? {
@@ -149,6 +157,8 @@ const EditListingLocationPanel = props => {
             };
             setState({
               initialValues: {
+                location: { search: address, selectedPlace: { address, origin } },
+
                 manualAddress: manualAddress,
                 fullManualAddress: {
                   street: street,
@@ -159,7 +169,7 @@ const EditListingLocationPanel = props => {
                 street: street ? street : null,
                 cityStateCountry: cityStateCountry ? cityStateCountry : null,
                 zip: zip ? zip : null,
-                // manualAddress: manualAddress ? manualAddress : false,
+                manualAddress,
               },
             });
             onSubmit(updateValues);

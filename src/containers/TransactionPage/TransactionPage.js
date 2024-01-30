@@ -252,7 +252,10 @@ export const TransactionPageComponent = props => {
 
   // Submit review and close the review modal
   const onSubmitReview = values => {
-    const { reviewRating, reviewContent } = values;
+    const {
+      reviewRating,
+      reviewContent = values.reviewContent ? values.reviewContent : ' ',
+    } = values;
     const rating = Number.parseInt(reviewRating, 10);
     const { states, transitions } = process;
     const transitionOptions =
@@ -520,6 +523,7 @@ export const TransactionPageComponent = props => {
           onManageDisableScrolling={onManageDisableScrolling}
           onSubmitReview={onSubmitReview}
           revieweeName={otherUserDisplayName}
+          provider={provider}
           reviewSent={reviewSubmitted}
           sendReviewInProgress={sendReviewInProgress}
           sendReviewError={sendReviewError}

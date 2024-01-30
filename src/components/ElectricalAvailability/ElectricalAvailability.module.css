@@ -1,0 +1,78 @@
+.sectionText {
+  padding: 0 24px;
+  margin-bottom: 40px;
+
+  @media (min-width: 1024px) {
+    padding: 0;
+    /* margin-bottom: 40px; */
+  }
+  @media (min-width: 768px) {
+    padding: 0;
+    /* margin-bottom: 40px; */
+  }
+}
+
+.sectionHeading {
+  /* Font for sections titles */
+  composes: p from global;
+  padding: 0;
+  font-weight: var(--fontWeightBold);
+
+  margin-top: 0;
+  margin-bottom: 12px;
+
+  @media (--viewportMedium) {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+}
+
+.electricalAvailabilityOptionDiv {
+}
+
+.selectedLabel {
+  font-weight: var(--fontWeightSemiBold);
+}
+
+.notSelectedLabel {
+  color: var(--colorGrey300);
+  position: relative;
+  text-decoration: line-through;
+}
+
+.checkIcon {
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.item {
+  display: flex;
+  padding: 3px 0;
+  flex-direction: column;
+  gap: 5px;
+
+  @media (--viewportMedium) {
+    padding: 5px 0 3px 0;
+  }
+}
+
+.listItemsIndividual {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-direction: row;
+}
+
+.iconWrapper {
+  align-self: baseline;
+  margin-right: 8px;
+
+  /* This follows line-height */
+  height: 24px;
+}
+
+.labelWrapper {
+  display: inline-block;
+}

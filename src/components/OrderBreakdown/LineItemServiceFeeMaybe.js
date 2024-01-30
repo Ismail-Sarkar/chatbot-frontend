@@ -57,7 +57,7 @@ function LineItemServiceFeeMaybe(props) {
     },
     {
       key: 'seats',
-      label: formattedLabel(`line-item/service-fee`),
+      label: formattedLabel(`line-item/service-fees`),
       formattedMoneyLabel: formatMoney(
         intl,
         new Money(lineTotal?.amount, lineTotal?.currency || 'USD')

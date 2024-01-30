@@ -53,6 +53,9 @@ const PanelHeading = props => {
   const titleClasses = classNames(rootClassName || defaultRootClassName, className);
   const listingLink = createListingLink(listingId, listingTitle, listingDeleted);
   const breakline = <br />;
+  const providerBusinessName =
+    providerName?.props?.user?.attributes?.profile?.publicData?.businessName;
+  const providerDisplayName = providerBusinessName ? providerBusinessName : providerName;
 
   return (
     <>
@@ -60,7 +63,7 @@ const PanelHeading = props => {
         <span className={css.mainTitle}>
           <FormattedMessage
             id={`TransactionPage.${processName}.${transactionRole}.${processState}.title`}
-            values={{ customerName, providerName, breakline }}
+            values={{ customerName, providerName: providerDisplayName, breakline }}
           />
         </span>
       </H1>
@@ -83,7 +86,7 @@ const PanelHeading = props => {
         <p className={css.transactionInfoMessage}>
           <FormattedMessage
             id={`TransactionPage.${processName}.${transactionRole}.${processState}.extraInfo`}
-            values={{ customerName, providerName, deliveryMethod, breakline }}
+            values={{ customerName, providerName: providerDisplayName, deliveryMethod, breakline }}
           />
         </p>
       ) : null}

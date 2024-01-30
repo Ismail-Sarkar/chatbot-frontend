@@ -34,7 +34,8 @@ const AddressLinkMaybe = props => {
   return showAddress && hrefToGoogleMaps ? (
     manualAddress ? (
       <p className={classes}>
-        {fullManualAddress?.street} <br />
+        {`${fullManualAddress?.street}, ${fullManualAddress?.cityStateCountry}, ${fullManualAddress?.zip}`}{' '}
+        <br />
       </p>
     ) : (
       <div className={classes}>

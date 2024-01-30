@@ -1,4 +1,5 @@
 @import '../../styles/customMediaQueries.css';
+@import '../../styles//marketplaceDefaults.css';
 
 .topbar {
   z-index: 1; /* ensure that Topbar shadow overlays content background */
@@ -48,12 +49,13 @@
   border-top-style: solid;
   background-color: var(--colorWhite);
   box-shadow: var(--boxShadow);
-
   @media (--viewportMedium) {
     padding: 24px 24px 0 24px;
   }
 
   @media (--viewportLarge) {
+    min-height: 560px;
+
     flex-wrap: unset;
     padding: 40px 0 82px 36px;
     flex-direction: column;
@@ -89,10 +91,15 @@
 
 .tabs {
   padding-top: 2px;
-
+  width: 340px;
   display: flex;
   flex-direction: row;
   overflow-x: auto;
+  & div:first-child {
+    & a {
+      width: 340px;
+    }
+  }
 
   @media (--viewportMedium) {
     padding-top: 12px;
@@ -328,8 +335,8 @@
   /* This class is empty on purpose, it is used below for banned users */
 }
 
-.accepted{
-  color:green !important;
+.accepted {
+  color: green !important;
 }
 
 .stateActionNeeded {
@@ -373,4 +380,180 @@
   & .stateName {
     color: var(--colorGrey300);
   }
+}
+.bookingDates {
+  /* background-color: aquamarine; */
+  & div:first-child {
+    & label:nth-child(2) {
+      display: none;
+    }
+  }
+  & div:nth-child(2) {
+    & div:first-child {
+      & div:first-child {
+        & div:first-child {
+          & div:nth-child(1) {
+            & input {
+              width: 339px;
+            }
+          }
+          & div:nth-child(3) {
+            display: none;
+          }
+          & div:nth-child(4) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+.nameAndNumber {
+  display: flex;
+  align-items: center;
+  & div:nth-child(2) {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+}
+
+.inboxPageCalender {
+  margin-top: -16px;
+
+  & :global(.DayPicker) {
+    margin: 0px !important;
+  }
+
+  & :global(.SingleDatePicker_picker) {
+    width: 314px !important;
+  }
+
+  & :global(.CalendarDay) {
+    color: var(--color-black) !important;
+    & :hover,
+    & :focus {
+      color: var(--color-black) !important;
+    }
+  }
+  & :global(.CalendarDay_default) {
+    border-width: 0px !important;
+    & :hover,
+    & :focus {
+      border-width: 0px !important;
+    }
+  }
+  & :global(.SingleDatePicker_picker),
+  & :global(.SingleDatePicker_picker__directionLeft),
+  & :global(.DayPicker__horizontal) {
+    background-color: var(--color-white) !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  & :global(.SingleDatePicker_picker__directionLeft) {
+    border: 1px solid #e5e5e6;
+  }
+
+  & :global(.CalendarMonth_caption) {
+    color: var(--color-black);
+    font-weight: 200 !important;
+  }
+
+  & :global(.DayPickerNavigation_button) {
+    color: var(--color-black) !important;
+
+    & svg {
+      stroke: var(--color-black);
+      fill: var(--color-black);
+    }
+  }
+
+  & :global(.DayPicker_weekHeader) {
+    color: var(--color-black) !important;
+    top: 54px !important;
+    /* border-bottom: 1px solid #000; */
+  }
+
+  & :global(.DayPicker_weekHeader_ul) {
+    border-bottom: 1px solid var(--color-black);
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+  }
+
+  & :global(.CalendarDay) {
+    color: var(--color-black) !important;
+    cursor: pointer !important;
+  }
+  & :global(.CalendarDay__firstDayOfWeek),
+  & :global(.CalendarDay__lastDayOfWeek) {
+    color: var(--color-blue) !important;
+  }
+
+  & :global(.CalendarDay__outside) {
+    color: var(--colorGrey300) !important;
+  }
+
+  & :global(.DateInput) {
+    display: none;
+  }
+
+  & :global(.CalendarDay__highlighted_calendar) {
+    background-color: var(--colorSuccess) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+
+    & :hover,
+    & :focus {
+      background-color: var(--colorSuccess) !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+    }
+  }
+
+  & :global(.CalendarDay__blocked_calendar) {
+    background-color: var(--color-blocked) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+
+    & :hover,
+    & :focus {
+      background-color: var(--color-blocked) !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+    }
+  }
+  & :global(.CalendarDay__selected) {
+    background-color: #000 !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    & :global(.renderedDay) {
+      background-color: #000 !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+    }
+  }
+
+  & :global(.CalendarDay__default) {
+    border: none !important;
+  }
+}
+
+.dateLoader {
+  width: 312px;
+  height: 300px;
+  border: 1px solid #e5e5e6;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #858585;
+  position: absolute;
+  & .icon {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.searchForm {
+  margin-bottom: 16px;
 }

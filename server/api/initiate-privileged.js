@@ -6,35 +6,62 @@ const {
   handleError,
   serialize,
   fetchCommission,
+  getIntegrationSdk,
 } = require('../api-util/sdk');
+const moment = require('moment');
 const marketplaceCurrency = process.env.REACT_APP_SHARETRIBE_MARKETPLACE_CURRENCY;
 
 const { createCustomPaymentIntent } = require('../api-util/stripeHelper');
-
+const { addTransactionDetails } = require('../api-util/transactionHelper');
+const integrationSdk = getIntegrationSdk();
 module.exports = (req, res) => {
   const { isSpeculative, orderData, bodyParams, queryParams } = req.body;
 
   const sdk = getSdk(req, res);
   let lineItems = null;
-  let stripePaymentIntents = {};
+  let stripePaymentIntents = {},
+    transactionResp,
+    customer,
+    provider,
+    timeZone,
+    bookingStart;
+  // let bookingStart = moment(bodyParams.params.bookingStart)
+  //   .add(offset, 'minutes')
+  //   .toISOString();
+
+  console.log(bookingStart);
+
   const paymentMethod = bodyParams?.params?.paymentMethod;
 
-  const currentUserPromise = () => sdk.currentUser.show({ 'fields.currentUser': [] });
+  const currentUserPromise = () => sdk.currentUser.show();
 
   const listingPromise = () =>
-    sdk.listings.show({
-      id: bodyParams?.params?.listingId,
+    integrationSdk.listings.show({
+      id: bodyParams?.params?.listingId.uuid,
       include: ['author'],
-      'fields.user': [],
     });
 
   Promise.all([listingPromise(), fetchCommission(sdk), currentUserPromise()])
     .then(async ([showListingResponse, fetchAssetsResponse, currentUserResponse]) => {
       const listing = showListingResponse.data.data;
+      timeZone = listing.attributes?.availabilityPlan.timezone;
       const commissionAsset = fetchAssetsResponse.data.data[0];
-      const providerId = showListingResponse.data.included[0].id.uuid;
-      const customerId = currentUserResponse.data.data.id.uuid;
+      provider = showListingResponse.data.included[0];
+      customer = currentUserResponse.data.data;
+      const providerId = provider.id.uuid;
+      const customerId = customer.id.uuid;
+      const offset = moment.tz.zone(timeZone).utcOffset();
+      // bookingStart = bodyParams.params.bookingStart;
+      bookingStart = moment(bodyParams.params.bookingStart)
+        .subtract(offset, 'minutes')
+        .toISOString();
 
+      console.log(
+        bookingStart,
+        moment(bodyParams.params.bookingStart)
+          .subtract(offset, 'minutes')
+          .toISOString()
+      );
       const providerCommission =
         commissionAsset?.type === 'jsonAsset'
           ? commissionAsset.attributes.data.providerCommission
@@ -89,7 +116,21 @@ module.exports = (req, res) => {
       return trustedSdk.transactions.initiate(body, queryParams);
     })
     .then(apiResponse => {
-      const { status, statusText, data } = apiResponse;
+      transactionResp = apiResponse;
+      if (isSpeculative) {
+        return Promise.resolve();
+      } else {
+        return addTransactionDetails(
+          customer,
+          provider,
+          transactionResp.data.data,
+          bookingStart,
+          timeZone
+        );
+      }
+    })
+    .then(() => {
+      const { status, statusText, data } = transactionResp;
       res
         .status(status)
         .set('Content-Type', 'application/transit+json')

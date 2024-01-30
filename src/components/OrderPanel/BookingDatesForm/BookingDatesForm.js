@@ -303,6 +303,8 @@ const fetchMonthData = (
 ) => {
   const endOfRangeDate = endOfRange(TODAY, dayCountAvailableForBooking, timeZone);
 
+  // console.log('55555', endOfRangeDate, dayCountAvailableForBooking);
+
   // Don't fetch timeSlots for past months or too far in the future
   if (isInRange(date, TODAY, endOfRangeDate)) {
     // Use "today", if the first day of given month is in the past
@@ -328,6 +330,7 @@ const handleMonthClick = (
   listingId,
   onFetchTimeSlots
 ) => monthFn => {
+  // console.log('6666');
   // Callback function after month has been updated.
   // react-dates component has next and previous months ready (but inivisible).
   // we try to populate those invisible months before user advances there.
@@ -443,6 +446,13 @@ const Prev = props => {
   const prevMonthDate = prevMonthFn(currentMonth, timeZone);
   const currentMonthDate = getStartOf(TODAY, 'month', timeZone);
 
+  // console.log(
+  //   '7777',
+  //   prevMonthDate,
+  //   currentMonthDate,
+  //   isDateSameOrAfter(prevMonthDate, currentMonthDate)
+  // );
+
   return isDateSameOrAfter(prevMonthDate, currentMonthDate) ? <PrevIcon /> : null;
 };
 
@@ -513,7 +523,6 @@ export const BookingDatesFormComponent = props => {
           intl,
           lineItemUnitType,
           values,
-          monthlyTimeSlots,
           lineItems,
           fetchLineItemsError,
           onFetchTimeSlots,
@@ -938,21 +947,21 @@ export const BookingDatesFormComponent = props => {
               //  errorClassName={errorTextField}
               // isOutsideRange={date => moment().diff(date, 'days') <= 0}
 
-              isDayBlocked={day => {
-                const monthlyTimeSlots = props.monthlyTimeSlots;
-                const key = moment(day)?.format('YYYY-MM');
-                const matchedData = monthlyTimeSlots[key]?.timeSlots;
-                const dataMatchedArray = matchedData?.filter(
-                  slot =>
-                    moment(day).isBetween(slot.attributes.start, slot.attributes.end, 'day') ||
-                    moment(day).isSame(slot.attributes.start, 'day')
-                );
-                if (dataMatchedArray?.length > 0) {
-                  return false;
-                } else {
-                  return true;
-                }
-              }}
+              // isDayBlocked={day => {
+              //   const monthlyTimeSlots = props.monthlyTimeSlots;
+              //   const key = moment(day)?.format('YYYY-MM');
+              //   const matchedData = monthlyTimeSlots[key]?.timeSlots;
+              //   const dataMatchedArray = matchedData?.filter(
+              //     slot =>
+              //       moment(day).isBetween(slot.attributes.start, slot.attributes.end, 'day') ||
+              //       moment(day).isSame(slot.attributes.start, 'day')
+              //   );
+              //   if (dataMatchedArray?.length > 0) {
+              //     return false;
+              //   } else {
+              //     return true;
+              //   }
+              // }}
               // isOutsideRange={isOutsideRange}
               onChange={value => singleDateChange(value, form, props)}
               // format={v => {
@@ -992,28 +1001,32 @@ export const BookingDatesFormComponent = props => {
               //   return v ? { startDate: parsedStart, endDate: parsedEnd } : v;
               // }}
               initialVisibleMonth={initialVisibleMonth(startDate || startOfToday, timeZone)}
-              // navNext={
-              //   <Next
-              //     currentMonth={currentMonth}
-              //     timeZone={timeZone}
-              //     dayCountAvailableForBooking={dayCountAvailableForBooking}
-              //   />
-              // }
-              // navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
-              // onPrevMonthClick={() => {
-              //   setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
-              //   onMonthClick(prevMonthFn);
-              // }}
-              // onNextMonthClick={() => {
-              //   setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
-              //   onMonthClick(nextMonthFn);
-              // }}
+              navNext={
+                <Next
+                  currentMonth={currentMonth}
+                  timeZone={timeZone}
+                  dayCountAvailableForBooking={dayCountAvailableForBooking}
+                />
+              }
+              navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
+              onPrevMonthClick={() => {
+                setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
+                onMonthClick(prevMonthFn);
+              }}
+              onNextMonthClick={() => {
+                setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
+                onMonthClick(nextMonthFn);
+              }}
+              isDayBlocked={isDayBlocked()}
+              isOutsideRange={isOutsideRange()}
+              isBlockedBetween={isBlockedBetween(monthlyTimeSlots, timeZone)}
               //
               // isBlockedBetween={isBlockedBetween(monthlyTimeSlots, timeZone)}
               // disabled={fetchLineItemsInProgress}
-              onClose={event =>
-                setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
-              }
+              // onClose={event =>
+              //   setCurrentMonth(getStartOf(event?.startDate ?? startOfToday, 'month', timeZone))
+              // }
+              enableOutsideDays={false}
             />
             {extraParkValues.length > 0 && (
               <div className={css.muiselectcontainer}>
@@ -1071,7 +1084,9 @@ export const BookingDatesFormComponent = props => {
               <PrimaryButton
                 type="submit"
                 inProgress={fetchLineItemsInProgress}
-                disabled={parseInt(values?.additionalGuest) > parseInt(guestMaxForListing)}
+                disabled={
+                  parseInt(values?.additionalGuest) > parseInt(guestMaxForListing) || isOwnListing
+                }
               >
                 <FormattedMessage id="BookingDatesForm.requestToBook" />
               </PrimaryButton>

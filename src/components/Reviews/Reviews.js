@@ -12,10 +12,16 @@ const Review = props => {
 
   const date = review.attributes.createdAt;
   const dateString = intl.formatDate(date, { month: 'long', year: 'numeric' });
+  const otherUserPartner =
+    review?.author?.attributes?.profile?.publicData?.userType === 'partner' ? true : false;
 
   return (
     <div className={css.review}>
-      <Avatar className={css.avatar} user={review.author} />
+      <Avatar
+        className={css.avatar}
+        user={review.author}
+        disableProfileLink={!otherUserPartner && true}
+      />
       <div>
         <ReviewRating
           rating={review.attributes.rating}

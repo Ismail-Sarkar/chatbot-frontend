@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { arrayOf, bool, number, oneOf, shape, string } from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { Form as FinalForm, FormSpy } from 'react-final-form';
 
 import { useConfiguration } from '../../context/configurationContext';
 
@@ -15,7 +16,7 @@ import {
   LINE_ITEM_HOUR,
   LISTING_UNIT_TYPES,
 } from '../../util/types';
-import { subtractTime } from '../../util/dates';
+import { subtractTime, getStartOf, addTime, getDefaultTimeZoneOnBrowser } from '../../util/dates';
 import {
   TX_TRANSITION_ACTOR_CUSTOMER,
   TX_TRANSITION_ACTOR_PROVIDER,
@@ -27,6 +28,7 @@ import {
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { isScrollingDisabled } from '../../ducks/ui.duck';
 import {
+  Form,
   H2,
   Avatar,
   NamedLink,
@@ -38,7 +40,10 @@ import {
   TimeRange,
   UserDisplayName,
   LayoutSideNavigation,
+  FieldDateRangeInput,
+  FieldDateInput,
 } from '../../components';
+import { required, bookingDatesRequired, composeValidators } from '../../util/validators';
 
 import TopbarContainer from '../../containers/TopbarContainer/TopbarContainer';
 import FooterContainer from '../../containers/FooterContainer/FooterContainer';
@@ -46,6 +51,12 @@ import NotFoundPage from '../../containers/NotFoundPage/NotFoundPage';
 
 import { stateDataShape, getStateData } from './InboxPage.stateData';
 import css from './InboxPage.module.css';
+import { fetchPerDayTransactions, searchTransactions } from './InboxPage.duck';
+import { useCallback } from 'react';
+import moment from 'moment';
+import { isEmpty } from 'lodash';
+import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
+import { parse } from 'query-string';
 
 // Check if the transaction line-items use booking-related units
 const getUnitLineItem = lineItems => {
@@ -77,6 +88,7 @@ const bookingData = (tx, lineItemUnitType, timeZone) => {
 
 const BookingTimeInfoMaybe = props => {
   const { transaction, ...rest } = props;
+
   const processName = resolveLatestProcessName(transaction?.attributes?.processName);
   const process = getProcess(processName);
   const isInquiry = process.getState(transaction) === process.states.INQUIRY;
@@ -115,17 +127,28 @@ BookingTimeInfoMaybe.propTypes = {
 
 export const InboxItem = props => {
   const { transactionRole, tx, intl, stateData, isBooking, stockType = 'multipleItems' } = props;
+
   const { customer, provider, listing } = tx;
-  const { processName, processState, actionNeeded, isSaleNotification, isFinal,isAccepted } = stateData;
+  const {
+    processName,
+    processState,
+    actionNeeded,
+    isSaleNotification,
+    isFinal,
+    isAccepted,
+  } = stateData;
   const isCustomer = transactionRole === TX_TRANSITION_ACTOR_CUSTOMER;
 
   const lineItems = tx.attributes?.lineItems;
+  const confirmationNumber = tx?.attributes?.protectedData?.confirmationNumber;
   const hasPricingData = lineItems.length > 0;
   const unitLineItem = getUnitLineItem(lineItems);
   const quantity = hasPricingData && !isBooking ? unitLineItem.quantity.toString() : null;
   const showStock = stockType === 'multipleItems' || (quantity && unitLineItem.quantity > 1);
 
   const otherUser = isCustomer ? provider : customer;
+  const otherUserPartner =
+    otherUser?.attributes?.profile?.publicData?.userType === 'partner' ? true : false;
   const otherUserDisplayName = <UserDisplayName user={otherUser} intl={intl} />;
   const isOtherUserBanned = otherUser.attributes.banned;
 
@@ -138,13 +161,13 @@ export const InboxItem = props => {
     [css.stateConcluded]: isFinal,
     [css.stateActionNeeded]: actionNeeded,
     [css.stateNoActionNeeded]: !actionNeeded,
-    [css.accepted]:isAccepted
+    [css.accepted]: isAccepted,
   });
 
   return (
     <div className={css.item}>
       <div className={css.itemAvatar}>
-        <Avatar user={otherUser} />
+        <Avatar user={otherUser} disableProfileLink={!otherUserPartner && true} />
       </div>
       <NamedLink
         className={linkClasses}
@@ -152,7 +175,13 @@ export const InboxItem = props => {
         params={{ id: tx.id.uuid }}
       >
         <div className={css.rowNotificationDot}>{rowNotificationDot}</div>
-        <div className={css.itemUsername}>{otherUserDisplayName}</div>
+        <div className={css.nameAndNumber}>
+          <div className={css.itemUsername}>{otherUserDisplayName}</div>
+          <div>
+            {tx?.attributes?.protectedData?.confirmationNumber &&
+              `Confirmation #${confirmationNumber}`}
+          </div>
+        </div>
         <div className={css.itemTitle}>{listing?.attributes?.title}</div>
         <div className={css.itemDetails}>
           {isBooking ? (
@@ -181,9 +210,54 @@ InboxItem.propTypes = {
   stateData: stateDataShape.isRequired,
 };
 
+const SearchForm = props => {
+  const { showFrom, intl, handleOnChange, onChangeKey, className, value } = props;
+  const [searchText, setSearchText] = useState(value || '');
+
+  const debounceCallback = func => {
+    let timeoutId = null;
+    return function delayedCallback(...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(...args);
+        clearTimeout(timeoutId);
+      }, 500);
+    };
+  };
+
+  const debounceHandleOnChange = useCallback(debounceCallback(handleOnChange), []);
+
+  const onChangeText = e => {
+    const value = e.target.value;
+    setSearchText(value);
+    debounceHandleOnChange(onChangeKey, value);
+  };
+  const handleSubmit = e => {
+    e.preventDefault();
+  };
+
+  return showFrom ? (
+    <div className={classNames(css.formWrapper, className)}>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={searchText}
+          onChange={onChangeText}
+          id="seachtext"
+          placeholder={intl.formatMessage({ id: 'InboxPage.seachPlaceholder' })}
+        />
+      </form>
+    </div>
+  ) : null;
+};
+
 export const InboxPageComponent = props => {
   const config = useConfiguration();
   const {
+    rootClassName,
+    className,
     currentUser,
     fetchInProgress,
     fetchOrdersOrSalesError,
@@ -193,9 +267,55 @@ export const InboxPageComponent = props => {
     providerNotificationCount,
     scrollingDisabled,
     transactions,
+    onSearchTransactions,
+    perDayTransaction,
+    perDayTransactionError,
+    perDayTransactionFetchInProgress,
+    onfetchPerDayTransactions,
+    location,
+    ...rest
   } = props;
+  const searchParams = parse(location?.search || '');
+
+  const [transactionSearchDetails, setTransactionSearchDetails] = useState({
+    userNameAndConfirmNumber: searchParams?.userNameAndConfirmNumber || '',
+    bookingStart: searchParams?.bookingStart || '',
+  });
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const { tab } = params;
   const validTab = tab === 'orders' || tab === 'sales';
+  const searchTransactionBy = (keyName, value) => {
+    setTransactionSearchDetails(transactionDetails => ({
+      ...transactionDetails,
+      [keyName]: value,
+    }));
+  };
+
+  useEffect(() => {
+    const type = tab === 'orders' ? 'customer' : 'provider';
+    if (!isFirstLoad) {
+      onSearchTransactions(
+        transactionSearchDetails.userNameAndConfirmNumber,
+        transactionSearchDetails.bookingStart,
+        undefined,
+        type
+      );
+    }
+  }, [transactionSearchDetails.userNameAndConfirmNumber, transactionSearchDetails.bookingStart]);
+
+  useEffect(() => {
+    setIsFirstLoad(false);
+  }, []);
+
+  useEffect(() => {
+    if (location) {
+      const searchParams = parse(location?.search || '');
+      setTransactionSearchDetails({
+        userNameAndConfirmNumber: searchParams?.userNameAndConfirmNumber || '',
+        bookingStart: searchParams?.bookingStart || '',
+      });
+    }
+  }, [location]);
   if (!validTab) {
     return <NotFoundPage />;
   }
@@ -205,6 +325,19 @@ export const InboxPageComponent = props => {
   const ordersTitle = intl.formatMessage({ id: 'InboxPage.ordersTitle' });
   const salesTitle = intl.formatMessage({ id: 'InboxPage.salesTitle' });
   const title = isOrders ? ordersTitle : salesTitle;
+  const searchParamsMaybe =
+    transactionSearchDetails.userNameAndConfirmNumber && transactionSearchDetails.bookingStart
+      ? {
+          userNameAndConfirmNumber: transactionSearchDetails.userNameAndConfirmNumber,
+          bookingStart: transactionSearchDetails.booking,
+        }
+      : transactionSearchDetails.userNameAndConfirmNumber
+      ? {
+          userNameAndConfirmNumber: transactionSearchDetails.userNameAndConfirmNumber,
+        }
+      : transactionSearchDetails.bookingStart
+      ? { bookingStart: transactionSearchDetails.bookingStart }
+      : {};
 
   const pickType = lt => conf => conf.listingType === lt;
   const findListingTypeConfig = publicData => {
@@ -285,6 +418,17 @@ export const InboxPageComponent = props => {
             },
           },
         ];
+  const handleSubmit = values => {};
+
+  const loadTransactionOnMonthChange = day => {
+    const momentStartDay = moment(day);
+    const momentEndDay = moment(day);
+    const startDay = momentStartDay.startOf('month').toISOString();
+    const endDay = momentEndDay.endOf('month').toISOString();
+    const type = tab === 'orders' ? 'customer' : 'provider';
+    onfetchPerDayTransactions(startDay, endDay, type);
+  };
+
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
       <LayoutSideNavigation
@@ -302,7 +446,83 @@ export const InboxPageComponent = props => {
             <H2 as="h1" className={css.title}>
               <FormattedMessage id="InboxPage.title" />
             </H2>
-            <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />{' '}
+            <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />
+            {currentUser && currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
+              <FinalForm
+                {...rest}
+                initialValues={{
+                  startDate: {
+                    date: moment(transactionSearchDetails.bookingStart)
+                      .tz(getDefaultTimeZoneOnBrowser())
+                      .toDate(),
+                  },
+                }}
+                handleDateOnChange={value =>
+                  setTransactionSearchDetails(details => ({
+                    ...details,
+                    bookingStart: value,
+                  }))
+                }
+                intl={intl}
+                onSubmit={handleSubmit}
+                isDateLoading={perDayTransactionFetchInProgress && isEmpty(perDayTransaction)}
+                perDayTransaction={perDayTransaction}
+                render={fieldRenderProps => {
+                  const {
+                    handleSubmit,
+                    values,
+                    handleDateOnChange,
+                    isDateLoading,
+                    perDayTransaction,
+                  } = fieldRenderProps;
+
+                  const classes = classNames(rootClassName || css.root, className);
+
+                  return (
+                    <Form
+                      onSubmit={handleSubmit}
+                      className={classes}
+                      enforcePagePreloadFor="InboxPage"
+                    >
+                      {isDateLoading ? (
+                        <div className={css.dateLoader}>
+                          <IconSpinner className={css.icon} />
+                        </div>
+                      ) : (
+                        <FieldDateInput
+                          dateClassName={css.inboxPageCalender}
+                          id="startDate"
+                          name="startDate"
+                          placeholderText={`Date`}
+                          isDayBlocked={day => {
+                            const formatedDate = moment(day).format('YYYY-MM-DD');
+                            const hasTransactionThatDay = !!perDayTransaction[formatedDate];
+
+                            return hasTransactionThatDay ? moment().diff(day, 'day') > 0 : false;
+                          }}
+                          onChange={value => {
+                            console.log(value.date);
+                            handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
+                          }}
+                          keepOpenCalender={true}
+                          keepOpenOnDateSelect={true}
+                          firstDayOfWeek={0}
+                          weekDayFormat="ddd"
+                          onNextMonthClick={loadTransactionOnMonthChange}
+                          onPrevMonthClick={loadTransactionOnMonthChange}
+                          isDayHighlighted={day => {
+                            const formatedDate = moment(day).format('YYYY-MM-DD');
+                            return !!perDayTransaction[formatedDate];
+                          }}
+                          useMobileMargins
+                          enableOutsideDays={false}
+                        />
+                      )}
+                    </Form>
+                  );
+                }}
+              />
+            )}
           </>
         }
         footer={<FooterContainer />}
@@ -312,6 +532,14 @@ export const InboxPageComponent = props => {
             <FormattedMessage id="InboxPage.fetchFailed" />
           </p>
         ) : null}
+        <SearchForm
+          className={css.searchForm}
+          showFrom={!isOrders}
+          intl={intl}
+          handleOnChange={searchTransactionBy}
+          onChangeKey={'userNameAndConfirmNumber'}
+          value={transactionSearchDetails.userNameAndConfirmNumber}
+        />
         <ul className={css.itemList}>
           {!fetchInProgress ? (
             transactions.map(toTxItem)
@@ -328,12 +556,14 @@ export const InboxPageComponent = props => {
             </li>
           ) : null}
         </ul>
+
         {hasTransactions && pagination && pagination.totalPages > 1 ? (
           <PaginationLinks
             className={css.pagination}
             pageName="InboxPage"
             pagePathParams={params}
             pagination={pagination}
+            pageSearchParams={searchParamsMaybe}
           />
         ) : null}
       </LayoutSideNavigation>
@@ -368,7 +598,15 @@ InboxPageComponent.propTypes = {
 };
 
 const mapStateToProps = state => {
-  const { fetchInProgress, fetchOrdersOrSalesError, pagination, transactionRefs } = state.InboxPage;
+  const {
+    fetchInProgress,
+    fetchOrdersOrSalesError,
+    pagination,
+    transactionRefs,
+    perDayTransaction,
+    perDayTransactionError,
+    perDayTransactionFetchInProgress,
+  } = state.InboxPage;
   const { currentUser, currentUserNotificationCount: providerNotificationCount } = state.user;
   return {
     currentUser,
@@ -378,9 +616,22 @@ const mapStateToProps = state => {
     providerNotificationCount,
     scrollingDisabled: isScrollingDisabled(state),
     transactions: getMarketplaceEntities(state, transactionRefs),
+    perDayTransaction,
+    perDayTransactionError,
+    perDayTransactionFetchInProgress,
   };
 };
+const mapDispatchToProps = dispatch => ({
+  onSearchTransactions: (userNameAndConfirmNumber, bookingStart, bookingEnd, type) =>
+    dispatch(searchTransactions(userNameAndConfirmNumber, bookingStart, bookingEnd, type)),
+  onfetchPerDayTransactions: (bookingStart, bookingEnd, type) =>
+    dispatch(fetchPerDayTransactions(bookingStart, bookingEnd, type)),
+  // getConfirmationNumber:()
+});
 
-const InboxPage = compose(connect(mapStateToProps), injectIntl)(InboxPageComponent);
+const InboxPage = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  injectIntl
+)(InboxPageComponent);
 
 export default InboxPage;

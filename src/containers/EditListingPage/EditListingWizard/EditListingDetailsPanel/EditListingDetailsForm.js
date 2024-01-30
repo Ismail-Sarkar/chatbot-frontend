@@ -11,7 +11,14 @@ import { EXTENDED_DATA_SCHEMA_TYPES, propTypes } from '../../../../util/types';
 import { maxLength, required, composeValidators } from '../../../../util/validators';
 
 // Import shared components
-import { Form, Button, FieldSelect, FieldTextInput, Heading } from '../../../../components';
+import {
+  Form,
+  Button,
+  FieldSelect,
+  FieldTextInput,
+  Heading,
+  ListingLink,
+} from '../../../../components';
 // Import modules from this directory
 import CustomExtendedDataField from '../CustomExtendedDataField';
 import css from './EditListingDetailsForm.module.css';
@@ -200,7 +207,21 @@ const EditListingDetailsFormComponent = props => (
             name="title"
             className={css.title}
             type="text"
-            label={intl.formatMessage({ id: 'EditListingDetailsForm.title' })}
+            showDiv={true}
+            label={intl.formatMessage(
+              { id: 'EditListingDetailsForm.title' },
+              {
+                tipsLink: (
+                  <a
+                    className={css.exampleTips}
+                    href="https://glaze-suggestion-d7f.notion.site/Tips-for-creating-your-listing-on-Adventurely-f4712c85138b4208bb10614c7c3485da"
+                    target="_blank"
+                  >
+                    (see examples and tips)
+                  </a>
+                ),
+              }
+            )}
             placeholder={intl.formatMessage({ id: 'EditListingDetailsForm.titlePlaceholder' })}
             maxLength={TITLE_MAX_LENGTH}
             validate={composeValidators(required(titleRequiredMessage), maxLength60Message)}

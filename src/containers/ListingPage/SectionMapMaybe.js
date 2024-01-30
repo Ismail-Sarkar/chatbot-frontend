@@ -39,7 +39,9 @@ class SectionMapMaybe extends Component {
         {publicData?.manualAddress && (
           <ManualAddress publicData={publicData} listingId={listingId} />
         )}
-        {publicData.location ? <div>{publicData.location.address}</div> : null}
+        {!publicData?.manualAddress && publicData.location ? (
+          <div>{publicData.location.address}</div>
+        ) : null}
 
         {this.state.isStatic ? (
           <button
