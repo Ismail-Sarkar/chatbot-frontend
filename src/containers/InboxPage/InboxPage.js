@@ -418,8 +418,8 @@ export const InboxPageComponent = props => {
             },
           },
         ];
-        const[modalOpen,SetModalOpen]=useState(false);
-       
+  const [modalOpen, SetModalOpen] = useState(false);
+
   const handleSubmit = values => {};
 
   const loadTransactionOnMonthChange = day => {
@@ -481,65 +481,78 @@ export const InboxPageComponent = props => {
                   const classes = classNames(rootClassName || css.root, className);
 
                   return (
-
                     <Form
                       onSubmit={handleSubmit}
                       className={classNames(classes, css.FormWrap)}
                       enforcePagePreloadFor="InboxPage"
                     >
                       <div className={css.DateMobWrap}>
-                        <button className={css.ChooseDateBtn} onClick={()=>SetModalOpen(!modalOpen)}>Choose Date</button>
-                        <svg className={classes} width="8" height="5" xmlns="http://www.w3.org/2000/svg" >
-                      <path
-                       d="M3.764 4.236c.131.13.341.13.472 0l2.666-2.667a.333.333 0 10-.471-.471L4 3.528l-2.43-2.43a.333.333 0 10-.471.471l2.665 2.667z"
-                    fill="#4A4A4A"
-                 stroke="#4A4A4A"
-                fillRule="evenodd"
-                  />
-                       </svg>
-                       {modalOpen&&<div className={css.mobDateCalender}>
-                      {isDateLoading ? (
-                        <div className={css.dateLoader}>
-                          <IconSpinner className={css.icon} />
-                        </div>
-                      ) : (
-                        <FieldDateInput
-                          dateClassName={css.inboxPageCalender}
-                          id="startDate"
-                          name="startDate"
-                          placeholderText={`Date`}
-                          isDayBlocked={day => {
-                            const formatedDate = moment(day).format('YYYY-MM-DD');
-                            const hasTransactionThatDay = !!perDayTransaction[formatedDate];
+                        <button
+                          className={css.ChooseDateBtn}
+                          onClick={() => SetModalOpen(!modalOpen)}
+                        >
+                          Choose Date
+                        </button>
+                        <svg
+                          className={classes}
+                          width="8"
+                          height="5"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M3.764 4.236c.131.13.341.13.472 0l2.666-2.667a.333.333 0 10-.471-.471L4 3.528l-2.43-2.43a.333.333 0 10-.471.471l2.665 2.667z"
+                            fill="#4A4A4A"
+                            stroke="#4A4A4A"
+                            fillRule="evenodd"
+                          />
+                        </svg>
+                        {modalOpen && (
+                          <div className={css.mobDateCalender}>
+                            {isDateLoading ? (
+                              <div className={css.dateLoader}>
+                                <IconSpinner className={css.icon} />
+                              </div>
+                            ) : (
+                              <FieldDateInput
+                                dateClassName={css.inboxPageCalender}
+                                id="startDate"
+                                name="startDate"
+                                placeholderText={`Date`}
+                                isDayBlocked={day => {
+                                  const formatedDate = moment(day).format('YYYY-MM-DD');
+                                  const hasTransactionThatDay = !!perDayTransaction[formatedDate];
 
-                            return hasTransactionThatDay ? moment().diff(day, 'day') > 0 : false;
-                          }}
-                          onChange={value => {
-                            console.log(value.date);
-                            handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
-                          }}
-                          keepOpenCalender={true}
-                          keepOpenOnDateSelect={true}
-                          firstDayOfWeek={0}
-                          weekDayFormat="ddd"
-                          onNextMonthClick={loadTransactionOnMonthChange}
-                          onPrevMonthClick={loadTransactionOnMonthChange}
-                          isDayHighlighted={day => {
-                            const formatedDate = moment(day).format('YYYY-MM-DD');
-                            return !!perDayTransaction[formatedDate];
-                          }}
-                          useMobileMargins
-                          enableOutsideDays={false}
-                        />
-                      )}
-                       </div>}
+                                  return hasTransactionThatDay
+                                    ? moment().diff(day, 'day') > 0
+                                    : false;
+                                }}
+                                onChange={value => {
+                                  console.log(value.date);
+                                  handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
+                                }}
+                                keepOpenCalender={true}
+                                keepOpenOnDateSelect={true}
+                                firstDayOfWeek={0}
+                                weekDayFormat="ddd"
+                                onNextMonthClick={loadTransactionOnMonthChange}
+                                onPrevMonthClick={loadTransactionOnMonthChange}
+                                isDayHighlighted={day => {
+                                  const formatedDate = moment(day).format('YYYY-MM-DD');
+                                  return !!perDayTransaction[formatedDate];
+                                }}
+                                useMobileMargins
+                                enableOutsideDays={false}
+                              />
+                            )}
+                          </div>
+                        )}
                       </div>
                       <div className={css.DateFormWrap}>
-                      {isDateLoading ? (
-                        <div className={css.dateLoader}>
-                          <IconSpinner className={css.icon} />
-                        </div>
-                      ) : (
+                        {/* {isDateLoading ? (
+                          <div className={css.dateLoader}>
+                            <IconSpinner className={css.icon} />
+                          </div>
+                        ) : ( */}
                         <FieldDateInput
                           dateClassName={css.inboxPageCalender}
                           id="startDate"
@@ -568,10 +581,8 @@ export const InboxPageComponent = props => {
                           useMobileMargins
                           enableOutsideDays={false}
                         />
-                      )}
+                        {/* )} */}
                       </div>
-
-                     
                     </Form>
                   );
                 }}
