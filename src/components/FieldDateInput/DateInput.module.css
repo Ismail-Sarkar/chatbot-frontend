@@ -26,6 +26,14 @@
       box-shadow: var(--boxShadowPopup);
       border-radius: 0 0 6px 6px;
     }
+    @media(max-width:1023px){
+      /* left:0 !important; */
+      right:0 !important;
+      top: 46px !important;
+    }
+    @media(max-width:767px){
+      left:0 !important;
+    }
   }
 
   & :global(.DateInput_input) {

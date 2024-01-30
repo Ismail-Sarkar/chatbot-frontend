@@ -28,7 +28,7 @@
   }
 
   @media (--viewportLarge) {
-    font-size: 14px;
+    font-size: 13px;
     min-width: 24px;
     height: 24px;
     border-radius: 12px;
