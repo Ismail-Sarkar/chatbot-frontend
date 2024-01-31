@@ -33,7 +33,7 @@ import { richText } from '../../util/richText';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { manageDisableScrolling, isScrollingDisabled } from '../../ducks/ui.duck';
 import { initializeCardPaymentData } from '../../ducks/stripe.duck.js';
-
+import classNames from 'classnames';
 import {
   H4,
   Page,
@@ -268,6 +268,7 @@ export const ListingPageComponent = props => {
   return (
     <Page
       title={schemaTitle}
+      className={css.ListingPageWrap}
       scrollingDisabled={scrollingDisabled}
       author={authorDisplayName}
       description={description}
@@ -287,7 +288,7 @@ export const ListingPageComponent = props => {
         },
       }}
     >
-      <LayoutSingleColumn className={css.pageRoot} topbar={topbar} footer={<FooterContainer />}>
+      <LayoutSingleColumn className={classNames(css.pageRoot,css.ListingpageMain)} topbar={topbar} footer={<FooterContainer />}>
         <div className={css.contentWrapperForProductLayout}>
           <div className={css.mainColumnForProductLayout}>
             {currentListing.id ? (
