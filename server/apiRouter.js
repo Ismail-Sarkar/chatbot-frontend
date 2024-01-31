@@ -21,7 +21,10 @@ const createUserWithIdp = require('./api/auth/createUserWithIdp');
 const { authenticateFacebook, authenticateFacebookCallback } = require('./api/auth/facebook');
 const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/google');
 const transactionsRouter = require('./api/transactions');
-const { updatesubscriptionstatusofuser } = require('./api/updatesubscriptionstatusofuser');
+const {
+  updatesubscriptionstatusofuser,
+  renewSubscriptionofUser,
+} = require('./api/updatesubscriptionstatusofuser');
 const fetchUserEmail = require('./api/fetchUserEmail');
 const getUserTypeByEmail = require('./api/getUserTypeByEmail');
 const currencyExchangeCode = require('./controllers/currencyExchange');
@@ -107,6 +110,8 @@ router.get('/auth/google', authenticateGoogle);
 router.get('/auth/google/callback', authenticateGoogleCallback);
 
 router.post('/updatesubscriptionstatusofuser', updatesubscriptionstatusofuser);
+
+router.get('/renewSubscriptionofUser/:subscriptionId', renewSubscriptionofUser);
 
 //transactionRouter
 
