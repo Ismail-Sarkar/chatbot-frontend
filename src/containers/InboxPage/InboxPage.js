@@ -508,42 +508,42 @@ export const InboxPageComponent = props => {
                         </svg>
                         {modalOpen && (
                           <div className={css.mobDateCalender}>
-                            {isDateLoading ? (
+                            {/* {isDateLoading ? (
                               <div className={css.dateLoader}>
                                 <IconSpinner className={css.icon} />
                               </div>
-                            ) : (
-                              <FieldDateInput
-                                dateClassName={css.inboxPageCalender}
-                                id="startDate"
-                                name="startDate"
-                                placeholderText={`Date`}
-                                isDayBlocked={day => {
-                                  const formatedDate = moment(day).format('YYYY-MM-DD');
-                                  const hasTransactionThatDay = !!perDayTransaction[formatedDate];
+                            ) : ( */}
+                            <FieldDateInput
+                              dateClassName={css.inboxPageCalender}
+                              id="startDate"
+                              name="startDate"
+                              placeholderText={`Date`}
+                              isDayBlocked={day => {
+                                const formatedDate = moment(day).format('YYYY-MM-DD');
+                                const hasTransactionThatDay = !!perDayTransaction[formatedDate];
 
-                                  return hasTransactionThatDay
-                                    ? moment().diff(day, 'day') > 0
-                                    : false;
-                                }}
-                                onChange={value => {
-                                  console.log(value.date);
-                                  handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
-                                }}
-                                keepOpenCalender={true}
-                                keepOpenOnDateSelect={true}
-                                firstDayOfWeek={0}
-                                weekDayFormat="ddd"
-                                onNextMonthClick={loadTransactionOnMonthChange}
-                                onPrevMonthClick={loadTransactionOnMonthChange}
-                                isDayHighlighted={day => {
-                                  const formatedDate = moment(day).format('YYYY-MM-DD');
-                                  return !!perDayTransaction[formatedDate];
-                                }}
-                                useMobileMargins
-                                enableOutsideDays={false}
-                              />
-                            )}
+                                return hasTransactionThatDay
+                                  ? moment().diff(day, 'day') > 0
+                                  : false;
+                              }}
+                              onChange={value => {
+                                console.log(value.date);
+                                handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
+                              }}
+                              keepOpenCalender={true}
+                              keepOpenOnDateSelect={true}
+                              firstDayOfWeek={0}
+                              weekDayFormat="ddd"
+                              onNextMonthClick={loadTransactionOnMonthChange}
+                              onPrevMonthClick={loadTransactionOnMonthChange}
+                              isDayHighlighted={day => {
+                                const formatedDate = moment(day).format('YYYY-MM-DD');
+                                return !!perDayTransaction[formatedDate];
+                              }}
+                              useMobileMargins
+                              enableOutsideDays={false}
+                            />
+                            {/* )} */}
                           </div>
                         )}
                       </div>
