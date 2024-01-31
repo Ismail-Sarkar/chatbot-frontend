@@ -31,6 +31,7 @@ const ReviewFormComponent = props => (
         sendReviewInProgress,
         provider,
       } = fieldRenderProps;
+      const providerCreationDate = provider && moment(provider?.attributes.createdAt);
       const today = moment();
 
       const reviewRating = intl.formatMessage({ id: 'ReviewForm.reviewRatingLabel' });
@@ -75,10 +76,11 @@ const ReviewFormComponent = props => (
             validate={required(reviewRatingRequiredMessage)}
           />
           {provider &&
-          today.isBetween(
-            provider.attributes.profile.publicData?.subScriptionOn?.subscriptionStart,
-            provider.attributes.profile.publicData?.subScriptionOn?.subscriptionEnd
-          ) ? null : (
+          // today.isBetween(
+          //   provider.attributes.profile.publicData?.subScriptionOn?.subscriptionStart,
+          //   provider.attributes.profile.publicData?.subScriptionOn?.subscriptionEnd
+          //   )
+          today.diff(providerCreationDate, 'years') <= 1 ? null : (
             <FieldTextInput
               className={css.reviewContent}
               type="textarea"

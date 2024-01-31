@@ -265,17 +265,7 @@ export const fetchPerDayTransactions = (bookingStart, bookingEnd, type) => (
         const formatedDate = moment(d.bookingStartDate)
           .toISOString()
           .split('T')[0];
-        console.log(
-          212,
-          d.bookingStartDate,
-          moment(d.bookingStartDate)
-            .toISOString()
-            .split('T')[0],
-          new Date(d.bookingStartDate).getDate(),
-          new Date(d.bookingStartDate).getUTCMonth(),
-          new Date(d.bookingStartDate).getFullYear(),
-          moment(d.bookingStartDate).format('YYYY-MM-DD')
-        );
+
         if (perDayTransaction[formatedDate] === undefined) {
           perDayTransaction[formatedDate] = 0;
         }
@@ -333,8 +323,8 @@ export const loadData = (params, search) => (dispatch, getState, sdk) => {
     perPage: INBOX_PAGE_SIZE,
   };
 
-  const momentStartDay = moment();
-  const momentEndDay = moment();
+  const momentStartDay = bookingStart ? moment(bookingStart) : moment();
+  const momentEndDay = bookingStart ? moment(bookingStart) : moment();
   const startDay = momentStartDay.startOf('month').toISOString();
   const endDay = momentEndDay.endOf('month').toISOString();
 

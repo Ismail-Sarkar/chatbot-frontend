@@ -511,19 +511,19 @@ export const InboxPageComponent = props => {
 
                         {modalOpen && (
                           <div className={css.mobDateCalender}>
-                            {isDateLoading ? (
+                            {/* {isDateLoading ? (
                               <div className={css.dateLoader}>
                                 <IconSpinner className={css.icon} />
                               </div>
-                            ) : (
-                              <FieldDateInput
-                                dateClassName={css.inboxPageCalender}
-                                id="startDate"
-                                name="startDate"
-                                placeholderText={`Date`}
-                                isDayBlocked={day => {
-                                  const formatedDate = moment(day).format('YYYY-MM-DD');
-                                  const hasTransactionThatDay = !!perDayTransaction[formatedDate];
+                            ) : ( */}
+                            <FieldDateInput
+                              dateClassName={css.inboxPageCalender}
+                              id="startDate"
+                              name="startDate"
+                              placeholderText={`Date`}
+                              isDayBlocked={day => {
+                                const formatedDate = moment(day).format('YYYY-MM-DD');
+                                const hasTransactionThatDay = !!perDayTransaction[formatedDate];
 
                                   return hasTransactionThatDay
                                     ? moment().diff(day, 'day') > 0
@@ -547,9 +547,10 @@ export const InboxPageComponent = props => {
                                 useMobileMargins
                                 enableOutsideDays={false}
                               />
+                              </div>
                             )}
-                          </div>
-                        )}
+                          
+                   
                       </div>
                       <div className={css.DateFormWrap}>
                         {/* {isDateLoading ? (
