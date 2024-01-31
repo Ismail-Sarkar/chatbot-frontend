@@ -51,7 +51,10 @@ const LayoutSideNavigation = props => {
                 ) : null}
                 {sideNavContent}
               </aside>
-              <main className={classNames(css.main, mainColumnClassName)}>{children}</main>
+              <main className={classNames(css.main, mainColumnClassName)}>{children}
+               
+              </main>
+               
             </Main>
             <Footer>{footerContent}</Footer>
           </>

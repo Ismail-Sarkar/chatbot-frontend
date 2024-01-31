@@ -494,8 +494,7 @@ export const InboxPageComponent = props => {
                           onClick={() => SetModalOpen(!modalOpen)}
                         >
                           Choose Date
-                        </button>
-                        {/* <svg
+                          <svg
                           className={classes}
                           width="8"
                           height="5"
@@ -507,8 +506,10 @@ export const InboxPageComponent = props => {
                             stroke="#4A4A4A"
                             fillRule="evenodd"
                           />
-                        </svg> */}
-                        {/* {modalOpen && (
+                        </svg>
+                        </button>
+
+                        {modalOpen && (
                           <div className={css.mobDateCalender}>
                             {isDateLoading ? (
                               <div className={css.dateLoader}>
@@ -531,6 +532,7 @@ export const InboxPageComponent = props => {
                                 onChange={value => {
                                   console.log(value.date);
                                   handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
+                                  SetModalOpen(false);
                                 }}
                                 keepOpenCalender={true}
                                 keepOpenOnDateSelect={true}
@@ -547,7 +549,7 @@ export const InboxPageComponent = props => {
                               />
                             )}
                           </div>
-                        )} */}
+                        )}
                       </div>
                       <div className={css.DateFormWrap}>
                         {/* {isDateLoading ? (
@@ -599,6 +601,10 @@ export const InboxPageComponent = props => {
             <FormattedMessage id="InboxPage.fetchFailed" />
           </p>
         ) : null}
+        <H2 as="h1" className={classNames(css.title, css.titleMob)}>
+          <FormattedMessage id="InboxPage.title" />
+        </H2>
+
         <SearchForm
           className={css.searchForm}
           showFrom={!isOrders}
@@ -634,16 +640,16 @@ export const InboxPageComponent = props => {
           />
         ) : null}
       </LayoutSideNavigation>
-      <Modal
+      {/* <Modal
         id="DateModal"
-        // containerClassName={containerClassName}
+         
         isOpen={!!modalOpen}
         onClose={() => {
           SetModalOpen(false);
         }}
         usePortal
         onManageDisableScrolling={onManageDisableScrolling}
-        // closeButtonMessage={closeButtonMessage}
+       
       >
         {currentUser && currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
           <FinalForm
@@ -679,15 +685,11 @@ export const InboxPageComponent = props => {
               return (
                 <Form
                   onSubmit={handleSubmit}
-                  // className={classNames(classes)}
+                
                   enforcePagePreloadFor="InboxPage"
                 >
-                  {/* <div className={css.mobDateCalender}> */}
-                    {/* {isDateLoading ? (
-                          <div className={css.dateLoader}>
-                            <IconSpinner className={css.icon} />
-                          </div>
-                        ) : ( */}
+                  <div className={css.mobDateCalender}>
+                    
                     <FieldDateInput
                       dateClassName={css.inboxPageCalender}
                       id="startDateInModal"
@@ -699,9 +701,10 @@ export const InboxPageComponent = props => {
 
                         return hasTransactionThatDay ? moment().diff(day, 'day') > 0 : false;
                       }}
-                      onChange={value => {
-                        console.log(value.date);
+                      onChange={value => { 
+                       
                         handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
+                        SetModalOpen(false);
                       }}
                       keepOpenCalender={true}
                       keepOpenOnDateSelect={true}
@@ -717,13 +720,13 @@ export const InboxPageComponent = props => {
                       enableOutsideDays={false}
                     />
                     {/* )} */}
-                  {/* </div> */}
+      {/* </div>
                 </Form>
               );
             }}
           />
         )}
-      </Modal>
+      </Modal> */}
     </Page>
   );
 };

@@ -68,12 +68,17 @@
     /* padding: 40px 0 82px calc((100% - 1056px) / 2); */
   }
   @media(max-width:1023px){
-    justify-content:inherit !important;
+    justify-content:space-between !important;
     width:100%;
-    padding:0 15px;
+    padding:10px 15px 0;
   }
   @media(max-width:767px){
     align-items:baseline;
+    flex-wrap: nowrap !important;
+  }
+  @media(max-width:575px){
+  
+    /* flex-direction: row-reverse; */
   }
 }
 
@@ -97,6 +102,9 @@
   }
   @media(max-width:575px){
     padding:0;
+  }
+  @media(max-width:1023px){
+    display: none;
   }
 }
 
@@ -210,6 +218,9 @@
 .item {
   display: flex;
   flex-direction: row;
+  @media(max-width:575px){
+    align-items:flex-start;
+  }
 }
 
 .itemAvatar {
@@ -225,6 +236,9 @@
   @media (--viewportLarge) {
     margin-top: 3px;
     margin-right: 7px;
+  }
+  @media(max-width:575px){
+    margin-right:0;
   }
 }
 
@@ -442,8 +456,14 @@
   & :global(.SingleDatePicker_picker) {
     width: 314px !important;
     top: 80px !important;
-    @media(max-width:991px){
-      top: 46px !important;
+    @media(max-width:1023px){
+      top: 130px!important;
+    }
+    /* @media(max-width:991px){
+      top: 30px !important;
+    } */
+    @media(max-width:767px){
+      top: 114px !important;
     }
   }
 
@@ -468,7 +488,7 @@
     box-shadow: none !important;
     border-radius: 0 !important;
     @media(max-width:1023px){
-      position: static !important;
+      /* position: static !important; */
     }
   }
 
@@ -597,7 +617,8 @@
           & > nav{
             @media(max-width:1023px){
               width:auto !important;
-              margin-left:auto !important;
+              /* margin-left:auto !important; */
+              padding-top:0 !important;
             }
             & > div{
               & > a{
@@ -618,6 +639,7 @@
           padding: 48px 36px 82px 59px !important;
           @media(max-width:1023px){
             padding: 25px 15px!important;
+            display:block !important;
           }
         }
       }
@@ -631,18 +653,23 @@
 }
 .DateMobWrap{
   display:none;
-  position:relative;
+  /* position:relative; */
   @media(max-width:1023px){
-    display: flex;
+    display: block;
+    /* height: 40px; */
+    width: 130px;
+    height: 40px;
+    /* display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
   }
+
   .ChooseDateBtn{
     display: inline-block;
     width: 130px;
     height: auto;
     min-height: 0;
-    padding: var(--marketplaceButtonSmallDesktopPadding);
+    padding:9px 6px 9px 6px;
     margin: 0;
     font-weight: var(--fontWeightMedium);
     font-size: 13px;
@@ -652,30 +679,51 @@
     border: 1px solid var(--colorGrey100);
     border-radius: var(--borderRadiusMedium);
     background-color: var(--colorWhite);
-    position:relative;
+    /* position:relative; */
     cursor: pointer;
     transition:all 500ms ease-in-out;
     box-shadow:none;
     &:hover{
       box-shadow: var(--boxShadowFilterButton);
     }
+    & > svg{
+      padding-left: 3px;
+    width: 10px;
+    height: 10px;
+    padding-top: 3px;
+     }
   }
-  & > svg{
-   position:absolute;
-   right:10px;
-  }
+
 }
 .FormWrap{
   @media(max-width:1023px){
     display: flex;
     align-items: center;
-    margin-top: 15px;
+    /* margin-top: 15px; */
   }
   @media(max-width:767px){
     margin-top: 0;
-    padding-bottom:10px;
+    /* padding-bottom:10px; */
   }
 }
 .mobDateCalender{
-
+  & > div{
+    & > div{
+      & > div{
+        @media(max-width:1023px){
+          position:inherit !important;
+        }
+      }
+    }
+  }
+}
+.titleMob{
+  display:none;
+  @media(max-width:1023px){
+   display:block;
+   margin-bottom: 20px;
+  }
+  @media(max-width:575px){
+    margin-bottom: 15px;
+  }
 }
