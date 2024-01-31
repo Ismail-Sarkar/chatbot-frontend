@@ -26,7 +26,7 @@ import {
 } from '../../transactions/transaction';
 
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
-import { isScrollingDisabled } from '../../ducks/ui.duck';
+import { isScrollingDisabled, manageDisableScrolling } from '../../ducks/ui.duck';
 import {
   Form,
   H2,
@@ -42,6 +42,7 @@ import {
   LayoutSideNavigation,
   FieldDateRangeInput,
   FieldDateInput,
+  Modal,
 } from '../../components';
 import { required, bookingDatesRequired, composeValidators } from '../../util/validators';
 
@@ -273,6 +274,7 @@ export const InboxPageComponent = props => {
     perDayTransactionFetchInProgress,
     onfetchPerDayTransactions,
     location,
+    onManageDisableScrolling,
     ...rest
   } = props;
   const searchParams = parse(location?.search || '');
@@ -493,7 +495,7 @@ export const InboxPageComponent = props => {
                         >
                           Choose Date
                         </button>
-                        <svg
+                        {/* <svg
                           className={classes}
                           width="8"
                           height="5"
@@ -505,8 +507,8 @@ export const InboxPageComponent = props => {
                             stroke="#4A4A4A"
                             fillRule="evenodd"
                           />
-                        </svg>
-                        {modalOpen && (
+                        </svg> */}
+                        {/* {modalOpen && (
                           <div className={css.mobDateCalender}>
                             {isDateLoading ? (
                               <div className={css.dateLoader}>
@@ -545,7 +547,7 @@ export const InboxPageComponent = props => {
                               />
                             )}
                           </div>
-                        )}
+                        )} */}
                       </div>
                       <div className={css.DateFormWrap}>
                         {/* {isDateLoading ? (
@@ -632,6 +634,96 @@ export const InboxPageComponent = props => {
           />
         ) : null}
       </LayoutSideNavigation>
+      <Modal
+        id="DateModal"
+        // containerClassName={containerClassName}
+        isOpen={!!modalOpen}
+        onClose={() => {
+          SetModalOpen(false);
+        }}
+        usePortal
+        onManageDisableScrolling={onManageDisableScrolling}
+        // closeButtonMessage={closeButtonMessage}
+      >
+        {currentUser && currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
+          <FinalForm
+            {...rest}
+            initialValues={{
+              startDate: {
+                date: moment(transactionSearchDetails.bookingStart)
+                  .tz(getDefaultTimeZoneOnBrowser())
+                  .toDate(),
+              },
+            }}
+            handleDateOnChange={value =>
+              setTransactionSearchDetails(details => ({
+                ...details,
+                bookingStart: value,
+              }))
+            }
+            intl={intl}
+            onSubmit={handleSubmit}
+            isDateLoading={perDayTransactionFetchInProgress && isEmpty(perDayTransaction)}
+            perDayTransaction={perDayTransaction}
+            render={fieldRenderProps => {
+              const {
+                handleSubmit,
+                values,
+                handleDateOnChange,
+                isDateLoading,
+                perDayTransaction,
+              } = fieldRenderProps;
+
+              const classes = classNames(rootClassName || css.root, className);
+
+              return (
+                <Form
+                  onSubmit={handleSubmit}
+                  // className={classNames(classes)}
+                  enforcePagePreloadFor="InboxPage"
+                >
+                  {/* <div className={css.mobDateCalender}> */}
+                    {/* {isDateLoading ? (
+                          <div className={css.dateLoader}>
+                            <IconSpinner className={css.icon} />
+                          </div>
+                        ) : ( */}
+                    <FieldDateInput
+                      dateClassName={css.inboxPageCalender}
+                      id="startDateInModal"
+                      name="startDate"
+                      placeholderText={`Date`}
+                      isDayBlocked={day => {
+                        const formatedDate = moment(day).format('YYYY-MM-DD');
+                        const hasTransactionThatDay = !!perDayTransaction[formatedDate];
+
+                        return hasTransactionThatDay ? moment().diff(day, 'day') > 0 : false;
+                      }}
+                      onChange={value => {
+                        console.log(value.date);
+                        handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
+                      }}
+                      keepOpenCalender={true}
+                      keepOpenOnDateSelect={true}
+                      firstDayOfWeek={0}
+                      weekDayFormat="ddd"
+                      onNextMonthClick={loadTransactionOnMonthChange}
+                      onPrevMonthClick={loadTransactionOnMonthChange}
+                      isDayHighlighted={day => {
+                        const formatedDate = moment(day).format('YYYY-MM-DD');
+                        return !!perDayTransaction[formatedDate];
+                      }}
+                      useMobileMargins
+                      enableOutsideDays={false}
+                    />
+                    {/* )} */}
+                  {/* </div> */}
+                </Form>
+              );
+            }}
+          />
+        )}
+      </Modal>
     </Page>
   );
 };
@@ -691,6 +783,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(searchTransactions(userNameAndConfirmNumber, bookingStart, bookingEnd, type)),
   onfetchPerDayTransactions: (bookingStart, bookingEnd, type) =>
     dispatch(fetchPerDayTransactions(bookingStart, bookingEnd, type)),
+  onManageDisableScrolling: (componentId, disableScrolling) =>
+    dispatch(manageDisableScrolling(componentId, disableScrolling)),
   // getConfirmationNumber:()
 });
 
