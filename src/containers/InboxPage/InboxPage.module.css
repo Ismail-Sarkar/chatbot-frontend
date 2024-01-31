@@ -164,6 +164,9 @@
   @media (--viewportLarge) {
     margin-top: 25px;
   }
+  @media(max-width:767px){
+    margin:0;
+  }
 }
 
 .itemList {
@@ -218,8 +221,9 @@
 .item {
   display: flex;
   flex-direction: row;
-  @media(max-width:575px){
+  @media(max-width:767px){
     align-items:flex-start;
+    flex-direction:column;
   }
 }
 
@@ -265,6 +269,11 @@
     /* Hightlight the username when the whole item is hovered */
     color: var(--marketplaceColor);
   }
+ @media(max-width:767px){
+  width: 100%;
+  position: relative;
+  display: inline;
+ }
 }
 
 .rowNotificationDot {
@@ -285,6 +294,11 @@
     justify-self: flex-start;
     width: 8px;
     height: 8px;
+  }
+  @media(max-width:767px){
+    position:absolute;
+    left: -10px;
+    top: 10px;
   }
 }
 
@@ -331,6 +345,17 @@
 
   margin-top: 0;
   margin-bottom: 0;
+  & > div{
+    @media(max-width:767px){
+      margin-top: 10px;
+    }
+    & > span{
+      @media(max-width:767px){
+        margin-right: 0;
+        margin-top: 5px;
+      }
+    }
+  }
 }
 
 .itemState {
@@ -443,6 +468,15 @@
   & div:nth-child(2) {
     margin-left: 10px;
     font-size: 14px;
+    @media(max-width:767px){
+      margin-left:0;
+    }
+  }
+  @media(max-width:767px){
+    flex-direction: column;
+    gap: 5px 0;
+    align-items:flex-start;
+    margin-top:10px;
   }
 }
 
