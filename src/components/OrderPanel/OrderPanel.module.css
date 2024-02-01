@@ -22,6 +22,14 @@
     margin-top: 0;
     margin-bottom: 0;
   }
+  @media(max-width:1023px){
+    padding: 80px 20px 30px!important;
+  }
+  & > button{
+   @media(max-width:767px){
+    position:absolute;
+   }
+ }
 }
 
 .modalHeading {
@@ -36,6 +44,11 @@
   @media (--viewportLarge) {
     display: none;
   }
+  @media(max-width:1023px){
+    margin-top: 0;
+    padding: 0;
+  }
+ 
 }
 
 .heading {
@@ -50,6 +63,14 @@
     margin-top: 0;
     margin-bottom: 5px;
   }
+  @media(max-width:1023px){
+    font-size: 40px !important;
+    line-height: 45px !important;
+  }
+  @media(max-width:767px){
+    font-size: 27px !important;
+    line-height: 40px !important;
+  }
 }
 
 .price {
@@ -57,7 +78,7 @@
   font-weight: var(--fontWeightBold);
 
   color: #fc334d;
-  margin: 0 0 0 24px;
+  margin: 0;
 
   @media (--viewportMedium) {
     margin: 10px 0;
@@ -180,6 +201,7 @@
             & > div:nth-child(2) {
               & > div {
                 background-color: #fc334d !important;
+                width: 312px !important;
                 /* & > div{
                   & > div{
                     & > div:nth-child(2){
@@ -203,6 +225,25 @@
                     }
                   }
                 } */
+               @media(max-width:575px){
+                width:100% !important;
+               }
+               & > div{
+                & > div{
+                  & > div:nth-child(2){
+                    & > div{
+                      & > div{
+                        @media(max-width:767px){
+                         left:unset !important;
+                        }
+                      }
+                    }
+                  }
+                }
+               }
+               @media(max-width:767px){
+                width:100% !important;
+               }
               }
             }
           }
@@ -210,6 +251,10 @@
       }
     }
   }
+  @media(max-width:1023px){
+    min-height:270px !important;
+  }
+  
 }
 
 .openOrderForm {
@@ -331,6 +376,10 @@
   font-weight: 700;
   border-bottom: 2px solid black;
   margin-bottom: 5px;
+  display: inline-block;
+  @media(max-width:767px){
+    font-size: 16px;
+  }
 }
 .timeDuration {
   font-size: 14px;

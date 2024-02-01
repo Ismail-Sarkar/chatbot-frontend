@@ -211,11 +211,34 @@
   margin-bottom: 20px;
 }
 .profilepagewrap{
-  & > div:nth-child(2){
-    & > aside{
-      @media(max-width:1199px){
-        padding: 48px 0 82px 36px !important;
+  & > div{
+    & > div:nth-child(2){
+      @media(min-width:1920px){
+        max-width:1120px;
+        margin:0 auto;
       }
+      /* & > aside{
+        padding: 48px 0 82px 36px !important;
+        width:25%;
+        flex:0 0 25%;
+        @media(max-width:1199px){
+          padding: 48px 0 82px 36px !important;
+        }
+        @media(max-width:1023px){
+          width:100%;
+          flex:0 0 100%;
+        }
+      }
+      & > main{
+        padding: 48px 36px 82px 59px !important;
+        width:75%;
+        flex:0 0 75%;
+        @media(max-width:1023px){
+          width:100%;
+          flex:0 0 100%;
+        }
+      } */
     }
   }
+
 }
