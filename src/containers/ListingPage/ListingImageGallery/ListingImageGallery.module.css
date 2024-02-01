@@ -22,6 +22,9 @@
   @media (--viewportLarge) {
     width: unset;
   }
+  @media(max-width:767px){
+    width:100% !important;
+  }
 }
 :global(.image-gallery-thumbnail) {
   width: auto;
@@ -34,6 +37,9 @@
 
     @media (--viewportMedium) {
       margin-left: 0;
+    }
+    @media(max-width:767px){
+     margin-left: 0;
     }
   }
   &:last-child {

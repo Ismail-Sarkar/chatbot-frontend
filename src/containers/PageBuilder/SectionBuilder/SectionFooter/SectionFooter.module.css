@@ -4,16 +4,26 @@
   border-top: 1px solid var(--colorGrey100);
   & > div{
     padding:40px 0 !important;
+    @media(max-width:767px){
+     padding:20px 0 !important;
+    }
   }
 }
 
 .footer {
-  max-width: var(--contentMaxWidthPages);
+  /* max-width: var(--contentMaxWidthPages); */
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 32px;
   margin: 0 auto;
   padding: 0 32px;
+  @media(min-width:1920px){
+    max-width:1120px;
+    margin:0 auto;
+  }
+  @media(max-width:767px){
+    padding:0 15px;
+  }
 }
 
 .footer ul {
@@ -49,6 +59,9 @@
   align-content: start;
   grid-auto-rows: auto;
   grid-gap: 32px;
+  @media(max-width:575px){
+    grid-gap: 20px;
+  }
 }
 
 .gridCol1,
@@ -99,9 +112,11 @@
 
 .icons {
   margin-top: 24px;
-
   @media (--viewportLarge) {
     margin-top: 0px;
+  }
+  @media(max-width:767px){
+    margin-top: 10px;  
   }
 }
 
