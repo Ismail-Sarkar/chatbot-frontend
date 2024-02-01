@@ -17,7 +17,7 @@ function ManageSubscriptionComponent() {
   const handleUnsubscribe = () => {
     setUnsubscribeInProgress(true);
     const dataToUnsubscribe = {
-      subId: currentUser?.attributes?.profile?.protectedData?.subscriptionId,
+      subsId: currentUser?.attributes?.profile?.protectedData?.subscriptionId,
       userId: currentUser.id.uuid,
     };
     axios

@@ -242,7 +242,7 @@ module.exports.removeSubscriptionofUser = async (req, res) => {
       id: userId,
       protectedData: { isSubscriptionCancelled, subscriptionStatus: cancelStatus },
     });
-    res.sendStatus(200);
+    res.status(200).send('Unsubscribed successfully');
   } catch (error) {
     console.log(error.message);
     return res.status(500).send(error.message);
