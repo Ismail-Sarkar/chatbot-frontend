@@ -247,21 +247,21 @@ const EditListingSubscribePanel = props => {
   //     currentUser?.attributes.profile.privateData.subscriptionDetails?.subscriptionStatus
   //   );
   const canSubscribe =
-    typeof currentUser?.attributes.profile.privateData.subscriptionDetails !== 'undefined'
-      ? currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionStatus !==
+    typeof currentUser?.attributes.profile.protectedData.subscriptionDetails !== 'undefined'
+      ? currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStatus !==
           'active' &&
         !(
           moment(new Date()).isBetween(
-            currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
-            currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
             'day'
           ) ||
           moment(new Date()).isSame(
-            currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
             'day'
           ) ||
           moment(new Date()).isSame(
-            currentUser?.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
             'day'
           )
         )
@@ -270,7 +270,8 @@ const EditListingSubscribePanel = props => {
 
   const handleSubscribe = () => {
     if (currentUser) {
-      const stripeSubscriptionUrl = `https://buy.stripe.com/test_5kA3gg8iQ57A0WA000?client_reference_id=${currentUser?.id?.uuid}`;
+      // const stripeSubscriptionUrl = `https://buy.stripe.com/test_5kA3gg8iQ57A0WA000?client_reference_id=${currentUser?.id?.uuid}`;
+      const stripeSubscriptionUrl = `https://buy.stripe.com/test_7sI1882Yw0Rk8p24gh?client_reference_id=${currentUser?.id?.uuid}`;
 
       if (canSubscribe && process.env.REACT_APP_ENV === 'development') {
         window.location.href = stripeSubscriptionUrl;

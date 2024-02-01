@@ -21,7 +21,11 @@ const createUserWithIdp = require('./api/auth/createUserWithIdp');
 const { authenticateFacebook, authenticateFacebookCallback } = require('./api/auth/facebook');
 const { authenticateGoogle, authenticateGoogleCallback } = require('./api/auth/google');
 const transactionsRouter = require('./api/transactions');
-const { updatesubscriptionstatusofuser } = require('./api/updatesubscriptionstatusofuser');
+const {
+  createSubscriptionofUser,
+  renewSubscriptionofUser,
+  removeSubscriptionofUser,
+} = require('./api/updatesubscriptionstatusofuser');
 const fetchUserEmail = require('./api/fetchUserEmail');
 const getUserTypeByEmail = require('./api/getUserTypeByEmail');
 const currencyExchangeCode = require('./controllers/currencyExchange');
@@ -29,6 +33,7 @@ const { fetchByUserName, checkAvailabilityOfUserName } = require('./api/userName
 const { getUniqueId } = require('./controllers/nanoIdController');
 const { fecthCurrency } = require('./cron-jobs/currencyUpdater');
 const { cronScheduler, cronTimers } = require('./api-util/cronSchedular');
+const { userupdationScript } = require('./api/userupdationScript');
 
 const router = express.Router();
 
@@ -106,7 +111,11 @@ router.get('/auth/google', authenticateGoogle);
 // loginWithIdp endpoint in Flex API to authenticate user to Flex
 router.get('/auth/google/callback', authenticateGoogleCallback);
 
-router.post('/updatesubscriptionstatusofuser', updatesubscriptionstatusofuser);
+router.post('/createSubscriptionofUser', createSubscriptionofUser);
+router.post('/renewSubscriptionofUser', renewSubscriptionofUser);
+router.post('/unsubscribeSubscriptionofUser', removeSubscriptionofUser);
+
+// router.get('/userupdationScript', userupdationScript);
 
 //transactionRouter
 
