@@ -270,8 +270,8 @@ const EditListingSubscribePanel = props => {
 
   const handleSubscribe = () => {
     if (currentUser) {
-      // const stripeSubscriptionUrl = `https://buy.stripe.com/test_5kA3gg8iQ57A0WA000?client_reference_id=${currentUser?.id?.uuid}`;
-      const stripeSubscriptionUrl = `https://buy.stripe.com/test_7sI1882Yw0Rk8p24gh?client_reference_id=${currentUser?.id?.uuid}`;
+      const stripeSubscriptionUrl = `https://buy.stripe.com/test_5kA3gg8iQ57A0WA000?client_reference_id=${currentUser?.id?.uuid}`;
+      // const stripeSubscriptionUrl = `https://buy.stripe.com/test_7sI1882Yw0Rk8p24gh?client_reference_id=${currentUser?.id?.uuid}`;
 
       if (canSubscribe && process.env.REACT_APP_ENV === 'development') {
         window.location.href = stripeSubscriptionUrl;
