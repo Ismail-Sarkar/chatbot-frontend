@@ -1,15 +1,17 @@
 import moment from 'moment';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../Button/Button';
 import { compose } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import axios from 'axios';
 import { apiBaseUrl } from '../../util/api';
 import css from './ManageSubscriptionComponent.module.css';
+import { fetchCurrentUser } from '../../ducks/user.duck';
 
 function ManageSubscriptionComponent() {
   const currentUser = useSelector(state => state.user.currentUser);
+  const dispatch = useDispatch();
   const [unsubscribeInProgress, setUnsubscribeInProgress] = useState(false);
 
   const handleUnsubscribe = () => {
@@ -20,7 +22,10 @@ function ManageSubscriptionComponent() {
     };
     axios
       .post(`${apiBaseUrl()}/api/unsubscribeSubscriptionofUser`, dataToUnsubscribe)
-      .then(res => setUnsubscribeInProgress(false))
+      .then(res => {
+        dispatch(fetchCurrentUser());
+        setUnsubscribeInProgress(false);
+      })
       .catch(err => setUnsubscribeInProgress(false));
   };
   return (
