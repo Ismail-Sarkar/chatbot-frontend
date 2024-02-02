@@ -49,6 +49,10 @@
     margin: 0px 48px 47px 48px;
     padding: 6px 0 2px 0;
   }
+  @media(max-width:1023px){
+    margin:0;
+    padding:5px 15px;
+  }
 }
 
 /* OrderPanel subcomponent */

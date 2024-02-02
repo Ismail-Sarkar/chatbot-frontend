@@ -6,6 +6,11 @@
 .content {
   display: flex;
   flex-direction: row;
+  & > a{
+    & > span{
+      font-size:20px;
+    }
+  }
 }
 
 .avatar {

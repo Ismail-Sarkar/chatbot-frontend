@@ -3,6 +3,9 @@
 .root {
   /* Clearfix */
   composes: clearfix from global;
+  @media(max-width:1023px){
+    margin: 0;
+  }
 }
 
 .messageItem {
@@ -17,6 +20,9 @@
 
   &:last-of-type {
     margin-bottom: 0;
+  }
+  @media(max-width:1023px){
+    margin-bottom:10px;
   }
 }
 

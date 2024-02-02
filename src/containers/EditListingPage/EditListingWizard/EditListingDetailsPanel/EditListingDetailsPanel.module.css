@@ -10,6 +10,19 @@
 
 .form {
   flex-grow: 1;
+  & > div{
+    & > div{
+      @media(max-width:575px){
+        flex-direction: column;
+      }
+      & > div{
+        @media(max-width:575px){
+          width: 100%;
+          margin: 0 0 10px 0;
+        }
+      }
+    }
+  }
 }
 .Title{
   

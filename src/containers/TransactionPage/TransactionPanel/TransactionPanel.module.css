@@ -7,11 +7,11 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 
   @media (--viewportLarge) {
     flex-direction: row;
-    max-width: calc(var(--contentMaxWidth) + 72px);
+    /* max-width: calc(var(--contentMaxWidth) + 72px); */
     margin: 0 auto 57px auto;
     padding: 0 36px;
   }
@@ -19,6 +19,9 @@
   @media (--viewportXLarge) {
     max-width: var(--contentMaxWidth);
     padding: 0;
+  }
+  @media(max-width:1199px){
+    gap: 0 80px;
   }
 }
 
@@ -31,6 +34,9 @@
     flex-shrink: 1;
     margin-right: 56px;
     margin-bottom: 0;
+  }
+  @media(max-width:1023px){
+    margin-bottom:20px;
   }
 }
 
@@ -149,6 +155,11 @@
     max-width: 100%;
     margin: 57px 0 0 0;
   }
+  @media(max-width:1023px){
+    max-width:none;
+    margin:15px 0 10px;
+    padding:6px 15px;
+  }
 }
 
 .headingSale {
@@ -166,12 +177,23 @@
     margin: 40px 0 0 0;
     padding: 2px 0 6px 0;
   }
+  @media(max-width:1023px){
+    margin:15px 0 0 0;
+    padding:0;
+  }
 }
 
 .mainTitle {
   composes: h3 from global;
   display: block;
   margin-bottom: 0;
+  @media(max-width:1023px){
+    margin-top:0;
+    margin-bottom:10px;
+    margin-left:0;
+    margin-right:0;
+    padding:0 15px;
+  }
 }
 
 .listingTitleMobile {
@@ -179,6 +201,10 @@
 
   @media (--viewportLarge) {
     display: none;
+  }
+  @media(max-width:1199px){
+    margin:0;
+    padding: 0 0 0 15px;
   }
 }
 
@@ -196,6 +222,10 @@
 
   @media (--viewportLarge) {
     margin: 0;
+  }
+  @media(max-width:1023px){
+    margin:12px 0 0 0;
+    padding:0 15px;
   }
 }
 
@@ -215,6 +245,9 @@
   }
   @media (--viewportLarge) {
     display: none;
+  }
+  @media(max-width:1023px){
+    margin-top: 20px;
   }
 }
 .deliveryInfoSection {
@@ -321,6 +354,10 @@
   @media (--viewportMedium) {
     margin: 0 48px;
   }
+  @media(max-width:1023px){
+    margin:0;
+    padding:0 15px;
+  }
 }
 
 .totalDivider {
@@ -333,6 +370,10 @@
 
   @media (--viewportMedium) {
     margin: 7px 48px 0 48px;
+  }
+  @media(max-width:1199px){
+    margin:12px 0 5px;
+    padding:0 15px;
   }
 }
 
@@ -349,6 +390,9 @@
   font-weight: var(--fontWeightBold);
   padding: 0;
   margin-bottom: 16px;
+  @media(max-width:1023px){
+    margin-bottom:0;
+  }
 }
 
 .shippingInfoContent {
@@ -426,7 +470,6 @@
 .deliveryInfoContainer,
 .feedContainer {
   margin: 42px 24px 0 24px;
-
   @media (--viewportMedium) {
     padding: 7px 0 1px 0;
     margin: 40px 24px 0 24px;
@@ -434,8 +477,20 @@
   @media (--viewportLarge) {
     margin: 40px 0 0 0;
   }
+  
 }
-
+.feedContainer{
+  @media(max-width:1023px){
+    padding: 7px 15px;
+    margin: 0;
+  }
+}
+.bookingLocationContainer{
+  @media(max-width:1023px){
+    margin: 20px 0 10px;
+    padding: 0 15px;
+  }
+} 
 /* Prop to be passed to SendMessageForm component */
 .sendMessageForm {
   position: relative;
@@ -583,5 +638,11 @@
   @media (--viewportLarge) {
     padding: 0px 75px;
     margin-top: 16px;
+ }
+
+}
+.msgDiv{
+  @media(max-width:1023px){
+    padding:0 15px;
   }
 }

@@ -805,7 +805,8 @@
         & > div{
           @media(max-width:575px){
             /* min-height:230px !important; */
-            height:200px !important;
+            /* height:200px !important; */
+            /* height:190px !important; */
           }
          & > div{
           & > div{
@@ -835,7 +836,7 @@
     display: none;
   }
   @media(max-width:767px){
-    margin: -85px 0 10px 0;
+    margin: 0 0 10px 0;
   }
 }
 
@@ -919,5 +920,7 @@
  }
 }
 .ListingpageMain{
-
+  & > main{
+    display: block;
+  }
 }

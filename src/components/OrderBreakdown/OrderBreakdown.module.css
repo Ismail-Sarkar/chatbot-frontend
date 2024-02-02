@@ -37,7 +37,7 @@
 
 .bookingPeriodSectionLeft {
   text-align: left;
-  margin-top: -7px;
+  margin-top: 10px;
 }
 
 .bookingPeriodSectionRight {
@@ -156,6 +156,9 @@
 
   & span {
     text-decoration: underline;
+  }
+  @media(max-width:767px){
+    font-size: 18px;
   }
 }
 .reservationInfo {

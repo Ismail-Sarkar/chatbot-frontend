@@ -19,9 +19,9 @@
   right: 0;
   width: 100%;
   & > div{
-    min-height:320px !important;
+    /* min-height:320px !important; */
     @media(max-width:575px){
-      min-height: 300px !important;
+      /* min-height: 300px !important; */
     }
   }
 }

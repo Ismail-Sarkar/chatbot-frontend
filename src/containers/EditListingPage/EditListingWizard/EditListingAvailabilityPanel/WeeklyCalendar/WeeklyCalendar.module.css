@@ -272,7 +272,7 @@
     padding: 24px 24px 23px 24px;
   }
   @media(max-width:767px){
-    padding:15px;
+    padding: 5px;
   }
 }
 
