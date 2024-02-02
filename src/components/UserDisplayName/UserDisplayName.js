@@ -36,9 +36,9 @@ const UserDisplayName = props => {
 
   const displayName = userHasBusinessName
     ? userHasBusinessName
-    : fullName
-    ? fullName
-    : userDisplayName
+    : // : fullName
+    // ? fullName
+    userDisplayName
     ? userDisplayName
     : userIsDeleted
     ? deletedUserDisplayNameInUse
