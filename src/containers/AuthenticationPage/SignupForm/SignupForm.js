@@ -233,28 +233,32 @@ const SignupFormComponent = props => (
           </div>
           {isPartner && (
             <div className={css.bottomMessage}>
-              Don’t have the code? Apply to list your space{' '}
+              Don’t have the partner sign up code? Apply{' '}
               <a href="http://www.adventurely.pro/vendors" target="_blank">
                 here
               </a>
             </div>
           )}
 
-          {/* <div className={css.otherTypeSignupLink}>
+          <div className={css.otherTypeSignupLink}>
             {isPartner ? (
-              <NamedLink name="SignupPage" className={css.signupLink}>
-                
-                <FormattedMessage id="SignupForm.customerSignUp" />
-                
-              </NamedLink>
+              // <NamedLink name="SignupPage" className={css.signupLink}>
+
+              //   <FormattedMessage id="SignupForm.customerSignUp" />
+
+              // </NamedLink>
+              <></>
             ) : (
-              <NamedLink name="PartnerSignupPage" className={css.signupLink}>
-                
-                <FormattedMessage id="SignupForm.partnerSignUp" />
-               
-              </NamedLink>
+              <div className={css.bottomMessage}>
+                Interested in listing your space?
+                <br />
+                <NamedLink name="PartnerSignupPage" className={css.signupLink}>
+                  {/* <FormattedMessage id="SignupForm.partnerSignUp" /> */}
+                  Sign up as a partner here
+                </NamedLink>
+              </div>
             )}
-          </div> */}
+          </div>
         </Form>
       );
     }}
