@@ -221,7 +221,7 @@ exports.renewSubscriptionofUser = async (req, res) => {
       }
     }
 
-    res.status(200).send(userDetails);
+    res.status(200).send({userDetails, data});
   } catch (err) {
     console.log('Error hitting webhook', err);
     //   res.status(401).send({ message: 'Profile not updated', error: err.data.errors[0].source });
