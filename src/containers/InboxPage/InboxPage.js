@@ -493,7 +493,7 @@ export const InboxPageComponent = props => {
                           className={css.ChooseDateBtn}
                           onClick={() => SetModalOpen(!modalOpen)}
                         >
-                          Choose Date
+                          View calendar
                           <svg
                           className={classes}
                           width="8"

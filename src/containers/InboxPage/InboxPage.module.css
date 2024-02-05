@@ -97,8 +97,8 @@
   }
 
   @media (--viewportLarge) {
-    padding: 5px 0 3px 0;
-    align-self: unset;
+    padding: 5px 20px 3px 0;
+    align-self: flex-end;
   }
   @media(max-width:575px){
     padding:0;
@@ -224,6 +224,7 @@
   @media(max-width:767px){
     align-items:flex-start;
     flex-direction:column;
+    margin-top: 20px;
   }
 }
 
@@ -618,6 +619,9 @@
     border: none !important;
     /* border-spacing:30px 0 !important; */
   }
+  & :global(.CalendarMonth_table) {
+   margin-top:10px;
+  }
 }
 
 .dateLoader {
@@ -659,7 +663,7 @@
                 @media(max-width:1023px){
                   background-image:none !important;
                   background-position:inherit !important;
-                  width: 200px !important;
+                  width: 130px !important;
                   border-bottom-color:inherit !important;
                   border-bottom-width: inherit !important;
                   border-bottom-style: inherit !important;

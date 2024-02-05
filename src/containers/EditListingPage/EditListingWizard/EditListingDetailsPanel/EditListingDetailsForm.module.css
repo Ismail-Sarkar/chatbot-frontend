@@ -10,10 +10,10 @@
   flex: 1;
   flex-direction: column;
 
-  padding-top: 1px;
+  padding-top: 10px;
 
   @media (--viewportMedium) {
-    padding-top: 2px;
+    /* padding-top: 2px; */
   }
 }
 
@@ -22,7 +22,7 @@
 }
 
 .formMargins {
-  margin-bottom: 15px;
+  margin-bottom: 22px;
   /* 
   @media (--viewportMedium) {
     margin-bottom: 32px;

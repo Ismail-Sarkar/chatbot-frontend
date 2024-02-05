@@ -20,6 +20,10 @@
 .sectionTitle {
   line-height:30px;
   font-size:21px;
+  @media(max-width:767px){
+    line-height: 30px;
+    font-size: 18px;
+  }
 }
 
 .lastSection {
@@ -342,7 +346,7 @@
   word-break: break-all;
   font-size: 14px;
   @media(max-width:767px){
-   padding: 10px;
+   padding:0;
   }
   @media(max-width:575px){
     word-break:inherit;
@@ -359,4 +363,7 @@
   max-width: fit-content;
   width: 100%;
   font-size: 14px;
+  @media(max-width:767px){
+    padding:0;
+   }
 }

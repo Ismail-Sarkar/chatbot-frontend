@@ -260,6 +260,9 @@
     text-decoration: line-through;
     border: 0;
   }
+  @media(max-width:575px){
+    margin:0;
+  }
 }
 
 .arrowIcon {

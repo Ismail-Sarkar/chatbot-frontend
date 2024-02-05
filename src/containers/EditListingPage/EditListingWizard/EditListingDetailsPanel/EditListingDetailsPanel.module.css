@@ -14,6 +14,7 @@
     & > div{
       @media(max-width:575px){
         flex-direction: column;
+        margin-top:15px;
       }
       & > div{
         @media(max-width:575px){

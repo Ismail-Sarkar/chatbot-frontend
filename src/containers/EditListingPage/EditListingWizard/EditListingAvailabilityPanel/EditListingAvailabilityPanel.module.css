@@ -49,7 +49,7 @@
 .addExceptionButton {
   composes: h4 from global;
   padding: 1px 0 5px 0;
-  margin: 0 0 15px 0;
+  margin: 0 0 30px 0;
 
   @media (--viewportMedium) {
     padding: 3px 0 5px 0;
@@ -95,7 +95,7 @@
   color: var(--colorFail);
 }
 .time {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   width: 100%;
   /* max-width: 40%; */
   @media (max-width: 767px) {
@@ -105,7 +105,7 @@
 .startEndTime {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   & div:nth-child(1) {
     /* margin-right: 25px; */
@@ -136,13 +136,17 @@
     font-size: 16px;
     line-height: 24px;
     font-weight: 600;
+    margin-top: 15px;
   }
 }
 .entryRulesInput {
   border-radius: 20px;
 }
 .entryRulesSection {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  @media(max-width:767px){
+    margin-bottom: 15px;
+  }
 }
 .entryRulesTitle {
   font-size: 20px;
@@ -152,6 +156,7 @@
   @media (max-width: 767px) {
     font-size:16px;
     line-height: 24px;
+    margin-top:20px;
   }
 }
 .availabilityModal {

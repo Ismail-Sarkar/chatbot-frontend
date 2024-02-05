@@ -5,7 +5,7 @@
 }
 :global(.image-gallery-thumbnails) {
   padding-top: 24px;
-  padding-bottom: 0;
+  padding-bottom: 24px;
 
   /*
    By default, the gallery controls the scroll position of the thumbnails when
@@ -15,7 +15,7 @@
    */
   width: 100vw;
   overflow: auto;
-
+  /* height:100vh; */
   @media (--viewportMedium) {
     width: calc(100vw - 48px);
   }
@@ -77,6 +77,7 @@
   & :global(.image-gallery-thumbnails-container),
   & :global(.image-gallery-thumbnail) {
     text-align: center !important;
+    /* height:100vh; */
   }
 }
 
@@ -88,6 +89,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height:100vh;
 }
 
 .itemWrapper {
@@ -104,16 +106,16 @@
 
 .itemCentering {
   display: flex;
-  align-items: center;
+  align-items:flex-start;
   justify-content: center;
   width: 100%;
-  /* height: 100%; */
+  height: 100%;
 }
 
 .item {
   /* max-width: 100%; */
   width: 100%;
-  max-height: 100%;
+  /* max-height: 100%; */
   object-fit: contain;
 }
 
@@ -129,11 +131,12 @@
 .navRight {
   position: absolute;
   width: 60px;
-  height: 100%;
+  /* height: 100%; */
   border: 0;
   padding: 0;
   z-index: 1;
-
+  top: 50%;
+  transform: translateY(-50%);
   /* center content */
   display: flex;
   align-items: center;
@@ -172,7 +175,9 @@
   border-radius: 50%;
 
   background-color: rgba(255, 255, 255, 0.5);
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
   @media (--viewportLarge) {
     /* center content */
     display: flex;

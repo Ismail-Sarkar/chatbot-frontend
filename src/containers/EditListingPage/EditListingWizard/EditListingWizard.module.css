@@ -132,4 +132,9 @@
  @media(max-width:767px){
   margin-bottom:30px;
  }
+ & > label{
+  @media(max-width:767px){
+    margin-bottom: 10px;
+  }
+ }
 }
