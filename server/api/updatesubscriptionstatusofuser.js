@@ -222,6 +222,7 @@ exports.renewSubscriptionofUser = async (req, res) => {
         }
       }
     } catch (userFoundError) {
+      console.log('User data not found.....', userFoundError);
       res.status(401).send({ message: 'User data not found', error: err.data.errors[0].source });
     }
   } catch (err) {
