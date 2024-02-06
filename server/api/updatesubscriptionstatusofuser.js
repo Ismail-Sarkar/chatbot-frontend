@@ -134,7 +134,7 @@ exports.renewSubscriptionofUser = async (req, res) => {
       if (data) {
         if (userData?.id?.uuid && data.object.object === 'subscription') {
           try {
-            const subscription = await stripe.subscriptions.retrieve(data.object.subscription);
+            const subscription = await stripe.subscriptions.retrieve(subscriptionId);
             // console.log('Subscription Details:', subscription);
             // console.log('Subscription Items:', subscription.items.data);
             if (subscription) {
@@ -170,13 +170,17 @@ exports.renewSubscriptionofUser = async (req, res) => {
                 },
                 protectedData: {
                   subscriptionDetails: {
-                    subscriptionId: data.object.subscription,
+                    subscriptionId: subscriptionId,
                     subscriptionStatus: status,
                     subscriptionStart: startDate,
                     subscriptionEnd: endDate,
                     subscriptionType: subscriptionType,
-                    subscriptionEmail: data.object.customer_details.email,
-                    subscriberName: data.object.customer_details.name,
+                    subscriptionEmail:
+                      userData?.attributes?.profile?.protectedData?.subscriptionDetails
+                        ?.subscriptionEmail,
+                    subscriberName:
+                      userData?.attributes?.profile?.protectedData?.subscriptionDetails
+                        ?.subscriberName,
                     discountedPercent: subscription.discount?.coupon?.percent_off
                       ? subscription.discount?.coupon?.percent_off
                       : 0,
@@ -194,7 +198,7 @@ exports.renewSubscriptionofUser = async (req, res) => {
                 },
               };
 
-              console.log('Subscription Details:', dataToUpdate.privateData.subscriptionDetails);
+              console.log('Subscription Details:', dataToUpdate.protectedData.subscriptionDetails);
 
               try {
                 const updatedProfile = await integrationSdk.users.updateProfile(dataToUpdate, {
