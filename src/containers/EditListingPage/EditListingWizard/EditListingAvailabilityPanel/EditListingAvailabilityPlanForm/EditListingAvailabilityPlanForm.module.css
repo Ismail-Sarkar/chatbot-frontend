@@ -33,18 +33,19 @@
     padding-left: 60px;
     padding-right: 60px;
   }
-  @media(max-width:767px){
-    padding:15px;
-    font-size:20px;
-    line-height:30px;
-    margin-bottom:0;
+  @media (max-width: 767px) {
+    padding: 15px;
+    font-size: 20px;
+    line-height: 30px;
+    margin-bottom: 0;
   }
 }
-.submitButton{
-  & > button{
-    background-color:#000;
-    &:hover,&:focus{
-    background-color:#000 !important;
+.submitButton {
+  & > button {
+    background-color: #000;
+    &:hover,
+    &:focus {
+      background-color: #000 !important;
     }
   }
 }
@@ -56,8 +57,8 @@
   @media (--viewportMedium) {
     margin: 0 0 8px 0;
   }
-  @media(max-width:767px){
-    padding-top:0;
+  @media (max-width: 767px) {
+    padding-top: 0;
     margin: 0;
     padding-bottom: 0;
   }
@@ -69,8 +70,8 @@
 
 .timezonePicker {
   margin-bottom: 24px;
-  @media(max-width:767px){
-    margin-bottom:15px;
+  @media (max-width: 767px) {
+    margin-bottom: 15px;
   }
 }
 
@@ -94,7 +95,13 @@
   @media (--viewportMedium) {
     padding-bottom: unset;
   }
-  @media(max-width:767px){
-    padding-bottom:0;
+  @media (max-width: 767px) {
+    padding-bottom: 0;
   }
+}
+
+.infoTxt {
+  margin-top: -8px;
+  padding-top: 0;
+  margin-bottom: 20px;
 }
