@@ -39,7 +39,7 @@ function ManageSubscriptionPage(props) {
           }
           sideNav={null}
           useAccountSettingsNav
-          currentPage="ContactDetailsPage"
+          currentPage="ManageSubscriptionPage"
           footer={<FooterContainer />}
         >
           <div className={css.content}>
