@@ -100,7 +100,7 @@ const EditListingAvailabilityPlanFormComponent = props => {
               <FormattedMessage id="EditListingAvailabilityPlanForm.timezonePickerTitle" />
             </Heading>
             <Heading as="h3" rootClassName={`${css.subheading} ${css.infoTxt}`}>
-              <div className={css.error}>
+              <div className={css.infoTxtDetails}>
                 <FormattedMessage id="EditListingAvailabilityPlanForm.timezoneInstructionTxt" />
               </div>
             </Heading>
