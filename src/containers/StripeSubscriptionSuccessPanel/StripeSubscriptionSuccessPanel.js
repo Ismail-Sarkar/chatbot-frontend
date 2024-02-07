@@ -29,21 +29,21 @@ function StripeSubscriptionSuccessPanel(props) {
   useEffect(() => {
     if (currentUser) {
       const isSubscribed =
-        typeof currentUser.attributes.profile.privateData.subscriptionDetails !== 'undefined' &&
+        typeof currentUser.attributes.profile.protectedData.subscriptionDetails !== 'undefined' &&
         currentUser.attributes.profile.publicData.userType === 'partner'
-          ? currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStatus ===
+          ? currentUser.attributes.profile.protectedData.subscriptionDetails.subscriptionStatus ===
               'active' &&
             (moment(new Date()).isBetween(
-              currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
-              currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+              currentUser.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
+              currentUser.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
               'day'
             ) ||
               moment(new Date()).isSame(
-                currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionStart,
+                currentUser.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
                 'day'
               ) ||
               moment(new Date()).isSame(
-                currentUser.attributes.profile.privateData.subscriptionDetails.subscriptionEnd,
+                currentUser.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
                 'day'
               ))
           : false;
@@ -112,7 +112,8 @@ function StripeSubscriptionSuccessPanel(props) {
                   {formatMoney(
                     intl,
                     new Money(
-                      currentUser?.attributes?.profile?.privateData?.subscriptionDetails?.totalAmount || 7200,
+                      currentUser?.attributes?.profile?.protectedData?.subscriptionDetails
+                        ?.totalAmount || 7200,
                       CURRENCY
                     )
                   )}{' '}
@@ -126,7 +127,8 @@ function StripeSubscriptionSuccessPanel(props) {
                   {formatMoney(
                     intl,
                     new Money(
-                      currentUser?.attributes?.profile?.privateData?.subscriptionDetails?.discountAmount || 0,
+                      currentUser?.attributes?.profile?.protectedData?.subscriptionDetails
+                        ?.discountAmount || 0,
                       CURRENCY
                     )
                   )}{' '}
@@ -139,7 +141,8 @@ function StripeSubscriptionSuccessPanel(props) {
                   {formatMoney(
                     intl,
                     new Money(
-                      currentUser?.attributes?.profile?.privateData?.subscriptionDetails?.discountedAmount ||7200,
+                      currentUser?.attributes?.profile?.protectedData?.subscriptionDetails
+                        ?.discountedAmount || 7200,
                       CURRENCY
                     )
                   )}{' '}
