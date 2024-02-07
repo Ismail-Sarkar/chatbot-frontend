@@ -87,7 +87,8 @@
   border-radius: 6px;
   border: 1px solid #d8dce6;
   transition: all 0.2s ease-out;
-  z-index: calc(var(--zIndexPopup) + 1);
+  /* z-index: calc(var(--zIndexPopup) + 1); */
+  /* z-index:inherit; */
   position: relative;
 
   background-color: #fff;

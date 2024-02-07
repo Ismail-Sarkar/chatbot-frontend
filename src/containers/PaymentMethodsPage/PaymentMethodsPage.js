@@ -142,7 +142,7 @@ const PaymentMethodsPageComponent = props => {
   const showCardDetails = !!hasDefaultPaymentMethod;
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
-      <LayoutSideNavigation
+      <LayoutSideNavigation className={css.paymentMethodsMain}
         topbar={
           <>
             <TopbarContainer

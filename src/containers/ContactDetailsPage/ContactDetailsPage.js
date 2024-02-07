@@ -69,8 +69,10 @@ export const ContactDetailsPageComponent = props => {
   const title = intl.formatMessage({ id: 'ContactDetailsPage.title' });
 
   return (
-    <Page title={title} scrollingDisabled={scrollingDisabled}>
-      <LayoutSideNavigation
+    <Page title={title} scrollingDisabled={scrollingDisabled} >
+       
+      <LayoutSideNavigation 
+      className={css.ContactdltsMain} 
         topbar={
           <>
             <TopbarContainer
@@ -93,6 +95,9 @@ export const ContactDetailsPageComponent = props => {
           {contactInfoForm}
         </div>
       </LayoutSideNavigation>
+
+  
+    
     </Page>
   );
 };

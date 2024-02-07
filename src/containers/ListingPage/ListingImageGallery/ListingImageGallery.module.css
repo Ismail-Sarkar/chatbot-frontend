@@ -79,6 +79,26 @@
     text-align: center !important;
     /* height:100vh; */
   }
+  & :global(.image-gallery-slides){
+    min-height: 100vh !important;
+  }
+  & > div{
+    & > div{
+      & > div{
+        & > div{
+          & > div{
+            & > div{
+              & > div{
+                & > div{
+                  height:100% !important;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .root {
@@ -106,10 +126,10 @@
 
 .itemCentering {
   display: flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content: center;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
 }
 
 .item {
@@ -169,7 +189,6 @@
 
 .navArrowWrapper {
   display: none;
-
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -184,13 +203,17 @@
     align-items: center;
     justify-content: center;
   }
+ @media(max-width:767px){
+  width: 25px;
+  height: 25px;
+ }
 }
 
 .openFullscreen {
   /* Hide on mobile. Currently react-image-gallery fullscreen mode is broken on
      mobile, and mobile doesn't really benefit from fullscreen anyways. */
-  display: none;
-
+  /* display: none; */
+   display:block;
   composes: marketplaceTinyFontStyles from global;
   font-weight: var(--fontWeightMedium);
 
@@ -223,6 +246,11 @@
   @media (--viewportLarge) {
     display: block;
   }
+  @media(max-width:767px){
+    bottom: 12px;
+    right: 12px;
+    padding: 8px 10px 6px 13px;
+  }
 }
 
 .close {
@@ -230,7 +258,8 @@
 
   color: var(--colorGrey300);
   transition: var(--transitionStyleButton);
-
+  background-color: rgb(255 255 255 / 20%) !important;
+  color: #000 !important;
   &:enabled:hover,
   &:enabled:active {
     color: var(--colorBlack);

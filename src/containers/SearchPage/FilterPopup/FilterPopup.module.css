@@ -9,13 +9,13 @@
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
-
+  left:0 !important;
   /* Position */
   position: absolute;
   z-index: var(--zIndexPopup);
 
   /* Layout */
-  min-width: 300px;
+  min-width: 300px !important;
   margin-top: 7px;
   background-color: var(--colorWhite);
 
