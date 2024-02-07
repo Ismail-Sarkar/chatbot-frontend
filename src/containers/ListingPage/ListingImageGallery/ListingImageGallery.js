@@ -168,6 +168,7 @@ const ListingImageGallery = props => {
       onScreenChange={onScreenChange}
       renderLeftNav={renderLeftNav}
       renderRightNav={renderRightNav}
+      showThumbnails={isFullscreen ? false : true}
       renderFullscreenButton={renderFullscreenButton}
       {...IMAGE_GALLERY_OPTIONS}
     />

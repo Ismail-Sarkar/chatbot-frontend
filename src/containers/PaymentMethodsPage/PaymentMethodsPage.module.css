@@ -10,9 +10,45 @@
   @media (--viewportLarge) {
     margin: 0;
   }
+  @media(max-width:1023px){
+    margin:0;
+    max-width:none;
+  }
 }
 
 .desktopTopbar,
 .mobileTopbar {
   box-shadow: none;
+}
+.paymentMethodsMain{
+  @media(max-width:1023px){
+    display: block !important;
+  }
+  & > div:nth-child(2){
+    @media(min-width:1920px){
+      max-width:1120px;
+      margin:0 auto;
+    }
+    & > aside{
+      width:20%;
+      flex:0 0 20%;
+      padding:48px 0 82px 36px !important;
+      @media(max-width:1023px){
+        width: 100%;
+        flex: 0 0 100%;
+        padding:25px 15px 0!important;
+        justify-content:flex-start;
+      }
+    }
+    & > main{
+      width:80%;
+      flex: 0 0 80%;
+      padding:48px 36px 82px 59px !important;
+      @media(max-width:1023px){
+        width: 100%;
+        flex: 0 0 100%;
+        padding:25px 15px 120px!important;
+      }
+    }
+  }
 }

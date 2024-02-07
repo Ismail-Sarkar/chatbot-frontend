@@ -370,6 +370,7 @@
   @media(max-width:575px){
     font-size: 18px;
     line-height: 20px;
+    margin-top: 15px;
   }
 }
 
@@ -810,7 +811,7 @@
           @media(max-width:480px){
             /* min-height:230px !important; */
             /* height:200px !important; */
-            height:190px !important;
+            /* height:190px !important; */
           }
          & > div{
           & > div{
@@ -904,11 +905,17 @@
   @media (max-width: 768px) {
     margin-left: 24px;
   }
+  @media (max-width: 767px) {
+    margin-left: 0;
+  }
 }
 .mannualAddressInner {
   /* margin-left: 12px; */
   @media (max-width: 768px) {
     margin-left: 14px;
+  }
+  @media (max-width: 767px) {
+    margin-left: 0;
   }
 }
 .RulesDiv {

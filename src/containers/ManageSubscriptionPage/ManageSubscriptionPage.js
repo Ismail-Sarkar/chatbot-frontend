@@ -26,7 +26,7 @@ function ManageSubscriptionPage(props) {
   return (
     <div>
       <Page title={title} scrollingDisabled={scrollingDisabled}>
-        <LayoutSideNavigation
+        <LayoutSideNavigation className={css.ManagesubscriptionMain}
           topbar={
             <>
               <TopbarContainer

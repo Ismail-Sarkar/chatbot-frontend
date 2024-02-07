@@ -130,6 +130,9 @@
   @media (--viewportMedium) {
     margin-top: 96px;
   }
+  @media(max-width:1023px){
+    margin-top:46px;
+  }
 }
 
 .error {

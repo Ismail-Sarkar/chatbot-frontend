@@ -52,7 +52,7 @@ export const PasswordChangePageComponent = props => {
 
   return (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
-      <LayoutSideNavigation
+      <LayoutSideNavigation className={css.passwordMain}
         topbar={
           <>
             <TopbarContainer

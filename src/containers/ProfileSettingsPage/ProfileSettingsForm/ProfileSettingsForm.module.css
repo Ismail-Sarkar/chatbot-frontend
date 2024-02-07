@@ -319,6 +319,10 @@
     border-bottom-left-radius: 0;
     border-left: none;
     color: black;
+    @media(max-width:767px){
+      font-size: 13px;
+      padding-left: 3px;
+    }
   }
   & input:focus {
     box-shadow: none;
@@ -346,7 +350,8 @@
   word-break: break-all;
   font-size: 14px;
   @media(max-width:767px){
-   padding:0;
+   padding:10px;
+   font-size: 13px;
   }
   @media(max-width:575px){
     word-break:inherit;
