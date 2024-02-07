@@ -239,19 +239,98 @@ exports.renewSubscriptionofUser = async (req, res) => {
 module.exports.removeSubscriptionofUser = async (req, res) => {
   try {
     const { subsId, userId } = req.body;
-    if (!subsId || !userId) {
+    if (!subsId) {
       return res.status(400).send('Invalid data!.');
     }
+    const userDetails = await integrationSdk.users.query({ prot_subscriptionId: subsId });
+
+    const userData = userDetails.data.data[0];
     const cancelledSubscription = await stripe.subscriptions.cancel(subsId);
     const cancelStatus = cancelledSubscription.status.toLowerCase();
     const isSubscriptionCancelled = cancelStatus === 'canceled';
-    await integrationSdk.users.updateProfile({
-      id: userId,
-      protectedData: { isSubscriptionCancelled, subscriptionStatus: cancelStatus },
-    });
-    res.status(200).send('Unsubscribed successfully');
+    const subscription = await stripe.subscriptions.retrieve(subsId);
+    console.log(subscription, 785);
+
+    if (subscription) {
+      // Extract the required information from the subscription object
+      const status = subscription.status;
+      const startDate = new Date(subscription.current_period_start * 1000).toISOString(); // Convert to a JavaScript date
+      const endDate = new Date(subscription.current_period_end * 1000).toISOString(); // Convert to a JavaScript date
+
+      // Retrieve the subscription type information with amount
+
+      const subscriptionType = subscription.items.data.reduce((accumulator, item) => {
+        const type = item.price.type;
+        const unitAmount = item.price.unit_amount;
+
+        // If the type doesn't exist in the accumulator, initialize it to 0
+        if (!accumulator[type]) {
+          accumulator[type] = 0;
+        }
+
+        // Add the unitAmount to the total for the current type
+        accumulator[type] += unitAmount;
+
+        return accumulator;
+      }, {});
+
+      const dataToUpdate = {
+        id: userData?.id?.uuid,
+
+        protectedData: {
+          subscriptionDetails: {
+            subscriptionId: subsId,
+            subscriptionStatus: status,
+            subscriptionStart: startDate,
+            subscriptionEnd: endDate,
+            subscriptionType: subscriptionType,
+            subscriptionEmail:
+              userData?.attributes?.profile?.protectedData?.subscriptionDetails?.subscriptionEmail,
+            subscriberName:
+              userData?.attributes?.profile?.protectedData?.subscriptionDetails?.subscriberName,
+            discountedPercent: subscription.discount?.coupon?.percent_off
+              ? subscription.discount?.coupon?.percent_off
+              : 0,
+            discountAmount: subscription.discount?.coupon?.percent_off
+              ? (subscriptionType.recurring * subscription.discount.coupon?.percent_off) / 100
+              : 0,
+            discountedAmount: subscription.discount?.coupon?.percent_off
+              ? subscriptionType.recurring -
+                (subscriptionType.recurring * subscription.discount?.coupon?.percent_off) / 100
+              : subscriptionType.recurring,
+            totalAmount: subscriptionType.recurring,
+          },
+          isSubscriptionCancelled,
+          subscriptionStatus: cancelStatus,
+        },
+      };
+
+      console.log('Subscription Details:', dataToUpdate.protectedData.subscriptionDetails);
+
+      try {
+        const updatedProfile = await integrationSdk.users.updateProfile(dataToUpdate, {
+          expand: true,
+        });
+        //   res.status(200).send({ data: resp.data.data });
+        res.status(200).send({
+          message: 'Unsubscribed and Profile updated successfully',
+          subscriptionDetails: dataToUpdate,
+          updatedProfileDetails: updatedProfile,
+        });
+      } catch (err) {
+        console.log(69, err.data.errors[0].source);
+        res.status(401).send({ message: 'Profile not updated', error: err.data.errors[0].source });
+      }
+    } else {
+      res.status(401).send({ message: 'Subscription data not found' });
+    }
+    // await integrationSdk.users.updateProfile({
+    //   id: userId,
+    //   protectedData: { isSubscriptionCancelled, subscriptionStatus: cancelStatus },
+    // });
+    // res.status(200).send('Unsubscribed successfully');
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message, 78);
     return res.status(500).send(error.message);
   }
 };

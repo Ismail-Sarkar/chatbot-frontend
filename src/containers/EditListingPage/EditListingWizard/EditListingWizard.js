@@ -200,21 +200,22 @@ const tabCompleted = (tab, listing, config, currentUser) => {
     case SUBSCRIBE:
       return typeof currentUser?.attributes.profile.protectedData.subscriptionDetails !==
         'undefined'
-        ? currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStatus ===
-            'active' &&
-            (moment(new Date()).isBetween(
-              currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
-              currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
-              'day'
-            ) ||
-              moment(new Date()).isSame(
+        ? currentUser?.attributes.profile.protectedData.subscriptionStatus === 'active' ||
+            (currentUser?.attributes.profile.protectedData.isSubscriptionCancelled &&
+              (moment(new Date()).isBetween(
                 currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
-                'day'
-              ) ||
-              moment(new Date()).isSame(
                 currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
                 'day'
-              ))
+              ) ||
+                moment(new Date()).isSame(
+                  currentUser?.attributes.profile.protectedData.subscriptionDetails
+                    .subscriptionStart,
+                  'day'
+                ) ||
+                moment(new Date()).isSame(
+                  currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
+                  'day'
+                )))
         : false;
     case DETAILS:
       return !!(
@@ -464,21 +465,21 @@ class EditListingWizard extends Component {
 
     const isStripeSubscribed =
       typeof currentUser?.attributes.profile.protectedData.subscriptionDetails !== 'undefined'
-        ? currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStatus ===
-            'active' &&
-          (moment(new Date()).isBetween(
-            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
-            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
-            'day'
-          ) ||
-            moment(new Date()).isSame(
+        ? currentUser?.attributes.profile.protectedData.subscriptionStatus === 'active' ||
+          (currentUser?.attributes.profile.protectedData.isSubscriptionCancelled &&
+            (moment(new Date()).isBetween(
               currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
-              'day'
-            ) ||
-            moment(new Date()).isSame(
               currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
               'day'
-            ))
+            ) ||
+              moment(new Date()).isSame(
+                currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
+                'day'
+              ) ||
+              moment(new Date()).isSame(
+                currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
+                'day'
+              )))
         : false;
 
     // For oudated draft listing, we don't show other tabs but the "details"

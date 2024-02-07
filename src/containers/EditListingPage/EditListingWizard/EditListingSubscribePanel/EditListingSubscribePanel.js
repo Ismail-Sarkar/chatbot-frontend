@@ -248,8 +248,8 @@ const EditListingSubscribePanel = props => {
   //   );
   const canSubscribe =
     typeof currentUser?.attributes.profile.protectedData.subscriptionDetails !== 'undefined'
-      ? currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStatus !==
-          'active' &&
+      ? (currentUser?.attributes.profile.protectedData.subscriptionStatus !== 'active' ||
+          !currentUser?.attributes.profile.protectedData.isSubscriptionCancelled) &&
         !(
           moment(new Date()).isBetween(
             currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,

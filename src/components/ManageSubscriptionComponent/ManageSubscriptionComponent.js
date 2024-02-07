@@ -12,10 +12,49 @@ import { fetchCurrentUser } from '../../ducks/user.duck';
 function ManageSubscriptionComponent() {
   const currentUser = useSelector(state => state.user.currentUser);
   const dispatch = useDispatch();
-  const [unsubscribeInProgress, setUnsubscribeInProgress] = useState(false);
+  const [subscriptionProcessInProgress, setSubscriptionProcessInProgress] = useState(false);
+
+  const isStripeSubscribed =
+    typeof currentUser?.attributes.profile.protectedData.subscriptionDetails !== 'undefined'
+      ? currentUser?.attributes.profile.protectedData.subscriptionStatus === 'active' ||
+        (currentUser?.attributes.profile.protectedData.isSubscriptionCancelled &&
+          (moment(new Date()).isBetween(
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
+            'day'
+          ) ||
+            moment(new Date()).isSame(
+              currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
+              'day'
+            ) ||
+            moment(new Date()).isSame(
+              currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
+              'day'
+            )))
+      : false;
+  const canSubscribe =
+    typeof currentUser?.attributes.profile.protectedData.subscriptionDetails !== 'undefined'
+      ? (currentUser?.attributes.profile.protectedData.subscriptionStatus !== 'active' ||
+          !currentUser?.attributes.profile.protectedData.isSubscriptionCancelled) &&
+        !(
+          moment(new Date()).isBetween(
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
+            'day'
+          ) ||
+          moment(new Date()).isSame(
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
+            'day'
+          ) ||
+          moment(new Date()).isSame(
+            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
+            'day'
+          )
+        )
+      : true;
 
   const handleUnsubscribe = () => {
-    setUnsubscribeInProgress(true);
+    setSubscriptionProcessInProgress(true);
     const dataToUnsubscribe = {
       subsId: currentUser?.attributes?.profile?.protectedData?.subscriptionId,
       userId: currentUser.id.uuid,
@@ -24,14 +63,24 @@ function ManageSubscriptionComponent() {
       .post(`${apiBaseUrl()}/api/unsubscribeSubscriptionofUser`, dataToUnsubscribe)
       .then(res => {
         dispatch(fetchCurrentUser());
-        setUnsubscribeInProgress(false);
+        setSubscriptionProcessInProgress(false);
       })
-      .catch(err => setUnsubscribeInProgress(false));
+      .catch(err => setSubscriptionProcessInProgress(false));
   };
+
+  const handleSubscribe = () => {
+    if (currentUser && canSubscribe && process.env.REACT_APP_ENV === 'development') {
+      setSubscriptionProcessInProgress(true);
+      const stripeSubscriptionUrl = `https://buy.stripe.com/test_5kA3gg8iQ57A0WA000?client_reference_id=${currentUser?.id?.uuid}`;
+      // const stripeSubscriptionUrl = `https://buy.stripe.com/test_7sI1882Yw0Rk8p24gh?client_reference_id=${currentUser?.id?.uuid}`;
+      window.location.href = stripeSubscriptionUrl;
+    }
+  };
+
   return (
     <div>
       <p>
-        {currentUser?.attributes?.profile?.protectedData?.subscriptionStatus === 'active'
+        {isStripeSubscribed
           ? 'You have an active subscription as a partner'
           : `You don't have any active subscription yet`}
       </p>
@@ -61,7 +110,7 @@ function ManageSubscriptionComponent() {
                   currentUser?.attributes?.profile?.protectedData?.subscriptionDetails?.subscriptionEnd
                 )
               ).format('MMM DD, YYYY')}`
-            : `Your current subscription expired at ${moment(
+            : `Your subscription expired on ${moment(
                 new Date(
                   currentUser?.attributes?.profile?.protectedData?.subscriptionDetails?.subscriptionEnd
                 )
@@ -71,12 +120,27 @@ function ManageSubscriptionComponent() {
       {currentUser?.attributes?.profile?.protectedData?.subscriptionStatus === 'active' && (
         <Button
           type="button"
-          inProgress={unsubscribeInProgress}
-          disabled={unsubscribeInProgress}
+          inProgress={subscriptionProcessInProgress}
+          disabled={subscriptionProcessInProgress}
           onClick={handleUnsubscribe}
           className={css.unsubscribeBtn}
         >
           <FormattedMessage id="ManageSubscriptionPage.unsubscribe" />
+        </Button>
+      )}
+      {canSubscribe && (
+        <Button
+          type="button"
+          inProgress={subscriptionProcessInProgress}
+          disabled={subscriptionProcessInProgress}
+          className={css.unsubscribeBtn}
+          onClick={handleSubscribe}
+
+          // ready={ready}
+          // updated={panelUpdated}
+          // updateInProgress={updateInProgress}
+        >
+          Subscribe
         </Button>
       )}
     </div>
