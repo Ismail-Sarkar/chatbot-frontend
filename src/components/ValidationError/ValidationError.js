@@ -31,19 +31,21 @@ const ValidationError = props => {
   };
   return touched && error ? (
     tab === 'location' ? (
-      <div className={css.mannualAddressCheckbox}>
-        <span className={classes}>{error}</span>
-        <input
-          type="checkbox"
-          id="manualAddress"
-          name="manualAddress"
-          onChange={manualAddressCheck}
-          checked={manualAddressState}
-          // value={f}
-          // defaultChecked={defaultCheck(f)}
-          // disabled={defaultDisabled(f)}
-        />
-      </div>
+      !manualAddressState ? ( // for remove checkbox with error message as per client requirement
+        <div className={css.mannualAddressCheckbox}>
+          <span className={classes}>{error}</span>
+          <input
+            type="checkbox"
+            id="manualAddress"
+            name="manualAddress"
+            onChange={manualAddressCheck}
+            checked={manualAddressState}
+            // value={f}
+            // defaultChecked={defaultCheck(f)}
+            // disabled={defaultDisabled(f)}
+          />
+        </div>
+      ) : null
     ) : (
       <div className={classes}>{error}</div>
     )
