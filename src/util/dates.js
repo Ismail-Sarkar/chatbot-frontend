@@ -77,6 +77,8 @@ export const isValidTimeZone = timeZone => {
  */
 export const getTimeZoneNames = relevantZonesRegExp => {
   const allTimeZones = moment.tz.names();
+  // allTimeZones.push('America/Miami');
+  // console.log(allTimeZones, 898);
   return relevantZonesRegExp ? allTimeZones.filter(z => relevantZonesRegExp.test(z)) : allTimeZones;
 };
 

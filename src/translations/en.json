@@ -1115,7 +1115,7 @@
   "TransactionPage.adventurely-booking.customer.inquiry.title": "You sent an inquiry.",
   "TransactionPage.adventurely-booking.customer.payment-expired.title": "You didn't confirm the payment in time.",
   "TransactionPage.adventurely-booking.customer.pending-payment.title": "{customerName}, you haven't confirmed the payment yet.",
-  "TransactionPage.adventurely-booking.customer.preauthorized.extraInfo": "You’ll be notified by {providerName} within 48 hours if your booking request was accepted. Your card has not been charged yet and will only be charged if your booking request is accepted.",
+  "TransactionPage.adventurely-booking.customer.preauthorized.extraInfo": "You’ll be notified by {providerName} within {timer} if your booking request was accepted. Your card has not been charged yet and will only be charged if your booking request is accepted.",
   "TransactionPage.adventurely-booking.customer.preauthorized.title": "Your booking request was sent!",
   "TransactionPage.adventurely-booking.customer.reviewed.title": "Your booking was completed.",
   "TransactionPage.adventurely-booking.customer.reviewed-by-customer.title": "Your booking was completed.",
