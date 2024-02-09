@@ -38,14 +38,25 @@ const MARKETPLACE_URL = process.env.REACT_APP_MARKETPLACE_ROOT_URL;
 
 export const AsideContent = props => {
   const { user, displayName, isCurrentUser, businessname } = props;
+  const { publicData } = user?.attributes?.profile || {};
+  const { profileUrl = null } = publicData || {};
   return (
     <div className={css.asideContent}>
       <AvatarLarge className={css.avatar} user={user} disableProfileLink />
+     
       <H2 as="h1" className={css.mobileHeading}>
         {businessname ? (
           <FormattedMessage id="ProfilePage.mobileHeading" values={{ name: businessname }} />
         ) : null}
       </H2>
+      <div className={css.MobHeadWrap}>
+      {profileUrl && (
+        <div className={classNames(css.profileUrl,css.MobProfileUrl)}>
+          <a href={`${MARKETPLACE_URL}/${profileUrl}`}>{profileUrl}</a>
+        
+        </div>
+      )}
+
       {isCurrentUser ? (
         <>
           <NamedLink className={css.editLinkMobile} name="ProfileSettingsPage">
@@ -56,6 +67,7 @@ export const AsideContent = props => {
           </NamedLink>
         </>
       ) : null}
+      </div>
     </div>
   );
 };
@@ -188,7 +200,7 @@ export const MainContent = props => {
         />
       </H2>
       {profileUrl && (
-        <div className={css.profileUrl}>
+        <div className={classNames(css.profileUrl,css.desktopProfileUrl)}>
           <a href={`${MARKETPLACE_URL}/${profileUrl}`}>{profileUrl}</a>
           {/* <CopyText text={`${MARKETPLACE_URL}/${profileUrl}`} /> */}
         </div>

@@ -31,8 +31,10 @@
     border-bottom: none;
   }
   @media(max-width:1023px){
-    align-items:center;
+    align-items:flex-start;
     padding-bottom: 30px;
+    flex-direction: column;
+
   }
 }
 
@@ -232,6 +234,9 @@
 
 .profileUrl {
   margin-bottom: 20px;
+  @media(max-width:1023px){
+    margin-bottom:10px;
+  }
 }
 .profilepagewrap{
   & > div{
@@ -269,4 +274,20 @@
     }
   }
 
+}
+.desktopProfileUrl{
+  @media(max-width:1023px){
+    display:none;
+  }
+}
+.MobProfileUrl{
+  display:none;
+  @media(max-width:1023px){
+    display:block;
+  }
+}
+.MobHeadWrap{
+  display:flex;
+  gap: 0;
+  flex-direction: column;
 }
