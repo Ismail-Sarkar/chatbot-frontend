@@ -148,6 +148,7 @@ export class TransactionPanelComponent extends Component {
       onCancelBookingCustomer,
       onCancelBookingProvider,
       transactionId,
+      transactionConfirmationPaymentTime,
     } = this.props;
 
     const isCustomer = transactionRole === 'customer';
@@ -252,6 +253,7 @@ export class TransactionPanelComponent extends Component {
               listingId={listing?.id?.uuid}
               listingTitle={listingTitle}
               listingDeleted={listingDeleted}
+              transactionConfirmationPaymentTime={transactionConfirmationPaymentTime}
             />
             <InquiryMessageMaybe
               protectedData={protectedData}

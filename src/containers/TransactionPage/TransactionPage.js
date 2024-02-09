@@ -134,8 +134,6 @@ export const TransactionPageComponent = props => {
     onCancelBookingProvider,
   } = props;
 
-  console.log(transaction, 457);
-
   const { listing, provider, customer, booking } = transaction || {};
   const txTransitions = transaction?.attributes?.transitions || [];
   const isProviderRole = transactionRole === PROVIDER;
@@ -430,7 +428,11 @@ export const TransactionPageComponent = props => {
       className={detailsClassName}
       currentUser={currentUser}
       transactionId={transaction?.id}
-      transactionConfirmationPaymentTime={transaction?.attributes?.transitions}
+      transactionConfirmationPaymentTime={
+        transaction?.attributes?.transitions?.filter(
+          elem => elem.transition === 'transition/confirm-payment'
+        )?.[0]?.createdAt
+      }
       listing={listing}
       customer={customer}
       provider={provider}

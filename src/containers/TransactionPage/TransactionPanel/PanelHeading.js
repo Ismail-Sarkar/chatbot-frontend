@@ -8,6 +8,8 @@ import { H1, H2, NamedLink } from '../../../components';
 
 import css from './TransactionPanel.module.css';
 import { formatMoney } from '../../../util/currency';
+import CountdownTimer from '../../../components/CountdownTimer/CountdownTimer';
+import moment from 'moment';
 
 const createListingLink = (listingId, label, listingDeleted, searchParams = {}, className = '') => {
   if (!listingDeleted) {
@@ -44,6 +46,7 @@ const PanelHeading = props => {
     listingTitle,
     listingDeleted,
     isCustomerBanned,
+    transactionConfirmationPaymentTime,
   } = props;
 
   const isProvider = transactionRole === 'provider';
@@ -86,8 +89,18 @@ const PanelHeading = props => {
         <p className={css.transactionInfoMessage}>
           <FormattedMessage
             id={`TransactionPage.${processName}.${transactionRole}.${processState}.extraInfo`}
-            values={{ customerName, providerName: providerDisplayName, deliveryMethod, breakline }}
-          />
+            values={{
+              customerName,
+              providerName: providerDisplayName,
+              deliveryMethod,
+              breakline,
+              timer: (
+                <CountdownTimer
+                  endTime={moment(new Date(transactionConfirmationPaymentTime)).add(48, 'hours')}
+                />
+              ),
+            }}
+          />{' '}
         </p>
       ) : null}
       {isProvider && isPendingPayment ? (
