@@ -47,6 +47,7 @@ const PanelHeading = props => {
     listingDeleted,
     isCustomerBanned,
     transactionConfirmationPaymentTime,
+    bookingStartTime,
   } = props;
 
   const isProvider = transactionRole === 'provider';
@@ -96,7 +97,13 @@ const PanelHeading = props => {
               breakline,
               timer: (
                 <CountdownTimer
-                  endTime={moment(new Date(transactionConfirmationPaymentTime)).add(48, 'hours')}
+                  endTime={
+                    moment(new Date(bookingStartTime)).isSameOrBefore(
+                      moment(new Date(transactionConfirmationPaymentTime)).add(48, 'hours')
+                    )
+                      ? moment(new Date(bookingStartTime))
+                      : moment(new Date(transactionConfirmationPaymentTime)).add(48, 'hours')
+                  }
                 />
               ),
             }}

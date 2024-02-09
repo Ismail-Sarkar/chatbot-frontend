@@ -9,7 +9,7 @@ const CountdownTimer = ({ endTime }) => {
       days: duration.days(),
       hours: duration.hours(),
       minutes: duration.minutes(),
-      seconds: duration.seconds(),
+      //   seconds: duration.seconds(),
     };
   };
 

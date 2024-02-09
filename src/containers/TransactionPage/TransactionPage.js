@@ -433,6 +433,7 @@ export const TransactionPageComponent = props => {
           elem => elem.transition === 'transition/confirm-payment'
         )?.[0]?.createdAt
       }
+      bookingStartTime={transaction?.booking?.attributes?.start}
       listing={listing}
       customer={customer}
       provider={provider}
