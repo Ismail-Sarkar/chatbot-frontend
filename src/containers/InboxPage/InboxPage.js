@@ -233,7 +233,7 @@ const SearchForm = props => {
   const onChangeText = e => {
     const value = e.target.value;
     setSearchText(value);
-    debounceHandleOnChange(onChangeKey, value);
+    debounceHandleOnChange(onChangeKey, value.replace(/[^a-zA-Z0-9\s]/g, ''));
   };
   const handleSubmit = e => {
     e.preventDefault();
@@ -479,7 +479,6 @@ export const InboxPageComponent = props => {
                     isDateLoading,
                     perDayTransaction,
                   } = fieldRenderProps;
-
                   const classes = classNames(rootClassName || css.root, className);
 
                   return (
@@ -495,18 +494,18 @@ export const InboxPageComponent = props => {
                         >
                           View calendar
                           <svg
-                          className={classes}
-                          width="8"
-                          height="5"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M3.764 4.236c.131.13.341.13.472 0l2.666-2.667a.333.333 0 10-.471-.471L4 3.528l-2.43-2.43a.333.333 0 10-.471.471l2.665 2.667z"
-                            fill="#4A4A4A"
-                            stroke="#4A4A4A"
-                            fillRule="evenodd"
-                          />
-                        </svg>
+                            className={classes}
+                            width="8"
+                            height="5"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M3.764 4.236c.131.13.341.13.472 0l2.666-2.667a.333.333 0 10-.471-.471L4 3.528l-2.43-2.43a.333.333 0 10-.471.471l2.665 2.667z"
+                              fill="#4A4A4A"
+                              stroke="#4A4A4A"
+                              fillRule="evenodd"
+                            />
+                          </svg>
                         </button>
 
                         {modalOpen && (
@@ -525,32 +524,29 @@ export const InboxPageComponent = props => {
                                 const formatedDate = moment(day).format('YYYY-MM-DD');
                                 const hasTransactionThatDay = !!perDayTransaction[formatedDate];
 
-                                  return hasTransactionThatDay
-                                    ? moment().diff(day, 'day') > 0
-                                    : false;
-                                }}
-                                onChange={value => {
-                                  console.log(value.date);
-                                  handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
-                                  SetModalOpen(false);
-                                }}
-                                keepOpenCalender={true}
-                                keepOpenOnDateSelect={true}
-                                firstDayOfWeek={0}
-                                weekDayFormat="ddd"
-                                onNextMonthClick={loadTransactionOnMonthChange}
-                                onPrevMonthClick={loadTransactionOnMonthChange}
-                                isDayHighlighted={day => {
-                                  const formatedDate = moment(day).format('YYYY-MM-DD');
-                                  return !!perDayTransaction[formatedDate];
-                                }}
-                                useMobileMargins
-                                enableOutsideDays={false}
-                              />
-                              </div>
-                            )}
-                          
-                   
+                                return hasTransactionThatDay
+                                  ? moment().diff(day, 'day') > 0
+                                  : false;
+                              }}
+                              onChange={value => {
+                                handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
+                                SetModalOpen(false);
+                              }}
+                              keepOpenCalender={true}
+                              keepOpenOnDateSelect={true}
+                              firstDayOfWeek={0}
+                              weekDayFormat="ddd"
+                              onNextMonthClick={loadTransactionOnMonthChange}
+                              onPrevMonthClick={loadTransactionOnMonthChange}
+                              isDayHighlighted={day => {
+                                const formatedDate = moment(day).format('YYYY-MM-DD');
+                                return !!perDayTransaction[formatedDate];
+                              }}
+                              useMobileMargins
+                              enableOutsideDays={false}
+                            />
+                          </div>
+                        )}
                       </div>
                       <div className={css.DateFormWrap}>
                         {/* {isDateLoading ? (
@@ -570,7 +566,6 @@ export const InboxPageComponent = props => {
                             return hasTransactionThatDay ? moment().diff(day, 'day') > 0 : false;
                           }}
                           onChange={value => {
-                            console.log(value.date);
                             handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
                           }}
                           keepOpenCalender={true}
