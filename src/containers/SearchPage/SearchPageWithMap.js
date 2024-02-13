@@ -291,10 +291,14 @@ export class SearchPageComponent extends Component {
       customPrimaryFilters?.filter(({ key }) => key !== 'amenities') || [];
     const hostedAmenities = customPrimaryFilters?.find(({ key }) => key === 'amenities') || [];
 
+    customDataWithoutAmenities[0].filterConfig.label = 'Search themes'; //Client requirement - Adventurely Sprint 3 QA - February 1st
+
     const modifiedAmenities = {
       ...hostedAmenities,
       filterConfig: { ...hostedAmenities.filterConfig, searchMode: 'has_any' },
     };
+
+    modifiedAmenities.filterConfig.label = 'Search amenities'; //Client requirement - Adventurely Sprint 3 QA - February 1st
 
     const modifiedCustomPrimaryFilters = [modifiedAmenities, ...customDataWithoutAmenities];
     const availablePrimaryFilters = [...modifiedCustomPrimaryFilters, ...defaultFilters];
