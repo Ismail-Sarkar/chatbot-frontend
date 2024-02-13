@@ -4,7 +4,7 @@ import { arrayOf, bool, func, node, number, object, string } from 'prop-types';
 import { injectIntl, intlShape } from '../../../util/reactIntl';
 import { parseDateFromISO8601, stringifyDateToISO8601 } from '../../../util/dates';
 
-import { FieldDateRangeController } from '../../../components';
+import { FieldDateInput, FieldDateRangeController } from '../../../components';
 
 import FilterPlain from '../FilterPlain/FilterPlain';
 import FilterPopup from '../FilterPopup/FilterPopup';
@@ -31,6 +31,15 @@ const parseValue = value => {
 const formatValue = (dateRange, queryParamName) => {
   const hasDates = dateRange && dateRange.dates;
   const { startDate, endDate } = hasDates ? dateRange.dates : {};
+  const start = startDate ? stringifyDateToISO8601(startDate) : null;
+  const end = endDate ? stringifyDateToISO8601(endDate) : null;
+  const value = start && end ? `${start},${end}` : null;
+  return { [queryParamName]: value };
+};
+
+const formatdateValue = (date, queryParamName) => {
+  const hasDates = date && date.dates;
+  const { date: startDate, date: endDate } = hasDates ? date.dates : {};
   const start = startDate ? stringifyDateToISO8601(startDate) : null;
   const end = endDate ? stringifyDateToISO8601(endDate) : null;
   const value = start && end ? `${start},${end}` : null;
@@ -120,7 +129,10 @@ export class BookingDateRangeFilterComponent extends Component {
       : null;
 
     const handleSubmit = values => {
-      onSubmit(formatValue(values, datesQueryParamName));
+      // console.log(values, 7575);
+      onSubmit(formatdateValue(values, datesQueryParamName));
+
+      // onSubmit(formatValue(values, datesQueryParamName));
     };
 
     const onClearPopupMaybe =
@@ -154,7 +166,15 @@ export class BookingDateRangeFilterComponent extends Component {
         initialValues={initialDates}
         {...rest}
       >
-        <FieldDateRangeController
+        {/* <FieldDateRangeController
+          name="dates"
+          minimumNights={minimumNights}
+          controllerRef={node => {
+            this.popupControllerRef = node;
+          }}
+        /> */}
+
+        <FieldDateInput
           name="dates"
           minimumNights={minimumNights}
           controllerRef={node => {
