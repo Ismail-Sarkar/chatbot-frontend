@@ -120,7 +120,10 @@ const PageBuilder = props => {
                 {sections.length === 0 && inProgress ? (
                   <LoadingSpinner />
                 ) : (
-                  <SectionBuilder sections={sections} options={options} />
+                  <>
+                    <div></div>
+                    <SectionBuilder sections={sections} options={options} />
+                  </>
                 )}
               </Main>
               <FooterContainer />
