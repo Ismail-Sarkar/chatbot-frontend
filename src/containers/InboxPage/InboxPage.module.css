@@ -224,7 +224,7 @@
   @media(max-width:767px){
     align-items:flex-start;
     flex-direction:column;
-    margin-top: 20px;
+    margin-top: 30px;
   }
 }
 
@@ -663,11 +663,11 @@
                 @media(max-width:1023px){
                   background-image:none !important;
                   background-position:inherit !important;
-                  width: 130px !important;
+                  width: 135px !important;
                   border-bottom-color:inherit !important;
                   border-bottom-width: inherit !important;
                   border-bottom-style: inherit !important;
-                  margin-right:5px !important;
+                  margin-right: 10px !important;
                 }
               }
             }
