@@ -5,6 +5,7 @@ const { captureCustomPaymentIntent, updatePaymentIntent } = require('../api-util
 const {
   searchTransactionsBy,
   updateTransactionConfirmNumber,
+  updateTransactionStatus,
 } = require('../models/transactionModel');
 const integrationSdk = getIntegrationSdk();
 
@@ -74,8 +75,21 @@ const updateTransactionDetails = async (req, res) => {
   }
 };
 
+const updateTransactionCurrentStatus = async (req, res) => {
+  try {
+    const { id, status } = req.body;
+    if (id && status) {
+      await updateTransactionStatus(id, status);
+    }
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
 router.post('/capturePaymentIntent', capturePaymentIntent);
 router.get('/:type', transactionSearch);
 router.post('/update', updateTransactionDetails);
+router.post('/update-status', updateTransactionCurrentStatus);
 
 module.exports = router;
