@@ -82,7 +82,7 @@ export default function inboxPageReducer(state = initialState, action = {}) {
       return {
         ...state,
         perDayTransactionFetchInProgress: false,
-        perDayTransaction: { ...state.perDayTransaction, ...payload },
+        perDayTransaction: { ...payload },
       };
     case FETCH_PER_DAY_ORDERS_OR_SALES_ERROR:
       return {
