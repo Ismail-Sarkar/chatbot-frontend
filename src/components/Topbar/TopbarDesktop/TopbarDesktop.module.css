@@ -90,7 +90,7 @@
   margin: 0;
 
   &:hover {
-    color:#fc334d;
+    color: #fc334d;
     border-bottom: 4px solid #fc334d;
     border-radius: 0;
     text-decoration: none;
@@ -122,6 +122,8 @@
     border-bottom: 4px solid #fc334d;
     border-radius: 0;
     text-decoration: none;
+    /* color: var(--colorBlack);
+    border-bottom: 4px solid var(--marketplaceColor); */
   }
 
   @media (--viewportMedium) {
@@ -157,7 +159,7 @@
   margin: 0;
 
   &:hover {
-    color:#fc334d;
+    color: #fc334d;
     border-bottom: 4px solid #fc334d;
     border-radius: 0;
     text-decoration: none;
@@ -230,7 +232,7 @@
   &:active {
     border-bottom: 0;
   }
-  & > div{
+  & > div {
     background-image: none !important;
     background-color: #fc334d !important;
   }
@@ -255,7 +257,7 @@
 .signupLink {
   border-bottom: 0px solid;
   transition: var(--transitionStyleButton);
-
+  border-left: 1px solid black;
   flex-shrink: 0;
   height: 100%;
   padding: 0 12px 0 12px;
@@ -411,11 +413,12 @@
   &:hover {
     text-decoration: none;
   }
-  & > svg{
-    fill:#fc334d;
+  & > svg {
+    fill: #fc334d;
   }
 }
 .searchTitle {
   padding-left: 10px;
-  color: #aba4a4;
+  color: #000000;
+  font-size: 16px;
 }
