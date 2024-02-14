@@ -48,6 +48,18 @@
         padding:25px 15px 0!important;
         justify-content:flex-start;
       }
+      & > nav{
+        & > div{
+          @media(max-width:1023px){
+            margin-left:0 !important;
+          }
+          & > a{
+            @media(max-width:1023px){
+              padding: 5px 10px 5px 0;
+            }
+          }
+        }
+      }
     }
     & > main{
       width:80%;
