@@ -10,6 +10,9 @@ import SectionBuilder from './SectionBuilder/SectionBuilder.js';
 import StaticPage from './StaticPage.js';
 
 import css from './PageBuilder.module.css';
+import TopbarSearchForm from '../../components/Topbar/TopbarSearchForm/TopbarSearchForm.js';
+import { createResourceLocatorString } from '../../util/routes.js';
+import routeConfiguration from '../../routing/routeConfiguration.js';
 
 const getMetadata = (meta, schemaType, fieldOptions) => {
   const { pageTitle, pageDescription, socialSharing } = meta;
@@ -90,7 +93,7 @@ const PageBuilder = props => {
     options,
     ...pageProps
   } = props;
-
+  console.log(123, props);
   if (!pageAssetsData && fallbackPage && !inProgress && error) {
     return fallbackPage;
   }
@@ -106,6 +109,45 @@ const PageBuilder = props => {
     main
     footer
   `;
+
+  // const handleSubmit = values => {
+  //   const { currentSearchParams } = this.props;
+  //   const { history, config, routeConfiguration } = this.props;
+
+  //   const topbarSearchParams = () => {
+  //     if (isMainSearchTypeKeywords(config)) {
+  //       return { keywords: values?.keywords };
+  //     }
+  //     // topbar search defaults to 'location' search
+  //     const { search, selectedPlace } = values?.location;
+  //     const { origin, bounds } = selectedPlace;
+  //     const originMaybe = isOriginInUse(config) ? { origin } : {};
+
+  //     return {
+  //       ...originMaybe,
+  //       address: search,
+  //       bounds,
+  //     };
+  //   };
+  //   const searchParams = {
+  //     ...currentSearchParams,
+  //     ...topbarSearchParams(),
+  //   };
+  //   history.push(createResourceLocatorString('SearchPage', routeConfiguration, {}, searchParams));
+  // };
+
+  const handleSubmit = values => {
+    setShowSubmitBtn(false);
+    const currentSearchParams = parse(props.location.search);
+    const keywords = values.keywords;
+    const { history } = props;
+    const searchParams = {
+      ...currentSearchParams,
+      pub_keyword: `has_any:${keywords.toLowerCase()}`,
+    };
+    history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, searchParams));
+  };
+
   return (
     <StaticPage {...pageMetaProps} {...pageProps}>
       <LayoutComposer areas={layoutAreas} className={css.layout}>
@@ -120,7 +162,25 @@ const PageBuilder = props => {
                 {sections.length === 0 && inProgress ? (
                   <LoadingSpinner />
                 ) : (
-                  <SectionBuilder sections={sections} options={options} />
+                  <>
+                    <div>
+                      {/* <div>
+                        <span>Book remote work day passes</span>
+                        <span>that blend work & play</span>
+                      </div> */}
+                      <div>
+                        {' '}
+                        {/* <TopbarSearchForm
+                          className={css.searchLink}
+                          desktopInputRoot={css.topbarSearchWithLeftPadding}
+                          onSubmit={handleSubmit}
+                          // initialValues={initialSearchFormValues}
+                          // appConfig={appConfig}
+                        /> */}
+                      </div>
+                    </div>
+                    <SectionBuilder sections={sections} options={options} />
+                  </>
                 )}
               </Main>
               <FooterContainer />
