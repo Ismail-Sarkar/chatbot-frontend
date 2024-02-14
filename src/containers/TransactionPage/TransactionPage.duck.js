@@ -2,15 +2,9 @@ import pick from 'lodash/pick';
 import pickBy from 'lodash/pickBy';
 import isEmpty from 'lodash/isEmpty';
 
-import {
-  types as sdkTypes,
-  createImageVariantConfig,
-} from '../../util/sdkLoader';
+import { types as sdkTypes, createImageVariantConfig } from '../../util/sdkLoader';
 import { findNextBoundary, getStartOf, monthIdString } from '../../util/dates';
-import {
-  isTransactionsTransitionInvalidTransition,
-  storableError,
-} from '../../util/errors';
+import { isTransactionsTransitionInvalidTransition, storableError } from '../../util/errors';
 import { apiBaseUrl, transactionLineItems } from '../../util/api';
 import * as log from '../../util/log';
 import {
@@ -35,33 +29,26 @@ const MESSAGES_PAGE_SIZE = 100;
 const REVIEW_TX_INCLUDES = ['reviews', 'reviews.author', 'reviews.subject'];
 
 const ACCEPT_BOOKING_TRANSITION = 'transition/accept';
+const DECLINE_BOOKING_TRANSITION = 'transition/decline';
 
 // ================ Action types ================ //
 
 export const SET_INITIAL_VALUES = 'app/TransactionPage/SET_INITIAL_VALUES';
 
-export const FETCH_TRANSACTION_REQUEST =
-  'app/TransactionPage/FETCH_TRANSACTION_REQUEST';
-export const FETCH_TRANSACTION_SUCCESS =
-  'app/TransactionPage/FETCH_TRANSACTION_SUCCESS';
-export const FETCH_TRANSACTION_ERROR =
-  'app/TransactionPage/FETCH_TRANSACTION_ERROR';
+export const FETCH_TRANSACTION_REQUEST = 'app/TransactionPage/FETCH_TRANSACTION_REQUEST';
+export const FETCH_TRANSACTION_SUCCESS = 'app/TransactionPage/FETCH_TRANSACTION_SUCCESS';
+export const FETCH_TRANSACTION_ERROR = 'app/TransactionPage/FETCH_TRANSACTION_ERROR';
 
-export const FETCH_TRANSITIONS_REQUEST =
-  'app/TransactionPage/FETCH_TRANSITIONS_REQUEST';
-export const FETCH_TRANSITIONS_SUCCESS =
-  'app/TransactionPage/FETCH_TRANSITIONS_SUCCESS';
-export const FETCH_TRANSITIONS_ERROR =
-  'app/TransactionPage/FETCH_TRANSITIONS_ERROR';
+export const FETCH_TRANSITIONS_REQUEST = 'app/TransactionPage/FETCH_TRANSITIONS_REQUEST';
+export const FETCH_TRANSITIONS_SUCCESS = 'app/TransactionPage/FETCH_TRANSITIONS_SUCCESS';
+export const FETCH_TRANSITIONS_ERROR = 'app/TransactionPage/FETCH_TRANSITIONS_ERROR';
 
 export const TRANSITION_REQUEST = 'app/TransactionPage/MARK_RECEIVED_REQUEST';
 export const TRANSITION_SUCCESS = 'app/TransactionPage/TRANSITION_SUCCESS';
 export const TRANSITION_ERROR = 'app/TransactionPage/TRANSITION_ERROR';
 
-export const FETCH_MESSAGES_REQUEST =
-  'app/TransactionPage/FETCH_MESSAGES_REQUEST';
-export const FETCH_MESSAGES_SUCCESS =
-  'app/TransactionPage/FETCH_MESSAGES_SUCCESS';
+export const FETCH_MESSAGES_REQUEST = 'app/TransactionPage/FETCH_MESSAGES_REQUEST';
+export const FETCH_MESSAGES_SUCCESS = 'app/TransactionPage/FETCH_MESSAGES_SUCCESS';
 export const FETCH_MESSAGES_ERROR = 'app/TransactionPage/FETCH_MESSAGES_ERROR';
 
 export const SEND_MESSAGE_REQUEST = 'app/TransactionPage/SEND_MESSAGE_REQUEST';
@@ -72,33 +59,21 @@ export const SEND_REVIEW_REQUEST = 'app/TransactionPage/SEND_REVIEW_REQUEST';
 export const SEND_REVIEW_SUCCESS = 'app/TransactionPage/SEND_REVIEW_SUCCESS';
 export const SEND_REVIEW_ERROR = 'app/TransactionPage/SEND_REVIEW_ERROR';
 
-export const FETCH_TIME_SLOTS_REQUEST =
-  'app/TransactionPage/FETCH_TIME_SLOTS_REQUEST';
-export const FETCH_TIME_SLOTS_SUCCESS =
-  'app/TransactionPage/FETCH_TIME_SLOTS_SUCCESS';
-export const FETCH_TIME_SLOTS_ERROR =
-  'app/TransactionPage/FETCH_TIME_SLOTS_ERROR';
+export const FETCH_TIME_SLOTS_REQUEST = 'app/TransactionPage/FETCH_TIME_SLOTS_REQUEST';
+export const FETCH_TIME_SLOTS_SUCCESS = 'app/TransactionPage/FETCH_TIME_SLOTS_SUCCESS';
+export const FETCH_TIME_SLOTS_ERROR = 'app/TransactionPage/FETCH_TIME_SLOTS_ERROR';
 
-export const FETCH_LINE_ITEMS_REQUEST =
-  'app/TransactionPage/FETCH_LINE_ITEMS_REQUEST';
-export const FETCH_LINE_ITEMS_SUCCESS =
-  'app/TransactionPage/FETCH_LINE_ITEMS_SUCCESS';
-export const FETCH_LINE_ITEMS_ERROR =
-  'app/TransactionPage/FETCH_LINE_ITEMS_ERROR';
+export const FETCH_LINE_ITEMS_REQUEST = 'app/TransactionPage/FETCH_LINE_ITEMS_REQUEST';
+export const FETCH_LINE_ITEMS_SUCCESS = 'app/TransactionPage/FETCH_LINE_ITEMS_SUCCESS';
+export const FETCH_LINE_ITEMS_ERROR = 'app/TransactionPage/FETCH_LINE_ITEMS_ERROR';
 
-export const PROVIDER_CANCEL_REQUEST =
-  'app/TransactionPage/PROVIDER_CANCEL_REQUEST';
-export const PROVIDER_CANCEL_SUCCESS =
-  'app/TransactionPage/PROVIDER_CANCEL_SUCCESS';
-export const PROVIDER_CANCEL_ERROR =
-  'app/TransactionPage/PROVIDER_CANCEL_ERROR';
+export const PROVIDER_CANCEL_REQUEST = 'app/TransactionPage/PROVIDER_CANCEL_REQUEST';
+export const PROVIDER_CANCEL_SUCCESS = 'app/TransactionPage/PROVIDER_CANCEL_SUCCESS';
+export const PROVIDER_CANCEL_ERROR = 'app/TransactionPage/PROVIDER_CANCEL_ERROR';
 
-export const CUSTOMER_CANCEL_REQUEST =
-  'app/TransactionPage/CUSTOMER_CANCEL_REQUEST';
-export const CUSTOMER_CANCEL_SUCCESS =
-  'app/TransactionPage/CUSTOMER_CANCEL_SUCCESS';
-export const CUSTOMER_CANCEL_ERROR =
-  'app/TransactionPage/CUSTOMER_CANCEL_ERROR';
+export const CUSTOMER_CANCEL_REQUEST = 'app/TransactionPage/CUSTOMER_CANCEL_REQUEST';
+export const CUSTOMER_CANCEL_SUCCESS = 'app/TransactionPage/CUSTOMER_CANCEL_SUCCESS';
+export const CUSTOMER_CANCEL_ERROR = 'app/TransactionPage/CUSTOMER_CANCEL_ERROR';
 
 // ================ Reducer ================ //
 
@@ -143,15 +118,10 @@ const initialState = {
 // mergeEntityArrays(a, b)
 // => [{ id: { uuid: 3 } }, { id: : { uuid: 2 } }, { id: : { uuid: 1 } }]
 const mergeEntityArrays = (a, b) => {
-  return a
-    .filter(aEntity => !b.find(bEntity => aEntity.id.uuid === bEntity.id.uuid))
-    .concat(b);
+  return a.filter(aEntity => !b.find(bEntity => aEntity.id.uuid === bEntity.id.uuid)).concat(b);
 };
 
-export default function transactionPageReducer(
-  state = initialState,
-  action = {}
-) {
+export default function transactionPageReducer(state = initialState, action = {}) {
   const { type, payload } = action;
   switch (type) {
     case SET_INITIAL_VALUES:
@@ -463,11 +433,7 @@ const timeSlotsRequest = params => (dispatch, getState, sdk) => {
   });
 };
 
-export const fetchTimeSlots = (listingId, start, end, timeZone) => (
-  dispatch,
-  getState,
-  sdk
-) => {
+export const fetchTimeSlots = (listingId, start, end, timeZone) => (dispatch, getState, sdk) => {
   const monthId = monthIdString(start, timeZone);
 
   dispatch(fetchTimeSlotsRequest(monthId));
@@ -493,9 +459,7 @@ const fetchMonthlyTimeSlots = (dispatch, listing) => {
   const attributes = listing.attributes;
   // Listing could be ownListing entity too, so we just check if attributes key exists
   const hasTimeZone =
-    attributes &&
-    attributes.availabilityPlan &&
-    attributes.availabilityPlan.timezone;
+    attributes && attributes.availabilityPlan && attributes.availabilityPlan.timezone;
 
   // Fetch time-zones on client side only.
   if (hasWindow && listing.id && hasTimeZone) {
@@ -517,11 +481,7 @@ const fetchMonthlyTimeSlots = (dispatch, listing) => {
 
 // Helper to fetch correct image variants for different thunk calls
 const getImageVariants = listingImageConfig => {
-  const {
-    aspectWidth = 1,
-    aspectHeight = 1,
-    variantPrefix = 'listing-card',
-  } = listingImageConfig;
+  const { aspectWidth = 1, aspectHeight = 1, variantPrefix = 'listing-card' } = listingImageConfig;
   const aspectRatio = aspectHeight / aspectWidth;
   return {
     'fields.image': [
@@ -542,11 +502,7 @@ const listingRelationship = txResponse => {
   return txResponse.data.data.relationships.listing.data;
 };
 
-export const fetchTransaction = (id, txRole, config) => (
-  dispatch,
-  getState,
-  sdk
-) => {
+export const fetchTransaction = (id, txRole, config) => (dispatch, getState, sdk) => {
   dispatch(fetchTransactionRequest());
   let txResponse = null;
 
@@ -576,19 +532,13 @@ export const fetchTransaction = (id, txRole, config) => (
       const entities = updatedEntities({}, response.data);
       const listingRef = { id: listingId, type: 'listing' };
       const transactionRef = { id, type: 'transaction' };
-      const denormalised = denormalisedEntities(entities, [
-        listingRef,
-        transactionRef,
-      ]);
+      const denormalised = denormalisedEntities(entities, [listingRef, transactionRef]);
       const listing = denormalised[0];
       const transaction = denormalised[1];
-      const processName = resolveLatestProcessName(
-        transaction.attributes.processName
-      );
+      const processName = resolveLatestProcessName(transaction.attributes.processName);
       try {
         const process = getProcess(processName);
-        const isInquiry =
-          process.getState(transaction) === process.states.INQUIRY;
+        const isInquiry = process.getState(transaction) === process.states.INQUIRY;
 
         // Fetch time slots for transactions that are in inquired state
         const canFetchTimeslots =
@@ -601,8 +551,7 @@ export const fetchTransaction = (id, txRole, config) => (
         console.log(`transaction process (${processName}) was not recognized`);
       }
 
-      const canFetchListing =
-        listing && listing.attributes && !listing.attributes.deleted;
+      const canFetchListing = listing && listing.attributes && !listing.attributes.deleted;
       if (canFetchListing) {
         return sdk.listings.show({
           id: listingId,
@@ -628,11 +577,7 @@ export const fetchTransaction = (id, txRole, config) => (
     });
 };
 
-export const makeTransition = (txId, transitionName, params) => async (
-  dispatch,
-  getState,
-  sdk
-) => {
+export const makeTransition = (txId, transitionName, params) => async (dispatch, getState, sdk) => {
   if (transitionInProgress(getState())) {
     return Promise.reject(new Error('Transition already in progress'));
   }
@@ -643,39 +588,41 @@ export const makeTransition = (txId, transitionName, params) => async (
   if (transitionName === ACCEPT_BOOKING_TRANSITION) {
     try {
       const [paymentResponse, uniqueIdResponse] = await Promise.all([
-        await axios.post(
-          `${apiBaseUrl()}/api/transaction/capturePaymentIntent`,
-          {
-            txId: txId.uuid,
-          }
-        ),
-        await axios.get(`${apiBaseUrl()}/api/uniqueId`),
+        axios.post(`${apiBaseUrl()}/api/transaction/capturePaymentIntent`, {
+          txId: txId.uuid,
+        }),
+        axios.get(`${apiBaseUrl()}/api/uniqueId`),
       ]);
 
       const { data, status: uniqueIdStatus } = uniqueIdResponse || {};
       const { nanoId: confirmationId } = data || {};
       confirmationNumber = confirmationId;
+
+      const url = `${apiBaseUrl()}/api/transaction/update`;
+      await axios.post(url, {
+        id: txId.uuid,
+        confirmNumber: confirmationNumber,
+      });
       finalParams = { ...params, protectedData: { confirmationNumber } };
     } catch (e) {
       console.error('error occurred during capture payment...', e);
     }
   }
 
+  if (transitionName === DECLINE_BOOKING_TRANSITION) {
+    const url = `${apiBaseUrl()}/api/transaction/update-status`;
+    await axios.post(url, {
+      id: txId.uuid,
+      status: 'declined',
+    });
+  }
+
+  // return;
+
   return sdk.transactions
-    .transition(
-      { id: txId, transition: transitionName, params: finalParams },
-      { expand: true }
-    )
+    .transition({ id: txId, transition: transitionName, params: finalParams }, { expand: true })
     .then(response => {
-      txResponse = response;
-      const url = `${apiBaseUrl()}/api/transaction/update`;
-      return axios.post(url, {
-        id: txId.uuid,
-        confirmNumber: confirmationNumber,
-      });
-    })
-    .then(() => {
-      dispatch(addMarketplaceEntities(txResponse));
+      dispatch(addMarketplaceEntities(response));
       dispatch(transitionSuccess());
       dispatch(fetchCurrentUserNotifications());
 
@@ -689,7 +636,7 @@ export const makeTransition = (txId, transitionName, params) => async (
         });
       }, 3000);
 
-      return txResponse;
+      return response;
     })
     .catch(e => {
       dispatch(transitionError(storableError(e)));
@@ -701,11 +648,8 @@ export const makeTransition = (txId, transitionName, params) => async (
     });
 };
 
-export const cancelBookingCustomer = (id, customTransfer) => (
-  dispatch,
-  getState,
-  sdk
-) => {
+export const cancelBookingCustomer = (id, customTransfer) => (dispatch, getState, sdk) => {
+  let txResponse;
   if (cancelInProgress(getState())) {
     return Promise.reject(new Error('Start or Cancel already in progress'));
   }
@@ -721,10 +665,18 @@ export const cancelBookingCustomer = (id, customTransfer) => (
       { expand: true }
     )
     .then(response => {
-      dispatch(addMarketplaceEntities(response));
+      txResponse = response;
+      const url = `${apiBaseUrl()}/api/transaction/update-status`;
+      return axios.post(url, {
+        id: id.uuid,
+        status: 'canceled',
+      });
+    })
+    .then(() => {
+      dispatch(addMarketplaceEntities(txResponse));
       dispatch(customerCancelSuccess());
       dispatch(fetchCurrentUserNotifications());
-      return response;
+      return txResponse;
     })
     .catch(e => {
       dispatch(customerCancelError(storableError(e)));
@@ -736,15 +688,12 @@ export const cancelBookingCustomer = (id, customTransfer) => (
     });
 };
 
-export const cancelBookingProvider = (id, customTransfer) => (
-  dispatch,
-  getState,
-  sdk
-) => {
+export const cancelBookingProvider = (id, customTransfer) => (dispatch, getState, sdk) => {
   if (cancelInProgress(getState())) {
     return Promise.reject(new Error('Start or Cancel already in progress'));
   }
   dispatch(providerCancelRequest());
+  let txResponse;
 
   return sdk.transactions
     .transition(
@@ -756,10 +705,18 @@ export const cancelBookingProvider = (id, customTransfer) => (
       { expand: true }
     )
     .then(response => {
-      dispatch(addMarketplaceEntities(response));
+      txResponse = response;
+      const url = `${apiBaseUrl()}/api/transaction/update-status`;
+      return axios.post(url, {
+        id: id.uuid,
+        status: 'canceled',
+      });
+    })
+    .then(() => {
+      dispatch(addMarketplaceEntities(txResponse));
       dispatch(providerCancelSuccess());
       dispatch(fetchCurrentUserNotifications());
-      return response;
+      return txResponse;
     })
     .catch(e => {
       dispatch(providerCancelError(storableError(e)));
@@ -812,28 +769,18 @@ const fetchMessages = (txId, page, config) => (dispatch, getState, sdk) => {
     });
 };
 
-export const fetchMoreMessages = (txId, config) => (
-  dispatch,
-  getState,
-  sdk
-) => {
+export const fetchMoreMessages = (txId, config) => (dispatch, getState, sdk) => {
   const state = getState();
   const { oldestMessagePageFetched, totalMessagePages } = state.TransactionPage;
   const hasMoreOldMessages = totalMessagePages > oldestMessagePageFetched;
 
   // In case there're no more old pages left we default to fetching the current cursor position
-  const nextPage = hasMoreOldMessages
-    ? oldestMessagePageFetched + 1
-    : oldestMessagePageFetched;
+  const nextPage = hasMoreOldMessages ? oldestMessagePageFetched + 1 : oldestMessagePageFetched;
 
   return dispatch(fetchMessages(txId, nextPage, config));
 };
 
-export const sendMessage = (txId, message, config) => (
-  dispatch,
-  getState,
-  sdk
-) => {
+export const sendMessage = (txId, message, config) => (dispatch, getState, sdk) => {
   dispatch(sendMessageRequest());
 
   return sdk.messages
@@ -862,14 +809,7 @@ export const sendMessage = (txId, message, config) => (
 
 // If other party has already sent a review, we need to make transition to
 // transitions.REVIEW_2_BY_<CUSTOMER/PROVIDER>
-const sendReviewAsSecond = (
-  txId,
-  transition,
-  params,
-  dispatch,
-  sdk,
-  config
-) => {
+const sendReviewAsSecond = (txId, transition, params, dispatch, sdk, config) => {
   const include = REVIEW_TX_INCLUDES;
 
   return sdk.transactions
@@ -928,11 +868,7 @@ export const sendReview = (tx, transitionOptionsInfo, params, config) => (
   getState,
   sdk
 ) => {
-  const {
-    reviewAsFirst,
-    reviewAsSecond,
-    hasOtherPartyReviewedFirst,
-  } = transitionOptionsInfo;
+  const { reviewAsFirst, reviewAsSecond, hasOtherPartyReviewedFirst } = transitionOptionsInfo;
   dispatch(sendReviewRequest());
 
   return hasOtherPartyReviewedFirst
@@ -941,9 +877,7 @@ export const sendReview = (tx, transitionOptionsInfo, params, config) => (
 };
 
 const isNonEmpty = value => {
-  return typeof value === 'object' || Array.isArray(value)
-    ? !isEmpty(value)
-    : !!value;
+  return typeof value === 'object' || Array.isArray(value) ? !isEmpty(value) : !!value;
 };
 
 export const fetchNextTransitions = id => (dispatch, getState, sdk) => {
@@ -959,11 +893,7 @@ export const fetchNextTransitions = id => (dispatch, getState, sdk) => {
     });
 };
 
-export const fetchTransactionLineItems = ({
-  orderData,
-  listingId,
-  isOwnListing,
-}) => dispatch => {
+export const fetchTransactionLineItems = ({ orderData, listingId, isOwnListing }) => dispatch => {
   dispatch(fetchLineItemsRequest());
   transactionLineItems({ orderData, listingId, isOwnListing })
     .then(response => {
