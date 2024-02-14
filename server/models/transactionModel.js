@@ -62,6 +62,27 @@ module.exports.updateTransactionStatus = async (id, status) => {
   return data;
 };
 
+module.exports.bulkUpdateTransactionStatus = async (transactionIds, status) => {
+  const filter = {
+    transactionId: { $in: transactionIds },
+    status: { $ne: status },
+  };
+
+  const update = {
+    $set: { status },
+  };
+
+  const options = { multi: true };
+
+  Transaction.updateMany(filter, update, options, function(err, result) {
+    if (err) {
+      throw err;
+    } else {
+      return result;
+    }
+  });
+};
+
 module.exports.searchTransactionsBy = async (
   userNameAndConfirmNumber,
   bookingStart,

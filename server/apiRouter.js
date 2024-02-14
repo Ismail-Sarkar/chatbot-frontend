@@ -34,6 +34,7 @@ const { getUniqueId } = require('./controllers/nanoIdController');
 const { fecthCurrency } = require('./cron-jobs/currencyUpdater');
 const { cronScheduler, cronTimers } = require('./api-util/cronSchedular');
 const { userupdationScript } = require('./api/userupdationScript');
+const { listeners } = require('./eventListeners');
 
 const router = express.Router();
 
@@ -52,6 +53,13 @@ require('./mongo-config');
 
 //============cron tab scheduler =================//
 cronScheduler(cronTimers.everyMidnight, fetchCur);
+
+cronScheduler(cronTimers.everyMinute, () => {
+  console.log('calling listener');
+  listeners.forEach(listener => {
+    if (typeof listener === 'function') listener();
+  });
+});
 // fetchCur();
 
 // ================ API router middleware: ================ //
