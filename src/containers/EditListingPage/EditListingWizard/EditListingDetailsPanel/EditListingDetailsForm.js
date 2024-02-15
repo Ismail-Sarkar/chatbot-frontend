@@ -18,6 +18,8 @@ import {
   FieldTextInput,
   Heading,
   ListingLink,
+  FieldRadioButton,
+  ExternalLink,
 } from '../../../../components';
 // Import modules from this directory
 import CustomExtendedDataField from '../CustomExtendedDataField';
@@ -201,6 +203,33 @@ const EditListingDetailsFormComponent = props => (
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           <ErrorMessage fetchErrors={fetchErrors} />
+          <div className={css.optionContainer}>
+            <div className={css.labelContainer}>
+              Select your preferred booking setting for this listing* (
+              <ExternalLink href="https://google.com" className={css.exampleTips}>
+                read more about booking settings here
+              </ExternalLink>
+              )
+            </div>
+            <FieldRadioButton
+              id={`automatic`}
+              name="acceptType"
+              label="Automatically accept booking requests for this listing"
+              value="automatic"
+              showAsRequired={true}
+            />
+            <FieldRadioButton
+              id={`manual`}
+              name="acceptType"
+              label="Manually approve each booking request for this listing"
+              value="manual"
+              showAsRequired={true}
+            />
+            <div className={css.note}>
+              (note: you will be able to make a custom default booking schedule for open
+              reservations later in this form).
+            </div>
+          </div>
 
           <FieldTextInput
             id={`${formId}title`}

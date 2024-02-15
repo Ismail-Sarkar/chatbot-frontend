@@ -29,6 +29,8 @@ export const transitions = {
   // to tell that the payment is confirmed.
   CONFIRM_PAYMENT: 'transition/confirm-payment',
 
+  CONFIRM_PAYMENT_FOR_AUTOMATIC_ACCEPT: 'transition/confirm-payment-for-automatic-accept',
+
   // If the payment is not confirmed in the time limit set in transaction process (by default 15min)
   // the transaction will expire automatically.
   EXPIRE_PAYMENT: 'transition/expire-payment',
@@ -128,6 +130,7 @@ export const graph = {
       on: {
         [transitions.EXPIRE_PAYMENT]: states.PAYMENT_EXPIRED,
         [transitions.CONFIRM_PAYMENT]: states.PREAUTHORIZED,
+        [transitions.CONFIRM_PAYMENT_FOR_AUTOMATIC_ACCEPT]: states.ACCEPTED,
       },
     },
 
@@ -192,6 +195,7 @@ export const isRelevantPastTransition = transition => {
     transitions.COMPLETE,
     transitions.OPERATOR_COMPLETE,
     transitions.CONFIRM_PAYMENT,
+    transitions.CONFIRM_PAYMENT_FOR_AUTOMATIC_ACCEPT,
     transitions.DECLINE,
     transitions.OPERATOR_DECLINE,
     transitions.EXPIRE,

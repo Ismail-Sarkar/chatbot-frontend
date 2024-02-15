@@ -82,3 +82,13 @@
 .exampleTips {
   text-decoration: underline !important;
 }
+
+.labelContainer {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.note {
+  margin: 20px 0;
+}

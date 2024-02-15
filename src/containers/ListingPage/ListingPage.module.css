@@ -255,7 +255,7 @@
     max-width: unset;
     /* width: min(calc(var(--contentMaxWidth) + 72px), 100vw); */
     width:100%;
-    padding: 64px 217px 0 217px; 
+    padding: 35px 70px 0 217px;
     /* padding: 217px from both sides for logo */
     margin: 0 auto 117px auto;
   }

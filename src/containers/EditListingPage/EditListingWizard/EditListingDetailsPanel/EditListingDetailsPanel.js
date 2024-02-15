@@ -218,6 +218,8 @@ const EditListingDetailsPanel = props => {
   const listingTypes = config.listing.listingTypes;
   const listingFieldsConfig = config.listing.listingFields;
 
+  const { acceptType = 'manual' } = publicData || {};
+
   const { hasExistingListingType, existingListingType } = hasSetListingType(publicData);
   const hasValidExistingListingType =
     hasExistingListingType &&
@@ -259,7 +261,7 @@ const EditListingDetailsPanel = props => {
       {canShowEditListingDetailsForm ? (
         <EditListingDetailsForm
           className={css.form}
-          initialValues={initialValues}
+          initialValues={{ ...initialValues, acceptType }}
           saveActionMsg={submitButtonText}
           onSubmit={values => {
             const {
@@ -268,6 +270,7 @@ const EditListingDetailsPanel = props => {
               listingType,
               transactionProcessAlias,
               unitType,
+              acceptType,
               ...rest
             } = values;
 
@@ -279,6 +282,7 @@ const EditListingDetailsPanel = props => {
                 listingType,
                 transactionProcessAlias,
                 unitType,
+                acceptType,
                 ...pickListingFieldsData(rest, 'public', listingType, listingFieldsConfig),
               },
               privateData: pickListingFieldsData(rest, 'private', listingType, listingFieldsConfig),
