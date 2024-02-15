@@ -59,6 +59,19 @@ export class BookingDateRangeFilterComponent extends Component {
     this.toggleIsOpen = this.toggleIsOpen.bind(this);
   }
 
+  componentDidMount() {
+    const { initialValues, queryParamNames } = this.props;
+    const datesQueryParamName = getDatesQueryParamName(queryParamNames);
+    const initialDates =
+      initialValues && initialValues[datesQueryParamName]
+        ? parseValue(initialValues[datesQueryParamName])
+        : { dates: null };
+    console.log(initialDates.dates.startDate, 8384);
+    this.setState({
+      selectedDate: moment(initialDates.dates.startDate).format('YYYY-MM-DD'),
+    });
+  }
+
   toggleIsOpen() {
     this.setState(prevState => ({ isOpen: !prevState.isOpen }));
   }
@@ -80,11 +93,14 @@ export class BookingDateRangeFilterComponent extends Component {
       ...rest
     } = this.props;
 
+    console.log(this.state.selectedDate, 8384);
+
     const datesQueryParamName = getDatesQueryParamName(queryParamNames);
     const initialDates =
       initialValues && initialValues[datesQueryParamName]
         ? parseValue(initialValues[datesQueryParamName])
         : { dates: null };
+    // console.log(initialDates, 8384);
 
     const isSelected = !!initialDates.dates;
     const startDate = isSelected ? initialDates.dates.startDate : null;
@@ -130,8 +146,9 @@ export class BookingDateRangeFilterComponent extends Component {
       : null;
 
     const handleSubmit = values => {
-      console.log(values, moment(this.state.selectedDate), 7575);
-      onSubmit(formatdateValue(this.state.selectedDate, datesQueryParamName));
+      onSubmit(
+        formatdateValue({ dates: { date: new Date(this.state.selectedDate) } }, datesQueryParamName)
+      );
 
       // onSubmit(formatValue(values, datesQueryParamName));
     };
