@@ -89,7 +89,7 @@
           & > div{
             & > div{
               & > div{
-                /* height:100% !important; */
+                height:100% !important;
                 & > img{
                   height:auto !important;
                   object-fit: contain !important;
