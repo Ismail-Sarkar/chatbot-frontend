@@ -290,8 +290,13 @@ export const processCheckoutWithPayment = (orderParams, extraPaymentParams) => {
     // Remember the created PaymentIntent for step 5
     createdPaymentIntent = fnParams.paymentIntent;
     const transactionId = fnParams.transactionId;
-    const transitionName = process.transitions.CONFIRM_PAYMENT;
+    const acceptType = pageData?.listing?.attributes?.publicData?.acceptType || 'manual';
+    const transitionName =
+      acceptType === 'automatic'
+        ? process.transitions.CONFIRM_PAYMENT_FOR_AUTOMATIC_ACCEPT
+        : process.transitions.CONFIRM_PAYMENT;
     const isTransitionedAlready = storedTx?.attributes?.lastTransition === transitionName;
+    console.log(storedTx, fnParams, pageData.listing);
     const orderPromise = isTransitionedAlready
       ? Promise.resolve(storedTx)
       : onConfirmPayment(transactionId, transitionName, {}, currency);
