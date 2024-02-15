@@ -247,14 +247,16 @@
   flex-direction: row;
   flex-wrap: wrap;
   @media(min-width:1920px){
-    max-width: 1120px !important;
+    max-width: 1440px !important;
     margin: 0 auto !important;
   }
 
   @media (--viewportLarge) {
     max-width: unset;
-    width: min(calc(var(--contentMaxWidth) + 72px), 100vw);
-    padding: 64px 36px 0 36px;
+    /* width: min(calc(var(--contentMaxWidth) + 72px), 100vw); */
+    width:100%;
+    padding: 64px 217px 0 217px; 
+    /* padding: 217px from both sides for logo */
     margin: 0 auto 117px auto;
   }
   @media (max-width: 1199px) {
