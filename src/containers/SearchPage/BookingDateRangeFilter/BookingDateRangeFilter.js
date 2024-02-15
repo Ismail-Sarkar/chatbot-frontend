@@ -11,6 +11,7 @@ import FilterPopup from '../FilterPopup/FilterPopup';
 
 import FilterPopupForSidebar from './FilterPopupForSidebar';
 import css from './BookingDateRangeFilter.module.css';
+import moment from 'moment';
 
 const getDatesQueryParamName = queryParamNames => {
   return Array.isArray(queryParamNames)
@@ -50,7 +51,7 @@ export class BookingDateRangeFilterComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { isOpen: true };
+    this.state = { isOpen: true, selectedDate: null };
 
     this.popupControllerRef = null;
     this.plainControllerRef = null;
@@ -129,8 +130,8 @@ export class BookingDateRangeFilterComponent extends Component {
       : null;
 
     const handleSubmit = values => {
-      // console.log(values, 7575);
-      onSubmit(formatdateValue(values, datesQueryParamName));
+      console.log(values, moment(this.state.selectedDate), 7575);
+      onSubmit(formatdateValue(this.state.selectedDate, datesQueryParamName));
 
       // onSubmit(formatValue(values, datesQueryParamName));
     };
@@ -174,13 +175,38 @@ export class BookingDateRangeFilterComponent extends Component {
           }}
         /> */}
 
-        <FieldDateInput
-          name="dates"
-          minimumNights={minimumNights}
-          controllerRef={node => {
-            this.popupControllerRef = node;
-          }}
-        />
+        <div className={css.calenderDateContainer}>
+          <FieldDateInput
+            dateClassName={css.inboxPageCalender}
+            name="dates"
+            placeholderText={`Date`}
+            minimumNights={minimumNights}
+            controllerRef={node => {
+              this.popupControllerRef = node;
+            }}
+            keepOpenCalender={true}
+            keepOpenOnDateSelect={true}
+            firstDayOfWeek={0}
+            weekDayFormat="ddd"
+            isDayHighlighted={day => {
+              const formatedDate = moment(day).format('YYYY-MM-DD');
+              console.log(
+                formatedDate,
+                this.state.selectedDate,
+                moment(day).isSame(this.state.selectedDate),
+                9888
+              );
+              // return true;
+              return moment(day).isSame(this.state.selectedDate);
+            }}
+            onChange={value => {
+              console.log(value, 98889);
+              this.setState({
+                selectedDate: moment(value.date).format('YYYY-MM-DD'),
+              });
+            }}
+          />
+        </div>
       </FilterPopup>
     ) : isDesktop ? (
       <FilterPopupForSidebar

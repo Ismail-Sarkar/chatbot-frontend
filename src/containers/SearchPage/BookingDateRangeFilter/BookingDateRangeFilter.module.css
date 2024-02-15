@@ -78,3 +78,174 @@
 .isOpen {
   display: block;
 }
+
+.calenderDateContainer {
+  height: 315px;
+  width: 310px;
+
+  & > div {
+    & > div {
+      & > div {
+        & > div {
+          & > div {
+            background-color: #fc334d;
+            & > div:first-child {
+              display: none;
+            }
+            & > div:last-child {
+              margin-top: -40px !important;
+              box-shadow: none !important;
+              & > div {
+                background: transparent;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.inboxPageCalender {
+  /* margin-top: -16px; */
+
+  & :global(.DayPicker) {
+    /* margin: 0px !important; */
+  }
+
+  & :global(.SingleDatePicker_picker) {
+    width: 314px !important;
+    /* top: 80px !important; */
+    @media (max-width: 1023px) {
+      /* top: 130px !important; */
+    }
+    /* @media(max-width:991px){
+      top: 30px !important;
+    } */
+    @media (max-width: 767px) {
+      /* top: 114px !important; */
+    }
+  }
+
+  & :global(.CalendarDay) {
+    /* color: var(--color-black) !important; */
+    & :hover,
+    & :focus {
+      /* color: var(--color-black) !important; */
+    }
+  }
+  & :global(.CalendarDay_default) {
+    border-width: 0px !important;
+    & :hover,
+    & :focus {
+      border-width: 0px !important;
+    }
+  }
+  & :global(.SingleDatePicker_picker),
+  & :global(.SingleDatePicker_picker__directionLeft),
+  & :global(.DayPicker__horizontal) {
+    /* background-color: var(--color-white) !important; */
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    @media (max-width: 1023px) {
+      /* position: static !important; */
+    }
+  }
+
+  & :global(.SingleDatePicker_picker__directionLeft) {
+    /* border: 1px solid #e5e5e6; */
+  }
+
+  & :global(.CalendarMonth_caption) {
+    /* color: var(--color-black); */
+    font-weight: 200 !important;
+  }
+  & :global(.CalendarMonthGrid) {
+    @media (max-width: 1023px) {
+      width: 100% !important;
+      height: inherit !important;
+    }
+  }
+  & :global(.DayPickerNavigation_button) {
+    /* color: var(--color-black) !important; */
+
+    & svg {
+      /* stroke: var(--color-black); */
+      /* fill: var(--color-black); */
+    }
+  }
+
+  & :global(.DayPicker_weekHeader) {
+    /* color: var(--color-black) !important; */
+    top: 54px !important;
+    /* border-bottom: 1px solid #000; */
+  }
+
+  & :global(.DayPicker_weekHeader_ul) {
+    border-bottom: 1px solid #fff;
+    /* border-bottom: 1px solid var(--color-black); */
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+  }
+
+  & :global(.CalendarDay) {
+    /* color: var(--color-black) !important; */
+    cursor: pointer !important;
+  }
+  & :global(.CalendarDay__firstDayOfWeek),
+  & :global(.CalendarDay__lastDayOfWeek) {
+    /* color: var(--color-blue) !important; */
+  }
+
+  & :global(.CalendarDay__outside) {
+    /* color: var(--colorGrey300) !important; */
+  }
+
+  & :global(.DateInput) {
+    display: none;
+  }
+
+  & :global(.CalendarDay__highlighted_calendar) {
+    background-color: var(--colorSuccess) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+
+    & :hover,
+    & :focus {
+      background-color: var(--colorSuccess) !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+    }
+  }
+
+  & :global(.CalendarDay__blocked_calendar) {
+    background-color: var(--color-blocked) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+
+    & :hover,
+    & :focus {
+      background-color: var(--color-blocked) !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+    }
+  }
+  & :global(.CalendarDay__selected) {
+    background-color: #000 !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    & :global(.renderedDay) {
+      background-color: #000 !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+    }
+  }
+
+  & :global(.CalendarDay__default) {
+    border: none !important;
+    /* border-spacing:30px 0 !important; */
+  }
+  & :global(.CalendarMonth_table) {
+    margin-top: 10px;
+  }
+}
