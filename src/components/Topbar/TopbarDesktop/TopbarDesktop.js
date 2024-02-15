@@ -157,7 +157,7 @@ const TopbarDesktop = props => {
         search
       ) : (
         <NamedLink className={classNames(css.searchLink, css.searchWithIcon)} name="SearchPage">
-          {/* <LiaSearchSolid size={25} /> */}
+          <LiaSearchSolid size={25} />
           <div className={css.searchTitle}> Search Passes</div>
         </NamedLink>
       )}

@@ -18,13 +18,14 @@ const PageBuilder = loadable(() =>
 
 export const LandingPageComponent = props => {
   const { pageAssetsData, inProgress, error, history } = props;
-  console.log(1211, props, history);
+  // console.log(1211, props, history);
   return (
     <PageBuilder
       pageAssetsData={pageAssetsData?.[camelize(ASSET_NAME)]?.data}
       inProgress={inProgress}
       error={error}
       fallbackPage={<FallbackPage error={error} />}
+      history={history}
     />
   );
 };

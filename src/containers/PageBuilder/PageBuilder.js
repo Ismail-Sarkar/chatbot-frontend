@@ -10,10 +10,11 @@ import SectionBuilder from './SectionBuilder/SectionBuilder.js';
 import StaticPage from './StaticPage.js';
 
 import css from './PageBuilder.module.css';
-import TopbarSearchForm from '../../components/Topbar/TopbarSearchForm/TopbarSearchForm.js';
 import { createResourceLocatorString } from '../../util/routes.js';
 import routeConfiguration from '../../routing/routeConfiguration.js';
-
+// import { ReactComponent as SearchLogo } from '../../assets/search.png';
+import { RiSearch2Line } from 'react-icons/ri';
+import { useRouteConfiguration } from '../../context/routeConfigurationContext.js';
 const getMetadata = (meta, schemaType, fieldOptions) => {
   const { pageTitle, pageDescription, socialSharing } = meta;
 
@@ -91,9 +92,11 @@ const PageBuilder = props => {
     fallbackPage,
     schemaType,
     options,
+    history,
+
     ...pageProps
   } = props;
-  console.log(123, props);
+  // console.log(123, props);
   if (!pageAssetsData && fallbackPage && !inProgress && error) {
     return fallbackPage;
   }
@@ -109,45 +112,12 @@ const PageBuilder = props => {
     main
     footer
   `;
+  const routeConfiguration = useRouteConfiguration();
 
-  // const handleSubmit = values => {
-  //   const { currentSearchParams } = this.props;
-  //   const { history, config, routeConfiguration } = this.props;
-
-  //   const topbarSearchParams = () => {
-  //     if (isMainSearchTypeKeywords(config)) {
-  //       return { keywords: values?.keywords };
-  //     }
-  //     // topbar search defaults to 'location' search
-  //     const { search, selectedPlace } = values?.location;
-  //     const { origin, bounds } = selectedPlace;
-  //     const originMaybe = isOriginInUse(config) ? { origin } : {};
-
-  //     return {
-  //       ...originMaybe,
-  //       address: search,
-  //       bounds,
-  //     };
-  //   };
-  //   const searchParams = {
-  //     ...currentSearchParams,
-  //     ...topbarSearchParams(),
-  //   };
-  //   history.push(createResourceLocatorString('SearchPage', routeConfiguration, {}, searchParams));
-  // };
-
-  const handleSubmit = values => {
-    setShowSubmitBtn(false);
-    const currentSearchParams = parse(props.location.search);
-    const keywords = values.keywords;
-    const { history } = props;
-    const searchParams = {
-      ...currentSearchParams,
-      pub_keyword: `has_any:${keywords.toLowerCase()}`,
-    };
-    history.push(createResourceLocatorString('SearchPage', routeConfiguration(), {}, searchParams));
+  const goToSearch = () => {
+    // console.log(1);
+    history.push(createResourceLocatorString('SearchPage', routeConfiguration, {}, {}));
   };
-
   return (
     <StaticPage {...pageMetaProps} {...pageProps}>
       <LayoutComposer areas={layoutAreas} className={css.layout}>
@@ -163,20 +133,27 @@ const PageBuilder = props => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    <div>
-                      {/* <div>
-                        <span>Book remote work day passes</span>
-                        <span>that blend work & play</span>
-                      </div> */}
+                    <div className={css.topdiv}>
                       <div>
-                        {' '}
-                        {/* <TopbarSearchForm
-                          className={css.searchLink}
-                          desktopInputRoot={css.topbarSearchWithLeftPadding}
-                          onSubmit={handleSubmit}
-                          // initialValues={initialSearchFormValues}
-                          // appConfig={appConfig}
-                        /> */}
+                        <span>Book remote work day passes that blend work & play</span>
+                      </div>
+
+                      <div className={css.searchDiv}>
+                        <RiSearch2Line />
+                        <input
+                          type="text"
+                          onFocus={() => {
+                            goToSearch();
+                          }}
+                        />
+                        <button
+                          className={css.srchBtn}
+                          onClick={() => {
+                            goToSearch();
+                          }}
+                        >
+                          Search passes
+                        </button>
                       </div>
                     </div>
                     <SectionBuilder sections={sections} options={options} />

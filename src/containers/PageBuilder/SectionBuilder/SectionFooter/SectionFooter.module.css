@@ -2,10 +2,11 @@
 
 .root {
   border-top: 1px solid var(--colorGrey100);
-  & > div{
-    padding:40px 0 !important;
-    @media(max-width:767px){
-     padding:20px 0 !important;
+  background-color: #ffffff !important;
+  & > div {
+    padding: 40px 0 !important;
+    @media (max-width: 767px) {
+      padding: 20px 0 !important;
     }
   }
 }
@@ -17,12 +18,12 @@
   gap: 32px;
   margin: 0 auto;
   padding: 0 32px;
-  @media(min-width:1920px){
-    max-width:1120px;
-    margin:0 auto;
+  @media (min-width: 1920px) {
+    max-width: 1120px;
+    margin: 0 auto;
   }
-  @media(max-width:767px){
-    padding:0 15px;
+  @media (max-width: 767px) {
+    padding: 0 15px;
   }
 }
 
@@ -59,7 +60,7 @@
   align-content: start;
   grid-auto-rows: auto;
   grid-gap: 32px;
-  @media(max-width:575px){
+  @media (max-width: 575px) {
     grid-gap: 20px;
   }
 }
@@ -86,8 +87,8 @@
   @media (--viewportLarge) {
     display: none;
   }
-  @media(max-width:991px){
-    padding-bottom:0;
+  @media (max-width: 991px) {
+    padding-bottom: 0;
   }
 }
 .sloganDesktop {
@@ -115,8 +116,8 @@
   @media (--viewportLarge) {
     margin-top: 0px;
   }
-  @media(max-width:767px){
-    margin-top: 10px;  
+  @media (max-width: 767px) {
+    margin-top: 10px;
   }
 }
 
