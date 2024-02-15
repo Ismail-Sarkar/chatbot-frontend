@@ -36,7 +36,7 @@ const resolveWorkerResult = async data => {
         break;
       }
       case 'transition/expire-payment': {
-        expiredTransactions(uuid);
+        expiredTransactions.push(uuid);
         break;
       }
       default: {
