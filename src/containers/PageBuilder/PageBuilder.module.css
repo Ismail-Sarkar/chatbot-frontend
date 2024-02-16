@@ -82,12 +82,12 @@
   }
   @media (max-width: 768px) {
     margin-top: 32px;
-    padding: 0 2px 0 04px;
+    padding: 0 2px 0 4px;
     width: 100%;
     justify-content: flex-start;
   }
   @media (max-width: 992px) {
-    margin: 32px auto;
+    margin: 32px auto 0;
   }
 }
 .srchBtn {
