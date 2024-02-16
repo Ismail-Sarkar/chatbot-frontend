@@ -16,7 +16,7 @@ const FieldTimeZoneSelect = props => {
       </option>
       {getTimeZoneNames(relevantZonesPattern).map(tz => (
         <option key={tz} value={tz}>
-          {/* <option key={tz} value={tz === 'America/Miami' ? 'America/New_York' : tz}> */}
+          {/* <option key={tz.value} value={tz.label}> */}
           {tz}
         </option>
       ))}

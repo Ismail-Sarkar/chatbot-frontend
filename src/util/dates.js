@@ -78,8 +78,25 @@ export const isValidTimeZone = timeZone => {
 export const getTimeZoneNames = relevantZonesRegExp => {
   const allTimeZones = moment.tz.names();
   // allTimeZones.push('America/Miami');
-  // console.log(allTimeZones, 898);
+  let allTimeZonesObject = [];
+  allTimeZones.map(el => {
+    allTimeZonesObject = [
+      ...allTimeZonesObject,
+      el === 'America/New_York'
+        ? [
+            { label: 'America/Miami', value: el },
+            { label: el, value: el },
+          ]
+        : { label: el, value: el },
+    ];
+  });
+
+  // allTimeZonesObject.push({ label: 'America/Miami', value: 'America/New_York' });
+  // allTimeZonesObject.sort();
+
+  console.log(allTimeZonesObject, 898);
   return relevantZonesRegExp ? allTimeZones.filter(z => relevantZonesRegExp.test(z)) : allTimeZones;
+  // return allTimeZonesObject;
 };
 
 /**
