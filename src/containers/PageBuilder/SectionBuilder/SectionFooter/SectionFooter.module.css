@@ -120,7 +120,16 @@
     margin-top: 10px;
   }
 }
-
+.iconsMobile {
+  @media (min-width: 1024px) {
+    display: none;
+  }
+}
+.iconsDesktop {
+  @media (max-width: 1024px) {
+    display: none;
+  }
+}
 .icon {
   font-size: 28px;
   margin: 15px 15px 0px 0px;
@@ -141,6 +150,9 @@
   max-width: 188px;
   object-fit: contain;
   object-position: center;
+  @media (max-width: 767px) {
+    height: 16px;
+  }
 }
 
 /* @media (min-width: 350px) {

@@ -76,13 +76,18 @@ const SectionFooter = props => {
           </div>
           <div className={css.sloganMobile}>
             <Field data={slogan} className={css.slogan} />
+            {showSocialMediaLinks ? (
+              <div className={classNames(css.icons, css.iconsMobile)}>
+                <BlockBuilder blocks={linksWithBlockId} options={options} />
+              </div>
+            ) : null}
           </div>
           <div className={css.detailsInfo}>
             <div className={css.sloganDesktop}>
               <Field data={slogan} className={css.slogan} />
             </div>
             {showSocialMediaLinks ? (
-              <div className={css.icons}>
+              <div className={classNames(css.icons, css.iconsDesktop)}>
                 <BlockBuilder blocks={linksWithBlockId} options={options} />
               </div>
             ) : null}
