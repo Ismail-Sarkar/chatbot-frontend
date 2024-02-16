@@ -206,7 +206,10 @@ const EditListingDetailsFormComponent = props => (
           <div className={css.optionContainer}>
             <div className={css.labelContainer}>
               Select your preferred booking setting for this listing* (
-              <ExternalLink href="https://google.com" className={css.exampleTips}>
+              <ExternalLink
+                href="https://adventurely.notion.site/adventurely/Selecting-a-Booking-Setting-for-your-Listing-36e5bc7b1f6e4ce69562693f80d149ad"
+                className={css.exampleTips}
+              >
                 read more about booking settings here
               </ExternalLink>
               )
