@@ -444,6 +444,7 @@ export class SearchPageComponent extends Component {
                     intl={intl}
                     liveEdit
                     showAsPopup={false}
+                    history={this.props.history}
                   />
                 );
               })}
@@ -472,6 +473,7 @@ export class SearchPageComponent extends Component {
                       intl={intl}
                       showAsPopup
                       contentPlacementOffset={FILTER_DROPDOWN_OFFSET}
+                      history={this.props.history}
                     />
                   );
                 })}

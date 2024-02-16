@@ -39,6 +39,7 @@ const formatValue = (dateRange, queryParamName) => {
 };
 
 const formatdateValue = (date, queryParamName) => {
+  console.log(4567, 'first');
   const hasDates = date && date.dates;
   const { date: startDate, date: endDate } = hasDates ? date.dates : {};
   const start = startDate ? stringifyDateToISO8601(startDate) : null;
@@ -66,9 +67,9 @@ export class BookingDateRangeFilterComponent extends Component {
       initialValues && initialValues[datesQueryParamName]
         ? parseValue(initialValues[datesQueryParamName])
         : { dates: null };
-    console.log(initialDates.dates.startDate, 8384);
+    console.log(moment(initialDates?.dates?.startDate).format('YYYY-MM-DD'), 8384);
     this.setState({
-      selectedDate: moment(initialDates.dates.startDate).format('YYYY-MM-DD'),
+      selectedDate: moment(initialDates?.dates?.startDate).format('YYYY-MM-DD'),
     });
   }
 
@@ -93,7 +94,16 @@ export class BookingDateRangeFilterComponent extends Component {
       ...rest
     } = this.props;
 
-    console.log(this.state.selectedDate, 8384);
+    const searchParams = new URLSearchParams(window?.location?.search);
+
+    const queryParams = {};
+
+    // Iterate through the search params and populate queryParams object
+    for (const [key, value] of searchParams.entries()) {
+      queryParams[key] = value;
+    }
+
+    console.log(this.state.selectedDate, queryParams, this.props, 8384);
 
     const datesQueryParamName = getDatesQueryParamName(queryParamNames);
     const initialDates =
@@ -155,8 +165,34 @@ export class BookingDateRangeFilterComponent extends Component {
 
     const onClearPopupMaybe =
       this.popupControllerRef && this.popupControllerRef.onReset
-        ? { onClear: () => this.popupControllerRef.onReset(null, null) }
-        : {};
+        ? {
+            onClear: () => {
+              console.log(445566, 'dfghjkl;');
+
+              this.popupControllerRef.onReset(null, null);
+            },
+          }
+        : {
+            onClear: () => {
+              console.log(445577, 'grdthrgrthyj');
+              this.setState({
+                selectedDate: null,
+              });
+              // onSubmit(formatdateValue({ dates: { date: null } }, datesQueryParamName));
+              const urlParamsafterClear = queryParams;
+              delete urlParamsafterClear['dates'];
+              console.log(
+                urlParamsafterClear,
+                window.location.pathname,
+                new URLSearchParams(urlParamsafterClear).toString(),
+                858467
+              );
+              this.props.history.push({
+                pathname: window.location.pathname,
+                search: new URLSearchParams(urlParamsafterClear).toString(),
+              });
+            },
+          };
 
     const onCancelPopupMaybe =
       this.popupControllerRef && this.popupControllerRef.onReset
@@ -165,8 +201,30 @@ export class BookingDateRangeFilterComponent extends Component {
 
     const onClearPlainMaybe =
       this.plainControllerRef && this.plainControllerRef.onReset
-        ? { onClear: () => this.plainControllerRef.onReset(null, null) }
-        : {};
+        ? {
+            onClear: () => {
+              console.log(445566, 'dfghjkl;');
+              this.setState({
+                selectedDate: null,
+              });
+              this.plainControllerRef.onReset(null, null);
+            },
+          }
+        : {
+            onClear: () => {
+              console.log(445577, 'grdthrgrthyj');
+              this.setState({
+                selectedDate: null,
+              });
+              const urlParamsafterClear = queryParams;
+              delete urlParamsafterClear['dates'];
+              console.log(urlParamsafterClear, 858467);
+              this.props.history.push({
+                pathname: window.location.pathname,
+                search: new URLSearchParams(urlParamsafterClear).toString(),
+              });
+            },
+          };
 
     return showAsPopup ? (
       <FilterPopup
@@ -198,6 +256,8 @@ export class BookingDateRangeFilterComponent extends Component {
             name="dates"
             placeholderText={`Date`}
             minimumNights={minimumNights}
+            // input={{ ref: 'gvhbj' }}
+            // controllerRef="this.popupControllerRef"
             controllerRef={node => {
               this.popupControllerRef = node;
             }}
@@ -207,14 +267,8 @@ export class BookingDateRangeFilterComponent extends Component {
             weekDayFormat="ddd"
             isDayHighlighted={day => {
               const formatedDate = moment(day).format('YYYY-MM-DD');
-              console.log(
-                formatedDate,
-                this.state.selectedDate,
-                moment(day).isSame(this.state.selectedDate),
-                9888
-              );
-              // return true;
-              return moment(day).isSame(this.state.selectedDate);
+
+              return moment(formatedDate).isSame(this.state.selectedDate);
             }}
             onChange={value => {
               console.log(value, 98889);

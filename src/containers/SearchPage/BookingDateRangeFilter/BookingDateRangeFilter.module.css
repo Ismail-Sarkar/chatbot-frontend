@@ -206,13 +206,13 @@
   }
 
   & :global(.CalendarDay__highlighted_calendar) {
-    background-color: var(--colorSuccess) !important;
+    background-color: var(--color-black) !important;
     color: #fff !important;
     border-radius: 8px !important;
 
     & :hover,
     & :focus {
-      background-color: var(--colorSuccess) !important;
+      background-color: var(--color-black) !important;
       color: #fff !important;
       border-radius: 8px !important;
     }
