@@ -4,8 +4,8 @@
   text-align: left !important;
 }
 :global(.image-gallery-thumbnails) {
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding-top: 12px;
+  padding-bottom: 12px;
 
   /*
    By default, the gallery controls the scroll position of the thumbnails when
@@ -89,7 +89,7 @@
           & > div{
             & > div{
               & > div{
-                /* height:100% !important; */
+                height:100% !important;
                 & > img{
                   height:auto !important;
                   object-fit: contain !important;
@@ -113,7 +113,9 @@
     }
   }
 }
-
+:global(.image-gallery-slides){
+  height:460px;
+}
 .root {
 }
 
@@ -157,9 +159,12 @@
 .thumb {
   /* With the active thumbnail border (default 4px), make the result
    height a multiple of the baseline. */
-  max-width: 88px;
-  max-height: 88px;
+  /* max-width: 88px;
+  max-height: 88px; */
   border-radius: var(--borderRadiusMedium);
+    width: 88px;
+    height: 66px;
+    object-fit: cover;
 }
 
 .navLeft,

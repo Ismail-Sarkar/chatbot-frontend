@@ -67,17 +67,16 @@
   @media (--viewportLargeWithPaddings) {
     /* padding: 40px 0 82px calc((100% - 1056px) / 2); */
   }
-  @media(max-width:1023px){
-    justify-content:space-between !important;
-    width:100%;
-    padding:10px 15px 0;
+  @media (max-width: 1023px) {
+    justify-content: space-between !important;
+    width: 100%;
+    padding: 10px 15px 0;
   }
-  @media(max-width:767px){
-    align-items:baseline;
+  @media (max-width: 767px) {
+    align-items: baseline;
     flex-wrap: nowrap !important;
   }
-  @media(max-width:575px){
-  
+  @media (max-width: 575px) {
     /* flex-direction: row-reverse; */
   }
 }
@@ -100,10 +99,10 @@
     padding: 5px 20px 3px 0;
     align-self: flex-end;
   }
-  @media(max-width:575px){
-    padding:0;
+  @media (max-width: 575px) {
+    padding: 0;
   }
-  @media(max-width:1023px){
+  @media (max-width: 1023px) {
     display: none;
   }
 }
@@ -117,8 +116,8 @@
   & div:first-child {
     & a {
       width: 340px;
-      text-align:right;
-      & > span{
+      text-align: right;
+      & > span {
         padding-right: 22px;
       }
     }
@@ -160,12 +159,13 @@
   margin-left: 24px;
   margin-right: 24px;
   margin-top: 1px;
+  text-align: center;
 
   @media (--viewportLarge) {
     margin-top: 25px;
   }
-  @media(max-width:767px){
-    margin:0;
+  @media (max-width: 767px) {
+    margin: 0;
   }
 }
 
@@ -221,9 +221,9 @@
 .item {
   display: flex;
   flex-direction: row;
-  @media(max-width:767px){
-    align-items:flex-start;
-    flex-direction:column;
+  @media (max-width: 767px) {
+    align-items: flex-start;
+    flex-direction: column;
     margin-top: 30px;
   }
 }
@@ -242,8 +242,8 @@
     margin-top: 3px;
     margin-right: 7px;
   }
-  @media(max-width:575px){
-    margin-right:0;
+  @media (max-width: 575px) {
+    margin-right: 0;
   }
 }
 
@@ -270,11 +270,11 @@
     /* Hightlight the username when the whole item is hovered */
     color: var(--marketplaceColor);
   }
- @media(max-width:767px){
-  width: 100%;
-  position: relative;
-  display: inline;
- }
+  @media (max-width: 767px) {
+    width: 100%;
+    position: relative;
+    display: inline;
+  }
 }
 
 .rowNotificationDot {
@@ -296,8 +296,8 @@
     width: 8px;
     height: 8px;
   }
-  @media(max-width:767px){
-    position:absolute;
+  @media (max-width: 767px) {
+    position: absolute;
     left: -10px;
     top: 10px;
   }
@@ -346,12 +346,12 @@
 
   margin-top: 0;
   margin-bottom: 0;
-  & > div{
-    @media(max-width:767px){
+  & > div {
+    @media (max-width: 767px) {
       margin-top: 10px;
     }
-    & > span{
-      @media(max-width:767px){
+    & > span {
+      @media (max-width: 767px) {
         margin-right: 0;
         margin-top: 5px;
       }
@@ -469,15 +469,15 @@
   & div:nth-child(2) {
     margin-left: 10px;
     font-size: 14px;
-    @media(max-width:767px){
-      margin-left:0;
+    @media (max-width: 767px) {
+      margin-left: 0;
     }
   }
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     flex-direction: column;
     gap: 5px 0;
-    align-items:flex-start;
-    margin-top:10px;
+    align-items: flex-start;
+    margin-top: 10px;
   }
 }
 
@@ -491,13 +491,13 @@
   & :global(.SingleDatePicker_picker) {
     width: 314px !important;
     top: 80px !important;
-    @media(max-width:1023px){
-      top: 130px!important;
+    @media (max-width: 1023px) {
+      top: 130px !important;
     }
     /* @media(max-width:991px){
       top: 30px !important;
     } */
-    @media(max-width:767px){
+    @media (max-width: 767px) {
       top: 114px !important;
     }
   }
@@ -522,7 +522,7 @@
     background-color: var(--color-white) !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    @media(max-width:1023px){
+    @media (max-width: 1023px) {
       /* position: static !important; */
     }
   }
@@ -535,11 +535,11 @@
     color: var(--color-black);
     font-weight: 200 !important;
   }
-  & :global(.CalendarMonthGrid){
-   @media(max-width:1023px){
-    width:100% !important;
-    height: inherit !important;
-   }
+  & :global(.CalendarMonthGrid) {
+    @media (max-width: 1023px) {
+      width: 100% !important;
+      height: inherit !important;
+    }
   }
   & :global(.DayPickerNavigation_button) {
     color: var(--color-black) !important;
@@ -620,7 +620,7 @@
     /* border-spacing:30px 0 !important; */
   }
   & :global(.CalendarMonth_table) {
-   margin-top:10px;
+    margin-top: 10px;
   }
 }
 
@@ -643,28 +643,28 @@
 .searchForm {
   margin-bottom: 16px;
 }
-.InboxPageWrap{
-  & > div{
-    & > div{
-      & > div:nth-child(2){
-        @media(min-width:1920px){
-          max-width:1120px;
-          margin:0 auto;
+.InboxPageWrap {
+  & > div {
+    & > div {
+      & > div:nth-child(2) {
+        @media (min-width: 1920px) {
+          max-width: 1120px;
+          margin: 0 auto;
         }
-        & > aside{
-          & > nav{
-            @media(max-width:1023px){
-              width:auto !important;
+        & > aside {
+          & > nav {
+            @media (max-width: 1023px) {
+              width: auto !important;
               /* margin-left:auto !important; */
-              padding-top:0 !important;
+              padding-top: 0 !important;
             }
-            & > div{
-              & > a{
-                @media(max-width:1023px){
-                  background-image:none !important;
-                  background-position:inherit !important;
+            & > div {
+              & > a {
+                @media (max-width: 1023px) {
+                  background-image: none !important;
+                  background-position: inherit !important;
                   width: 135px !important;
-                  border-bottom-color:inherit !important;
+                  border-bottom-color: inherit !important;
                   border-bottom-width: inherit !important;
                   border-bottom-style: inherit !important;
                   margin-right: 10px !important;
@@ -673,26 +673,26 @@
             }
           }
         }
-        & > main{
+        & > main {
           padding: 48px 36px 82px 59px !important;
-          @media(max-width:1023px){
-            padding: 25px 15px!important;
-            display:block !important;
+          @media (max-width: 1023px) {
+            padding: 25px 15px !important;
+            display: block !important;
           }
         }
       }
     }
   }
 }
-.DateFormWrap{
-  @media(max-width:1023px){
+.DateFormWrap {
+  @media (max-width: 1023px) {
     display: none;
   }
 }
-.DateMobWrap{
-  display:none;
+.DateMobWrap {
+  display: none;
   /* position:relative; */
-  @media(max-width:1023px){
+  @media (max-width: 1023px) {
     display: block;
     /* height: 40px; */
     width: 130px;
@@ -702,12 +702,12 @@
     justify-content: center; */
   }
 
-  .ChooseDateBtn{
+  .ChooseDateBtn {
     display: inline-block;
     width: 130px;
     height: auto;
     min-height: 0;
-    padding:9px 6px 9px 6px;
+    padding: 9px 6px 9px 6px;
     margin: 0;
     font-weight: var(--fontWeightMedium);
     font-size: 13px;
@@ -719,49 +719,48 @@
     background-color: var(--colorWhite);
     /* position:relative; */
     cursor: pointer;
-    transition:all 500ms ease-in-out;
-    box-shadow:none;
-    &:hover{
+    transition: all 500ms ease-in-out;
+    box-shadow: none;
+    &:hover {
       box-shadow: var(--boxShadowFilterButton);
     }
-    & > svg{
+    & > svg {
       padding-left: 3px;
-    width: 10px;
-    height: 10px;
-    padding-top: 3px;
-     }
+      width: 10px;
+      height: 10px;
+      padding-top: 3px;
+    }
   }
-
 }
-.FormWrap{
-  @media(max-width:1023px){
+.FormWrap {
+  @media (max-width: 1023px) {
     display: flex;
     align-items: center;
     /* margin-top: 15px; */
   }
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     margin-top: 0;
     /* padding-bottom:10px; */
   }
 }
-.mobDateCalender{
-  & > div{
-    & > div{
-      & > div{
-        @media(max-width:1023px){
-          position:inherit !important;
+.mobDateCalender {
+  & > div {
+    & > div {
+      & > div {
+        @media (max-width: 1023px) {
+          position: inherit !important;
         }
       }
     }
   }
 }
-.titleMob{
-  display:none;
-  @media(max-width:1023px){
-   display:block;
-   margin-bottom: 20px;
+.titleMob {
+  display: none;
+  @media (max-width: 1023px) {
+    display: block;
+    margin-bottom: 20px;
   }
-  @media(max-width:575px){
+  @media (max-width: 575px) {
     margin-bottom: 15px;
   }
 }

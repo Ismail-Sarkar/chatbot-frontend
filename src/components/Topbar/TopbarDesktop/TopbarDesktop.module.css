@@ -11,16 +11,17 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 0 12px 0 0;
+  /* padding: 0 12px 0 0; */
 
   /* fill */
   background-color: var(--colorWhite);
 
   /* shadows */
-  box-shadow: var(--boxShadowLight);
+  /* box-shadow: var(--boxShadowLight); */
 
+  border-bottom: 1px solid #000000;
   @media (--viewportLarge) {
-    padding: 0 24px 0 0;
+    /* padding: 0 24px 0 0; */
   }
 }
 
@@ -39,9 +40,9 @@
   flex-grow: 1;
   height: 100%;
   margin-right: 24px;
-  border-left-style: solid;
+  /* border-left-style: solid;
   border-left-width: 1px;
-  border-left-color: var(--colorGrey100);
+  border-left-color: var(--colorGrey100); */
 
   @media (--viewportLarge) {
     padding-left: 0;
@@ -90,7 +91,7 @@
   margin: 0;
 
   &:hover {
-    color:#fc334d;
+    color: #fc334d;
     border-bottom: 4px solid #fc334d;
     border-radius: 0;
     text-decoration: none;
@@ -114,16 +115,22 @@
 
   flex-shrink: 0;
   height: 100%;
-  padding: 0 12px 0 12px;
-  margin: 0;
+  /* padding: 0 24px 0 12px; */
+  padding: 0 36px 0 16px;
 
   &:hover {
-    color: #fc334d;
-    border-bottom: 4px solid #fc334d;
+    /* color: #fc334d;
+    border-bottom: 4px solid #fc334d; */
+    border-bottom: 4px solid #000000;
+
     border-radius: 0;
     text-decoration: none;
+    /* color: var(--colorBlack);
+    border-bottom: 4px solid var(--marketplaceColor); */
   }
-
+  @media (min-width: 768px) and (max-width: 992px) {
+    padding: 0 16px 0 16px;
+  }
   @media (--viewportMedium) {
     line-height: 16px;
     margin: 0;
@@ -133,7 +140,9 @@
 .topbarDesktopLabel {
   composes: textSmall from global;
   display: inline-block;
-  margin: 28px 0;
+  /* margin: 28px 0; */
+  margin: 40px 0;
+
   text-decoration: inherit;
 }
 
@@ -157,7 +166,7 @@
   margin: 0;
 
   &:hover {
-    color:#fc334d;
+    color: #fc334d;
     border-bottom: 4px solid #fc334d;
     border-radius: 0;
     text-decoration: none;
@@ -230,7 +239,7 @@
   &:active {
     border-bottom: 0;
   }
-  & > div{
+  & > div {
     background-image: none !important;
     background-color: #fc334d !important;
   }
@@ -255,11 +264,11 @@
 .signupLink {
   border-bottom: 0px solid;
   transition: var(--transitionStyleButton);
-
+  border-left: 1px solid black;
   flex-shrink: 0;
   height: 100%;
-  padding: 0 12px 0 12px;
-
+  /* padding: 0 12px 0 12px; */
+  padding: 0 16px 0 32px;
   color: var(--colorGrey700);
 
   &:hover {
@@ -267,6 +276,9 @@
     border-bottom: 4px solid var(--marketplaceColor);
     border-radius: 0;
     text-decoration: none;
+  }
+  @media (min-width: 768px) and (max-width: 992px) {
+    padding: 0 16px 0 16px;
   }
 }
 
@@ -276,7 +288,8 @@
 
   flex-shrink: 0;
   height: 100%;
-  padding: 0 12px 0 12px;
+  /* padding: 0 12px 0 12px; */
+  padding: 0 36px 0 16px;
 
   color: var(--colorGrey700);
 
@@ -286,6 +299,9 @@
     border-radius: 0;
     text-decoration: none;
   }
+  @media (min-width: 768px) and (max-width: 992px) {
+    padding: 0 16px 0 16px;
+  }
 }
 
 .signup,
@@ -293,7 +309,9 @@
   composes: textSmall from global;
 
   display: inline-block;
-  margin: 28px 0;
+  /* margin: 28px 0; */
+  margin: 40px 0;
+
   text-decoration: inherit;
 }
 
@@ -408,14 +426,16 @@
   display: flex;
   align-items: center;
   padding-left: 10px;
+  margin: 13px 0;
   &:hover {
     text-decoration: none;
   }
-  & > svg{
-    fill:#fc334d;
+  & > svg {
+    /* fill: #fc334d; */
   }
 }
 .searchTitle {
   padding-left: 10px;
-  color: #aba4a4;
+  color: #000000;
+  font-size: 16px;
 }

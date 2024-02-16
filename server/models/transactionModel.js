@@ -11,6 +11,7 @@ const TransactionSchema = new mongoose.Schema(
     transactionConfirmNumber: { type: String },
     timeZone: { type: String },
     bookingStartDate: { type: Date },
+    status: { type: String, default: 'pending' },
   },
   { timestamps: true }
 );
@@ -45,10 +46,41 @@ module.exports.updateTransactionConfirmNumber = async (id, confirmNumber) => {
     {
       transactionId: id,
     },
-    { transactionConfirmNumber: confirmNumber },
+    { transactionConfirmNumber: confirmNumber, status: 'accepted' },
     { lean: true, new: true }
   ).exec();
   return data;
+};
+
+module.exports.updateTransactionStatus = async (id, status) => {
+  const data = await Transaction.findOneAndUpdate(
+    {
+      transactionId: id,
+    },
+    { status: status }
+  ).exec();
+  return data;
+};
+
+module.exports.bulkUpdateTransactionStatus = async (transactionIds, status) => {
+  const filter = {
+    transactionId: { $in: transactionIds },
+    status: { $ne: status },
+  };
+
+  const update = {
+    $set: { status },
+  };
+
+  const options = { multi: true };
+
+  Transaction.updateMany(filter, update, options, function(err, result) {
+    if (err) {
+      throw err;
+    } else {
+      return result;
+    }
+  });
 };
 
 module.exports.searchTransactionsBy = async (
@@ -60,7 +92,6 @@ module.exports.searchTransactionsBy = async (
   isCustomer = false,
   perPage = PER_PAGE
 ) => {
-  console.log(moment(bookingStart).toDate());
   const hasPage = page && typeof page === 'number';
   const pageMaybe = hasPage
     ? { $skip: (page - 1) * PER_PAGE }
@@ -130,6 +161,9 @@ module.exports.searchTransactionsBy = async (
           $and: [
             { bookingStartDate: { $gte: bookingRangeStartDate } },
             { bookingStartDate: { $lte: bookingRangeEndDate } },
+            { status: { $ne: 'canceled' } },
+            { status: { $ne: 'declined' } },
+            { status: { $ne: 'expired' } },
           ],
         }
       : !!bookingStart
@@ -192,6 +226,7 @@ module.exports.searchTransactionsBy = async (
         transactionConfirmNumber: 1,
         timeZone: 1,
         createdAt: 1,
+        status: 1,
         user: { $arrayElemAt: ['$users', 0] },
       },
     },
@@ -202,6 +237,7 @@ module.exports.searchTransactionsBy = async (
         id: '$transactionId',
         bookingStartDate: 1,
         timeZone: 1,
+        status: 1,
       },
     },
   ];

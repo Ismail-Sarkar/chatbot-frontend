@@ -158,14 +158,10 @@ const TopbarDesktop = props => {
       ) : (
         <NamedLink className={classNames(css.searchLink, css.searchWithIcon)} name="SearchPage">
           <LiaSearchSolid size={25} />
-          <div className={css.searchTitle}> Search Passes...</div>
+          <div className={css.searchTitle}> Search Passes</div>
         </NamedLink>
       )}
-      <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
-        <span className={css.createListing}>
-          <FormattedMessage id="TopbarDesktop.blog" />
-        </span>
-      </ExternalLink>
+
       {currentUser?.attributes?.profile?.publicData?.userType === 'partner' ? (
         <NamedLink className={css.createListingLink} name="NewListingPage">
           <span className={css.createListing}>
@@ -182,7 +178,11 @@ const TopbarDesktop = props => {
       ) : (
         ''
       )}
-
+      <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
+        <span className={css.createListing}>
+          <FormattedMessage id="TopbarDesktop.blog" />
+        </span>
+      </ExternalLink>
       {inboxLink}
       {profileMenu}
       {signupLink}

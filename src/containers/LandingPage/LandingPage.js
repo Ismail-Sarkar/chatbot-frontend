@@ -10,20 +10,22 @@ import { propTypes } from '../../util/types';
 
 import FallbackPage from './FallbackPage';
 import { ASSET_NAME } from './LandingPage.duck';
+import { withRouter } from 'react-router-dom';
 
 const PageBuilder = loadable(() =>
   import(/* webpackChunkName: "PageBuilder" */ '../PageBuilder/PageBuilder')
 );
 
 export const LandingPageComponent = props => {
-  const { pageAssetsData, inProgress, error } = props;
-
+  const { pageAssetsData, inProgress, error, history } = props;
+  // console.log(1211, props, history);
   return (
     <PageBuilder
       pageAssetsData={pageAssetsData?.[camelize(ASSET_NAME)]?.data}
       inProgress={inProgress}
       error={error}
       fallbackPage={<FallbackPage error={error} />}
+      history={history}
     />
   );
 };
@@ -45,6 +47,6 @@ const mapStateToProps = state => {
 // lifecycle hook.
 //
 // See: https://github.com/ReactTraining/react-router/issues/4671
-const LandingPage = compose(connect(mapStateToProps))(LandingPageComponent);
+const LandingPage = compose(withRouter, connect(mapStateToProps))(LandingPageComponent);
 
 export default LandingPage;

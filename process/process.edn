@@ -45,6 +45,17 @@
    ],
    :from :state/pending-payment,
    :to :state/preauthorized}
+
+   {:name :transition/confirm-payment-for-automatic-accept,
+   :actor :actor.role/customer,
+   :actions [
+    ;; {:name :action/stripe-confirm-payment-intent}
+    {:name :action/update-protected-data},
+
+   ],
+   :from :state/pending-payment,
+   :to :state/accepted}
+   
   {:name :transition/accept,
    :actor :actor.role/provider,
    :actions

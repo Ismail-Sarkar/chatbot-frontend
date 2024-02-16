@@ -6,7 +6,7 @@
   flex-shrink: 0;
   padding: 0;
   height: 100%;
-
+  margin: auto;
   &:hover {
     text-decoration: none;
   }
@@ -23,14 +23,17 @@
 .logo {
   /* If height is increased, change link margins accordingly */
   /* NOTE: extremely wide logos may look bad. This will scale them to container of 24 x 200. */
-  height: 24px;
+  /* height: 24px; */
+  height: 16px;
+
   width: auto;
   max-width: 188px;
   object-fit: contain;
   object-position: center;
-  margin: 18px 0;
+  margin: 25px 0;
 
   @media (--viewportMedium) {
-    margin: 24px 0;
+    /* margin: 24px 0; */
+    margin: 40px 0;
   }
 }
