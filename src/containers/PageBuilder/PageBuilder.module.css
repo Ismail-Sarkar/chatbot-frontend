@@ -33,7 +33,26 @@
       font-weight: 500;
       color: #000000;
       line-height: 62px;
+      @media (max-width: 992px) {
+        font-size: 42px;
+        line-height: 44px;
+      }
+      @media (max-width: 768px) {
+        font-size: 31px;
+        line-height: 38px;
+      }
+      @media (max-width: 375px) {
+        font-size: 25px;
+      }
     }
+  }
+  @media (max-width: 992px) {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px 72px 40px;
+  }
+  @media (max-width: 575px) {
+    padding: 25px 16px 40px;
   }
 }
 .searchDiv {
@@ -50,12 +69,25 @@
   & > svg {
     height: 32px;
     width: 32px;
+    @media (max-width: 768px) {
+      height: 16px;
+    }
   }
   & > input {
     border: none;
+    width: auto;
     &:focus {
       box-shadow: none;
     }
+  }
+  @media (max-width: 768px) {
+    margin-top: 32px;
+    padding: 0 2px 0 4px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  @media (max-width: 992px) {
+    margin: 32px auto 0;
   }
 }
 .srchBtn {
