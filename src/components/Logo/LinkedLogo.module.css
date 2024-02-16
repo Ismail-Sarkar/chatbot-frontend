@@ -6,7 +6,7 @@
   flex-shrink: 0;
   padding: 0;
   height: 100%;
-
+  margin: auto;
   &:hover {
     text-decoration: none;
   }
@@ -30,7 +30,7 @@
   max-width: 188px;
   object-fit: contain;
   object-position: center;
-  margin: 18px 0;
+  margin: 25px 0;
 
   @media (--viewportMedium) {
     /* margin: 24px 0; */
