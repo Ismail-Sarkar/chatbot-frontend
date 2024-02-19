@@ -1,7 +1,7 @@
 import React from 'react';
 import { arrayOf, bool, func, node, number, object, shape, string } from 'prop-types';
 import classNames from 'classnames';
-import { LinkedLogo } from '../../../../components';
+import { ExternalLink, LinkedLogo, NamedLink } from '../../../../components';
 
 import Field from '../../Field';
 import BlockBuilder from '../../BlockBuilder';
@@ -96,6 +96,58 @@ const SectionFooter = props => {
           <div className={classNames(css.grid, getGridCss(numberOfColumns))}>
             <BlockBuilder blocks={blocks} options={options} />
           </div>
+          {/* <div className={css.textLinkDiv}>
+            <div>
+              <div>
+                <NamedLink
+                  className={classNames(css.searchLink, css.searchWithIcon)}
+                  name="SearchPage"
+                >
+                  <span className={css.searchTitle}>Browse day passes</span>
+                </NamedLink>
+                <ExternalLink href="https://adventurely.pro" className={css.termsLink}>
+                  <span>List your space</span>
+                </ExternalLink>
+                <ExternalLink
+                  href="https://www.notion.so/Adventurely-FAQ-3d07f72573b64224b48e9df3b32c333b?pvs=4"
+                  className={css.termsLink}
+                >
+                  <span>FAQ/How it Works</span>
+                </ExternalLink>
+                <ExternalLink
+                  href="https://www.notion.so/Contact-b241c3b1a1a44c278cebd55ca219723e"
+                  className={css.termsLink}
+                >
+                  <span>Contact</span>
+                </ExternalLink>
+              </div>
+              <div>
+                <ExternalLink href="http://www.adventurely.pro" className={css.termsLink}>
+                  <span>Parnters</span>
+                </ExternalLink>
+                <ExternalLink
+                  href=" https://www.notion.so/Adventurely-Terms-of-Use-Privacy-Policy-0d54a870182340368c23d23f08793d7f?pvs=4"
+                  className={css.termsLink}
+                >
+                  <span>Get nomad insurance</span>
+                </ExternalLink>
+              </div>
+            </div>
+            <div>
+              <ExternalLink
+                href="https://www.notion.so/Adventurely-Terms-of-Use-Privacy-Policy-0d54a870182340368c23d23f08793d7f?pvs=4"
+                className={css.termsLink}
+              >
+                <span>Terms of Use</span>
+              </ExternalLink>
+              <ExternalLink
+                href="https://www.notion.so/Adventurely-Terms-of-Use-Privacy-Policy-0d54a870182340368c23d23f08793d7f?pvs=4"
+                className={css.termsLink}
+              >
+                <span>Privacy Policy</span>
+              </ExternalLink>
+            </div>
+          </div> */}
         </div>
       </div>
     </SectionContainer>
