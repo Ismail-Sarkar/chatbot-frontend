@@ -50,6 +50,7 @@
    :actor :actor.role/customer,
    :actions [
     ;; {:name :action/stripe-confirm-payment-intent}
+    {:name :action/accept-booking}
     {:name :action/update-protected-data},
 
    ],

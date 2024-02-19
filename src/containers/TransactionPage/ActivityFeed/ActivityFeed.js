@@ -130,28 +130,6 @@ const TransitionMessage = props => {
     { id: `TransactionPage.ActivityFeed.${processName}.${nextState}` },
     { actor, otherUsersName, listingTitle, reviewLink, deliveryMethod, stateStatus }
   );
-  console.log(
-    message,
-    transition,
-    transition.by,
-    ownRole,
-    transition.transition === 'transition/confirm-payment-for-automatic-accept',
-    transition.transition === 'transition/confirm-payment-for-automatic-accept'
-      ? transition.by === ownRole
-        ? otherUsersName
-        : [TX_TRANSITION_ACTOR_SYSTEM, TX_TRANSITION_ACTOR_OPERATOR].includes(transition.by)
-        ? transition.by
-        : 'you2..'
-      : transition.by === ownRole
-      ? 'you1..'
-      : [TX_TRANSITION_ACTOR_SYSTEM, TX_TRANSITION_ACTOR_OPERATOR].includes(transition.by)
-      ? transition.by
-      : otherUsersName,
-    intl.formatMessage(
-      { id: `TransactionPage.ActivityFeed.${processName}.${nextState}` },
-      { actor, otherUsersName, listingTitle, reviewLink, deliveryMethod, stateStatus }
-    )
-  );
 
   return message;
 };
