@@ -6,6 +6,8 @@ import * as log from '../../util/log';
 import { fetchCurrentUserHasOrdersSuccess, fetchCurrentUser } from '../../ducks/user.duck';
 import axios from 'axios';
 
+const CONFIRM_PAYMENT_FOR_AUTOMATIC_ACCEPT = 'transition/confirm-payment-for-automatic-accept';
+
 // ================ Action types ================ //
 
 export const SET_INITIAL_VALUES = 'app/CheckoutPage/SET_INITIAL_VALUES';
@@ -272,6 +274,31 @@ export const confirmPayment = (
 ) => async (dispatch, getState, sdk) => {
   dispatch(confirmPaymentRequest());
 
+  let confirmationNumber = null;
+
+  if (transitionName === CONFIRM_PAYMENT_FOR_AUTOMATIC_ACCEPT) {
+    try {
+      const [paymentResponse, uniqueIdResponse] = await Promise.all([
+        axios.post(`${apiBaseUrl()}/api/transaction/capturePaymentIntent`, {
+          txId: transactionId.uuid,
+        }),
+        axios.get(`${apiBaseUrl()}/api/uniqueId`),
+      ]);
+
+      const { data, status: uniqueIdStatus } = uniqueIdResponse || {};
+      const { nanoId: confirmationId } = data || {};
+      confirmationNumber = confirmationId;
+
+      const url = `${apiBaseUrl()}/api/transaction/update`;
+      await axios.post(url, {
+        id: transactionId.uuid,
+        confirmNumber: confirmationNumber,
+      });
+    } catch (e) {
+      console.error('error occurred during capture payment...', e);
+    }
+  }
+
   const bodyParams = {
     id: transactionId,
     transition: transitionName,
@@ -283,7 +310,9 @@ export const confirmPayment = (
   );
 
   const { rate: exchangeCode } = data || {};
-  const params = { protectedData: { acceptedCurrency: currency, exchangeCode } };
+  const params = {
+    protectedData: { acceptedCurrency: currency, exchangeCode, confirmationNumber },
+  };
 
   return sdk.transactions
     .transition({ ...bodyParams, params })
