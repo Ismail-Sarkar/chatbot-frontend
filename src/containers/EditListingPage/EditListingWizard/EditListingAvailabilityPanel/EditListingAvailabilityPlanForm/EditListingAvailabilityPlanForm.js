@@ -110,13 +110,6 @@ const EditListingAvailabilityPlanFormComponent = props => {
               <FieldTimeZoneSelect
                 id="timezone"
                 name="timezone"
-                // value={timezoneForEdit}
-                // value={
-                //   (restOfprops.availabilityPlan.timezone =
-                //     restOfprops.listingAttributes?.privateData?.timezone === 'America/Miami'
-                //       ? 'America/Miami'
-                //       : restOfprops.listingAttributes?.availabilityPlan?.timezone)
-                // }
                 listingAttributes={restOfprops.listingAttributes}
                 formApi={formApi}
               />
