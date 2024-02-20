@@ -8,8 +8,8 @@
 .bookingBreakdownTitle {
   letter-spacing: 1px;
   font-weight: var(--fontWeightMedium);
-  font-size:14px;
-  line-height:24px;
+  font-size: 14px;
+  line-height: 24px;
 }
 
 .totalDivider {
@@ -24,8 +24,8 @@
   @media (--viewportMedium) {
     margin: 7px 0 0px 0;
   } */
-  margin:0;
-  display:none;
+  margin: 0;
+  display: none;
 }
 
 .bookingDates {
@@ -43,7 +43,7 @@
     padding: 0;
     margin-top: 20px;
   }
-  @media(max-width:575px){
+  @media (max-width: 575px) {
     padding: 0;
     margin-top: 10px;
   }
@@ -81,12 +81,12 @@
   & button {
     background: #000;
     &:hover,
-    &:focus{
+    &:focus {
       background: #000 !important;
     }
   }
-  @media(max-width:767px){
-    padding:0;
+  @media (max-width: 767px) {
+    padding: 0;
   }
 }
 
@@ -98,17 +98,17 @@
 .muiselectcontainer {
   & > div {
     width: 100% !important;
-    & > div{
-      & > div{
-        padding-right:65px!important;
-        & > input{
-          background-color:#fff !important;
+    & > div {
+      & > div {
+        padding-right: 65px !important;
+        & > input {
+          background-color: #fff !important;
         }
-        & > div:nth-child(3){
+        & > div:nth-child(3) {
           /* position: static !important; */
           /* top: 0 !important; */
-          & > button{
-            & > svg{
+          & > button {
+            & > svg {
               /* font-size: 16px !important; */
             }
           }
@@ -125,8 +125,13 @@
       transition: none;
     }
   }
-  padding-top:10px;
+  padding-top: 10px;
 }
-.GuestContainer{
-  padding-top:10px;
+.GuestContainer {
+  padding-top: 10px;
+}
+
+.infoTxt {
+  font-size: 13px;
+  font-weight: 400;
 }

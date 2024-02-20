@@ -14,14 +14,17 @@
   &:first-child {
     margin-top: 0;
   }
-  & > h1{
-    @media(max-width:991px){
-      font-size:31px;
+  & > h1 {
+    @media (max-width: 991px) {
+      font-size: 31px;
     }
   }
-  & > h3{
-    @media(max-width:991px){
+  & > h3 {
+    @media (max-width: 991px) {
       font-size: 22px;
     }
+  }
+  @media (max-width: 768px) {
+    margin-top: 12px;
   }
 }

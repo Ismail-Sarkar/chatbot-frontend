@@ -494,6 +494,7 @@ export const BookingDatesFormComponent = props => {
     dayCountAvailableForBooking,
     marketplaceName,
     monthlyTimeSlots,
+    currentUser,
     ...rest
   } = props;
 
@@ -508,6 +509,12 @@ export const BookingDatesFormComponent = props => {
     onFetchTransactionLineItems,
     guestMaxForListing
   );
+
+  const { publicData } = currentUser?.attributes?.profile || {};
+
+  const { userType } = publicData || {};
+
+  const isPartner = userType === 'partner';
 
   return (
     <FinalForm
@@ -1080,17 +1087,23 @@ export const BookingDatesFormComponent = props => {
               </span>
             ) : null}
 
-            <div className={css.submitButton}>
-              <PrimaryButton
-                type="submit"
-                inProgress={fetchLineItemsInProgress}
-                disabled={
-                  parseInt(values?.additionalGuest) > parseInt(guestMaxForListing) || isOwnListing
-                }
-              >
-                <FormattedMessage id="BookingDatesForm.requestToBook" />
-              </PrimaryButton>
-            </div>
+            {isPartner ? (
+              <span className={css.infoTxt}>
+                To book a listing please create a customer account!
+              </span>
+            ) : (
+              <div className={css.submitButton}>
+                <PrimaryButton
+                  type="submit"
+                  inProgress={fetchLineItemsInProgress}
+                  disabled={
+                    parseInt(values?.additionalGuest) > parseInt(guestMaxForListing) || isOwnListing
+                  }
+                >
+                  <FormattedMessage id="BookingDatesForm.requestToBook" />
+                </PrimaryButton>
+              </div>
+            )}
             <p className={css.finePrint}>
               <FormattedMessage
                 id={

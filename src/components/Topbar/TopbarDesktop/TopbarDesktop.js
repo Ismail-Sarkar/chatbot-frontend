@@ -69,7 +69,7 @@ const TopbarDesktop = props => {
           currentUser?.attributes?.profile?.publicData?.userType === 'partner' ? 'sales' : 'orders',
       }}
     >
-      <span className={css.inbox}>
+      <span className={classNames(css.inbox, { [css.authenticatedLink]: isAuthenticated })}>
         <FormattedMessage id="TopbarDesktop.inbox" />
         {notificationDot}
       </span>
@@ -151,12 +151,18 @@ const TopbarDesktop = props => {
         className={css.logoLink}
         format="desktop"
         alt={intl.formatMessage({ id: 'TopbarDesktop.logo' }, { marketplaceName })}
+        isAuthenticated={isAuthenticated}
       />
       {/* {search} */}
       {currentPage === 'SearchPage' ? (
         search
       ) : (
-        <NamedLink className={classNames(css.searchLink, css.searchWithIcon)} name="SearchPage">
+        <NamedLink
+          className={classNames(css.searchLink, css.searchWithIcon, {
+            [css.authSearchLink]: isAuthenticated,
+          })}
+          name="SearchPage"
+        >
           <LiaSearchSolid size={25} />
           <div className={css.searchTitle}> Search Passes</div>
         </NamedLink>
@@ -179,7 +185,9 @@ const TopbarDesktop = props => {
         ''
       )}
       <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
-        <span className={css.createListing}>
+        <span
+          className={classNames(css.createListing, { [css.authenticatedLink]: isAuthenticated })}
+        >
           <FormattedMessage id="TopbarDesktop.blog" />
         </span>
       </ExternalLink>

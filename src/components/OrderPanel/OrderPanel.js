@@ -177,6 +177,7 @@ const OrderPanel = props => {
     fetchLineItemsInProgress,
     fetchLineItemsError,
     listingTimeZone,
+    currentUser,
   } = props;
 
   const listingPublicData = listing?.attributes?.publicData;
@@ -388,6 +389,7 @@ const OrderPanel = props => {
             fetchLineItemsInProgress={fetchLineItemsInProgress}
             fetchLineItemsError={fetchLineItemsError}
             listingTimeZone={listingTimeZone}
+            currentUser={currentUser}
           />
         ) : showBookingDatesForm ? (
           <BookingDatesForm
@@ -412,6 +414,7 @@ const OrderPanel = props => {
             extraParkValues={extraParkValues}
             guestMaxForListing={listing?.attributes?.publicData?.guests || 0}
             listingTimeZone={listingTimeZone}
+            currentUser={currentUser}
           />
         ) : showProductOrderForm ? (
           <ProductOrderForm

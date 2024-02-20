@@ -296,7 +296,6 @@ export const processCheckoutWithPayment = (orderParams, extraPaymentParams) => {
         ? process.transitions.CONFIRM_PAYMENT_FOR_AUTOMATIC_ACCEPT
         : process.transitions.CONFIRM_PAYMENT;
     const isTransitionedAlready = storedTx?.attributes?.lastTransition === transitionName;
-    console.log(storedTx, fnParams, pageData.listing);
     const orderPromise = isTransitionedAlready
       ? Promise.resolve(storedTx)
       : onConfirmPayment(transactionId, transitionName, {}, currency);

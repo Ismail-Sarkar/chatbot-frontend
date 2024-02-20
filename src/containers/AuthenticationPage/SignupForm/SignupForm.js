@@ -232,10 +232,10 @@ const SignupFormComponent = props => (
             </PrimaryButton>
           </div>
           {isPartner && (
-            <div className={css.bottomMessage}>
-              Don’t have the partner sign up code? Apply{' '}
+            <div className={css.partnerBottomMessage}>
+              <span>Don’t have a partner code?</span>{' '}
               <a href="http://www.adventurely.pro/vendors" target="_blank">
-                here
+                Apply here
               </a>
             </div>
           )}
@@ -254,7 +254,7 @@ const SignupFormComponent = props => (
                 <br />
                 <NamedLink name="PartnerSignupPage" className={css.signupLink}>
                   {/* <FormattedMessage id="SignupForm.partnerSignUp" /> */}
-                  Sign up as a partner here
+                  Sign up as partner
                 </NamedLink>
               </div>
             )}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { bool, object, string } from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
@@ -52,6 +52,7 @@ const submit = (onSubmit, weekdays) => values => {
  */
 const EditListingAvailabilityPlanFormComponent = props => {
   const { onSubmit, ...restOfprops } = props;
+
   return (
     <FinalForm
       {...restOfprops}
@@ -104,8 +105,14 @@ const EditListingAvailabilityPlanFormComponent = props => {
                 <FormattedMessage id="EditListingAvailabilityPlanForm.timezoneInstructionTxt" />
               </div>
             </Heading>
+
             <div className={css.timezonePicker}>
-              <FieldTimeZoneSelect id="timezone" name="timezone" />
+              <FieldTimeZoneSelect
+                id="timezone"
+                name="timezone"
+                listingAttributes={restOfprops.listingAttributes}
+                formApi={formApi}
+              />
             </div>
             <Heading as="h3" rootClassName={css.subheading}>
               <FormattedMessage id="EditListingAvailabilityPlanForm.hoursOfOperationTitle" />
