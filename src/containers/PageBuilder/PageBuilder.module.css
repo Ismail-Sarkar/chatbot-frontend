@@ -57,7 +57,7 @@
 }
 .searchDiv {
   margin-left: auto;
-  flex-basis: 35%;
+
   border: 1px solid #000000;
   display: flex;
   align-items: center;
