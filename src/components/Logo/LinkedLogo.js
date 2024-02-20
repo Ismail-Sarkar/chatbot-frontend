@@ -7,11 +7,18 @@ import { NamedLink, Logo } from '../../components';
 import css from './LinkedLogo.module.css';
 
 const LinkedLogo = props => {
-  const { className, rootClassName, logoClassName, format, alt, ...rest } = props;
+  const { className, rootClassName, logoClassName, format, alt, isAuthenticated, ...rest } = props;
+
   const classes = classNames(rootClassName || css.root, className);
   return (
     <NamedLink className={classes} name="LandingPage" {...rest}>
-      <Logo format={format} className={logoClassName || css.logo} alt={alt} />
+      <Logo
+        format={format}
+        className={
+          logoClassName || classNames(css.logo, { [css.authenticatedLogo]: isAuthenticated })
+        }
+        alt={alt}
+      />
     </NamedLink>
   );
 };
