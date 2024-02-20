@@ -2,6 +2,11 @@
 
 .root {
   flex-grow: 1;
+  & > div {
+    & > div {
+      background: #ffffff;
+    }
+  }
 }
 
 .contentContainer {
@@ -11,27 +16,28 @@
   @media (--viewportMedium) {
     height: unset;
   }
-  @media(max-width:767px){
-    height:auto;
+  @media (max-width: 767px) {
+    height: auto;
   }
 }
 
 .content {
   composes: marketplaceModalBaseStyles from global;
   padding-top: 29px;
-  padding:30px;
+  padding: 30px;
+  border-bottom: none;
   @media (--viewportMedium) {
     margin-top: 5vh;
     margin-bottom: 7.5vh;
     /* min-height: 700px; */
   }
-  @media(max-width:767px){
-    padding:15px;
+  @media (max-width: 767px) {
+    padding: 15px;
   }
-  & > nav{
-    & > div{
-      & > a{
-        @media(max-width:767px){
+  & > nav {
+    & > div {
+      & > a {
+        @media (max-width: 767px) {
           padding-bottom: 5px;
         }
       }
@@ -57,8 +63,8 @@
     padding: 0;
     margin-top: 0;
   }
-  @media(max-width:767px){
-    font-size:25px;
+  @media (max-width: 767px) {
+    font-size: 25px;
   }
 }
 
@@ -81,17 +87,17 @@
   whole form correctly.  */
   flex-grow: 0;
   flex-basis: 260px;
-  padding-top:0;
+  padding-top: 0;
   @media (--viewportMedium) {
     /* flex-basis: 330px; */
     /* margin-top: 30px; */
     /* padding-top: 2px; */
   }
-  
 }
 
 .signupForm {
-  margin-top: 15px;
+  /* margin-top: 15px; */
+  margin-top: 30px;
 
   /* We don't want the form to take the whole space so that on mobile view
   the social login buttons will be after the sign up button
@@ -106,7 +112,6 @@
     /* margin-top: 30px; */
     /* padding-top: 2px; */
   }
-
 }
 
 .bottomWrapper {
@@ -146,8 +151,8 @@
 
   /* This is not a real modal, z-index should not be modal's z-index */
   z-index: 1;
-  @media(max-width:575px){
-    position:absolute;
+  @media (max-width: 575px) {
+    position: absolute;
   }
 }
 
@@ -172,7 +177,7 @@
 .modalMessage {
   composes: marketplaceModalParagraphStyles from global;
   margin: 10px 0 0 0;
-  & > span{
+  & > span {
     font-size: 16px;
     line-height: 26px;
   }
