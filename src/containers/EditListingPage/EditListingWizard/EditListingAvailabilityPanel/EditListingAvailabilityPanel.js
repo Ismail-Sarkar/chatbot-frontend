@@ -602,13 +602,17 @@ const EditListingAvailabilityPanel = props => {
             weekdays={rotateDays(WEEKDAYS, firstDayOfWeek)}
             useFullDays={useFullDays}
             onSubmit={handleSubmit}
-            initialValues={{
-              ...initialValues,
-              timezone: (availabilityPlan.timezone =
-                listingAttributes?.privateData?.timezone === 'America/Miami'
-                  ? 'America/Miami'
-                  : listingAttributes?.availabilityPlan?.timezone),
-            }}
+            initialValues={
+              listingAttributes?.availabilityPlan?.timezone
+                ? {
+                    ...initialValues,
+                    timezone:
+                      listingAttributes?.privateData?.timezone === 'America/Miami'
+                        ? 'America/Miami'
+                        : listingAttributes?.availabilityPlan?.timezone,
+                  }
+                : initialValues
+            }
             listingAttributes={listingAttributes}
             inProgress={updateInProgress}
             fetchErrors={errors}
