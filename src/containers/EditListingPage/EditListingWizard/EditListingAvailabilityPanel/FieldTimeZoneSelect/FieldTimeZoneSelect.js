@@ -4,9 +4,35 @@ import { getTimeZoneNames } from '../../../../../util/dates';
 import { FieldSelect } from '../../../../../components';
 
 const FieldTimeZoneSelect = props => {
+  const { listingAttributes = {}, formApi } = props;
+
+  const timezone = false;
+  // const { timezone } = listingAttributes.privateData || {};
+  // restOfprops.listingAttributes?.privateData?.timezone === 'America/Miami'
+  //                     ? // ? restOfprops.listingAttributes?.privateData?.timezone
+  //                       'America/Miami'
+  //                     :
   // IANA database contains irrelevant time zones too.
   const relevantZonesPattern = new RegExp(
     '^(Africa|America(?!/(Argentina/ComodRivadavia|Knox_IN|Nuuk))|Antarctica(?!/(DumontDUrville|McMurdo))|Asia(?!/Qostanay)|Atlantic|Australia(?!/(ACT|LHI|NSW))|Europe|Indian|Pacific)'
+  );
+
+  const auxTz = [...getTimeZoneNames(relevantZonesPattern)];
+
+  auxTz.splice(
+    auxTz.findIndex(({ value }) => value === 'America/New_York'),
+    1,
+    { label: 'America/Miami', value: 'America/Miami' }
+  );
+
+  const tzToDisplay = timezone ? auxTz : getTimeZoneNames(relevantZonesPattern);
+
+  console.log(
+    234,
+    tzToDisplay,
+    timezone,
+    auxTz.findIndex(({ value }) => value === 'America/New_York'),
+    auxTz
   );
 
   return (
@@ -15,9 +41,9 @@ const FieldTimeZoneSelect = props => {
         Pick something...
       </option>
       {getTimeZoneNames(relevantZonesPattern).map(tz => (
-        <option key={tz} value={tz}>
-          {/* <option key={tz.value} value={tz.label}> */}
-          {tz}
+        // <option key={tz} value={tz}>
+        <option key={tz.value} value={tz.label}>
+          {tz.label}
         </option>
       ))}
     </FieldSelect>

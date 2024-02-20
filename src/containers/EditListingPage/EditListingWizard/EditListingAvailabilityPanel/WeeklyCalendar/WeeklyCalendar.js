@@ -344,7 +344,8 @@ const WeeklyCalendar = props => {
     history,
   } = props;
   // Get all the AvailabilityExcetions
-  const timeZone = availabilityPlan.timezone;
+  const timeZone =
+    availabilityPlan.timezone === 'America/Miami' ? 'America/New_York' : availabilityPlan.timezone;
   const endOfRange = endOfAvailabilityExceptionRange(timeZone, new Date());
   const thisWeek = getStartOfWeek(TODAY, timeZone, firstDayOfWeek);
   const endOfCurrentWeek = getStartOf(currentWeek, 'day', timeZone, 6, 'days');

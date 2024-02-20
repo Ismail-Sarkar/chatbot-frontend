@@ -113,8 +113,11 @@ const createEntriesFromSubmitValues = (values, listing) =>
 const createAvailabilityPlan = (values, listing) => ({
   availabilityPlan: {
     type: 'availability-plan/time',
-    timezone: values.timezone,
+    timezone: values.timezone === 'America/Miami' ? 'America/New_York' : values.timezone,
     entries: createEntriesFromSubmitValues(values, listing),
+  },
+  privateData: {
+    timezone: values.timezone,
   },
 });
 
@@ -353,6 +356,8 @@ const EditListingAvailabilityPanel = props => {
     ],
   };
   const availabilityPlan = listingAttributes?.availabilityPlan || defaultAvailabilityPlan;
+
+  console.log(availabilityPlan, 4545);
 
   const initialValues = valuesFromLastSubmit
     ? valuesFromLastSubmit
@@ -599,7 +604,14 @@ const EditListingAvailabilityPanel = props => {
             weekdays={rotateDays(WEEKDAYS, firstDayOfWeek)}
             useFullDays={useFullDays}
             onSubmit={handleSubmit}
-            initialValues={initialValues}
+            initialValues={{
+              ...initialValues,
+              timezone: (availabilityPlan.timezone =
+                listingAttributes?.privateData?.timezone === 'America/Miami'
+                  ? 'America/Miami'
+                  : listingAttributes?.availabilityPlan?.timezone),
+            }}
+            listingAttributes={listingAttributes}
             inProgress={updateInProgress}
             fetchErrors={errors}
           />
