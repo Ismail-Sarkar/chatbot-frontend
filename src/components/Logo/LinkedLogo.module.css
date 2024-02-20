@@ -24,7 +24,7 @@
   /* If height is increased, change link margins accordingly */
   /* NOTE: extremely wide logos may look bad. This will scale them to container of 24 x 200. */
   /* height: 24px; */
-  height: 16px;
+  height: 30px;
 
   width: auto;
   max-width: 188px;
@@ -34,6 +34,9 @@
 
   @media (--viewportMedium) {
     /* margin: 24px 0; */
-    margin: 40px 0;
+    margin: 30px 0;
   }
+}
+.authenticatedLogo {
+  margin: 20px 0;
 }

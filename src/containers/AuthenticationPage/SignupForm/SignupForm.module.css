@@ -13,35 +13,44 @@
 .name {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
-  gap:0 20px;
+  /* margin-top: 15px; */
+  margin-top: 30px;
+
+  gap: 0 20px;
   @media (--viewportMedium) {
     /* margin-top: 32px; */
   }
-  & > div{
-    & > label{
-      padding:0 0 5px 0;
+  & > div {
+    & > label {
+      padding: 0 0 5px 0;
+    }
+  }
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+    & > div:nth-child(2) {
+      margin-top: 24px;
     }
   }
 }
 
 .firstNameRoot {
   /* width: calc(34% - 9px); */
-  flex-basis:50%;
-  width:50%;
-  @media(max-width:575px){
-    flex-basis:100%;
-    width:100%;
+  flex-basis: 50%;
+  width: 50%;
+  @media (max-width: 575px) {
+    flex-basis: 100%;
+    width: 100%;
   }
 }
 
 .lastNameRoot {
   /* width: calc(66% - 9px); */
-  flex-basis:50%;
-  width:50%;
-  @media(max-width:575px){
-    flex-basis:100%;
-    width:100%;
+  flex-basis: 50%;
+  width: 50%;
+  @media (max-width: 575px) {
+    flex-basis: 100%;
+    width: 100%;
   }
 }
 
@@ -56,12 +65,14 @@
 
 .password {
   composes: marketplaceModalPasswordMargins from global;
-  margin-top:15px;
+  /* margin-top: 15px; */
+  margin-top: 30px;
 }
 
 .bottomWrapper {
   composes: marketplaceModalBottomWrapper from global;
-  margin-top:40px;
+  /* margin-top: 40px; */
+  margin-top: 50px;
 }
 
 .sectionTitle {
@@ -69,21 +80,35 @@
   margin-top: -15px;
   margin-bottom: 25px;
 }
-.bottomMessage {
-  color: red;
-  margin-top: 15px;
+.bottomMessage,
+.partnerBottomMessage {
+  /* color: red; */
+  color: #000;
+
+  margin-top: 5px;
+
+  font-size: 14px;
   & a {
-    color: red;
+    /* color: red; */
+    color: #000;
+
     font-weight: 800;
     text-decoration: none;
-    border-bottom: 2px solid red;
+    border-bottom: 2px solid #000;
   }
 }
-.middleContainer{
-   & > div{
-    & > label{
-      padding-top:0;
-      padding-bottom:5px;
+.partnerBottomMessage {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.middleContainer {
+  & > div {
+    & > label {
+      padding-top: 0;
+      /* padding-bottom:5px; */
+      padding-bottom: 10px;
     }
-   }
+  }
 }

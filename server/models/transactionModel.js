@@ -164,6 +164,7 @@ module.exports.searchTransactionsBy = async (
             { status: { $ne: 'canceled' } },
             { status: { $ne: 'declined' } },
             { status: { $ne: 'expired' } },
+            { status: { $ne: 'pending' } },
           ],
         }
       : !!bookingStart

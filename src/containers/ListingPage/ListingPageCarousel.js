@@ -288,7 +288,11 @@ export const ListingPageComponent = props => {
         },
       }}
     >
-      <LayoutSingleColumn className={classNames(css.pageRoot,css.ListingpageMain)} topbar={topbar} footer={<FooterContainer />}>
+      <LayoutSingleColumn
+        className={classNames(css.pageRoot, css.ListingpageMain)}
+        topbar={topbar}
+        footer={<FooterContainer />}
+      >
         <div className={css.contentWrapperForProductLayout}>
           <div className={css.mainColumnForProductLayout}>
             {currentListing.id ? (
@@ -414,6 +418,7 @@ export const ListingPageComponent = props => {
               dayCountAvailableForBooking={config.stripe.dayCountAvailableForBooking}
               marketplaceName={config.marketplaceName}
               listingTimeZone={listingTimeZone}
+              currentUser={currentUser}
             />
           </div>
         </div>

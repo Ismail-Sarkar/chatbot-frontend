@@ -497,7 +497,35 @@ select:disabled {
   }
 }
 
-input,
+input {
+  /* Dimensions */
+  display: block;
+  width: 100%;
+  margin: 0;
+
+  /* 6 + 24 + 4 + borders are divisible by 6 */
+  padding: 6px 12px 4px 12px;
+  background-color: #fff;
+
+  /* Borders */
+
+  border: 1px solid #000000;
+  outline: none;
+
+  /* Transition */
+  transition: all ease-in-out 100ms;
+
+  &::placeholder {
+    color: var(--colorGrey300);
+  }
+
+  @media (--viewportMedium) {
+    /* 7 + 32 + 7 + borders = 48, which is divisible by 8. */
+    padding: 7px 16px 7px 16px;
+    line-height: 32px;
+  }
+}
+
 textarea {
   /* Dimensions */
   display: block;
@@ -1000,7 +1028,9 @@ textarea {
   /* button defaults */
   display: block;
   width: 100%;
-  min-height: 56px;
+  /* min-height: 56px; */
+  min-height: 53px;
+
   margin: 0;
 
   /* Padding is only for <a> elements where button styles are applied,
@@ -1027,7 +1057,9 @@ textarea {
 
   /* Button colors */
   /* Primary button uses success color */
-  background-color: var(--colorSuccess);
+  /* background-color: var(--colorSuccess); */
+  background-color: #000;
+
   color: var(--colorWhite);
 
   @media (--viewportMedium) {
@@ -1038,7 +1070,9 @@ textarea {
 .buttonPrimary:hover {
   outline: none;
   box-shadow: var(--boxShadowButton);
-  background-color: var(--colorSuccessDark);
+  /* background-color: var(--colorSuccessDark); */
+  background-color: #000;
+
   color: var(--colorWhite);
 }
 .buttonPrimary:hover {
@@ -1340,12 +1374,15 @@ textarea {
 
 .marketplaceModalHelperText {
   font-weight: var(--fontWeightRegular);
+
   font-size: 13px;
   line-height: 18px;
 
   -webkit-font-smoothing: subpixel-antialiased;
 
-  color: var(--colorGrey300);
+  /* color: var(--colorGrey300); */
+  color: #000;
+
   margin: 0;
 
   @media (--viewportMedium) {
@@ -1355,8 +1392,11 @@ textarea {
 }
 
 .marketplaceModalHelperLink {
-  font-weight: var(--fontWeightRegular);
-  font-size: 13px;
+  /* font-weight: var(--fontWeightRegular); */
+  font-weight: 600;
+  /* font-size: 13px; */
+  font-size: 14px;
+
   line-height: 18px;
 
   -webkit-font-smoothing: subpixel-antialiased;
