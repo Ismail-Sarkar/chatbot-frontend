@@ -6,9 +6,9 @@
 .content {
   display: flex;
   flex-direction: row;
-  & > a{
-    & > span{
-      font-size:20px;
+  & > a {
+    & > span {
+      font-size: 20px;
     }
   }
 }
@@ -79,7 +79,8 @@
   /* Text size should be inherited */
   text-decoration: none;
 
-  font-weight: var(--fontWeightMedium);
+  /* font-weight: var(--fontWeightMedium); */
+  font-weight: 700;
   font-size: 15px;
   line-height: 24px;
   letter-spacing: 0;
@@ -92,10 +93,11 @@
   }
 
   @media (--viewportMedium) {
-    font-weight: var(--fontWeightMedium);
+    /* font-weight: var(--fontWeightMedium); */
+    /* font-weight: 600; */
     /* margin-top + n * line-height + margin-bottom => x * 8px */
-    margin-top: 17px;
-    margin-bottom: 15px;
+    /* margin-top: 17px;
+    margin-bottom: 15px; */
   }
 }
 
@@ -104,8 +106,8 @@
   @media (--viewportMedium) {
     margin: 16px 0 0 0;
   }
-  @media(max-width:575px){
-    margin-top:0;
+  @media (max-width: 575px) {
+    margin-top: 0;
   }
 }
 
@@ -130,8 +132,8 @@
     /* justify-content: space-between; */
     align-items: baseline;
   }
-  @media(max-width:1023px){
-    justify-content:unset;
+  @media (max-width: 1023px) {
+    justify-content: unset;
   }
 }
 
@@ -139,9 +141,9 @@
   composes: p from global;
   display: none;
   padding: 0;
-  margin-left:10px;
+  margin-left: 10px;
   white-space: nowrap;
-  
+
   @media (--viewportMedium) {
     display: inline;
   }
