@@ -53,7 +53,6 @@ const PriceMaybe = props => {
 
   const isBookable = isBookingProcessAlias(publicData?.transactionProcessAlias);
   const { formattedPrice, priceTitle } = priceData(price, config.currency, intl);
-  console.log(formattedPrice, 77);
   return (
     <div className={css.price}>
       <div className={css.priceValue} title={priceTitle}>
