@@ -2,21 +2,21 @@
 
 .root {
   display: block;
-
   flex-shrink: 0;
   padding: 0;
   height: 100%;
   margin: auto;
+  padding: 0 23px;
   &:hover {
     text-decoration: none;
   }
 
   @media (--viewportMedium) {
-    padding: 0 24px;
+    /* padding: 0 24px; */
   }
 
   @media (--viewportLarge) {
-    padding: 0 36px;
+    /* padding: 0 36px; */
   }
 }
 
@@ -30,7 +30,7 @@
   max-width: 188px;
   object-fit: contain;
   object-position: center;
-  margin: 25px 0;
+  margin: 15px 0;
 
   @media (--viewportMedium) {
     /* margin: 24px 0; */
@@ -38,5 +38,5 @@
   }
 }
 .authenticatedLogo {
-  margin: 20px 0;
+ 
 }

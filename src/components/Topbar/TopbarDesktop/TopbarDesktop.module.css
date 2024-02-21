@@ -10,7 +10,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
+  /* align-items: flex-start; */
+  align-items:center;
   /* padding: 0 12px 0 0; */
 
   /* fill */
@@ -48,9 +49,12 @@
   border-left-color: var(--colorGrey100); */
   margin: 13px 0;
   padding-left: 10px;
-
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: var(--colorGrey100);
+  margin: 0;
   @media (--viewportLarge) {
-    padding-left: 10px;
+    /* padding-left: 10px; */
   }
 }
 .authSearchLink {
@@ -152,8 +156,7 @@
   composes: textSmall from global;
   display: inline-block;
   /* margin: 28px 0; */
-  margin: 40px 0;
-
+  margin: 28px 0;
   text-decoration: inherit;
 }
 
@@ -323,8 +326,8 @@
   composes: textSmall from global;
 
   display: inline-block;
-  /* margin: 28px 0; */
-  margin: 40px 0;
+  margin: 28px 0;
+  /* margin: 40px 0; */
 
   text-decoration: inherit;
 }
@@ -439,12 +442,13 @@
 .searchWithIcon {
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  padding-left: 28px;
   &:hover {
     text-decoration: none;
   }
   & > svg {
     /* fill: #fc334d; */
+    margin-top: 4px;
   }
 }
 .searchTitle {
