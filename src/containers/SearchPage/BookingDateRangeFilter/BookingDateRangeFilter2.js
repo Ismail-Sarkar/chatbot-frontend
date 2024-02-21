@@ -129,12 +129,12 @@ export class BookingDateRangeFilterComponent extends Component {
 
     const handleSubmit = values => {
       onSubmit(
-        values && this.state.selectedDate
+        values && values.dates && this.state.selectedDate
           ? formatValue(
               { ...values, dates: { ...values?.dates, date: new Date(this.state.selectedDate) } },
               datesQueryParamName
             )
-          : formatValue(values, datesQueryParamName)
+          : formatValue(null, datesQueryParamName)
       );
     };
 
@@ -142,8 +142,9 @@ export class BookingDateRangeFilterComponent extends Component {
       this.popupControllerRef && this.popupControllerRef.onReset
         ? {
             onClear: () => {
-              this.setState({ selectedDate: null });
-              this.popupControllerRef.onReset(null, null);
+              this.setState({ selectedDate: null }, () =>
+                this.popupControllerRef.onReset(null, null)
+              );
             },
           }
         : {};
@@ -152,8 +153,9 @@ export class BookingDateRangeFilterComponent extends Component {
       this.popupControllerRef && this.popupControllerRef.onReset
         ? {
             onCancel: () => {
-              this.setState({ selectedDate: null });
-              this.popupControllerRef.onReset(null, null);
+              this.setState({ selectedDate: null }, () =>
+                this.popupControllerRef.onReset(null, null)
+              );
             },
           }
         : {};
@@ -162,9 +164,9 @@ export class BookingDateRangeFilterComponent extends Component {
       this.plainControllerRef && this.plainControllerRef.onReset
         ? {
             onClear: () => {
-              this.setState({ selectedDate: null });
-
-              this.plainControllerRef.onReset(null, null);
+              this.setState({ selectedDate: null }, () =>
+                this.plainControllerRef.onReset(null, null)
+              );
             },
           }
         : {};
@@ -235,13 +237,31 @@ export class BookingDateRangeFilterComponent extends Component {
         initialValues={initialDates}
         {...rest}
       >
-        <FieldDateRangeController
-          name="dates"
-          minimumNights={minimumNights}
-          controllerRef={node => {
-            this.popupControllerRef = node;
-          }}
-        />
+        <div className={css.calenderDateContainer}>
+          <FieldDateInput
+            dateClassName={css.inboxPageCalender}
+            name="dates"
+            placeholderText={`Date`}
+            minimumNights={minimumNights}
+            controllerRef={node => {
+              this.popupControllerRef = node;
+            }}
+            keepOpenCalender={true}
+            keepOpenOnDateSelect={true}
+            firstDayOfWeek={0}
+            weekDayFormat="ddd"
+            isDayHighlighted={day => {
+              const formatedDate = moment(day).format('YYYY-MM-DD');
+
+              return moment(formatedDate).isSame(this.state.selectedDate);
+            }}
+            onChange={value => {
+              this.setState({
+                selectedDate: moment(value.date).format('YYYY-MM-DD'),
+              });
+            }}
+          />
+        </div>
       </FilterPopupForSidebar>
     ) : (
       <FilterPlain
@@ -259,13 +279,31 @@ export class BookingDateRangeFilterComponent extends Component {
         initialValues={initialDates}
         {...rest}
       >
-        <FieldDateRangeController
-          name="dates"
-          minimumNights={minimumNights}
-          controllerRef={node => {
-            this.plainControllerRef = node;
-          }}
-        />
+        <div className={css.calenderDateContainer}>
+          <FieldDateInput
+            dateClassName={css.inboxPageCalender}
+            name="dates"
+            placeholderText={`Date`}
+            minimumNights={minimumNights}
+            controllerRef={node => {
+              this.popupControllerRef = node;
+            }}
+            keepOpenCalender={true}
+            keepOpenOnDateSelect={true}
+            firstDayOfWeek={0}
+            weekDayFormat="ddd"
+            isDayHighlighted={day => {
+              const formatedDate = moment(day).format('YYYY-MM-DD');
+
+              return moment(formatedDate).isSame(this.state.selectedDate);
+            }}
+            onChange={value => {
+              this.setState({
+                selectedDate: moment(value.date).format('YYYY-MM-DD'),
+              });
+            }}
+          />
+        </div>
       </FilterPlain>
     );
   }
