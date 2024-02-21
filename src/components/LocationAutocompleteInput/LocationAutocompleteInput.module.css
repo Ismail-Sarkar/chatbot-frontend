@@ -3,6 +3,7 @@
 .root {
   position: relative;
   display: flex;
+  /* background: transparent; */
 }
 
 .icon {
@@ -15,6 +16,7 @@
 
 .iconSvg {
   margin: auto;
+  height: 21px;
 }
 
 .iconSvgGroup {
