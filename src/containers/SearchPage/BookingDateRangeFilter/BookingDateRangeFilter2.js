@@ -12,6 +12,8 @@ import FilterPopup from '../FilterPopup/FilterPopup';
 import FilterPopupForSidebar from './FilterPopupForSidebar';
 import css from './BookingDateRangeFilter.module.css';
 import moment from 'moment';
+import { compose } from 'redux';
+import { withViewport } from '../../../util/uiHelpers';
 
 const getDatesQueryParamName = queryParamNames => {
   return Array.isArray(queryParamNames)
@@ -45,6 +47,8 @@ const formatValue = (dateRange, queryParamName) => {
   return { [queryParamName]: value };
 };
 
+const MAX_MOBILE_SCREEN_WIDTH = 768;
+
 export class BookingDateRangeFilterComponent extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +60,6 @@ export class BookingDateRangeFilterComponent extends Component {
 
     this.toggleIsOpen = this.toggleIsOpen.bind(this);
   }
-
   toggleIsOpen() {
     this.setState(prevState => ({ isOpen: !prevState.isOpen }));
   }
@@ -75,8 +78,11 @@ export class BookingDateRangeFilterComponent extends Component {
       label,
       intl,
       minimumNights,
+      viewport,
       ...rest
     } = this.props;
+
+    const isMobileLayout = viewport.width < MAX_MOBILE_SCREEN_WIDTH;
 
     const datesQueryParamName = getDatesQueryParamName(queryParamNames);
     const initialDates =
@@ -126,12 +132,17 @@ export class BookingDateRangeFilterComponent extends Component {
           }
         )
       : null;
-
     const handleSubmit = values => {
       onSubmit(
-        values && values.dates && this.state.selectedDate
+        values && values.dates //&& this.state.selectedDate
           ? formatValue(
-              { ...values, dates: { ...values?.dates, date: new Date(this.state.selectedDate) } },
+              {
+                ...values,
+                dates: {
+                  ...values?.dates,
+                  date: isMobileLayout ? values.dates.date : new Date(this.state.selectedDate),
+                },
+              },
               datesQueryParamName
             )
           : formatValue(null, datesQueryParamName)
@@ -199,7 +210,6 @@ export class BookingDateRangeFilterComponent extends Component {
             dateClassName={css.inboxPageCalender}
             name="dates"
             placeholderText={`Date`}
-            minimumNights={minimumNights}
             controllerRef={node => {
               this.popupControllerRef = node;
             }}
@@ -242,7 +252,6 @@ export class BookingDateRangeFilterComponent extends Component {
             dateClassName={css.inboxPageCalender}
             name="dates"
             placeholderText={`Date`}
-            minimumNights={minimumNights}
             controllerRef={node => {
               this.popupControllerRef = node;
             }}
@@ -284,7 +293,6 @@ export class BookingDateRangeFilterComponent extends Component {
             dateClassName={css.inboxPageCalender}
             name="dates"
             placeholderText={`Date`}
-            minimumNights={minimumNights}
             controllerRef={node => {
               this.popupControllerRef = node;
             }}
@@ -336,6 +344,6 @@ BookingDateRangeFilterComponent.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const BookingDateRangeFilter2 = injectIntl(BookingDateRangeFilterComponent);
+const BookingDateRangeFilter2 = compose(injectIntl, withViewport)(BookingDateRangeFilterComponent);
 
 export default BookingDateRangeFilter2;

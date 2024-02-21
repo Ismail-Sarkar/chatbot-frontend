@@ -43,6 +43,7 @@ class FieldDateInputComponent extends Component {
       showErrorMessage,
       onChange: parentOnChange,
       dateClassName,
+      controllerRef,
       ...rest
     } = this.props;
 
@@ -64,23 +65,14 @@ class FieldDateInputComponent extends Component {
       [css.pickerError]: hasError,
     });
 
-    const {
-      onBlur,
-      onFocus,
-      onChange: inputOnChange,
-      type,
-      checked,
-      ...restOfInput
-    } = input;
+    const { onBlur, onFocus, onChange: inputOnChange, type, checked, ...restOfInput } = input;
     const inputProps = {
       onBlur: input.onBlur,
       onFocus: input.onFocus,
       onChange: handleChange(parentOnChange, inputOnChange),
       useMobileMargins,
       id,
-      readOnly:
-        typeof window !== 'undefined' &&
-        window.innerWidth < MAX_MOBILE_SCREEN_WIDTH,
+      readOnly: typeof window !== 'undefined' && window.innerWidth < MAX_MOBILE_SCREEN_WIDTH,
       className: dateClassName,
       ...restOfInput,
       ...rest,
@@ -101,10 +93,8 @@ class FieldDateInputComponent extends Component {
             {label}
           </label>
         ) : null}
-        <DateInput className={inputClasses} {...inputProps} />
-        {showErrorMessage ? (
-          <ValidationError className={errorClasses} fieldMeta={meta} />
-        ) : null}
+        <DateInput className={inputClasses} ref={controllerRef} {...inputProps} />
+        {showErrorMessage ? <ValidationError className={errorClasses} fieldMeta={meta} /> : null}
       </div>
     );
   }
