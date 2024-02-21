@@ -95,6 +95,7 @@
             & > div:last-child {
               margin-top: -40px !important;
               box-shadow: none !important;
+              background-color: #fc334d;
               & > div {
                 background: transparent;
               }
