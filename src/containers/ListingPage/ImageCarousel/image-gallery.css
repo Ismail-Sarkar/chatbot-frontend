@@ -132,7 +132,9 @@
   overflow: hidden;
   position: relative;
   white-space: nowrap;
-  text-align: center; }
+  text-align: center; 
+                                                              
+}                                             
 
 .image-gallery-slide {
   left: 0;

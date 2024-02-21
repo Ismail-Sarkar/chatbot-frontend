@@ -29,6 +29,9 @@
 .logoLink {
   border-bottom: 0px solid;
   transition: var(--transitionStyleButton);
+  & > img{
+    height: 40px;
+  }
 }
 .logoLink:hover {
   border-bottom: 4px solid var(--marketplaceColor);
@@ -274,7 +277,7 @@
 .signupLink {
   border-bottom: 0px solid;
   transition: var(--transitionStyleButton);
-  border-left: 1px solid black;
+  /* border-left: 1px solid black; */
   flex-shrink: 0;
   height: 100%;
   /* padding: 0 12px 0 12px; */
