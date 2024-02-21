@@ -48,12 +48,12 @@
 .desktopIcon {
   height: var(--topbarHeightDesktop);
   border: none;
-  padding-top: 2px;
+  /* padding-top: 2px; */
 
   display: flex;
   width: 24px;
   align-self: stretch;
-  background-color: var(--colorWhite);
+  /* background-color: var(--colorWhite); */
 }
 
 .desktopInput {
@@ -70,10 +70,9 @@
   /* Search text gets ellipsis if it's too wide */
   text-overflow: ellipsis;
   overflow-x: hidden;
-
   margin-top: 0;
   margin-bottom: 0;
-
+  /* background: transparent; */
   &:hover,
   &:focus {
     border-bottom-color: var(--marketplaceColor);
@@ -84,7 +83,7 @@
 
   &:hover::placeholder,
   &:focus::placeholder {
-    color: var(--colorGrey700);
+    /* color: var(--colorGrey700); */
   }
 
   /* Placeholder text might be too wide */
@@ -92,6 +91,7 @@
     text-overflow: ellipsis;
     overflow-x: hidden;
     transition: var(--transitionStyleButton);
+    /* color: #000; */
   }
 
   @media (--viewportMedium) {

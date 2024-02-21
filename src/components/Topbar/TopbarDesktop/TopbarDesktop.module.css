@@ -47,9 +47,10 @@
   border-left-width: 1px;
   border-left-color: var(--colorGrey100); */
   margin: 13px 0;
+  padding-left: 10px;
 
   @media (--viewportLarge) {
-    padding-left: 0;
+    padding-left: 10px;
   }
 }
 .authSearchLink {
@@ -438,7 +439,7 @@
 .searchWithIcon {
   display: flex;
   align-items: center;
-  /* padding-left: 10px; */
+  padding-left: 10px;
   &:hover {
     text-decoration: none;
   }
@@ -450,4 +451,11 @@
   padding-left: 10px;
   color: #000000;
   font-size: 16px;
+}
+.authenticatedSearchBar {
+  margin: 0;
+  padding-left: 10px;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: var(--colorGrey100);
 }
