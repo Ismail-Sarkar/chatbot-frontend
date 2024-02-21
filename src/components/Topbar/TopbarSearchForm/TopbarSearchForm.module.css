@@ -72,7 +72,7 @@
   overflow-x: hidden;
   margin-top: 0;
   margin-bottom: 0;
-  /* background: transparent; */
+  background: transparent;
   &:hover,
   &:focus {
     border-bottom-color: var(--marketplaceColor);

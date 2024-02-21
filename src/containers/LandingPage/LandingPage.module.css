@@ -11,6 +11,8 @@
       font-weight: 500;
       color: #000000;
       line-height: 62px;
+      font-family:var(--bodyfontfamily);
+      /* font-family: 'NeueHaasGroteskDisp Pro'; */
     }
   }
   & > div:nth-child(2) {

@@ -82,7 +82,7 @@
 
 .topbarSearchWithLeftPadding {
   /* padding-left: 24px; */
-  height: var(--topbarHeightDesktop);
+  /* height: var(--topbarHeightDesktop); */
 
   @media (--viewportLarge) {
     /* padding-left: 34px; */

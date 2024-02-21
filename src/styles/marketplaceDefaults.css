@@ -1,6 +1,7 @@
 @import '../assets/sanitize.css';
 @import './customMediaQueries.css';
-
+/* @import '../fonts/fonts.css'; */
+/* @import '../fonts/fonts.css'; */
 /* ================ Custom Properties aka CSS variables ================ */
 
 /**
@@ -61,7 +62,7 @@
   --color-blocked: #999999;
 
   /* ================ Font ================ */
-  --fontFamily: -apple-system, BlinkMacSystemFont, 'Inter', Helvetica, Arial, sans-serif,
+  --fontFamily: 'NeueHaasGroteskDisp Pro Md', 'Inter', Helvetica, Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 
   --fontWeightRegular: 400;
@@ -71,8 +72,9 @@
   --fontWeightHeavy: 800;
   --fontWeightBlack: 900;
 
-  --fontWeightHighlightEmail: var(--fontWeightBold);
 
+  --fontWeightHighlightEmail: var(--fontWeightBold);
+  --bodyfontfamily: 'NeueHaasGroteskText Pro';
   /* ================ Spacing units ================ */
 
   /**
@@ -181,7 +183,8 @@
  */
 
 body {
-  font-family: var(--fontFamily);
+  /* font-family: var(--fontFamily); */
+  font-family:var(--bodyfontfamily);
 
   /* A non-standard feature: https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth */
   -webkit-font-smoothing: antialiased;
