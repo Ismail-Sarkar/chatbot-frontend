@@ -7,6 +7,7 @@ import SelectMultipleFilter from './SelectMultipleFilter/SelectMultipleFilter';
 import BookingDateRangeFilter from './BookingDateRangeFilter/BookingDateRangeFilter';
 import KeywordFilter from './KeywordFilter/KeywordFilter';
 import PriceFilter from './PriceFilter/PriceFilter';
+import BookingDateRangeFilter2 from './BookingDateRangeFilter/BookingDateRangeFilter2';
 
 // Helper: get enumOptions in a format that works as query parameter
 const createFilterOptions = options => options.map(o => ({ key: `${o.option}`, label: o.label }));
@@ -73,7 +74,7 @@ const FilterComponent = props => {
       const { dateRangeMode } = config;
       const isNightlyMode = dateRangeMode === 'night';
       return (
-        <BookingDateRangeFilter
+        <BookingDateRangeFilter2
           id={componentId}
           label={intl.formatMessage({ id: 'FilterComponent.datesLabel' })}
           queryParamNames={[key]}

@@ -12,6 +12,8 @@ import FilterPopup from '../FilterPopup/FilterPopup';
 import FilterPopupForSidebar from './FilterPopupForSidebar';
 import css from './BookingDateRangeFilter.module.css';
 import moment from 'moment';
+import { compose } from 'redux';
+import { withViewport } from '../../../util/uiHelpers';
 
 const getDatesQueryParamName = queryParamNames => {
   return Array.isArray(queryParamNames)
@@ -25,28 +27,27 @@ const getDatesQueryParamName = queryParamNames => {
 const parseValue = value => {
   const rawValuesFromParams = value ? value.split(',') : [];
   const [startDate, endDate] = rawValuesFromParams.map(v => parseDateFromISO8601(v));
-  return value && startDate && endDate ? { dates: { startDate, endDate } } : { dates: null };
+  //   return value && startDate && endDate ? { dates: { startDate, endDate } } : { dates: null };
+  return value && startDate && endDate
+    ? { dates: { startDate, endDate, date: startDate } }
+    : { dates: null };
 };
 // Format dateRange value for the query. It's given by FieldDateRangeInput:
 // { dates: { startDate, endDate } }
 const formatValue = (dateRange, queryParamName) => {
   const hasDates = dateRange && dateRange.dates;
-  const { startDate, endDate } = hasDates ? dateRange.dates : {};
+  //   const { startDate, endDate } = hasDates ? dateRange.dates : {};
+  //   const start = startDate ? stringifyDateToISO8601(startDate) : null;
+  //   const end = endDate ? stringifyDateToISO8601(endDate) : null;
+  //   const value = start && end ? `${start},${end}` : null;
+
+  const { date: startDate } = hasDates ? dateRange.dates : {};
   const start = startDate ? stringifyDateToISO8601(startDate) : null;
-  const end = endDate ? stringifyDateToISO8601(endDate) : null;
-  const value = start && end ? `${start},${end}` : null;
+  const value = start ? `${start},${start}` : null;
   return { [queryParamName]: value };
 };
 
-const formatdateValue = (date, queryParamName) => {
-  console.log(4567, 'first');
-  const hasDates = date && date.dates;
-  const { date: startDate, date: endDate } = hasDates ? date.dates : {};
-  const start = startDate ? stringifyDateToISO8601(startDate) : null;
-  const end = endDate ? stringifyDateToISO8601(endDate) : null;
-  const value = start && end ? `${start},${end}` : null;
-  return { [queryParamName]: value };
-};
+const MAX_MOBILE_SCREEN_WIDTH = 768;
 
 export class BookingDateRangeFilterComponent extends Component {
   constructor(props) {
@@ -59,20 +60,6 @@ export class BookingDateRangeFilterComponent extends Component {
 
     this.toggleIsOpen = this.toggleIsOpen.bind(this);
   }
-
-  componentDidMount() {
-    const { initialValues, queryParamNames } = this.props;
-    const datesQueryParamName = getDatesQueryParamName(queryParamNames);
-    const initialDates =
-      initialValues && initialValues[datesQueryParamName]
-        ? parseValue(initialValues[datesQueryParamName])
-        : { dates: null };
-    console.log(moment(initialDates?.dates?.startDate).format('YYYY-MM-DD'), 8384);
-    this.setState({
-      selectedDate: moment(initialDates?.dates?.startDate).format('YYYY-MM-DD'),
-    });
-  }
-
   toggleIsOpen() {
     this.setState(prevState => ({ isOpen: !prevState.isOpen }));
   }
@@ -91,26 +78,17 @@ export class BookingDateRangeFilterComponent extends Component {
       label,
       intl,
       minimumNights,
+      viewport,
       ...rest
     } = this.props;
 
-    const searchParams = new URLSearchParams(window?.location?.search);
-
-    const queryParams = {};
-
-    // Iterate through the search params and populate queryParams object
-    for (const [key, value] of searchParams.entries()) {
-      queryParams[key] = value;
-    }
-
-    console.log(this.state.selectedDate, queryParams, this.props, 8384);
+    const isMobileLayout = viewport.width < MAX_MOBILE_SCREEN_WIDTH;
 
     const datesQueryParamName = getDatesQueryParamName(queryParamNames);
     const initialDates =
       initialValues && initialValues[datesQueryParamName]
         ? parseValue(initialValues[datesQueryParamName])
         : { dates: null };
-    // console.log(initialDates, 8384);
 
     const isSelected = !!initialDates.dates;
     const startDate = isSelected ? initialDates.dates.startDate : null;
@@ -128,7 +106,7 @@ export class BookingDateRangeFilterComponent extends Component {
       ? intl.formatMessage(
           { id: 'BookingDateRangeFilter.labelSelectedPlain' },
           {
-            dates: `${formattedStartDate} - ${formattedEndDate}`,
+            dates: `${formattedStartDate} `,
           }
         )
       : label
@@ -139,7 +117,7 @@ export class BookingDateRangeFilterComponent extends Component {
       ? intl.formatMessage(
           { id: 'BookingDateRangeFilter.labelSelectedPopup' },
           {
-            dates: `${formattedStartDate} - ${formattedEndDate}`,
+            dates: `${formattedStartDate} `,
           }
         )
       : label
@@ -150,81 +128,59 @@ export class BookingDateRangeFilterComponent extends Component {
       ? intl.formatMessage(
           { id: 'BookingDateRangeFilter.labelSelectedPopup' },
           {
-            dates: `${formattedStartDate} - ${formattedEndDate}`,
+            dates: `${formattedStartDate} `,
           }
         )
       : null;
-
     const handleSubmit = values => {
       onSubmit(
-        formatdateValue({ dates: { date: new Date(this.state.selectedDate) } }, datesQueryParamName)
+        values && values.dates //&& this.state.selectedDate
+          ? formatValue(
+              {
+                ...values,
+                dates: {
+                  ...values?.dates,
+                  date: isMobileLayout ? values.dates.date : new Date(this.state.selectedDate),
+                },
+              },
+              datesQueryParamName
+            )
+          : formatValue(null, datesQueryParamName)
       );
-
-      // onSubmit(formatValue(values, datesQueryParamName));
     };
 
     const onClearPopupMaybe =
       this.popupControllerRef && this.popupControllerRef.onReset
         ? {
             onClear: () => {
-              console.log(445566, 'dfghjkl;');
-
-              this.popupControllerRef.onReset(null, null);
+              this.setState({ selectedDate: null }, () =>
+                this.popupControllerRef.onReset(null, null)
+              );
             },
           }
-        : {
-            onClear: () => {
-              console.log(445577, 'grdthrgrthyj');
-              this.setState({
-                selectedDate: null,
-              });
-              // onSubmit(formatdateValue({ dates: { date: null } }, datesQueryParamName));
-              const urlParamsafterClear = queryParams;
-              delete urlParamsafterClear['dates'];
-              console.log(
-                urlParamsafterClear,
-                window.location.pathname,
-                new URLSearchParams(urlParamsafterClear).toString(),
-                858467
-              );
-              this.props.history.push({
-                pathname: window.location.pathname,
-                search: new URLSearchParams(urlParamsafterClear).toString(),
-              });
-            },
-          };
+        : {};
 
     const onCancelPopupMaybe =
       this.popupControllerRef && this.popupControllerRef.onReset
-        ? { onCancel: () => this.popupControllerRef.onReset(startDate, endDate) }
+        ? {
+            onCancel: () => {
+              this.setState({ selectedDate: null }, () =>
+                this.popupControllerRef.onReset(null, null)
+              );
+            },
+          }
         : {};
 
     const onClearPlainMaybe =
       this.plainControllerRef && this.plainControllerRef.onReset
         ? {
             onClear: () => {
-              console.log(445566, 'dfghjkl;');
-              this.setState({
-                selectedDate: null,
-              });
-              this.plainControllerRef.onReset(null, null);
+              this.setState({ selectedDate: null }, () =>
+                this.plainControllerRef.onReset(null, null)
+              );
             },
           }
-        : {
-            onClear: () => {
-              console.log(445577, 'grdthrgrthyj');
-              this.setState({
-                selectedDate: null,
-              });
-              const urlParamsafterClear = queryParams;
-              delete urlParamsafterClear['dates'];
-              console.log(urlParamsafterClear, 858467);
-              this.props.history.push({
-                pathname: window.location.pathname,
-                search: new URLSearchParams(urlParamsafterClear).toString(),
-              });
-            },
-          };
+        : {};
 
     return showAsPopup ? (
       <FilterPopup
@@ -249,15 +205,11 @@ export class BookingDateRangeFilterComponent extends Component {
             this.popupControllerRef = node;
           }}
         /> */}
-
         <div className={css.calenderDateContainer}>
           <FieldDateInput
             dateClassName={css.inboxPageCalender}
             name="dates"
             placeholderText={`Date`}
-            minimumNights={minimumNights}
-            // input={{ ref: 'gvhbj' }}
-            // controllerRef="this.popupControllerRef"
             controllerRef={node => {
               this.popupControllerRef = node;
             }}
@@ -271,7 +223,6 @@ export class BookingDateRangeFilterComponent extends Component {
               return moment(formatedDate).isSame(this.state.selectedDate);
             }}
             onChange={value => {
-              console.log(value, 98889);
               this.setState({
                 selectedDate: moment(value.date).format('YYYY-MM-DD'),
               });
@@ -296,13 +247,30 @@ export class BookingDateRangeFilterComponent extends Component {
         initialValues={initialDates}
         {...rest}
       >
-        <FieldDateRangeController
-          name="dates"
-          minimumNights={minimumNights}
-          controllerRef={node => {
-            this.popupControllerRef = node;
-          }}
-        />
+        <div className={css.calenderDateContainer}>
+          <FieldDateInput
+            dateClassName={css.inboxPageCalender}
+            name="dates"
+            placeholderText={`Date`}
+            controllerRef={node => {
+              this.popupControllerRef = node;
+            }}
+            keepOpenCalender={true}
+            keepOpenOnDateSelect={true}
+            firstDayOfWeek={0}
+            weekDayFormat="ddd"
+            isDayHighlighted={day => {
+              const formatedDate = moment(day).format('YYYY-MM-DD');
+
+              return moment(formatedDate).isSame(this.state.selectedDate);
+            }}
+            onChange={value => {
+              this.setState({
+                selectedDate: moment(value.date).format('YYYY-MM-DD'),
+              });
+            }}
+          />
+        </div>
       </FilterPopupForSidebar>
     ) : (
       <FilterPlain
@@ -320,13 +288,30 @@ export class BookingDateRangeFilterComponent extends Component {
         initialValues={initialDates}
         {...rest}
       >
-        <FieldDateRangeController
-          name="dates"
-          minimumNights={minimumNights}
-          controllerRef={node => {
-            this.plainControllerRef = node;
-          }}
-        />
+        <div className={css.calenderDateContainer}>
+          <FieldDateInput
+            dateClassName={css.inboxPageCalender}
+            name="dates"
+            placeholderText={`Date`}
+            controllerRef={node => {
+              this.popupControllerRef = node;
+            }}
+            keepOpenCalender={true}
+            keepOpenOnDateSelect={true}
+            firstDayOfWeek={0}
+            weekDayFormat="ddd"
+            isDayHighlighted={day => {
+              const formatedDate = moment(day).format('YYYY-MM-DD');
+
+              return moment(formatedDate).isSame(this.state.selectedDate);
+            }}
+            onChange={value => {
+              this.setState({
+                selectedDate: moment(value.date).format('YYYY-MM-DD'),
+              });
+            }}
+          />
+        </div>
       </FilterPlain>
     );
   }
@@ -359,6 +344,6 @@ BookingDateRangeFilterComponent.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const BookingDateRangeFilter = injectIntl(BookingDateRangeFilterComponent);
+const BookingDateRangeFilter2 = compose(injectIntl, withViewport)(BookingDateRangeFilterComponent);
 
-export default BookingDateRangeFilter;
+export default BookingDateRangeFilter2;
