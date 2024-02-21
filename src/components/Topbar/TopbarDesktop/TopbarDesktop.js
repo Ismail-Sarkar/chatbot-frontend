@@ -50,7 +50,7 @@ const TopbarDesktop = props => {
 
   const search = (
     <TopbarSearchForm
-      className={css.searchLink}
+      className={classNames(css.searchLink, { [css.authenticatedSearchBar]: isAuthenticated })}
       desktopInputRoot={css.topbarSearchWithLeftPadding}
       onSubmit={onSearchSubmit}
       initialValues={initialSearchFormValues}
@@ -164,7 +164,7 @@ const TopbarDesktop = props => {
           name="SearchPage"
         >
           <LiaSearchSolid size={25} />
-          <div className={css.searchTitle}> Search Passes</div>
+          <div className={css.searchTitle}>Search passes</div>
         </NamedLink>
       )}
 

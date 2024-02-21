@@ -10,7 +10,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
+  /* align-items: flex-start; */
+  align-items:center;
   /* padding: 0 12px 0 0; */
 
   /* fill */
@@ -29,6 +30,9 @@
 .logoLink {
   border-bottom: 0px solid;
   transition: var(--transitionStyleButton);
+  & > img{
+    height: 40px;
+  }
 }
 .logoLink:hover {
   border-bottom: 4px solid var(--marketplaceColor);
@@ -44,9 +48,13 @@
   border-left-width: 1px;
   border-left-color: var(--colorGrey100); */
   margin: 13px 0;
-
+  padding-left: 10px;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: var(--colorGrey100);
+  margin: 0;
   @media (--viewportLarge) {
-    padding-left: 0;
+    /* padding-left: 10px; */
   }
 }
 .authSearchLink {
@@ -148,8 +156,7 @@
   composes: textSmall from global;
   display: inline-block;
   /* margin: 28px 0; */
-  margin: 40px 0;
-
+  margin: 28px 0;
   text-decoration: inherit;
 }
 
@@ -274,7 +281,7 @@
 .signupLink {
   border-bottom: 0px solid;
   transition: var(--transitionStyleButton);
-  border-left: 1px solid black;
+  /* border-left: 1px solid black; */
   flex-shrink: 0;
   height: 100%;
   /* padding: 0 12px 0 12px; */
@@ -319,8 +326,8 @@
   composes: textSmall from global;
 
   display: inline-block;
-  /* margin: 28px 0; */
-  margin: 40px 0;
+  margin: 28px 0;
+  /* margin: 40px 0; */
 
   text-decoration: inherit;
 }
@@ -435,16 +442,24 @@
 .searchWithIcon {
   display: flex;
   align-items: center;
-  /* padding-left: 10px; */
+  padding-left: 28px;
   &:hover {
     text-decoration: none;
   }
   & > svg {
     /* fill: #fc334d; */
+    margin-top: 4px;
   }
 }
 .searchTitle {
   padding-left: 10px;
   color: #000000;
   font-size: 16px;
+}
+.authenticatedSearchBar {
+  margin: 0;
+  padding-left: 10px;
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-left-color: var(--colorGrey100);
 }

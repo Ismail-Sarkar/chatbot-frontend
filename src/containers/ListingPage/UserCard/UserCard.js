@@ -38,15 +38,23 @@ const ExpandableBio = props => {
   const handleShowMoreClick = () => {
     setExpand(true);
   };
+  const handleShowLessClick = () => {
+    setExpand(false);
+  };
   const showMore = (
     <InlineTextButton rootClassName={css.showMore} onClick={handleShowMoreClick}>
       <FormattedMessage id="UserCard.showFullBioLink" />
     </InlineTextButton>
   );
+  const showLess = (
+    <InlineTextButton rootClassName={css.showMore} onClick={handleShowLessClick}>
+      <FormattedMessage id="UserCard.showLessBioLink" />
+    </InlineTextButton>
+  );
   return (
     <p className={className}>
       {expand ? bio : truncatedBio}
-      {bio !== truncatedBio && !expand ? showMore : null}
+      {bio !== truncatedBio && !expand ? showMore : showLess}
     </p>
   );
 };
