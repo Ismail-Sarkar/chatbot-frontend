@@ -456,7 +456,7 @@
 .searchTitle {
   padding-left: 10px;
   color: RGBA(74, 74, 79, 1);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 22px;
   &:hover{
     color: #000;
