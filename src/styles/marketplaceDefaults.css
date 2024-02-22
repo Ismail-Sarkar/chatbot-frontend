@@ -1575,8 +1575,8 @@ textarea {
   font-size: 25px;
 }
 ::-webkit-scrollbar {
-  width: 5px;
-  background-color: #f9f9f9;
+  width: 11px;
+  background-color: #ededed;
   height: 4px !important;
   cursor: pointer;
   @media (max-width: 767px) {
@@ -1585,5 +1585,6 @@ textarea {
 }
 ::-webkit-scrollbar-thumb {
   background-color: #000;
-  border-radius: 15px;
+  border-radius: 10px;
+  height: 15px;
 }

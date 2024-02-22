@@ -51,8 +51,9 @@
   /* padding-top: 2px; */
 
   display: flex;
-  width: 24px;
-  align-self: stretch;
+  /* width: 24px; */
+  /* align-self: stretch; */
+  align-items:center;
   /* background-color: var(--colorWhite); */
 }
 
@@ -73,17 +74,20 @@
   margin-top: 0;
   margin-bottom: 0;
   background: transparent;
+  font-family:var(--bodyfontfamily);
   &:hover,
   &:focus {
     border-bottom-color: var(--marketplaceColor);
     outline: none;
     border: 0;
     box-shadow: none;
+    background: transparent;
   }
 
   &:hover::placeholder,
   &:focus::placeholder {
     /* color: var(--colorGrey700); */
+    color: #000000;
   }
 
   /* Placeholder text might be too wide */
@@ -91,7 +95,13 @@
     text-overflow: ellipsis;
     overflow-x: hidden;
     transition: var(--transitionStyleButton);
-    /* color: #000; */
+    color: var(--colorGrey700);
+    /* color: #ebd7d7; */
+    font-size:16px;
+    font-size: 16px;
+    line-height: 22px;
+    font-family:var(--bodyfontfamily);
+    font-weight:500;
   }
 
   @media (--viewportMedium) {
@@ -125,13 +135,12 @@
   position: absolute;
   width: 100%;
   top: var(--topbarHeightDesktop);
-  left: 0;
+  left:-30px;
   background-color: var(--marketplaceColor);
   border-bottom-left-radius: var(--borderRadius);
   border-bottom-right-radius: var(--borderRadius);
   box-shadow: var(--boxShadowPopup);
   z-index: calc(var(--zIndexPopup) + 1);
-
   margin-top: 0;
   max-width: 434px;
 }

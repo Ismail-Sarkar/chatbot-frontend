@@ -13,14 +13,14 @@
   /* align-items: flex-start; */
   align-items:center;
   /* padding: 0 12px 0 0; */
-
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05);
   /* fill */
   background-color: var(--colorWhite);
 
   /* shadows */
   /* box-shadow: var(--boxShadowLight); */
 
-  border-bottom: 1px solid #000000;
+  border-bottom: 4px solid #000000;
   @media (--viewportLarge) {
     /* padding: 0 24px 0 0; */
   }
@@ -35,7 +35,7 @@
   }
 }
 .logoLink:hover {
-  border-bottom: 4px solid var(--marketplaceColor);
+  border-bottom: 3px solid var(--marketplaceColor);
   border-radius: 0;
 }
 
@@ -48,10 +48,10 @@
   border-left-width: 1px;
   border-left-color: var(--colorGrey100); */
   margin: 13px 0;
-  padding-left: 10px;
+  padding-left: 28px;
   border-left-style: solid;
-  border-left-width: 1px;
-  border-left-color: var(--colorGrey100);
+  border-left-width: 4px;
+  border-left-color: #000;
   margin: 0;
   @media (--viewportLarge) {
     /* padding-left: 10px; */
@@ -131,7 +131,7 @@
   flex-shrink: 0;
   height: 100%;
   /* padding: 0 24px 0 12px; */
-  padding: 0 36px 0 16px;
+  padding: 0 12px;
 
   &:hover {
     /* color: #fc334d;
@@ -285,7 +285,7 @@
   flex-shrink: 0;
   height: 100%;
   /* padding: 0 12px 0 12px; */
-  padding: 0 16px 0 32px;
+  padding: 0 12px;
   color: var(--colorGrey700);
 
   &:hover {
@@ -306,13 +306,15 @@
   flex-shrink: 0;
   height: 100%;
   /* padding: 0 12px 0 12px; */
-  padding: 0 36px 0 16px;
-
+  /* padding: 0 36px 0 16px; */
+  padding: 0 12px;
   color: var(--colorGrey700);
+  font-family: 'NeueHaasGroteskText Pro';
+  font-weight:500;
 
   &:hover {
     color: var(--colorBlack);
-    border-bottom: 4px solid var(--marketplaceColor);
+    border-bottom: 3px solid var(--marketplaceColor);
     border-radius: 0;
     text-decoration: none;
   }
@@ -448,13 +450,17 @@
   }
   & > svg {
     /* fill: #fc334d; */
-    margin-top: 4px;
+    margin-top: 3px;
   }
 }
 .searchTitle {
   padding-left: 10px;
-  color: #000000;
+  color: RGBA(74, 74, 79, 1);
   font-size: 16px;
+  line-height: 22px;
+  &:hover{
+    color: #000;
+  }
 }
 .authenticatedSearchBar {
   margin: 0;
