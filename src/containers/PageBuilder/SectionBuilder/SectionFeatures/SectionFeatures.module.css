@@ -11,6 +11,19 @@
 
 .featuresMain {
   composes: baseColumn;
+  & > div{
+    & > div{
+      & > div{
+        & > div{
+          & > div{
+            & > img{
+              height:320px !important;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 .block {

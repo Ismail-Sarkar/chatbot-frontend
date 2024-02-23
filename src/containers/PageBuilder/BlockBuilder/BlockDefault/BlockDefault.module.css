@@ -5,11 +5,23 @@
   /* width: 100%; */
   border-radius: 0px;
   margin-bottom: 0;
+  & > div{
+    & > div{
+      padding-bottom:65.25% !important;
+      & > div{
+        & > img{
+          height: 220px;
+          /* width: 370px; */
+          object-position: top;
+        }
+      }
+    }
+  }
 }
 
 .text {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 10px;
 
   &:first-child {
     margin-top: 0;

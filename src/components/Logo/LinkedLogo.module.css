@@ -18,6 +18,9 @@
   @media (--viewportLarge) {
     /* padding: 0 36px; */
   }
+  @media(max-width:767px){
+    padding: 5px 23px;
+  }
 }
 
 .logo {
@@ -35,6 +38,9 @@
   @media (--viewportMedium) {
     /* margin: 24px 0; */
     /* margin: 30px 0; */
+  }
+  @media(max-width:767px){
+    margin:0;
   }
 }
 .authenticatedLogo {

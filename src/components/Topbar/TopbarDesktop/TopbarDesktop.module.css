@@ -12,7 +12,7 @@
   justify-content: space-between;
   /* align-items: flex-start; */
   align-items:center;
-  /* padding: 0 12px 0 0; */
+  padding: 0 20px 0 0;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.05);
   /* fill */
   background-color: var(--colorWhite);
@@ -57,12 +57,12 @@
     /* padding-left: 10px; */
   }
 }
-.authSearchLink {
+/* .authSearchLink {
   border-left-style: solid;
   border-left-width: 1px;
   border-left-color: var(--colorGrey100);
   margin: 0;
-}
+} */
 
 .search {
   font-weight: var(--fontWeightMedium);
