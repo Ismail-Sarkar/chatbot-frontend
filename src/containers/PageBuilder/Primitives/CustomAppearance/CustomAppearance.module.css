@@ -9,5 +9,12 @@
 .backgroundImage {
   object-fit: cover;
   width: 100%;
-  height: 100%;
+  height: 780px;
+  object-position: top;
+  @media(min-width:1600px){
+    height: 860px;
+  }
+  @media(min-width:1920px){
+    height: auto;
+  }
 }

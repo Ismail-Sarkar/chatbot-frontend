@@ -28,6 +28,8 @@
         }
         & p {
           text-align: left;
+          font-family: 'NeueHaasGroteskText Pro Md';
+          font-weight:500;
         }
       }
     }
@@ -43,6 +45,8 @@
           & > div:nth-child(2) {
             & > p {
               text-align: left !important;
+              font-family: 'NeueHaasGroteskText Pro Md';
+              font-weight:500;
             }
           }
         }
@@ -64,7 +68,8 @@
           box-shadow: none;
           font-size: 14px;
           margin-top: 0;
-
+          font-family: 'NeueHaasGroteskText Pro Md';
+          font-weight:500;
           &:hover {
             color: #000000 !important;
           }

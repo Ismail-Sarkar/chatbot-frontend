@@ -40,9 +40,11 @@
   }
   & h2 + p {
     font-size: 40px;
+    line-height:60px;
     font-weight: 500;
     padding-top: 0;
     margin-top: 0;
+    font-family: 'NeueHaasGroteskText Pro Md';
     color: #000000;
     @media (max-width: 768px) {
       text-align: center;
@@ -151,9 +153,9 @@
 .title {
   composes: align;
   max-width: 30ch;
-  font-size: 14px;
-  font-weight: 400;
-  color: #000000;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #000000 !important;
 
   @media (max-width: 768px) {
     text-align: center;

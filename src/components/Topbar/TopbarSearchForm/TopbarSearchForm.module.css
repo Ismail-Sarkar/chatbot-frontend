@@ -67,7 +67,8 @@
   padding-top: 0;
   padding-bottom: 0;
   padding-left: 10px;
-
+  font-family: 'NeueHaasGroteskText Pro Md';
+  font-weight: 500;
   /* Search text gets ellipsis if it's too wide */
   text-overflow: ellipsis;
   overflow-x: hidden;
@@ -100,8 +101,8 @@
     /* font-size:16px; */
     font-size: 14px;
     line-height: 22px;
-    font-family:var(--bodyfontfamily);
-    font-weight:500;
+    font-family: 'NeueHaasGroteskText Pro Md';
+    font-weight: 500;
   }
 
   @media (--viewportMedium) {

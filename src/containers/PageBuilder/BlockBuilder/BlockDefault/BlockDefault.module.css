@@ -7,12 +7,12 @@
   margin-bottom: 0;
   & > div{
     & > div{
-      padding-bottom:65.25% !important;
+      padding-bottom:58.25% !important;
       & > div{
         & > img{
-          height: 220px;
+          height: 200px;
           /* width: 370px; */
-          object-position: top;
+          object-position: top center;
         }
       }
     }
@@ -38,5 +38,14 @@
   }
   @media (max-width: 768px) {
     margin-top: 12px;
+  }
+  & > h3{
+    font-family: 'NeueHaasGroteskText Pro Md';
+    font-weight:500;
+  }
+  & > p{
+    font-family: 'NeueHaasGroteskText Pro';
+    font-weight:400;
+    font-size:16px;
   }
 }

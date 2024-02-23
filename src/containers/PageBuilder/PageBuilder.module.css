@@ -105,6 +105,8 @@
     min-width: 300px;
     min-height: 55px;
     font-size: 16px;
+    font-family: 'NeueHaasGroteskText Pro';
+    font-weight: bold;
   cursor: pointer;
   /* @media (max-width: 768px) {
     display: none;

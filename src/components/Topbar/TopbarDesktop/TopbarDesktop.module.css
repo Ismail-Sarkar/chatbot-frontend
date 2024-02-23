@@ -127,7 +127,8 @@
   line-height: 18px;
   letter-spacing: 0;
   color: var(--colorGrey700);
-
+  font-family: 'NeueHaasGroteskText Pro Md';
+  font-weight:500;
   flex-shrink: 0;
   height: 100%;
   /* padding: 0 24px 0 12px; */
@@ -287,7 +288,8 @@
   /* padding: 0 12px 0 12px; */
   padding: 0 12px;
   color: var(--colorGrey700);
-
+  font-family: 'NeueHaasGroteskText Pro Md';
+  font-weight: 500;
   &:hover {
     color: var(--colorBlack);
     border-bottom: 4px solid var(--marketplaceColor);
@@ -309,8 +311,9 @@
   /* padding: 0 36px 0 16px; */
   padding: 0 12px;
   color: var(--colorGrey700);
-  font-family: 'NeueHaasGroteskText Pro';
+  font-family: 'NeueHaasGroteskText Pro Md';
   font-weight:500;
+  /* font-weight:500; */
 
   &:hover {
     color: var(--colorBlack);
@@ -458,6 +461,8 @@
   color: RGBA(74, 74, 79, 1);
   font-size: 14px;
   line-height: 22px;
+  font-family: 'NeueHaasGroteskText Pro Md';
+  font-weight:500;
   &:hover{
     color: #000;
   }

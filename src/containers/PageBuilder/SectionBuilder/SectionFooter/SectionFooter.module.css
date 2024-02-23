@@ -1,7 +1,9 @@
 @import '../../../../styles/customMediaQueries.css';
 
 .root {
-  border-top: 1px solid var(--colorGrey100);
+  /* border-top: 1px solid var(--colorGrey100); */
+  border-top: 2px solid #000;
+
   background-color: #ffffff !important;
   & > div {
     padding: 40px 0 !important;
@@ -158,7 +160,7 @@
   }
 }
 .logoImage {
-  height: 24px;
+  height: 36px;
   width: auto;
   max-width: 188px;
   object-fit: contain;
