@@ -11,7 +11,13 @@ import { FormattedMessage } from '../../../util/reactIntl';
 import { propTypes } from '../../../util/types';
 import { ensureCurrentUser } from '../../../util/data';
 
-import { AvatarLarge, InlineTextButton, NamedLink, NotificationBadge } from '../../../components';
+import {
+  AvatarLarge,
+  ExternalLink,
+  InlineTextButton,
+  NamedLink,
+  NotificationBadge,
+} from '../../../components';
 
 import css from './TopbarMobileMenu.module.css';
 
@@ -26,6 +32,18 @@ const TopbarMobileMenu = props => {
   } = props;
 
   const user = ensureCurrentUser(currentUser);
+
+  const notificationCountBadge =
+    notificationCount > 0 ? (
+      <NotificationBadge className={css.notificationBadge} count={notificationCount} />
+    ) : null;
+
+  const displayName = user.attributes.profile.firstName;
+  const currentPageClass = page => {
+    const isAccountSettingsPage =
+      page === 'AccountSettingsPage' && ACCOUNT_SETTINGS_PAGES.includes(currentPage);
+    return currentPage === page || isAccountSettingsPage ? css.currentPage : null;
+  };
 
   if (!isAuthenticated) {
     const signup = (
@@ -47,45 +65,70 @@ const TopbarMobileMenu = props => {
     );
     return (
       <div className={css.root}>
-        <div className={css.content}>
-          <div className={css.authenticationGreeting}>
+        <div className={css.unAuthenticatedcontentRoot}>
+          <div className={css.unAuthenticatedcontent}>
+            {/* <div className={css.authenticationGreeting}>
             <FormattedMessage
               id="TopbarMobileMenu.unauthorizedGreeting"
               values={{ lineBreak: <br />, signupOrLogin }}
             />
+          </div> */}
+            <NamedLink
+              name="SignupPage"
+              // className={css.signupLink}
+              className={classNames(css.navigationLink, currentPageClass('SignupPage'))}
+            >
+              <FormattedMessage id="TopbarMobileMenu.signupLink" />
+            </NamedLink>
+          </div>
+          <div className={css.unAuthenticatedcontentInner}>
+            <NamedLink
+              name="LoginPage"
+              // className={css.loginLink}
+              className={classNames(css.navigationLink, currentPageClass('LoginPage'))}
+            >
+              <FormattedMessage id="TopbarMobileMenu.loginLink" />
+            </NamedLink>
+            <NamedLink
+              className={classNames(css.navigationLink, currentPageClass('NewListingPage'))}
+              name="NewListingPage"
+            >
+              <FormattedMessage id="TopbarMobileMenu.newListingLink" />
+            </NamedLink>
+            <ExternalLink
+              className={classNames(css.navigationLink, currentPageClass('BlogPage'))}
+              href="https://adventurely.app/blog"
+              name="BlogPage"
+            >
+              <FormattedMessage id="TopbarMobileMenu.blog" />
+            </ExternalLink>
           </div>
         </div>
-        <div className={css.footer}>
+        {/* <div className={css.footer}>
           <NamedLink className={css.createNewListingLink} name="NewListingPage">
             <FormattedMessage id="TopbarMobileMenu.newListingLink" />
           </NamedLink>
-        </div>
+        </div> */}
       </div>
     );
   }
 
-  const notificationCountBadge =
-    notificationCount > 0 ? (
-      <NotificationBadge className={css.notificationBadge} count={notificationCount} />
-    ) : null;
-
-  const displayName = user.attributes.profile.firstName;
-  const currentPageClass = page => {
-    const isAccountSettingsPage =
-      page === 'AccountSettingsPage' && ACCOUNT_SETTINGS_PAGES.includes(currentPage);
-    return currentPage === page || isAccountSettingsPage ? css.currentPage : null;
-  };
-
   return (
     <div className={css.root}>
       <AvatarLarge className={css.avatar} user={currentUser} />
-      <div className={css.content}>
-        <span className={css.greeting}>
+      <div
+        className={
+          currentUser?.attributes?.profile?.publicData?.userType === 'partner'
+            ? css.partnerContent
+            : css.content
+        }
+      >
+        {/* <span className={css.greeting}>
           <FormattedMessage id="TopbarMobileMenu.greeting" values={{ displayName }} />
         </span>
         <InlineTextButton rootClassName={css.logoutButton} onClick={onLogout}>
           <FormattedMessage id="TopbarMobileMenu.logoutLink" />
-        </InlineTextButton>
+        </InlineTextButton> */}
         <NamedLink
           className={classNames(css.inbox, currentPageClass('InboxPage'))}
           name="InboxPage"
@@ -99,12 +142,23 @@ const TopbarMobileMenu = props => {
           <FormattedMessage id="TopbarMobileMenu.inboxLink" />
           {notificationCountBadge}
         </NamedLink>
-        <NamedLink
-          className={classNames(css.navigationLink, currentPageClass('ManageListingsPage'))}
-          name="ManageListingsPage"
-        >
-          <FormattedMessage id="TopbarMobileMenu.yourListingsLink" />
-        </NamedLink>
+        {currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
+          <>
+            <NamedLink
+              className={classNames(css.navigationLink, currentPageClass('NewListingPage'))}
+              name="NewListingPage"
+            >
+              <FormattedMessage id="TopbarMobileMenu.newListingLink" />
+            </NamedLink>
+            <NamedLink
+              className={classNames(css.navigationLink, currentPageClass('ManageListingsPage'))}
+              name="ManageListingsPage"
+            >
+              <FormattedMessage id="TopbarMobileMenu.yourListingsLink" />
+            </NamedLink>
+          </>
+        )}
+
         <NamedLink
           className={classNames(css.navigationLink, currentPageClass('ProfileSettingsPage'))}
           name="ProfileSettingsPage"
@@ -117,13 +171,27 @@ const TopbarMobileMenu = props => {
         >
           <FormattedMessage id="TopbarMobileMenu.accountSettingsLink" />
         </NamedLink>
-        <div className={css.spacer} />
+        <ExternalLink
+          className={classNames(css.navigationLink, currentPageClass('BlogPage'))}
+          href="https://adventurely.app/blog"
+          name="BlogPage"
+        >
+          <FormattedMessage id="TopbarMobileMenu.blog" />
+        </ExternalLink>
+
+        <div
+          className={classNames(css.navigationLink, currentPageClass('Logout'))}
+          onClick={onLogout}
+        >
+          <FormattedMessage id="TopbarMobileMenu.logoutLink" />
+        </div>
+        {/* <div className={css.spacer} /> */}
       </div>
-      <div className={css.footer}>
+      {/* <div className={css.footer}>
         <NamedLink className={css.createNewListingLink} name="NewListingPage">
           <FormattedMessage id="TopbarMobileMenu.newListingLink" />
         </NamedLink>
-      </div>
+      </div> */}
     </div>
   );
 };
