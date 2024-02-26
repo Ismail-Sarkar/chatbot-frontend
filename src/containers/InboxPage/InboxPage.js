@@ -540,6 +540,7 @@ export const InboxPageComponent = props => {
                               onPrevMonthClick={loadTransactionOnMonthChange}
                               isDayHighlighted={day => {
                                 const formatedDate = moment(day).format('YYYY-MM-DD');
+                                console.log(575, formatedDate, perDayTransaction);
                                 return !!perDayTransaction[formatedDate];
                               }}
                               useMobileMargins
