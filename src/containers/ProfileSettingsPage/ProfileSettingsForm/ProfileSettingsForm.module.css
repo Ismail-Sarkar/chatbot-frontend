@@ -18,9 +18,9 @@
 }
 
 .sectionTitle {
-  line-height:30px;
-  font-size:21px;
-  @media(max-width:767px){
+  line-height: 30px;
+  font-size: 21px;
+  @media (max-width: 767px) {
     line-height: 30px;
     font-size: 18px;
   }
@@ -254,33 +254,33 @@
   display: flex;
   justify-content: space-between;
   margin-top: 0;
-  gap:0 20px;
+  gap: 0 20px;
   @media (--viewportMedium) {
     /* margin-top: 24px; */
   }
-  @media(max-width:575px){
-    flex-direction:column;
-    gap:15px 0;
+  @media (max-width: 575px) {
+    flex-direction: column;
+    gap: 15px 0;
   }
 }
 
 .firstName {
   /* width: calc(34% - 9px); */
-  width:50%;
-  flex-basis:50%;
-  @media(max-width:767px){
-    width:100%;
-    flex-basis:100%;
+  width: 50%;
+  flex-basis: 50%;
+  @media (max-width: 767px) {
+    width: 100%;
+    flex-basis: 100%;
   }
 }
 
 .lastName {
   /* width: calc(66% - 9px); */
-  width:50%;
-  flex-basis:50%;
-  @media(max-width:767px){
-    width:100%;
-    flex-basis:100%;
+  width: 50%;
+  flex-basis: 50%;
+  @media (max-width: 767px) {
+    width: 100%;
+    flex-basis: 100%;
   }
 }
 
@@ -310,6 +310,9 @@
 
 .inpField {
   flex-grow: 1;
+  > div {
+    flex-wrap: wrap;
+  }
   & input {
     width: 100%;
     padding: 10px;
@@ -319,9 +322,12 @@
     border-bottom-left-radius: 0;
     border-left: none;
     color: black;
-    @media(max-width:767px){
+    @media (max-width: 767px) {
       font-size: 13px;
-      padding-left: 3px;
+      padding-left: 0;
+    }
+    @media (max-width: 426px) {
+      width: calc(100vw - 290px);
     }
   }
   & input:focus {
@@ -349,12 +355,13 @@
   width: 100%;
   word-break: break-all;
   font-size: 14px;
-  @media(max-width:767px){
-   padding:10px;
-   font-size: 13px;
+  @media (max-width: 767px) {
+    padding: 10px;
+    padding-right: 0px;
+    font-size: 13px;
   }
-  @media(max-width:575px){
-    word-break:inherit;
+  @media (max-width: 575px) {
+    word-break: inherit;
   }
 }
 
@@ -368,7 +375,7 @@
   max-width: fit-content;
   width: 100%;
   font-size: 14px;
-  @media(max-width:767px){
-    padding:0;
-   }
+  @media (max-width: 767px) {
+    padding: 0;
+  }
 }
