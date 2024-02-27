@@ -663,7 +663,7 @@
                 @media (max-width: 1023px) {
                   background-image: none !important;
                   background-position: inherit !important;
-                  width: 135px !important;
+                  width: max-content !important;
                   border-bottom-color: inherit !important;
                   border-bottom-width: inherit !important;
                   border-bottom-style: inherit !important;

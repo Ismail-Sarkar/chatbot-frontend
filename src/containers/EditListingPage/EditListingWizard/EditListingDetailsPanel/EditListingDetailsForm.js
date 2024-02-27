@@ -229,8 +229,8 @@ const EditListingDetailsFormComponent = props => (
               showAsRequired={true}
             />
             <div className={css.note}>
-              (note: you will be able to make a custom default booking schedule for open
-              reservations later in this form).
+              (Note: you will be able to customize a default weekly booking schedule later on in
+              this form).
             </div>
           </div>
 
