@@ -13,7 +13,13 @@
           height: 200px;
           /* width: 370px; */
           object-position: top center;
+          @media(max-width:1199px){
+            height:auto;
+          }
         }
+      }
+      @media(max-width:1199px){
+        padding-bottom: 56.25% !important;
       }
     }
   }
@@ -36,16 +42,22 @@
       font-size: 22px;
     }
   }
-  @media (max-width: 768px) {
-    margin-top: 12px;
-  }
+  /* @media (max-width: 1199px) {
+    margin-top: 25px;
+  } */
   & > h3{
     font-family: 'NeueHaasGroteskText Pro Md';
     font-weight:500;
+    @media(max-width:1199px){
+      padding:0;
+    }
   }
   & > p{
     font-family: 'NeueHaasGroteskText Pro';
     font-weight:400;
     font-size:16px;
+    @media(max-width:767px){
+      font-size:14px;
+    }
   }
 }

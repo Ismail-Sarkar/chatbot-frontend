@@ -14,8 +14,8 @@
   &:nth-child(2) {
     & > div {
       & > img {
-        @media (max-width: 768px) {
-          height: 300px;
+        @media (max-width: 1199px) {
+          height: auto;
         }
       }
     }
@@ -23,13 +23,20 @@
   &:nth-child(3) {
     & > div:nth-child(2) {
       & > div:nth-child(2) {
-        @media (max-width: 768px) {
+        @media (max-width: 767px) {
           grid-template-columns: repeat(2, 1fr);
+        }
+        @media (max-width: 390px) {
+          grid-template-columns: auto;
         }
         & p {
           text-align: left;
           font-family: 'NeueHaasGroteskText Pro Md';
           font-weight:500;
+          @media(max-width:1199px){
+            padding:0;
+            margin: 0;
+          }
         }
       }
     }
@@ -47,8 +54,16 @@
               text-align: left !important;
               font-family: 'NeueHaasGroteskText Pro Md';
               font-weight:500;
+              padding:0;
+              margin:0;
+              @media(max-width:1199px){
+                padding:0;
+              }
             }
           }
+        }
+        @media(max-width:991px){
+          padding-bottom: 35px;
         }
       }
     }
@@ -77,6 +92,9 @@
             font-size: 12px;
           }
         }
+        @media(max-width:991px){
+          padding-bottom:60px;
+        }
       }
     }
     @media (max-width: 768px) {
@@ -94,6 +112,9 @@
         display: flex;
         & > div {
           flex-basis: 50%;
+          @media(max-width:991px){
+            flex-basis:100%;
+          }
         }
         & > div:nth-child(1) {
           & > div {
@@ -101,7 +122,7 @@
           }
           & img {
             @media (max-width: 768px) {
-              border-radius: 10px;
+              /* border-radius: 10px; */
             }
           }
         }
@@ -117,12 +138,18 @@
             padding: 0 16px;
           }
         }
-
-        @media (max-width: 768px) {
+        @media(max-width: 1199px){
+          padding-bottom: 100px;
+        }
+        @media (max-width: 991px) {
           flex-direction: column;
           padding: 0;
         }
+
       }
+    }
+    @media(max-width:1199px){
+      padding: 30px 0;
     }
   }
 }

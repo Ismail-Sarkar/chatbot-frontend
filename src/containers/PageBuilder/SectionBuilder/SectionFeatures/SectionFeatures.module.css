@@ -15,9 +15,15 @@
     & > div{
       & > div{
         & > div{
+          @media(max-width:991px){
+           padding-bottom:75% !important;
+          }
           & > div{
             & > img{
               height:320px !important;
+              @media(max-width:1199px){
+                height:auto !important;
+              }
             }
           }
         }
@@ -28,6 +34,9 @@
     & > div{
       & > h3{
         font-size:30px;
+        @media(max-width:767px){
+          font-size: 25px;
+        }
       }
     }
   }
