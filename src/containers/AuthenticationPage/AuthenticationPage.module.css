@@ -32,7 +32,7 @@
     /* min-height: 700px; */
   }
   @media (max-width: 767px) {
-    padding: 15px;
+    padding: 50px 15px 30px;
   }
   & > nav {
     & > div {
@@ -78,7 +78,8 @@
 }
 
 .loginForm {
-  margin-top: 15px;
+  /* margin-top: 15px; */
+  margin-top: 30px;
 
   /* We don't want the form to take the whole space so that on mobile view
   the social login buttons will be after the sign up button
