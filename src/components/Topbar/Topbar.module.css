@@ -24,7 +24,7 @@
 
   /* shadows */
   /* box-shadow: var(--boxShadow); */
-  border-bottom: 1px solid #000000;
+  border-bottom: 4px solid #000000;
 
   @media (--viewportMedium) {
     display: none;
@@ -71,7 +71,11 @@
 .searchMenu {
   padding: 12px 24px;
   @media (max-width: 768px) {
-    display: none;
+    /* display: none; */
+  }
+  @media(max-width:767px){
+    padding: 12px 15px;
+    width:auto;
   }
 }
 
