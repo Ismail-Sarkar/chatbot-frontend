@@ -472,6 +472,7 @@ class StripePaymentForm extends Component {
 
     const { publicData } = listing?.attributes || {};
     const { fullManualAddress, manualAddress } = publicData || {};
+    const {businessName}=listing?.author?.attributes?.profile?.publicData
 
     this.finalFormAPI = formApi;
 
@@ -691,7 +692,7 @@ class StripePaymentForm extends Component {
           <p className={css.paymentInfo}>
             <FormattedMessage
               id="StripePaymentForm.submitConfirmPaymentFinePrint"
-              values={{ isBooking: isBookingYesNo, name: authorDisplayName }}
+              values={{ isBooking: isBookingYesNo, name: businessName }}
             />
           </p>
         </div>

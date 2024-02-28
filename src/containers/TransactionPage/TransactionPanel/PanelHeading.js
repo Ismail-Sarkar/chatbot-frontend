@@ -109,7 +109,30 @@ const PanelHeading = props => {
             }}
           />{' '}
         </p>
-      ) : null}
+      ) : (
+        <p className={css.transactionInfoMessage}>
+          <FormattedMessage
+            id={`TransactionPage.${processName}.${transactionRole}.${processState}.extraInfo`}
+            values={{
+              customerName,
+              providerName: providerDisplayName,
+              deliveryMethod,
+              breakline,
+              timer: (
+                <CountdownTimer
+                  endTime={
+                    moment(new Date(bookingStartTime)).isSameOrBefore(
+                      moment(new Date(transactionConfirmationPaymentTime)).add(48, 'hours')
+                    )
+                      ? moment(new Date(bookingStartTime))
+                      : moment(new Date(transactionConfirmationPaymentTime)).add(48, 'hours')
+                  }
+                />
+              ),
+            }}
+          />{' '}
+        </p>
+      )}
       {isProvider && isPendingPayment ? (
         <p className={css.transactionInfoMessage}>
           <FormattedMessage
