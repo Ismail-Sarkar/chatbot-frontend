@@ -218,7 +218,7 @@ const EditListingDetailsPanel = props => {
   const listingTypes = config.listing.listingTypes;
   const listingFieldsConfig = config.listing.listingFields;
 
-  const { acceptType = 'manual' } = publicData || {};
+  const { acceptType = 'automatic' } = publicData || {};
 
   const { hasExistingListingType, existingListingType } = hasSetListingType(publicData);
   const hasValidExistingListingType =

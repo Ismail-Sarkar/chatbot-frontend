@@ -54,7 +54,7 @@ const ExpandableBio = props => {
   return (
     <p className={className}>
       {expand ? bio : truncatedBio}
-      {bio !== truncatedBio && !expand ? showMore : showLess}
+      {bio !== truncatedBio ? !expand ? showMore : showLess : null}
     </p>
   );
 };
