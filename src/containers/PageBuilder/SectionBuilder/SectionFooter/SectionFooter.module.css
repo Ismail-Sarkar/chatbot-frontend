@@ -2,7 +2,7 @@
 
 .root {
   /* border-top: 1px solid var(--colorGrey100); */
-  border-top: 2px solid #000;
+  border-top: 4px solid #000;
 
   background-color: #ffffff !important;
   & > div {

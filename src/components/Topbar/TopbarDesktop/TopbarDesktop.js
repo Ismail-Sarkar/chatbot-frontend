@@ -184,7 +184,10 @@ const TopbarDesktop = props => {
       ) : (
         ''
       )}
-      <ExternalLink href="https://adventurely.app/blog" className={css.blogLink} name="Blog">
+
+      
+      <ExternalLink href="https://adventurely.app/blog" className={classNames(css.blogLink,
+      { [css.BlogauthenticatedLink]: isAuthenticated })} name="Blog">
         <span
           className={classNames(css.createListing, { [css.authenticatedLink]: isAuthenticated })}
         >

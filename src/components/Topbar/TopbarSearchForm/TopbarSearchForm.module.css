@@ -136,7 +136,7 @@
   position: absolute;
   width: 100%;
   top: var(--topbarHeightDesktop);
-  left:-30px;
+  left:0;
   background-color: var(--marketplaceColor);
   border-bottom-left-radius: var(--borderRadius);
   border-bottom-right-radius: var(--borderRadius);

@@ -37,26 +37,27 @@
       font-weight:bold;
       /* font-family:'NeueHaasGroteskDisp Pro Md'; */
       display: inline-block;
-      @media (max-width: 992px) {
+      @media (max-width: 1199px) {
         font-size: 42px;
-        line-height: 44px;
+        line-height: 52px;
       }
-      @media (max-width: 768px) {
+      @media (max-width: 991px) {
         font-size: 31px;
         line-height: 38px;
       }
-      @media (max-width: 375px) {
-        font-size: 25px;
+      @media (max-width: 767px) {
+        font-size: 22px;
+        line-height: 32px;
       }
     }
   }
-  @media (max-width: 992px) {
+  @media (max-width: 991px) {
     flex-direction: column;
     text-align: center;
     padding: 25px 72px 40px;
   }
   @media (max-width: 575px) {
-    padding: 25px 16px 40px;
+    padding: 25px 0 40px;
   }
 }
 .searchDiv {
@@ -91,7 +92,7 @@
   }
   @media (max-width:767px) {
     margin-top: 32px;
-    padding: 0 2px 0 4px;
+    padding: 0;
     width: 100%;
     justify-content: center;
   }
@@ -111,4 +112,7 @@
   /* @media (max-width: 768px) {
     display: none;
   } */
+  @media(max-width:767px){
+    min-width: 270px;
+  }
 }
