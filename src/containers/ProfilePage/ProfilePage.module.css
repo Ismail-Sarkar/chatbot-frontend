@@ -254,17 +254,22 @@
       display: block !important;
     }
     & > div:nth-child(2) {
+      @media (min-width: 1024px) {
+        max-width: 100vw;
+        justify-content: flex-start;
+      }
       @media (min-width: 1920px) {
         /* max-width:1120px; */
-        max-width: 100vw;
+
         margin: 0 auto;
-        justify-content: flex-start;
       }
       & > aside {
         padding: 48px 0 82px 36px !important;
         /* width: 20%; */
 
-        max-width: 205px;
+        @media (min-width: 1024px) {
+          max-width: 205px;
+        }
         flex: 0 0 20%;
         /* @media(max-width:1199px){
           padding: 48px 0 82px 36px !important;
