@@ -128,19 +128,17 @@ const TopbarDesktop = props => {
       </MenuContent>
     </Menu>
   ) : null;
-
-  const signupLink = isAuthenticatedOrJustHydrated ? null : (
-    <NamedLink name="SignupPage" className={css.signupLink}>
-      <span className={css.signup}>
-        <FormattedMessage id="TopbarDesktop.signup" />
-      </span>
-    </NamedLink>
-  );
-
   const loginLink = isAuthenticatedOrJustHydrated ? null : (
     <NamedLink name="LoginPage" className={css.loginLink}>
       <span className={css.login}>
         <FormattedMessage id="TopbarDesktop.login" />
+      </span>
+    </NamedLink>
+  );
+  const signupLink = isAuthenticatedOrJustHydrated ? null : (
+    <NamedLink name="SignupPage" className={css.signupLink}>
+      <span className={css.signup}>
+        <FormattedMessage id="TopbarDesktop.signup" />
       </span>
     </NamedLink>
   );
@@ -185,9 +183,11 @@ const TopbarDesktop = props => {
         ''
       )}
 
-      
-      <ExternalLink href="https://adventurely.app/blog" className={classNames(css.blogLink,
-      { [css.BlogauthenticatedLink]: isAuthenticated })} name="Blog">
+      <ExternalLink
+        href="https://adventurely.app/blog"
+        className={classNames(css.blogLink, { [css.BlogauthenticatedLink]: isAuthenticated })}
+        name="Blog"
+      >
         <span
           className={classNames(css.createListing, { [css.authenticatedLink]: isAuthenticated })}
         >
@@ -196,8 +196,8 @@ const TopbarDesktop = props => {
       </ExternalLink>
       {inboxLink}
       {profileMenu}
-      {signupLink}
       {loginLink}
+      {signupLink}
     </nav>
   );
 };

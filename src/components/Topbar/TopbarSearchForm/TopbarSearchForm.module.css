@@ -53,8 +53,12 @@
   display: flex;
   /* width: 24px; */
   /* align-self: stretch; */
-  align-items:center;
+  align-items: center;
   /* background-color: var(--colorWhite); */
+  & > svg {
+    margin-top: 6px;
+    fill: #000;
+  }
 }
 
 .desktopInput {
@@ -75,7 +79,7 @@
   margin-top: 0;
   margin-bottom: 0;
   background: transparent;
-  font-family:var(--bodyfontfamily);
+  font-family: var(--bodyfontfamily);
   &:hover,
   &:focus {
     border-bottom-color: var(--marketplaceColor);
@@ -136,7 +140,7 @@
   position: absolute;
   width: 100%;
   top: var(--topbarHeightDesktop);
-  left:0;
+  left: 0;
   background-color: var(--marketplaceColor);
   border-bottom-left-radius: var(--borderRadius);
   border-bottom-right-radius: var(--borderRadius);

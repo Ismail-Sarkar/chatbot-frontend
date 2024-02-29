@@ -24,7 +24,7 @@ import IconHourGlass from './IconHourGlass';
 import IconCurrentLocation from './IconCurrentLocation';
 import * as geocoderMapbox from './GeocoderMapbox';
 import * as geocoderGoogleMaps from './GeocoderGoogleMaps';
-
+import { LiaSearchSolid } from 'react-icons/lia';
 import css from './LocationAutocompleteInput.module.css';
 
 const DEBOUNCE_WAIT_TIME = 300;
@@ -527,7 +527,8 @@ class LocationAutocompleteInputImplementation extends Component {
           {this.state.fetchingPlaceDetails ? (
             <IconSpinner className={css.iconSpinner} />
           ) : (
-            <IconHourGlass />
+            // <IconHourGlass />
+            <LiaSearchSolid size={25} />
           )}
         </div>
         <input
