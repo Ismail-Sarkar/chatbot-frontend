@@ -76,6 +76,7 @@ const SectionColumns = props => {
             blocks={blocks}
             responsiveImageSizes={getResponsiveImageSizes(numColumns)}
             options={options}
+            sectionId={sectionId}
           />
         </div>
       ) : null}

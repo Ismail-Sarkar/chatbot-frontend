@@ -6,6 +6,7 @@ import Field, { hasDataInFields } from '../../Field';
 import BlockContainer from '../BlockContainer';
 
 import css from './BlockDefault.module.css';
+import { useHistory } from 'react-router-dom';
 
 const FieldMedia = props => {
   const { className, media, sizes, options } = props;
@@ -31,26 +32,38 @@ const BlockDefault = props => {
     media,
     responsiveImageSizes,
     options,
+    sectionId,
   } = props;
   const classes = classNames(rootClassName || css.root, className);
   const hasTextComponentFields = hasDataInFields([title, text, callToAction], options);
 
+  const history = useHistory();
+
   return (
-    <BlockContainer id={blockId} className={classes}>
-      <FieldMedia
-        media={media}
-        sizes={responsiveImageSizes}
-        className={mediaClassName}
-        options={options}
-      />
-      {hasTextComponentFields ? (
-        <div className={classNames(textClassName, css.text)}>
-          <Field data={title} options={options} />
-          <Field data={text} options={options} />
-          <Field data={callToAction} className={ctaButtonClass} options={options} />
-        </div>
-      ) : null}
-    </BlockContainer>
+    <div
+      onClick={() => {
+        if ((sectionId === 'themes' || sectionId === 'locations') && callToAction.href) {
+          history.push(callToAction.href);
+        }
+      }}
+      className={css.customBlockLink}
+    >
+      <BlockContainer id={blockId} className={classes}>
+        <FieldMedia
+          media={media}
+          sizes={responsiveImageSizes}
+          className={mediaClassName}
+          options={options}
+        />
+        {hasTextComponentFields ? (
+          <div className={classNames(textClassName, css.text)}>
+            <Field data={title} options={options} />
+            <Field data={text} options={options} />
+            <Field data={callToAction} className={ctaButtonClass} options={options} />
+          </div>
+        ) : null}
+      </BlockContainer>
+    </div>
   );
 };
 
