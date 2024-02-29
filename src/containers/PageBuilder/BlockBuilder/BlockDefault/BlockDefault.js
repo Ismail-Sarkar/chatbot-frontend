@@ -42,7 +42,7 @@ const BlockDefault = props => {
   return (
     <div
       onClick={() => {
-        if ((sectionId === 'themes' || sectionId === 'locations') && callToAction.href) {
+        if ((sectionId === 'categories' || sectionId === 'locations') && callToAction.href) {
           history.push(callToAction.href);
         }
       }}

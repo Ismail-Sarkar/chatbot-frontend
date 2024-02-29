@@ -16,11 +16,17 @@
           @media (max-width: 1199px) {
             height: auto;
           }
+          /* @media (max-width: 390px) {
+            height: 130px;
+          } */
         }
       }
       @media (max-width: 1199px) {
         padding-bottom: 56.25% !important;
       }
+      /* @media (max-width: 390px) {
+        padding-bottom: 90.25% !important;
+      } */
     }
   }
 }
