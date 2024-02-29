@@ -79,6 +79,10 @@
   font-size: 30px;
   margin-top: -15px;
   margin-bottom: 25px;
+  @media (max-width: 575px) {
+    font-size: 28px;
+    margin-top: 0;
+  }
 }
 .bottomMessage,
 .partnerBottomMessage {
