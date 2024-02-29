@@ -284,6 +284,7 @@
   &:enabled:active {
     color: var(--colorBlack);
   }
+  z-index:1;
 }
 
 .closeText {
