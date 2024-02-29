@@ -166,7 +166,8 @@
   object-fit: contain;
   object-position: center;
   @media (max-width: 767px) {
-    height: 16px;
+    height: auto;
+    max-width: 140px;
   }
 }
 

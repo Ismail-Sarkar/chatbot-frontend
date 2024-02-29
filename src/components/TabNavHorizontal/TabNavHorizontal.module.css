@@ -56,6 +56,10 @@
     /* padding: 16px 10px 14px 10px; */
     padding: 16px 10px 6px 10px;
   }
+  & > h2 {
+    border-bottom: 2px solid transparent;
+    padding-bottom: 8px;
+  }
 }
 
 .button {
@@ -67,8 +71,12 @@
 }
 
 .selectedTabContent {
-  border-bottom-color: var(--colorBlack);
+  /* border-bottom-color: var(--colorBlack); */
   color: var(--colorBlack);
+  & > h1 {
+    border-bottom: 2px solid var(--colorBlack);
+    padding-bottom: 8px;
+  }
 }
 
 .disabled {
