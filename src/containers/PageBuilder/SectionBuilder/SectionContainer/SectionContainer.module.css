@@ -16,6 +16,7 @@
       & > img {
         @media (max-width: 575px) {
           height: 200px;
+          object-fit:inherit !important;
         }
       }
     }
