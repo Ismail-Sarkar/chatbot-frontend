@@ -134,9 +134,10 @@ const PageBuilder = props => {
                 ) : (
                   <>
                     <div className={css.topdiv}>
-                      <div>
-                        <span>Book remote work day passes</span>
-                          <span>that blend work & play</span>
+                      <div className={css.topdivContent}>
+                        <span>Book remote work </span>
+                          <span>day passes that blend </span>
+                          <span>work & play </span>
                       </div>
 
                       <div className={css.searchDiv}>

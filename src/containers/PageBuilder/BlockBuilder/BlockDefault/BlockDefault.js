@@ -39,6 +39,7 @@ const BlockDefault = props => {
 
   const history = useHistory();
 
+
   return (
     <div
       onClick={() => {
