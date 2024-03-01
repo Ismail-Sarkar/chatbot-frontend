@@ -30,11 +30,11 @@
     flex-direction: column;
     border-bottom: none;
   }
-  @media(max-width:1023px){
-    align-items:flex-start;
+  @media (max-width: 1023px) {
+    align-items: flex-start;
     padding-bottom: 30px;
     flex-direction: column;
-
+    border-bottom: 0;
   }
 }
 
@@ -45,13 +45,13 @@
   @media (--viewportLarge) {
     /* margin: 0 96px 48px 0; */
   }
-  @media(max-width:1199px){
+  @media (max-width: 1199px) {
     margin: 0 45px 26px 0;
   }
-  @media(max-width:1023px){
+  @media (max-width: 1023px) {
     margin: 0 30px 0 0;
   }
-  @media(max-width:575px){
+  @media (max-width: 575px) {
     width: 60px;
     height: 60px;
     margin: 0 10px 0 0;
@@ -68,11 +68,11 @@
   @media (--viewportLarge) {
     display: none;
   }
-  @media(max-width:1023px){
-    margin:10px 0 0 0 !important;
+  @media (max-width: 1023px) {
+    margin: 10px 0 0 0 !important;
     padding: 0 30px 0 0;
   }
-  @media(max-width:575px){
+  @media (max-width: 575px) {
     padding: 0 10px 0 0;
   }
 }
@@ -89,28 +89,27 @@
   @media (--viewportLarge) {
     display: none;
   }
-  @media(max-width:1023px){
-    margin-left:0;
-    margin-top:0;
+  @media (max-width: 1023px) {
+    margin-left: 0;
+    margin-top: 0;
   }
-  & > span{
-    font-size:20px;
-    font-weight:600;
+  & > span {
+    font-size: 20px;
+    font-weight: 600;
   }
-  &:hover{
-   text-underline-offset:0.3em;
-   
+  &:hover {
+    text-underline-offset: 0.3em;
   }
 }
 
 .editLinkDesktop {
   display: none;
-  
+
   @media (--viewportLarge) {
     display: inline;
     padding: 6px 0 2px 0;
   }
-  & > span{
+  & > span {
     font-size: 20px;
     font-weight: 600;
   }
@@ -129,13 +128,16 @@
   /* Preserve newlines, but collapse other whitespace */
   white-space: pre-line;
   margin: 5px 0 24px 0;
-
+  word-break: break-all;
   @media (--viewportMedium) {
     margin: 4px 0 51px 0;
   }
   @media (--viewportLarge) {
     margin: 0 0 56px 0;
     max-width: 600px;
+  }
+  @media (max-width: 1023px) {
+    margin: -50px 0 40px 0;
   }
 }
 
@@ -146,6 +148,9 @@
 
   @media (--viewportMedium) {
     padding-bottom: 22px;
+  }
+  @media (max-width: 1024px) {
+    border-top: 0;
   }
 }
 
@@ -214,7 +219,7 @@
 }
 
 .mobileReviews {
-  border-top: 1px solid var(--colorGrey100);
+  /* border-top: 1px solid var(--colorGrey100); */
   margin-bottom: 36px;
 }
 
@@ -246,60 +251,69 @@
 
 .profileUrl {
   margin-bottom: 20px;
-  @media(max-width:1023px){
-    margin-bottom:10px;
+  @media (max-width: 1023px) {
+    margin-bottom: 10px;
   }
 }
-.profilepagewrap{
-  & > div{
-    @media(max-width:1023px){
-     display:block !important;
+.profilepagewrap {
+  & > div {
+    @media (max-width: 1023px) {
+      display: block !important;
     }
-    & > div:nth-child(2){
-      @media(min-width:1920px){
-        max-width:1120px;
-        margin:0 auto;
+    & > div:nth-child(2) {
+      @media (min-width: 1024px) {
+        max-width: 100vw;
+        justify-content: flex-start;
       }
-      & > aside{
+      @media (min-width: 1920px) {
+        /* max-width:1120px; */
+
+        margin: 0 auto;
+      }
+      & > aside {
         padding: 48px 0 82px 36px !important;
-        width: 20%;
+        /* width: 20%; */
+
+        @media (min-width: 1024px) {
+          max-width: 205px;
+        }
         flex: 0 0 20%;
         /* @media(max-width:1199px){
           padding: 48px 0 82px 36px !important;
         } */
-        @media(max-width:1023px){
-          width:100%;
-          flex:0 0 100%;
-          padding:20px 15px !important;
+        @media (max-width: 1023px) {
+          width: 100%;
+          flex: 0 0 100%;
+          padding: 20px 15px !important;
         }
       }
-      & > main{
-        padding: 48px 36px 82px 59px !important;
+      & > main {
+        padding: 48px 36px 82px 0 !important;
         width: 80%;
         flex: 0 0 80%;
-        @media(max-width:1023px){
-          width:100%;
-          flex:0 0 100%;
-          padding:20px 15px !important;
+        border-left: 0;
+        @media (max-width: 1023px) {
+          width: 100%;
+          flex: 0 0 100%;
+          padding: 20px 15px !important;
         }
       }
     }
   }
-
 }
-.desktopProfileUrl{
-  @media(max-width:1023px){
-    display:none;
+.desktopProfileUrl {
+  @media (max-width: 1023px) {
+    display: none;
   }
 }
-.MobProfileUrl{
-  display:none;
-  @media(max-width:1023px){
-    display:block;
+.MobProfileUrl {
+  display: none;
+  @media (max-width: 1023px) {
+    display: block;
   }
 }
-.MobHeadWrap{
-  display:flex;
+.MobHeadWrap {
+  display: flex;
   gap: 0;
   flex-direction: column;
 }
