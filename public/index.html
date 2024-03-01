@@ -1,63 +1,65 @@
 <!doctype html>
 <html data-htmlattr="htmlAttributes">
-  <head>
-    <meta charset="utf-8">
-    <!--!title-->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--!meta-->
 
-    <!-- Create icons using https://realfavicongenerator.net/ -->
-    <!-- Note: we don't use favicon.ico, favicon-32x32.png, favicon-16x16.png, or safari-pinned-tab.svg as "favicon" icon comes from hosted assets / Console -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
-    <link rel="manifest" href="/static/icons/site.webmanifest">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="msapplication-config" content="/static/icons/browserconfig.xml">
-    <!-- End Favicons -->
+<head>
+  <meta charset="utf-8">
+  <!--!title-->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--!meta-->
 
-    <!--!link-->
-    <!--!ssrStyles-->
-    <!--!ssrLinks-->
+  <!-- Create icons using https://realfavicongenerator.net/ -->
+  <!-- Note: we don't use favicon.ico, favicon-32x32.png, favicon-16x16.png, or safari-pinned-tab.svg as "favicon" icon comes from hosted assets / Console -->
+  <!-- <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png"> -->
+  <link rel="manifest" href="/static/icons/site.webmanifest">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="msapplication-config" content="/static/icons/browserconfig.xml">
+  <!-- End Favicons -->
 
-<style>
+  <!--!link-->
+  <!--!ssrStyles-->
+  <!--!ssrLinks-->
+
+  <style>
     /* @font-face {
         font-family: 'Josefin Sans';
         src: url('%PUBLIC_URL%/static/fonts/JosefinSans-MediumItalic.ttf') format('truetype');
         font-weight: 500; 
         font-style: italic;
       } */
- @font-face {
-    font-family: 'NeueHaasGroteskText Pro';
-    src: url('%PUBLIC_URL%/static/fonts/NHaasGroteskTXPro-55Rg.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: 'NeueHaasGroteskText Pro';
-    src:url('%PUBLIC_URL%/static/fonts/NHaasGroteskTXPro-75Bd.woff2') format('woff2');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
+    @font-face {
+      font-family: 'NeueHaasGroteskText Pro';
+      src: url('%PUBLIC_URL%/static/fonts/NHaasGroteskTXPro-55Rg.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
 
-@font-face {
-    font-family: 'NeueHaasGroteskText Pro Md';
-    src: url('%PUBLIC_URL%/static/fonts/NHaasGroteskTXPro-65Md.woff2') format('woff2');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
+    @font-face {
+      font-family: 'NeueHaasGroteskText Pro';
+      src: url('%PUBLIC_URL%/static/fonts/NHaasGroteskTXPro-75Bd.woff2') format('woff2');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'NeueHaasGroteskText Pro Md';
+      src: url('%PUBLIC_URL%/static/fonts/NHaasGroteskTXPro-65Md.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
 
 
-     /**
+    /**
       * Inter font is back up font for non-apple environments
       *
       * https://rsms.me/inter/
       * https://github.com/philipbelesky/inter-ui
       */
 
-      /* @font-face {
+    /* @font-face {
         font-family: "Inter";
         font-style: normal;
         font-weight: 100;
@@ -183,34 +185,35 @@
         font-display: fallback;
         src: url("https://assets-sharetribecom.sharetribe.com/webfonts/inter/static-web/Inter-BlackItalic.woff2") format("woff2"), url("https://assets-sharetribecom.sharetribe.com/webfonts/inter/static-web/Inter-BlackItalic.woff") format("woff");
       } */
-      
-    </style>
+  </style>
 
-    <!--!script-->
+  <!--!script-->
 
-    <link rel="stylesheet" href="%PUBLIC_URL%/static/reactDates.css" />
-  </head>
-  <body>
-    <div id="root"><!--!body--></div>
-    <div id="portal-root"></div>
+  <link rel="stylesheet" href="%PUBLIC_URL%/static/reactDates.css" />
+</head>
 
-    <!--
+<body>
+  <div id="root"><!--!body--></div>
+  <div id="portal-root"></div>
+
+  <!--
          Stripe script should be on every page, not just the pages that
          use the API:
 
          https://stripe.com/docs/stripe.js#including-stripejs
        -->
-    <script src="https://js.stripe.com/v3/" crossorigin></script>
-    <!--!preloadedStateScript-->
+  <script src="https://js.stripe.com/v3/" crossorigin></script>
+  <!--!preloadedStateScript-->
 
-    <!--!ssrScripts-->
+  <!--!ssrScripts-->
 
-    <!--
+  <!--
          Note when adding new external scripts/styles/fonts/etc.:
          If a Content Security Policy (CSP) is turned on, the new URLs
          should be whitelisted in the policy.
 
          Check: /server/csp.js
     -->
-  </body>
+</body>
+
 </html>

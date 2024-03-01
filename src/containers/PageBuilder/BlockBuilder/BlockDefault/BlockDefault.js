@@ -39,7 +39,6 @@ const BlockDefault = props => {
 
   const history = useHistory();
 
-
   return (
     <div
       onClick={() => {
@@ -47,7 +46,7 @@ const BlockDefault = props => {
           history.push(callToAction.href);
         }
       }}
-      className={css.customBlockLink}
+      className={(sectionId === 'categories' || sectionId === 'locations') && css.customBlockLink}
     >
       <BlockContainer id={blockId} className={classes}>
         <FieldMedia
