@@ -158,6 +158,7 @@ const PageBuilder = props => {
                         </button>
                       </div>
                     </div>
+                    <div className={css.HerobnnrImg}></div>
                     <SectionBuilder sections={sections} options={options} />
                   </>
                 )}
