@@ -325,7 +325,7 @@ const OrderPanel = props => {
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.orderTitle);
 
-  const isPartner = currentUser.attributes?.profile?.publicData?.userType === 'partner';
+  const isPartner = currentUser?.attributes?.profile?.publicData?.userType === 'partner';
 
   return (
     <div className={classes}>
