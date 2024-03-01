@@ -22,8 +22,8 @@
   @media (--viewportLarge) {
     width: unset;
   }
-  @media(max-width:767px){
-    width:100% !important;
+  @media (max-width: 767px) {
+    width: 100% !important;
   }
 }
 :global(.image-gallery-thumbnail) {
@@ -38,8 +38,8 @@
     @media (--viewportMedium) {
       margin-left: 0;
     }
-    @media(max-width:767px){
-     margin-left: 0;
+    @media (max-width: 767px) {
+      margin-left: 0;
     }
   }
   &:last-child {
@@ -52,7 +52,7 @@
 
   &:hover,
   &:global(.active) {
-    border-color:#fc334d;
+    border-color: #fc334d;
   }
 }
 
@@ -79,29 +79,28 @@
     text-align: center !important;
     /* height:100vh; */
   }
-  & :global(.image-gallery-slides){
+  & :global(.image-gallery-slides) {
     min-height: 100vh !important;
   }
-  & > div{
-    & > div{
-      & > div{
-        & > div{
-          & > div{
-            & > div{
-              & > div{
-                height:100% !important;
-                & > img{
-                  height:auto !important;
+  & > div {
+    & > div {
+      & > div {
+        & > div {
+          & > div {
+            & > div {
+              & > div {
+                height: 100% !important;
+                & > img {
+                  height: auto !important;
                   object-fit: contain !important;
                 }
-                & > div{
-                  height:100% !important;
-                  & img{
-                    height:auto !important;
+                & > div {
+                  height: 100% !important;
+                  & img {
+                    height: auto !important;
                     object-fit: contain !important;
-                    @media(max-width:1199px){
-                      height:100% !important;
-                     
+                    @media (max-width: 1199px) {
+                      height: 100% !important;
                     }
                   }
                 }
@@ -113,8 +112,8 @@
     }
   }
 }
-:global(.image-gallery-slides){
-  height:460px;
+:global(.image-gallery-slides) {
+  height: 460px;
 }
 .root {
 }
@@ -124,7 +123,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height:100vh;
+  min-height: 100vh;
 }
 
 .itemWrapper {
@@ -141,7 +140,7 @@
 
 .itemCentering {
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: center;
   width: 100%;
   /* height: 100%; */
@@ -152,8 +151,10 @@
   width: 100%;
   /* max-height: 100%; */
   object-fit: cover;
-  height:485px;
-
+  height: 485px;
+  /* @media (max-width: 575px) {
+    height: auto !important;
+  } */
 }
 
 .thumb {
@@ -162,9 +163,9 @@
   /* max-width: 88px;
   max-height: 88px; */
   border-radius: var(--borderRadiusMedium);
-    width: 88px;
-    height: 66px;
-    object-fit: cover;
+  width: 88px;
+  height: 66px;
+  object-fit: cover;
 }
 
 .navLeft,
@@ -223,17 +224,17 @@
     align-items: center;
     justify-content: center;
   }
- @media(max-width:767px){
-  width: 25px;
-  height: 25px;
- }
+  @media (max-width: 767px) {
+    width: 25px;
+    height: 25px;
+  }
 }
 
 .openFullscreen {
   /* Hide on mobile. Currently react-image-gallery fullscreen mode is broken on
      mobile, and mobile doesn't really benefit from fullscreen anyways. */
   /* display: none; */
-   display:block;
+  display: block;
   composes: marketplaceTinyFontStyles from global;
   font-weight: var(--fontWeightMedium);
 
@@ -266,7 +267,7 @@
   @media (--viewportLarge) {
     display: block;
   }
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     bottom: 12px;
     right: 12px;
     padding: 8px 10px 6px 13px;
@@ -284,7 +285,7 @@
   &:enabled:active {
     color: var(--colorBlack);
   }
-  z-index:1;
+  z-index: 1;
 }
 
 .closeText {
@@ -294,30 +295,29 @@
 .closeIcon {
   composes: marketplaceModalCloseIcon from global;
 }
-.viewImages{
+.viewImages {
   position: absolute;
-    z-index: 1;
-    /* color: white; */
-    bottom: 19px;
-    right: 24px;
-    margin: 0;
-    padding: 15px 10px;
-    background-color: var(--colorWhite);
-    border: 1px solid var(--colorGrey100);
-    border-radius: var(--borderRadius);
-    cursor: pointer;
-    transition: var(--transitionStyleButton);
-    font-size: 13px;
-    @media (max-width:767px){
-      bottom:10px;
-      right:11px;
-    }
-    &:hover {
-      background-color: var(--marketplaceColor);
-      border-color: var(--marketplaceColor);
-      color: var(--colorWhite);
-    }
-   
+  z-index: 1;
+  /* color: white; */
+  bottom: 19px;
+  right: 24px;
+  margin: 0;
+  padding: 15px 10px;
+  background-color: var(--colorWhite);
+  border: 1px solid var(--colorGrey100);
+  border-radius: var(--borderRadius);
+  cursor: pointer;
+  transition: var(--transitionStyleButton);
+  font-size: 13px;
+  @media (max-width: 767px) {
+    bottom: 10px;
+    right: 11px;
+  }
+  &:hover {
+    background-color: var(--marketplaceColor);
+    border-color: var(--marketplaceColor);
+    color: var(--colorWhite);
+  }
 }
 .modalScrollLayer {
   width: 100vw;
@@ -328,7 +328,7 @@
 .modalContainer {
   width: 100%;
   height: 100%;
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -349,28 +349,28 @@
       object-fit: contain !important;
   }
   } */
-  &>div{
-    &>div{
-      &>div{
-        border:none !important;
+  & > div {
+    & > div {
+      & > div {
+        border: none !important;
 
-        &>div{
-          &>div{
-            &>div{
-              &>div{
-                &>div{
-                  &>div{
-                    & > img{
+        & > div {
+          & > div {
+            & > div {
+              & > div {
+                & > div {
+                  & > div {
+                    & > img {
                       object-fit: contain !important;
                       background-color: transparent !important;
-                      border:none;
+                      border: none;
                     }
-                    &> div{
-                      & > img{
+                    & > div {
+                      & > img {
                         object-fit: contain !important;
                         background-color: transparent !important;
-                        border:none;
-                    }
+                        border: none;
+                      }
                     }
                   }
                 }
@@ -381,11 +381,11 @@
       }
     }
   }
-  
+
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin:auto;
+  margin: auto;
   /* & .content{
       width: 100%;
       display: flex;
@@ -402,12 +402,12 @@
 /* .imageInModal{
   padding:100px 0;
 } */
-.imageGalleryDiv{
+.imageGalleryDiv {
   width: 100vw;
-  height:100vh;
+  height: 100vh;
   position: fixed;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   /* background-color:var(--wardrobeColorTransBlack); */
   z-index: 1001;
 }
