@@ -325,6 +325,8 @@ const OrderPanel = props => {
   const classes = classNames(rootClassName || css.root, className);
   const titleClasses = classNames(titleClassName || css.orderTitle);
 
+  const isPartner = currentUser.attributes?.profile?.publicData?.userType === 'partner';
+
   return (
     <div className={classes}>
       <ModalInMobile
@@ -452,7 +454,9 @@ const OrderPanel = props => {
           </div>
         </div>
 
-        {isClosed ? (
+        {isPartner ? (
+          <div className={css.infoTxt}>To book a listing please create a customer account!</div>
+        ) : isClosed ? (
           <div className={css.closedListingButton}>
             <FormattedMessage id="OrderPanel.closedListingButtonText" />
           </div>

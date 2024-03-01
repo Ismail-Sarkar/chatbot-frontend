@@ -22,14 +22,14 @@
     margin-top: 0;
     margin-bottom: 0;
   }
-  @media(max-width:1023px){
-    padding: 80px 20px 30px!important;
+  @media (max-width: 1023px) {
+    padding: 80px 20px 30px !important;
   }
-  & > button{
-   @media(max-width:767px){
-    position:absolute;
-   }
- }
+  & > button {
+    @media (max-width: 767px) {
+      position: absolute;
+    }
+  }
 }
 
 .modalHeading {
@@ -44,11 +44,10 @@
   @media (--viewportLarge) {
     display: none;
   }
-  @media(max-width:1023px){
+  @media (max-width: 1023px) {
     margin-top: 0;
     padding: 0;
   }
- 
 }
 
 .heading {
@@ -63,11 +62,11 @@
     margin-top: 0;
     margin-bottom: 5px;
   }
-  @media(max-width:1023px){
+  @media (max-width: 1023px) {
     font-size: 40px !important;
     line-height: 45px !important;
   }
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     font-size: 22px !important;
     line-height: 35px !important;
   }
@@ -199,10 +198,10 @@
         & > div {
           & > div {
             & > div:nth-child(2) {
-              @media(max-width:1023px){
+              @media (max-width: 1023px) {
                 left: 0 !important;
                 width: 100%;
-               top: 50px !important;
+                top: 50px !important;
               }
               & > div {
                 background-color: #fc334d !important;
@@ -230,25 +229,25 @@
                     }
                   }
                 } */
-               @media(max-width:575px){
-                width:100% !important;
-               }
-               & > div{
-                & > div{
-                  & > div:nth-child(2){
-                    & > div{
-                      & > div{
-                        @media(max-width:767px){
-                         left:unset !important;
+                @media (max-width: 575px) {
+                  width: 100% !important;
+                }
+                & > div {
+                  & > div {
+                    & > div:nth-child(2) {
+                      & > div {
+                        & > div {
+                          @media (max-width: 767px) {
+                            left: unset !important;
+                          }
                         }
                       }
                     }
                   }
                 }
-               }
-               @media(max-width:767px){
-                width:100% !important;
-               }
+                @media (max-width: 767px) {
+                  width: 100% !important;
+                }
               }
             }
           }
@@ -256,10 +255,9 @@
       }
     }
   }
-  @media(max-width:1023px){
-    min-height:270px !important;
+  @media (max-width: 1023px) {
+    min-height: 270px !important;
   }
-  
 }
 
 .openOrderForm {
@@ -382,7 +380,7 @@
   border-bottom: 2px solid black;
   margin-bottom: 5px;
   display: inline-block;
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     font-size: 16px;
   }
 }
@@ -394,4 +392,10 @@
 }
 .durationMainDiv {
   margin-bottom: 20px;
+}
+.infoTxt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }

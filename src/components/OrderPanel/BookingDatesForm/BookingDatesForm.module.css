@@ -134,4 +134,7 @@
 .infoTxt {
   font-size: 13px;
   font-weight: 400;
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
 }
