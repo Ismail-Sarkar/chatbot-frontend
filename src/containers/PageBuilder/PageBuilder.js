@@ -133,32 +133,34 @@ const PageBuilder = props => {
                   <LoadingSpinner />
                 ) : (
                   <>
-                    <div className={css.topdiv}>
-                      <div className={css.topdivContent}>
-                        <span>Book remote work </span>
+                    <div>
+                      <div className={css.topdiv}>
+                        <div className={css.topdivContent}>
+                          <span>Book remote work </span>
                           <span>day passes that blend </span>
                           <span>work & play </span>
-                      </div>
+                        </div>
 
-                      <div className={css.searchDiv}>
-                        {/* <RiSearch2Line /> */}
-                        {/* <input
+                        <div className={css.searchDiv}>
+                          {/* <RiSearch2Line /> */}
+                          {/* <input
                           type="text"
                           onFocus={() => {
                             goToSearch();
                           }}
                         /> */}
-                        <button
-                          className={css.srchBtn}
-                          onClick={() => {
-                            goToSearch();
-                          }}
-                        >
-                          Search passes
-                        </button>
+                          <button
+                            className={css.srchBtn}
+                            onClick={() => {
+                              goToSearch();
+                            }}
+                          >
+                            Search passes
+                          </button>
+                        </div>
                       </div>
+                      <div className={css.HerobnnrImg}></div>
                     </div>
-                    <div className={css.HerobnnrImg}></div>
                     <SectionBuilder sections={sections} options={options} />
                   </>
                 )}
