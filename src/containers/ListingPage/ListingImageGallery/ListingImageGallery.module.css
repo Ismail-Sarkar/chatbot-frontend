@@ -294,3 +294,120 @@
 .closeIcon {
   composes: marketplaceModalCloseIcon from global;
 }
+.viewImages{
+  position: absolute;
+    z-index: 1;
+    /* color: white; */
+    bottom: 19px;
+    right: 24px;
+    margin: 0;
+    padding: 15px 10px;
+    background-color: var(--colorWhite);
+    border: 1px solid var(--colorGrey100);
+    border-radius: var(--borderRadius);
+    cursor: pointer;
+    transition: var(--transitionStyleButton);
+    font-size: 13px;
+    @media (max-width:767px){
+      bottom:10px;
+      right:11px;
+    }
+    &:hover {
+      background-color: var(--marketplaceColor);
+      border-color: var(--marketplaceColor);
+      color: var(--colorWhite);
+    }
+   
+}
+.modalScrollLayer {
+  width: 100vw;
+  height: 100vh;
+  /* background-color: rgba(1, 1, 1, 0.92); */
+  background-color: var(--colorWhite);
+}
+.modalContainer {
+  width: 100%;
+  height: 100%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  @media (--viewportMedium) {
+    margin: 0;
+    padding: 0 24px 0 0;
+    display: flex;
+    position: relative;
+  }
+  /* & .ListingImageGallery{
+    & > img{
+      object-fit: contain !important;
+  }
+  } */
+  &>div{
+    &>div{
+      &>div{
+        border:none !important;
+
+        &>div{
+          &>div{
+            &>div{
+              &>div{
+                &>div{
+                  &>div{
+                    & > img{
+                      object-fit: contain !important;
+                      background-color: transparent !important;
+                      border:none;
+                    }
+                    &> div{
+                      & > img{
+                        object-fit: contain !important;
+                        background-color: transparent !important;
+                        border:none;
+                    }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin:auto;
+  /* & .content{
+      width: 100%;
+      display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  align-items: center;
+  padding: 8px 2px;
+} */
+
+  @media (--viewportXLarge) {
+    padding: 0;
+  }
+}
+/* .imageInModal{
+  padding:100px 0;
+} */
+.imageGalleryDiv{
+  width: 100vw;
+  height:100vh;
+  position: fixed;
+  top:0;
+  left:0;
+  /* background-color:var(--wardrobeColorTransBlack); */
+  z-index: 1001;
+}

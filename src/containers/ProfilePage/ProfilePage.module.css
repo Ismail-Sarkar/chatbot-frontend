@@ -128,7 +128,7 @@
   /* Preserve newlines, but collapse other whitespace */
   white-space: pre-line;
   margin: 5px 0 24px 0;
-
+  word-break: break-all;
   @media (--viewportMedium) {
     margin: 4px 0 51px 0;
   }
@@ -219,7 +219,7 @@
 }
 
 .mobileReviews {
-  border-top: 1px solid var(--colorGrey100);
+  /* border-top: 1px solid var(--colorGrey100); */
   margin-bottom: 36px;
 }
 
@@ -288,9 +288,10 @@
         }
       }
       & > main {
-        padding: 48px 36px 82px 59px !important;
+        padding: 48px 36px 82px 0 !important;
         width: 80%;
         flex: 0 0 80%;
+        border-left: 0;
         @media (max-width: 1023px) {
           width: 100%;
           flex: 0 0 100%;

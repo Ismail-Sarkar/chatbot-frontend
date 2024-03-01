@@ -312,6 +312,7 @@ export const ListingPageComponent = props => {
             <SectionGallery
               listing={currentListing}
               variantPrefix={config.layout.listingImage.variantPrefix}
+              onManageDisableScrolling={onManageDisableScrolling}
             />
             <div className={css.mobileHeading}>
               <H4 as="h1" className={css.orderPanelTitle}>
