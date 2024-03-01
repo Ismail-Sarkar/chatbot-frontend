@@ -86,7 +86,7 @@ const PanelHeading = props => {
           <FormattedMessage id="TransactionPanel.messageDeletedListing" />
         </p>
       ) : null}
-      {isCustomer && !listingDeleted && showExtraInfo ? (
+      {isCustomer && !listingDeleted && showExtraInfo && processState==='preauthorized' ? (
         <p className={css.transactionInfoMessage}>
           <FormattedMessage
             id={`TransactionPage.${processName}.${transactionRole}.${processState}.extraInfo`}
@@ -110,7 +110,8 @@ const PanelHeading = props => {
           />{' '}
         </p>
       ) : (
-        <p className={css.transactionInfoMessage}>
+         processState==='preauthorized' ?
+        (<p className={css.transactionInfoMessage}>
           <FormattedMessage
             id={`TransactionPage.${processName}.${transactionRole}.${processState}.extraInfo`}
             values={{
@@ -131,7 +132,7 @@ const PanelHeading = props => {
               ),
             }}
           />{' '}
-        </p>
+        </p>):null
       )}
       {isProvider && isPendingPayment ? (
         <p className={css.transactionInfoMessage}>

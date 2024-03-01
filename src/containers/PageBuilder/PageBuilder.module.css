@@ -51,6 +51,10 @@
         /* display: inline; */
         /* margin-left: 5px; */
       }
+      @media(max-width:374px){
+        font-size: 26px;
+        line-height: 35px;
+      }
     }
     @media (max-width: 767px) {
       flex-basis: 100%;
@@ -128,5 +132,16 @@
     display: block !important;
 
    }
+  }
+}
+.HerobnnrImg{
+  background-image:url(../../assets/Banner_Image.png);
+  height: 500px;
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-position:center;
+  @media(max-width:575px){
+  background-image:url(../../assets/Banner_Image-Mobile.png);
+  height: 250px;
   }
 }
