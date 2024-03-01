@@ -62,11 +62,17 @@
     background-color: transparent;
     cursor: auto;
   }
+  @media(max-width:575px){
+    width:auto;
+  }
 }
 
 .menu {
   padding: 15px 24px;
   position: relative;
+  @media(max-width:575px){
+   padding: 12px 15px;
+  }
 }
 .searchMenu {
   padding: 12px 24px;

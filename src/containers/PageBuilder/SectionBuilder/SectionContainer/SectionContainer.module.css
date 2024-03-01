@@ -14,11 +14,9 @@
   &:nth-child(2) {
     & > div {
       & > img {
-        @media (max-width: 1199px) {
-          height: auto;
-        }
         @media (max-width: 575px) {
-          height: 300px;
+          height: 200px;
+          object-fit:inherit !important;
         }
       }
     }
@@ -118,6 +116,25 @@
           @media (max-width: 991px) {
             flex-basis: 100%;
           }
+         & > div{
+          & > div{
+            & > div{
+              & > div{
+                & > div{
+                  & > img{
+                    height: 340px;
+                    object-fit: cover;
+                    
+                    @media(max-width:991px){
+                      height:100%;
+                      object-position:inherit !important;
+                    }
+                  }
+                }
+              }
+            }
+          }
+         }
         }
         & > div:nth-child(1) {
           & > div {
@@ -153,8 +170,12 @@
     @media (max-width: 1199px) {
       padding: 30px 0;
     }
+
   }
 }
+/* #funadventure{
+  padding: 200px 0;
+} */
 
 .sectionContent {
   /* padding: 32px 0; */

@@ -169,6 +169,7 @@ class DateRangeInputComponent extends Component {
   onDatesChange(dates) {
     const { isDaily, isBlockedBetween } = this.props;
     const { startDate, endDate } = dates;
+    console.log(dates, startDate.toDate(), startDate.format());
 
     // both dates are selected, a new start date before the previous start
     // date is selected
@@ -195,6 +196,7 @@ class DateRangeInputComponent extends Component {
     this.setState(() => ({
       currentStartDate: startDateAsDate,
     }));
+    console.log(632, startDateAsDate);
 
     this.props.onChange({ startDate: startDateAsDate, endDate: endDateAsDate });
   }
@@ -203,7 +205,6 @@ class DateRangeInputComponent extends Component {
     // DateRangePicker requires 'onFocusChange' function and 'focusedInput'
     // but Fields of React-Form deals with onFocus & onBlur instead
     this.setState({ focusedInput });
-    console.log(334, focusedInput);
     if (focusedInput) {
       window.clearTimeout(this.blurTimeoutId);
       this.props.onFocus(focusedInput);
@@ -238,7 +239,6 @@ class DateRangeInputComponent extends Component {
       form,
       ...datePickerProps
     } = this.props;
-    console.log(52, this.state.focusedInput);
     const initialStartMoment = initialDates ? moment(initialDates.startDate) : null;
     const initialEndMoment = initialDates ? moment(initialDates.endDate) : null;
     const startDate =

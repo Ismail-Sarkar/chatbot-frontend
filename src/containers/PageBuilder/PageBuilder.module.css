@@ -47,9 +47,13 @@
       }
       @media (max-width: 575px) {
         font-size: 32px;
-        line-height: 50px;
-        display: inline;
-        margin-left: 5px;
+        line-height: 45px;
+        /* display: inline; */
+        /* margin-left: 5px; */
+      }
+      @media(max-width:374px){
+        font-size: 26px;
+        line-height: 35px;
       }
     }
     @media (max-width: 767px) {
@@ -119,5 +123,14 @@
   } */
   @media (max-width: 767px) {
     min-width: 270px;
+  }
+}
+.topdivContent{
+  & > span{
+   display: inline !important;
+   @media(max-width:575px){
+    display: block !important;
+
+   }
   }
 }

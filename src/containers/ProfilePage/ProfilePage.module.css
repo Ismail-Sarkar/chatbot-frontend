@@ -134,7 +134,7 @@
   }
   @media (--viewportLarge) {
     margin: 0 0 56px 0;
-    max-width: 600px;
+    /* max-width: 600px; */
   }
   @media (max-width: 1023px) {
     margin: -50px 0 40px 0;
@@ -143,15 +143,15 @@
 
 .listingsContainer {
   composes: clearfix from global;
-  border-top: 1px solid var(--colorGrey100);
+  /* border-top: 1px solid var(--colorGrey100); */
   padding-bottom: 23px;
 
   @media (--viewportMedium) {
     padding-bottom: 22px;
   }
-  @media (max-width: 1024px) {
+  /* @media (max-width: 1024px) {
     border-top: 0;
-  }
+  } */
 }
 
 .listingsTitle {
@@ -224,7 +224,7 @@
 }
 
 .desktopReviews {
-  border-top: 1px solid var(--colorGrey100);
+  /* border-top: 1px solid var(--colorGrey100); */
 
   @media (--viewportMedium) {
     margin-bottom: 48px;
@@ -236,7 +236,7 @@
 }
 
 .desktopReviewsWrapper {
-  max-width: 600px;
+  /* max-width: 600px; */
   margin-top: 28px;
 }
 
