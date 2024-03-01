@@ -136,12 +136,21 @@
 }
 .HerobnnrImg{
   background-image:url(../../assets/Banner_Image.png);
-  height: 500px;
+  height: 520px;
   background-size:cover;
   background-repeat: no-repeat;
   background-position:center;
   @media(max-width:575px){
   background-image:url(../../assets/Banner_Image-Mobile.png);
-  height: 250px;
+  height: 280px;
+  }
+  @media(min-width:1440px){
+    height:600px;
+  }
+  @media(min-width:1920px){
+    height:800px;
+  }
+  @media(min-width:2500px){
+    height:1000px;
   }
 }
