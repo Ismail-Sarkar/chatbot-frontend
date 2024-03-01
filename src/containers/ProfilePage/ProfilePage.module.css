@@ -143,15 +143,15 @@
 
 .listingsContainer {
   composes: clearfix from global;
-  border-top: 1px solid var(--colorGrey100);
+  /* border-top: 1px solid var(--colorGrey100); */
   padding-bottom: 23px;
 
   @media (--viewportMedium) {
     padding-bottom: 22px;
   }
-  @media (max-width: 1024px) {
+  /* @media (max-width: 1024px) {
     border-top: 0;
-  }
+  } */
 }
 
 .listingsTitle {
@@ -224,7 +224,7 @@
 }
 
 .desktopReviews {
-  border-top: 1px solid var(--colorGrey100);
+  /* border-top: 1px solid var(--colorGrey100); */
 
   @media (--viewportMedium) {
     margin-bottom: 48px;
