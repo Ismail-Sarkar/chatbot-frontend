@@ -11,7 +11,9 @@ import {
   IconClose,
   IconArrowHead,
   ResponsiveImage,
+  Modal,
 } from '../../../components';
+// import { isScrollingDisabled, manageDisableScrolling } from '../../ducks/ui.duck';
 
 // Copied directly from
 // `node_modules/react-image-gallery/styles/css/image-gallery.css`. The
@@ -24,6 +26,7 @@ import css from './ListingImageGallery.module.css';
 const IMAGE_GALLERY_OPTIONS = {
   showPlayButton: false,
   disableThumbnailScroll: true,
+  showFullscreenButton: false,
 };
 const MAX_LANDSCAPE_ASPECT_RATIO = 2; // 2:1
 const MAX_PORTRAIT_ASPECT_RATIO = 4 / 3;
@@ -52,7 +55,15 @@ const getFirstImageAspectRatio = (firstImage, scaledVariant) => {
 
 const ListingImageGallery = props => {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const { intl, rootClassName, className, images, imageVariants, thumbnailVariants } = props;
+  const {
+    intl,
+    rootClassName,
+    className,
+    images,
+    imageVariants,
+    thumbnailVariants,
+    onManageDisableScrolling,
+  } = props;
   const thumbVariants = thumbnailVariants || imageVariants;
   // imageVariants are scaled variants.
   const { aspectWidth, aspectHeight } = getFirstImageAspectRatio(images?.[0], imageVariants[0]);
@@ -160,18 +171,53 @@ const ListingImageGallery = props => {
   const classes = classNames(rootClassName || css.root, className);
 
   return (
-    <ReactImageGallery
-      additionalClass={classes}
-      items={items}
-      renderItem={renderItem}
-      renderThumbInner={renderThumbInner}
-      onScreenChange={onScreenChange}
-      renderLeftNav={renderLeftNav}
-      renderRightNav={renderRightNav}
-      showThumbnails={isFullscreen ? false : true}
-      renderFullscreenButton={renderFullscreenButton}
-      {...IMAGE_GALLERY_OPTIONS}
-    />
+    <>
+      <ReactImageGallery
+        additionalClass={classes}
+        items={items}
+        renderItem={renderItem}
+        renderThumbInner={renderThumbInner}
+        onScreenChange={onScreenChange}
+        renderLeftNav={renderLeftNav}
+        renderRightNav={renderRightNav}
+        showThumbnails={isFullscreen ? false : true}
+        renderFullscreenButton={renderFullscreenButton}
+        renderCustomControls={() => {
+          return (
+            <>
+              <div className={css.viewImages} onClick={() => onScreenChange(true)}>
+                View large photos ({items.length})
+              </div>
+            </>
+          );
+        }}
+        {...IMAGE_GALLERY_OPTIONS}
+      />
+      {/* <div className={css.imageGalleryDiv}> */}
+      <Modal
+        className={css.imageGalleryDiv}
+        id="ListingImageGallery.viewImages"
+        onManageDisableScrolling={onManageDisableScrolling}
+        isOpen={isFullscreen}
+        onClose={() => onScreenChange(false)}
+        scrollLayerClassName={css.modalScrollLayer}
+        containerClassName={css.modalContainer}
+        contentClassName={css.modalContent}
+        usePortal
+      >
+        <ReactImageGallery
+          additionalClass={css.imageInModal}
+          items={items}
+          renderItem={renderItem}
+          renderThumbInner={renderThumbInner}
+          renderLeftNav={renderLeftNav}
+          renderRightNav={renderRightNav}
+          showThumbnails={isFullscreen ? false : true}
+          {...IMAGE_GALLERY_OPTIONS}
+        />
+      </Modal>
+      {/* </div> */}
+    </>
   );
 };
 
