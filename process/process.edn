@@ -225,6 +225,10 @@
    :on :transition/operator-accept,
    :to :actor.role/provider,
    :template :booking-operator-accepted-request}
+   {:name :notification/booking-automatic-accepted-request-to-provider,
+   :on :transition/confirm-payment-for-automatic-accept,
+   :to :actor.role/provider,
+   :template :booking-automatic-accepted-request}
   {:name :notification/booking-declined-request,
    :on :transition/decline,
    :to :actor.role/customer,
