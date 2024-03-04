@@ -123,6 +123,10 @@
     padding: 40px 15px 0;
     display: block;
   }
+  @media (max-width: 575px) {
+    padding: 80px 15px 0;
+    display: block;
+  }
 }
 
 .blockContainer {
@@ -141,10 +145,10 @@
   }
   @media (max-width: 991px) {
     text-align: center;
-    padding: 35px 32px 35px 32px;
+    padding: 35px 32px 10px 32px;
   }
-  @media (max-width: 991px) {
-    padding: 20px 15px 35px 15px;
+  @media (max-width: 767px) {
+    padding: 20px 15px 10px 15px;
   }
 }
 

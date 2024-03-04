@@ -29,7 +29,7 @@
   & > div:nth-child(1) {
     flex-basis: 55%;
     & > span {
-      font-size: 44px;
+      font-size: 40px;
       font-weight: 500;
       color: #000000;
       line-height: 54px;
@@ -37,24 +37,24 @@
       font-weight: bold;
       /* font-family:'NeueHaasGroteskDisp Pro Md'; */
       display: block;
-      @media (max-width: 1199px) {
+      /* @media (max-width: 1199px) {
         font-size: 42px;
         line-height: 52px;
-      }
+      } */
       @media (max-width: 991px) {
         font-size: 31px;
         line-height: 38px;
       }
       @media (max-width: 575px) {
         font-size: 32px;
-        line-height: 45px;
+        /* line-height: 45px; */
         /* display: inline; */
         /* margin-left: 5px; */
       }
-      @media(max-width:374px){
+      /* @media(max-width:374px){
         font-size: 26px;
         line-height: 35px;
-      }
+      } */
     }
     @media (max-width: 767px) {
       flex-basis: 100%;
@@ -67,7 +67,7 @@
     padding: 25px 72px 40px;
   }
   @media (max-width: 575px) {
-    padding: 25px 0 40px;
+    padding: 40px 0 40px;
   }
 }
 .searchDiv {
@@ -98,7 +98,7 @@
     }
   } */
   @media (max-width: 991px) {
-    margin: 32px auto 0;
+    margin: 20px auto 0;
   }
   @media (max-width: 767px) {
     margin-top: 32px;
@@ -135,16 +135,21 @@
   }
 }
 .HerobnnrImg{
-  background-image:url(../../assets/Banner_Image.png);
-  height: 520px;
+  background-image:url(../../assets/Banner-img-new.png);
+  height:80vh;
   background-size:cover;
   background-repeat: no-repeat;
-  background-position:center;
-  @media(max-width:575px){
-  background-image:url(../../assets/Banner_Image-Mobile.png);
-  height: 280px;
+  background-position:bottom ;
+  @media(max-width:991px){
+    height: 65vh;
+    background-position: 80%;
   }
-  @media(min-width:1440px){
+  @media(max-width:575px){
+   background-image:url(../../assets/mob-img-new.png);
+   height: 50vh;
+   background-position: 30%;
+  }
+  /* @media(min-width:1440px){
     height:600px;
   }
   @media(min-width:1920px){
@@ -152,5 +157,5 @@
   }
   @media(min-width:2500px){
     height:1000px;
-  }
+  } */
 }

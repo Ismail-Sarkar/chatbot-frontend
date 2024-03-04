@@ -120,9 +120,13 @@
           & > div{
             & > div{
               & > div{
+                @media(max-width:991px){
+                  padding-bottom: 71.25% !important;
+                }
                 & > div{
                   & > img{
                     height: 370px;
+                    /* height:fit-content; */
                     object-fit: cover;
                     
                     @media(max-width:991px){
@@ -130,10 +134,7 @@
                       object-position:inherit !important;
                     }
                                         
-                    @media(max-width:575px){
-                      height:260px;
-                      object-position:inherit !important;
-                    }
+
                   }
                 }
               }

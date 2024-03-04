@@ -70,7 +70,7 @@
   border: none;
   padding-top: 0;
   padding-bottom: 0;
-  padding-left: 10px;
+  padding-left: 8px;
   font-family: 'NeueHaasGroteskText Pro Md';
   font-weight: 500;
   /* Search text gets ellipsis if it's too wide */
@@ -80,6 +80,7 @@
   margin-bottom: 0;
   background: transparent;
   font-family: var(--bodyfontfamily);
+  /* margin-top: 2px; */
   &:hover,
   &:focus {
     border-bottom-color: var(--marketplaceColor);
@@ -107,10 +108,11 @@
     line-height: 22px;
     font-family: 'NeueHaasGroteskText Pro Md';
     font-weight: 500;
+    /* margin-top:4px; */
   }
 
   @media (--viewportMedium) {
-    margin-top: 0;
+    margin-top: 2px;
     margin-bottom: 0;
   }
 }
