@@ -79,7 +79,7 @@
   margin-top: 0;
   margin-bottom: 0;
   background: transparent;
-  font-family: var(--bodyfontfamily);
+  /* font-family: var(--bodyfontfamily); */
   /* margin-top: 2px; */
   &:hover,
   &:focus {
