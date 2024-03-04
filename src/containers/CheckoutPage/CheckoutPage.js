@@ -11,12 +11,12 @@ import { userDisplayNameAsString } from '../../util/data';
 import { INQUIRY_PROCESS_NAME, resolveLatestProcessName } from '../../transactions/transaction';
 
 // Import global thunk functions
-import { isScrollingDisabled } from '../../ducks/ui.duck';
+import { isScrollingDisabled, manageDisableScrolling } from '../../ducks/ui.duck';
 import { confirmCardPayment, retrievePaymentIntent } from '../../ducks/stripe.duck';
 import { savePaymentMethod } from '../../ducks/paymentMethods.duck';
 
 // Import shared components
-import { NamedRedirect, Page } from '../../components';
+import { ModalMissingInformation, NamedRedirect, Page } from '../../components';
 
 // Session helpers file needs to be imported before CheckoutPageWithPayment and CheckoutPageWithInquiryProcess
 import { storeData, clearData, handlePageData } from './CheckoutPageSessionHelpers';
@@ -37,6 +37,9 @@ import CheckoutPageWithPayment, {
   loadInitialDataForStripePayments,
 } from './CheckoutPageWithPayment';
 import CheckoutPageWithInquiryProcess from './CheckoutPageWithInquiryProcess';
+import { authenticationInProgress } from '../../ducks/auth.duck';
+
+import css from './CheckoutPage.module.css';
 
 const STORAGE_KEY = 'CheckoutPage';
 
@@ -93,6 +96,13 @@ const EnhancedCheckoutPage = props => {
     scrollingDisabled,
     speculateTransactionInProgress,
     onInquiryWithoutPayment,
+    currentUserHasListings,
+    currentUserHasOrders,
+    location,
+    onManageDisableScrolling,
+    sendVerificationEmailInProgress,
+    sendVerificationEmailError,
+    onResendVerificationEmail,
   } = props;
   const processName = getProcessName(pageData);
   const isInquiryProcess = processName === INQUIRY_PROCESS_NAME;
@@ -123,39 +133,79 @@ const EnhancedCheckoutPage = props => {
     : 'Checkout page is loading data';
 
   return processName && isInquiryProcess ? (
-    <CheckoutPageWithInquiryProcess
-      config={config}
-      routeConfiguration={routeConfiguration}
-      intl={intl}
-      history={history}
-      processName={processName}
-      pageData={pageData}
-      listingTitle={listingTitle}
-      listing={listing}
-      title={title}
-      onInquiryWithoutPayment={onInquiryWithoutPayment}
-      onSubmitCallback={onSubmitCallback}
-      {...props}
-    />
+    <>
+      <ModalMissingInformation
+        id="MissingInformationReminder"
+        containerClassName={css.missingInformationModal}
+        currentUser={currentUser}
+        currentUserHasListings={currentUserHasListings}
+        currentUserHasOrders={currentUserHasOrders}
+        location={location}
+        onManageDisableScrolling={onManageDisableScrolling}
+        onResendVerificationEmail={onResendVerificationEmail}
+        sendVerificationEmailInProgress={sendVerificationEmailInProgress}
+        sendVerificationEmailError={sendVerificationEmailError}
+      />
+      <CheckoutPageWithInquiryProcess
+        config={config}
+        routeConfiguration={routeConfiguration}
+        intl={intl}
+        history={history}
+        processName={processName}
+        pageData={pageData}
+        listingTitle={listingTitle}
+        listing={listing}
+        title={title}
+        onInquiryWithoutPayment={onInquiryWithoutPayment}
+        onSubmitCallback={onSubmitCallback}
+        {...props}
+      />
+    </>
   ) : processName && !isInquiryProcess && !speculateTransactionInProgress ? (
-    <CheckoutPageWithPayment
-      config={config}
-      routeConfiguration={routeConfiguration}
-      intl={intl}
-      history={history}
-      processName={processName}
-      sessionStorageKey={STORAGE_KEY}
-      pageData={pageData}
-      setPageData={setPageData}
-      listingTitle={listingTitle}
-      listing={listing}
-      title={title}
-      onSubmitCallback={onSubmitCallback}
-      {...props}
-    />
+    <>
+      <ModalMissingInformation
+        id="MissingInformationReminder"
+        containerClassName={css.missingInformationModal}
+        currentUser={currentUser}
+        currentUserHasListings={currentUserHasListings}
+        currentUserHasOrders={currentUserHasOrders}
+        location={location}
+        onManageDisableScrolling={onManageDisableScrolling}
+        onResendVerificationEmail={onResendVerificationEmail}
+        sendVerificationEmailInProgress={sendVerificationEmailInProgress}
+        sendVerificationEmailError={sendVerificationEmailError}
+      />
+      <CheckoutPageWithPayment
+        config={config}
+        routeConfiguration={routeConfiguration}
+        intl={intl}
+        history={history}
+        processName={processName}
+        sessionStorageKey={STORAGE_KEY}
+        pageData={pageData}
+        setPageData={setPageData}
+        listingTitle={listingTitle}
+        listing={listing}
+        title={title}
+        onSubmitCallback={onSubmitCallback}
+        {...props}
+      />
+    </>
   ) : (
     <Page title={title} scrollingDisabled={scrollingDisabled}>
       <CustomTopbar intl={intl} />
+      <ModalMissingInformation
+        id="MissingInformationReminder"
+        containerClassName={css.missingInformationModal}
+        currentUser={currentUser}
+        currentUserHasListings={currentUserHasListings}
+        currentUserHasOrders={currentUserHasOrders}
+        location={location}
+        onManageDisableScrolling={onManageDisableScrolling}
+        onResendVerificationEmail={onResendVerificationEmail}
+        sendVerificationEmailInProgress={sendVerificationEmailInProgress}
+        sendVerificationEmailError={sendVerificationEmailError}
+      />
     </Page>
   );
 };
@@ -173,8 +223,17 @@ const mapStateToProps = state => {
     initiateOrderError,
     confirmPaymentError,
   } = state.CheckoutPage;
-  const { currentUser } = state.user;
   const { confirmCardPaymentError, paymentIntent, retrievePaymentIntentError } = state.stripe;
+
+  // Topbar needs user info.
+  const {
+    currentUser,
+    currentUserHasListings,
+    currentUserHasOrders,
+    currentUserNotificationCount: notificationCount,
+    sendVerificationEmailInProgress,
+    sendVerificationEmailError,
+  } = state.user;
   return {
     scrollingDisabled: isScrollingDisabled(state),
     currentUser,
@@ -191,6 +250,12 @@ const mapStateToProps = state => {
     confirmPaymentError,
     paymentIntent,
     retrievePaymentIntentError,
+    authInProgress: authenticationInProgress(state),
+    currentUserHasListings,
+    currentUserHasOrders,
+    notificationCount,
+    sendVerificationEmailInProgress,
+    sendVerificationEmailError,
   };
 };
 
@@ -210,6 +275,10 @@ const mapDispatchToProps = dispatch => ({
   onSendMessage: params => dispatch(sendMessage(params)),
   onSavePaymentMethod: (stripeCustomer, stripePaymentMethodId) =>
     dispatch(savePaymentMethod(stripeCustomer, stripePaymentMethodId)),
+
+  onManageDisableScrolling: (componentId, disableScrolling) =>
+    dispatch(manageDisableScrolling(componentId, disableScrolling)),
+  onResendVerificationEmail: () => dispatch(sendVerificationEmail()),
 });
 
 const CheckoutPage = compose(connect(mapStateToProps, mapDispatchToProps))(EnhancedCheckoutPage);

@@ -481,3 +481,6 @@
   border-left-width: 1px;
   border-left-color: var(--colorGrey100); */
 }
+.safariMargin{
+  margin-top:2px;
+}
