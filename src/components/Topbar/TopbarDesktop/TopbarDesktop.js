@@ -143,7 +143,7 @@ const TopbarDesktop = props => {
     </NamedLink>
   );
   const isSafari = typeof navigator !== 'undefined' ? navigator.userAgent.includes("safari") : false
-  console.log(123,isSafari)
+  // console.log(123,isSafari)
   return (
     <nav className={classes}>
       <LinkedLogo
