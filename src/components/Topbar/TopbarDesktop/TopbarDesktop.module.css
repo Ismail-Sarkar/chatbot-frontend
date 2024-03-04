@@ -469,7 +469,7 @@
   line-height: 22px;
   font-family: 'NeueHaasGroteskText Pro Md';
   font-weight: 500;
-  margin-top:4px;
+  margin-top:2px;
   &:hover {
     color: #000;
   }
