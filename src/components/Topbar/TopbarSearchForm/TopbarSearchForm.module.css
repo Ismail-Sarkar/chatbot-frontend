@@ -110,6 +110,19 @@
     font-weight: 500;
     margin-top:2px !important;
   }
+  &::-webkit-input-placeholder {
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    transition: var(--transitionStyleButton);
+    color: var(--colorGrey700);
+    /* color: #ebd7d7; */
+    /* font-size:16px; */
+    font-size: 14px;
+    line-height: 22px;
+    font-family: 'NeueHaasGroteskText Pro Md';
+    font-weight: 500;
+    margin-top:2px !important;
+  }
 
   @media (--viewportMedium) {
     margin-top: 2px;
