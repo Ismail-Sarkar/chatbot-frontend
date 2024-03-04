@@ -3,6 +3,7 @@ import css from './ListingPage.module.css';
 function UpperLocation(props) {
   const { publicData, currentListing } = props;
   const { manualAddress, mapLocation, fullManualAddress } = publicData;
+  console.log(98, mapLocation, mapLocation?.state);
   const country = manualAddress
     ? fullManualAddress.cityStateCountry
       ? `${fullManualAddress.cityStateCountry}`
