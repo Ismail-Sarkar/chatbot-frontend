@@ -62,7 +62,7 @@ const LocationSearchField = props => {
           onChange(value);
           onLocationChange(value);
         };
-
+        // const isSafari = typeof navigator !== 'undefined' ? navigator.userAgent.includes("safari") : false
         return (
           <LocationAutocompleteInput
             className={isMobile ? css.mobileInputRoot : desktopInputRootClass}

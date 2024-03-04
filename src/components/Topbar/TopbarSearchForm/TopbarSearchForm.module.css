@@ -123,6 +123,9 @@
     font-weight: 500;
     margin-top:2px !important;
   }
+  .safariMargin{
+    
+  }
 
   @media (--viewportMedium) {
     margin-top: 2px;

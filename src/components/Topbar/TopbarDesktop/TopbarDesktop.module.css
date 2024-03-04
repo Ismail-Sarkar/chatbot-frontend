@@ -469,7 +469,7 @@
   line-height: 22px;
   font-family: 'NeueHaasGroteskText Pro Md';
   font-weight: 500;
-  margin-top:2px;
+  margin-top:4px;
   &:hover {
     color: #000;
   }
@@ -480,4 +480,7 @@
   /* border-left-style: solid;
   border-left-width: 1px;
   border-left-color: var(--colorGrey100); */
+}
+.safariMargin{
+  margin-top:2px;
 }

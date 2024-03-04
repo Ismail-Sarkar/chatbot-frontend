@@ -142,7 +142,7 @@ const TopbarDesktop = props => {
       </span>
     </NamedLink>
   );
-
+  const isSafari = typeof navigator !== 'undefined' ? navigator.userAgent.includes("safari") : false
   return (
     <nav className={classes}>
       <LinkedLogo
@@ -162,7 +162,7 @@ const TopbarDesktop = props => {
           name="SearchPage"
         >
           <LiaSearchSolid size={25} />
-          <div className={css.searchTitle}>Search passes</div>
+          <div className={classNames(css.searchTitle,{[css.safariMargin]:isSafari})}>Search passes</div>
         </NamedLink>
       )}
 
