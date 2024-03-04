@@ -375,7 +375,8 @@
   }
 }
 .bookingMessage {
-  font-size: 19px;
+  /* font-size: 19px; */
+  font-size:18px;
   font-weight: 700;
   border-bottom: 2px solid black;
   margin-bottom: 5px;
