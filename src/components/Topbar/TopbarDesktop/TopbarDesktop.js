@@ -149,7 +149,7 @@ const TopbarDesktop = props => {
       <LinkedLogo
         className={css.logoLink}
         format="desktop"
-        alt={intl.formatMessage({ id: 'TopbarDesktop.logo' }, { marketplaceName })}
+        alt={intl.formatMessage({ id: 'TopbarDesktop.logo' },  { marketplaceName })}
         isAuthenticated={isAuthenticated}
       />
       {/* {search} */}
