@@ -24,6 +24,11 @@
     & > label {
       padding: 0 0 10px 0;
     }
+    & > div{
+      & > input{
+        padding: 12px;
+      }
+    }
   }
 
   @media (max-width: 575px) {
@@ -33,7 +38,7 @@
       margin-top: 20px;
     }
   }
-
+ 
 }
 
 .firstNameRoot {

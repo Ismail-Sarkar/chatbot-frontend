@@ -78,5 +78,10 @@
     & > label {
       padding: 0 0 10px 0;
     }
+    & > div{
+      & > input{
+        padding:12px;
+      }
+    }
   }
 }
