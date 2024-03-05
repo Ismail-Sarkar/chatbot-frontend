@@ -210,18 +210,17 @@
         align-items:center;
         height:100vh;
         flex-direction:column;
+        @media(max-width:575px){
+          display: block;
+        }
       }
       .paswwordField{
-        /* width: 30%; */
+        width: 30%;
+        padding: 15px 0 15px 0;
         & input{
+          height:48px;
           /* line-height: inherit; */
         }
-        /* & h2{
-          font-size: 20px;
-          line-height: 10px;
-          margin-top: 0;
-          margin-bottom: 10px;
-        } */
         @media(max-width:767px){
          width:50% !important;
        }
@@ -230,13 +229,14 @@
        }
       }
       #login-button{
-        /* width: 15%;
-        padding: 15px 0 15px 0; */
+        width: 15%;
+        padding: 15px 0 15px 0;
         @media(max-width:767px){
           width:30% !important;
         }
         @media(max-width:575px){
           width:100% !important;
+          margin-top:20px;
         }
       }
   </style>
@@ -252,11 +252,11 @@
 
   <div id="password-form" class="password-form">
   <div class="password-wrap">
-    <div class="paswwordField" style="width: 30%; padding: 15px 0 15px 0;">
+    <div class="paswwordField">
      <!-- <h2>Enter Password:</h2> -->
-    <input type="password" id="password-input" placeholder="Enter Password:" style="height:48px;">
+    <input type="password" id="password-input" placeholder="Enter Password:">
     </div>
-    <button id="login-button" class="buttonPrimary " style=" width: 15%;  padding: 15px 0 15px 0;">Submit</button>
+    <button id="login-button" class="buttonPrimary">Submit</button>
     </div>
  
   
