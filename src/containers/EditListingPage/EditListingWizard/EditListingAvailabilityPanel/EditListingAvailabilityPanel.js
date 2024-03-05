@@ -496,7 +496,7 @@ const EditListingAvailabilityPanel = props => {
               <Select
                 id="endTime"
                 name="endTime"
-                options={[...endTimeOptions, { value: '12:00pm', label: '12:00pm' }]}
+                options={[...endTimeOptions, { value: '11:59pm', label: '11:59pm' }]}
                 onChange={changeEndTime}
                 value={endTime}
                 isSearchable={false}
