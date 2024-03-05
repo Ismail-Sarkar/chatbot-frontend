@@ -185,6 +185,14 @@
         font-display: fallback;
         src: url("https://assets-sharetribecom.sharetribe.com/webfonts/inter/static-web/Inter-BlackItalic.woff2") format("woff2"), url("https://assets-sharetribecom.sharetribe.com/webfonts/inter/static-web/Inter-BlackItalic.woff") format("woff");
       } */
+
+      #password-input {
+        margin-bottom: 10px;
+      }
+
+      #root, #portal-root {
+        display: none;
+      }
   </style>
 
   <!--!script-->
@@ -195,6 +203,57 @@
 <body>
   <div id="root"><!--!body--></div>
   <div id="portal-root"></div>
+
+  <div id="password-form">
+    <h2>Enter Password:</h2>
+    <input type="password" id="password-input">
+    <button id="login-button">Login</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var passwordInput = document.getElementById('password-input');
+        var loginButton = document.getElementById('login-button');
+        var passwordForm = document.getElementById('password-form');
+        var landingPage = document.getElementById('root');
+        var landingPage2 = document.getElementById('portal-root');
+        var resetButton = document.getElementById('reset-button');
+
+        var correctPassword = 'pass123';
+        var storedPassword = sessionStorage.getItem('password');
+
+        if (storedPassword === correctPassword) {
+            // If password is already saved in session storage, show landing page
+            passwordForm.style.display = 'none';
+            landingPage.style.display = 'block';
+            landingPage2.style.display = 'block';
+        } else {
+            // Show password form if no password is saved
+            passwordForm.style.display = 'block';
+        }
+
+        loginButton.addEventListener('click', function () {
+            var enteredPassword = passwordInput.value;
+            if (enteredPassword === correctPassword) {
+                // If password is correct, save it in session storage and show landing page
+                sessionStorage.setItem('password', enteredPassword);
+                passwordForm.style.display = 'none';
+                landingPage.style.display = 'block';
+            } else {
+                // If password is incorrect, show error message
+                alert('Incorrect password. Please try again.');
+                passwordInput.value = '';
+            }
+        });
+
+        resetButton.addEventListener('click', function () {
+            // Reset the session storage and show the password form
+            sessionStorage.removeItem('password');
+            passwordForm.style.display = 'block';
+            landingPage.style.display = 'none';
+        });
+    });
+</script>
 
   <!--
          Stripe script should be on every page, not just the pages that

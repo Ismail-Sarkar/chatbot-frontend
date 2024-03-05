@@ -208,7 +208,7 @@ const EditListingAvailabilityPanel = props => {
   const endTimeOptions = [];
 
   for (let hour = 0; hour < 24; hour++) {
-    for (let minute = 0; minute < 60; minute += 60) {
+    for (let minute = 0; minute < 60; minute += 30) {
       if (hour < 12) {
         const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}am`;
         timeOptions.push({ value: time, label: time });
@@ -224,9 +224,9 @@ const EditListingAvailabilityPanel = props => {
       }
     }
   }
-
+  console.log(889900, timeOptions);
   for (let hour = 0; hour < 24; hour++) {
-    for (let minute = 0; minute < 60; minute += 60) {
+    for (let minute = 0; minute < 60; minute += 30) {
       const parts = startTime?.value?.split(':');
       if (parts?.length === 2) {
         const starthour = parts[0]; // This will give you '10' as a string
@@ -496,7 +496,7 @@ const EditListingAvailabilityPanel = props => {
               <Select
                 id="endTime"
                 name="endTime"
-                options={endTimeOptions}
+                options={[...endTimeOptions, { value: '11:59pm', label: '11:59pm' }]}
                 onChange={changeEndTime}
                 value={endTime}
                 isSearchable={false}
