@@ -195,21 +195,40 @@
       }
       .password-form{
         display:flex !important;
-        justify-content:center;
+        /* justify-content:center;
         align-items: center;
         flex-direction:column;
-        height: 100vh;
+        height: 100vh; */
+        @media(max-width:767px){
+          padding:0 15px;
+        }
       }
       .paswwordField{
-        width: 30%;
+        /* width: 30%; */
         & input{
-          line-height: inherit;
+          /* line-height: inherit; */
         }
-        & h2{
+        /* & h2{
           font-size: 20px;
           line-height: 10px;
           margin-top: 0;
           margin-bottom: 10px;
+        } */
+        @media(max-width:767px){
+         width:50% !important;
+       }
+       @media(max-width:575px){
+         width:100% !important;
+       }
+      }
+      #login-button{
+        /* width: 15%;
+        padding: 15px 0 15px 0; */
+        @media(max-width:767px){
+          width:30% !important;
+        }
+        @media(max-width:575px){
+          width:100% !important;
         }
       }
   </style>
@@ -223,13 +242,13 @@
   <div id="root"><!--!body--></div>
   <div id="portal-root"></div>
 
-  <div id="password-form" class="password-form">
-    <div class="paswwordField">
-     <h2>Enter Password:</h2>
-    <input type="password" id="password-input">
+  <div id="password-form" class="password-form" style="justify-content:center; align-items: center;  flex-direction:column;  height: 100vh;">
+    <div class="paswwordField" style="width: 30%; padding: 15px 0 15px 0;">
+     <!-- <h2>Enter Password:</h2> -->
+    <input type="password" id="password-input" placeholder="Enter Password:" style="line-height: inherit;">
     </div>
     
-    <button id="login-button">Login</button>
+    <button id="login-button" class="buttonPrimary " style=" width: 15%;  padding: 15px 0 15px 0;">Submit</button>
   </div>
 
   <script>
@@ -270,7 +289,7 @@
             }
         });
 
-        resetButton.addEventListener('click', function () {
+        resetButton?.addEventListener('click', function () {
             // Reset the session storage and show the password form
             sessionStorage.removeItem('password');
             passwordForm.style.display = 'block';
