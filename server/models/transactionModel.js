@@ -64,8 +64,10 @@ module.exports.updateTransactionStatus = async (id, status) => {
 
 module.exports.bulkUpdateTransactionStatus = async (transactionIds, status) => {
   const filter = {
-    transactionId: { $in: transactionIds },
-    status: { $ne: status },
+    $and: [
+      { transactionId: { $in: transactionIds } },
+      { $or: [{ status: { $ne: status } }, { status: { $exists: false } }] },
+    ],
   };
 
   const update = {
@@ -78,6 +80,7 @@ module.exports.bulkUpdateTransactionStatus = async (transactionIds, status) => {
     if (err) {
       throw err;
     } else {
+      console.log(result);
       return result;
     }
   });
