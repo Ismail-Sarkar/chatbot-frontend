@@ -5,6 +5,7 @@ const transactionToListen = [
   'transition/cancel',
   'transition/operator-decline',
   'transition/expire-payment',
+  'transition/expire',
 ];
 
 const filterFunc = (txArrs, lastTx, lastTxAt, curDate) => {

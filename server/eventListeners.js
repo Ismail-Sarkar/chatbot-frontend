@@ -39,6 +39,10 @@ const resolveWorkerResult = async data => {
         expiredTransactions.push(uuid);
         break;
       }
+      case 'transition/expire': {
+        expiredTransactions.push(uuid);
+        break;
+      }
       default: {
         console.log('unknown transition');
       }
