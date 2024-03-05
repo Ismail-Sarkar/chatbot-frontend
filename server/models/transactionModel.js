@@ -80,7 +80,6 @@ module.exports.bulkUpdateTransactionStatus = async (transactionIds, status) => {
     if (err) {
       throw err;
     } else {
-      console.log(result);
       return result;
     }
   });
