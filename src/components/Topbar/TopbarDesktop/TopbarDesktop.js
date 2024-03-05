@@ -143,13 +143,14 @@ const TopbarDesktop = props => {
     </NamedLink>
   );
   const isSafari = typeof navigator !== 'undefined' ? navigator.userAgent.includes("safari") : false
- 
+  // console.log(123,isSafari)
+  
   return (
     <nav className={classes}>
       <LinkedLogo
         className={css.logoLink}
         format="desktop"
-        alt={intl.formatMessage({ id: 'TopbarDesktop.logo' }, { marketplaceName })}
+        alt={intl.formatMessage({ id: 'TopbarDesktop.logo' },  { marketplaceName })}
         isAuthenticated={isAuthenticated}
       />
       {/* {search} */}

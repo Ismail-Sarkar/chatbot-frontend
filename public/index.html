@@ -185,6 +185,52 @@
         font-display: fallback;
         src: url("https://assets-sharetribecom.sharetribe.com/webfonts/inter/static-web/Inter-BlackItalic.woff2") format("woff2"), url("https://assets-sharetribecom.sharetribe.com/webfonts/inter/static-web/Inter-BlackItalic.woff") format("woff");
       } */
+
+      #password-input {
+        margin-bottom: 10px;
+      }
+
+      #root, #portal-root, #password-form {
+        display: none;
+      }
+      .password-form{
+        display:flex !important;
+        /* justify-content:center;
+        align-items: center;
+        flex-direction:column;
+        height: 100vh; */
+        @media(max-width:767px){
+          padding:0 15px;
+        }
+      }
+      .paswwordField{
+        /* width: 30%; */
+        & input{
+          /* line-height: inherit; */
+        }
+        /* & h2{
+          font-size: 20px;
+          line-height: 10px;
+          margin-top: 0;
+          margin-bottom: 10px;
+        } */
+        @media(max-width:767px){
+         width:50% !important;
+       }
+       @media(max-width:575px){
+         width:100% !important;
+       }
+      }
+      #login-button{
+        /* width: 15%;
+        padding: 15px 0 15px 0; */
+        @media(max-width:767px){
+          width:30% !important;
+        }
+        @media(max-width:575px){
+          width:100% !important;
+        }
+      }
   </style>
 
   <!--!script-->
@@ -195,6 +241,62 @@
 <body>
   <div id="root"><!--!body--></div>
   <div id="portal-root"></div>
+
+  <div id="password-form" class="password-form" style="justify-content:center; align-items: center;  flex-direction:column;  height: 100vh;">
+    <div class="paswwordField" style="width: 30%; padding: 15px 0 15px 0;">
+     <!-- <h2>Enter Password:</h2> -->
+    <input type="password" id="password-input" placeholder="Enter Password:" style="line-height: inherit;">
+    </div>
+    
+    <button id="login-button" class="buttonPrimary " style=" width: 15%;  padding: 15px 0 15px 0;">Submit</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var passwordInput = document.getElementById('password-input');
+        var loginButton = document.getElementById('login-button');
+        var passwordForm = document.getElementById('password-form');
+        var landingPage = document.getElementById('root');
+        var landingPage2 = document.getElementById('portal-root');
+        var resetButton = document.getElementById('reset-button');
+
+        var correctPassword = 'Workanywhere2024';
+        var storedPassword = sessionStorage.getItem('password');
+
+
+        if (storedPassword === correctPassword) {
+            // If password is already saved in session storage, show landing page
+            passwordForm.style.display = 'none';
+            landingPage.style.display = 'block';
+            landingPage2.style.display = 'block';
+        } else {
+            // Show password form if no password is saved
+            passwordForm.style.display = 'block';
+        }
+
+        loginButton.addEventListener('click', function () {
+            var enteredPassword = passwordInput.value;
+            if (enteredPassword === correctPassword) {
+                // If password is correct, save it in session storage and show landing page
+                sessionStorage.setItem('password', enteredPassword);
+                passwordForm.style.display = 'none';
+                landingPage.style.display = 'block';
+                landingPage2.style.display = 'block';
+            } else {
+                // If password is incorrect, show error message
+                alert('Incorrect password. Please try again.');
+                passwordInput.value = '';
+            }
+        });
+
+        resetButton?.addEventListener('click', function () {
+            // Reset the session storage and show the password form
+            sessionStorage.removeItem('password');
+            passwordForm.style.display = 'block';
+            landingPage.style.display = 'none';
+        });
+    });
+</script>
 
   <!--
          Stripe script should be on every page, not just the pages that

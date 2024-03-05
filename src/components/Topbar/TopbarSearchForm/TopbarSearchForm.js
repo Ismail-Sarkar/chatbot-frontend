@@ -62,12 +62,19 @@ const LocationSearchField = props => {
           onChange(value);
           onLocationChange(value);
         };
-        // const isSafari = typeof navigator !== 'undefined' ? navigator.userAgent.includes("safari") : false
+        const isSafari =
+          /constructor/i.test(window.HTMLElement) ||
+          (function(p) {
+            return p.toString() === '[object SafariRemoteNotification]';
+          })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+          console.log(777788, isSafari)
         return (
           <LocationAutocompleteInput
             className={isMobile ? css.mobileInputRoot : desktopInputRootClass}
             iconClassName={isMobile ? css.mobileIcon : css.desktopIcon}
-            inputClassName={isMobile ? css.mobileInput : css.desktopInput}
+            inputClassName={
+              isMobile ? css.mobileInput : classNames(css.desktopInput, { [css.chrmar]: !isSafari })
+            }
             predictionsClassName={isMobile ? css.mobilePredictions : css.desktopPredictions}
             predictionsAttributionClassName={isMobile ? css.mobilePredictionsAttribution : null}
             placeholder={intl.formatMessage({ id: 'TopbarSearchForm.placeholder' })}

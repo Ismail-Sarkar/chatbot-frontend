@@ -123,16 +123,16 @@
     font-weight: 500;
     margin-top:2px !important;
   }
-  .safariMargin{
-    
-  }
 
   @media (--viewportMedium) {
-    margin-top: 2px;
+    /* margin-top: 2px; */
+    margin-top:3px;
     margin-bottom: 0;
   }
 }
-
+.chrmar{
+  margin-top: 2px; 
+}
 .mobilePredictions {
   position: absolute;
   top: 50px;
