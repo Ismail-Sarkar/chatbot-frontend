@@ -193,49 +193,48 @@
       #root, #portal-root, #password-form {
         display: none;
       }
-      #password-form{
-        /* display:flex !important; */
-        /* justify-content:center;
-        align-items: center;
-        flex-direction:column;
-        height: 100vh; */
-        @media(max-width:767px){
-          padding:25px 15px;
-          /* height:100% !important; */
-        }
-      }
+
       #password-wrap{
         display:flex;
         justify-content:center;
         align-items:center;
         height:100vh;
         flex-direction:column;
-        @media(max-width:575px){
-          display: block;
-        }
       }
       #paswwordField{
         width: 30%;
         padding: 15px 0 15px 0;
-        & input{
-          height:48px;
-          /* line-height: inherit; */
-        }
-        @media(max-width:767px){
-         width:50% !important;
-         padding:0;
-       }
-       @media(max-width:575px){
-         width:100% !important;
-       }
+
+      }
+      #paswwordField input{
+        height:48px;
       }
       #login-button{
         width: 15%;
         padding: 15px 0 15px 0;
-        @media(max-width:767px){
+
+      }
+      /* responsive css */
+      @media(max-width:767px){
+        #password-form{
+          padding:25px 15px;
+        }
+        #paswwordField{
+          width:50% !important;
+         padding:0;
+        }
+        #login-button{
           width:30% !important;
         }
-        @media(max-width:575px){
+      }
+      @media(max-width:575px){
+        #password-wrap{
+          display: block;
+        }
+        #paswwordField{
+          width:100% !important;
+        }
+        #login-button{
           width:100% !important;
           margin-top:30px;
         }
