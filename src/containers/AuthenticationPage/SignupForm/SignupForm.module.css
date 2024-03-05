@@ -127,5 +127,12 @@
       /* padding-bottom:5px; */
       padding-bottom: 10px;
     }
+    & > div{
+      & > input{
+        @media(max-width:575px){
+          padding: 12px 12px 12px 12px;
+        }
+      }
+    }
   }
 }

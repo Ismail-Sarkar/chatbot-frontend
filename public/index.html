@@ -194,14 +194,22 @@
         display: none;
       }
       .password-form{
-        display:flex !important;
+        /* display:flex !important; */
         /* justify-content:center;
         align-items: center;
         flex-direction:column;
         height: 100vh; */
         @media(max-width:767px){
           padding:0 15px;
+          /* height:100% !important; */
         }
+      }
+      .password-wrap{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+        flex-direction:column;
       }
       .paswwordField{
         /* width: 30%; */
@@ -242,13 +250,17 @@
   <div id="root"><!--!body--></div>
   <div id="portal-root"></div>
 
-  <div id="password-form" class="password-form" style="justify-content:center; align-items: center;  flex-direction:column;  height: 100vh;">
+  <div id="password-form" class="password-form">
+  <div class="password-wrap">
     <div class="paswwordField" style="width: 30%; padding: 15px 0 15px 0;">
      <!-- <h2>Enter Password:</h2> -->
-    <input type="password" id="password-input" placeholder="Enter Password:" style="line-height: inherit;">
+    <input type="password" id="password-input" placeholder="Enter Password:" style="height:48px;">
     </div>
-    
     <button id="login-button" class="buttonPrimary " style=" width: 15%;  padding: 15px 0 15px 0;">Submit</button>
+    </div>
+ 
+  
+
   </div>
 
   <script>
