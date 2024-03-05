@@ -30,6 +30,8 @@ const getInitialValues = props => {
   const fullManualAddress = publicData?.fullManualAddress || {};
   const { cityStateCountry, street, zip } = fullManualAddress;
   const manualAddress = publicData.manualAddress;
+  const mapLocation = publicData.mapLocation;
+
   return {
     building,
     location: locationFieldsPresent
@@ -42,6 +44,11 @@ const getInitialValues = props => {
     cityStateCountry: cityStateCountry ? cityStateCountry : null,
     zip: zip ? zip : null,
     manualAddress: manualAddress ? manualAddress : false,
+    mapLocation: {
+      country: mapLocation?.country ? mapLocation?.country : null,
+      state: mapLocation?.state ? mapLocation?.state : null,
+      district: mapLocation?.district ? mapLocation?.district : null,
+    },
   };
 };
 
@@ -100,6 +107,7 @@ const EditListingLocationPanel = props => {
             cityStateCountry,
             zip,
           } = values;
+
           const {
             selectedPlace: { address, origin },
           } = location;
@@ -114,9 +122,21 @@ const EditListingLocationPanel = props => {
                   building,
                 },
                 mapLocation: {
-                  country: mapLocation?.country ? mapLocation?.country.text : null,
-                  state: mapLocation?.state ? mapLocation?.state.text : null,
-                  district: mapLocation?.district ? mapLocation?.district.text : null,
+                  country: mapLocation?.country
+                    ? mapLocation?.country.text
+                      ? mapLocation?.country.text
+                      : mapLocation?.country
+                    : null,
+                  state: mapLocation?.state
+                    ? mapLocation?.state.text
+                      ? mapLocation?.state.text
+                      : mapLocation?.state
+                    : null,
+                  district: mapLocation?.district
+                    ? mapLocation?.district.text
+                      ? mapLocation?.district.text
+                      : mapLocation?.district
+                    : null,
                 },
                 manualAddress: false,
                 fullManualAddress: null,
@@ -131,6 +151,7 @@ const EditListingLocationPanel = props => {
                 location: { search: address, selectedPlace: { address, origin } },
               },
             });
+
             onSubmit(updateValues);
           } else {
             const updateValues = {
