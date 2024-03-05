@@ -193,6 +193,25 @@
       #root, #portal-root {
         display: none;
       }
+      .password-form{
+        display:flex !important;
+        justify-content:center;
+        align-items: center;
+        flex-direction:column;
+        height: 100vh;
+      }
+      .paswwordField{
+        width: 30%;
+        & input{
+          line-height: inherit;
+        }
+        & h2{
+          font-size: 20px;
+          line-height: 10px;
+          margin-top: 0;
+          margin-bottom: 10px;
+        }
+      }
   </style>
 
   <!--!script-->
@@ -204,9 +223,12 @@
   <div id="root"><!--!body--></div>
   <div id="portal-root"></div>
 
-  <div id="password-form">
-    <h2>Enter Password:</h2>
+  <div id="password-form" class="password-form">
+    <div class="paswwordField">
+     <h2>Enter Password:</h2>
     <input type="password" id="password-input">
+    </div>
+    
     <button id="login-button">Login</button>
   </div>
 
