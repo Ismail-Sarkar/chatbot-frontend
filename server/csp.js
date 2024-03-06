@@ -30,6 +30,7 @@ const defaultDirectives = {
     '*.tiles.mapbox.com',
     'api.mapbox.com',
     'events.mapbox.com',
+    'mapbox-sdk.min.js',
 
     // Google Analytics
     'www.googletagmanager.com',
@@ -86,6 +87,7 @@ const defaultDirectives = {
     'www.googletagmanager.com',
     '*.google-analytics.com',
     'js.stripe.com',
+    'mapbox-sdk.min.js',
   ],
   styleSrc: [self, unsafeInline, 'fonts.googleapis.com', 'api.mapbox.com'],
 };
