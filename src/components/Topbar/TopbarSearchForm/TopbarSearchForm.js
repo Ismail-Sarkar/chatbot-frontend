@@ -63,7 +63,7 @@ const LocationSearchField = props => {
           onLocationChange(value);
         };
         const isSafari =
-          /constructor/i.test(window.HTMLElement) ||
+          /constructor/i.test(typeof window !== 'undefined' && window.HTMLElement) ||
           (function(p) {
             return p.toString() === '[object SafariRemoteNotification]';
           })(typeof window !== 'undefined' && window['safari'] && window.safari.pushNotification);
