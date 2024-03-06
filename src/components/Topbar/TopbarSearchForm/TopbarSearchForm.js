@@ -66,8 +66,8 @@ const LocationSearchField = props => {
           /constructor/i.test(window.HTMLElement) ||
           (function(p) {
             return p.toString() === '[object SafariRemoteNotification]';
-          })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
-          console.log(777788, isSafari)
+          })(typeof window !== 'undefined' && window['safari'] && window.safari.pushNotification);
+
         return (
           <LocationAutocompleteInput
             className={isMobile ? css.mobileInputRoot : desktopInputRootClass}
