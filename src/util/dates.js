@@ -93,7 +93,6 @@ export const getTimeZoneNames = relevantZonesRegExp => {
   // allTimeZonesObject.push({ label: 'America/Miami', value: 'America/New_York' });
   // allTimeZonesObject.sort();
 
-  console.log(allTimeZonesObject, 898);
   // return relevantZonesRegExp ? allTimeZones.filter(z => relevantZonesRegExp.test(z)) : allTimeZones;
   return relevantZonesRegExp
     ? allTimeZonesObject.filter(z => relevantZonesRegExp.test(z.value))

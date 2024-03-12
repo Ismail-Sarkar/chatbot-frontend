@@ -27,13 +27,6 @@ const FieldTimeZoneSelect = props => {
 
   const tzToDisplay = timezone ? auxTz : getTimeZoneNames(relevantZonesPattern);
 
-  console.log(
-    234,
-    tzToDisplay,
-    timezone,
-    auxTz.findIndex(({ value }) => value === 'America/New_York'),
-    auxTz
-  );
 
   return (
     <FieldSelect {...props}>

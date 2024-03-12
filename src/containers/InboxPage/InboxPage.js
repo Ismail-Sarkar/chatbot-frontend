@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { arrayOf, bool, number, oneOf, shape, string } from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import classNames from 'classnames';
-import { Form as FinalForm, FormSpy } from 'react-final-form';
+import React, { useEffect, useState } from "react";
+import { arrayOf, bool, number, oneOf, shape, string } from "prop-types";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import classNames from "classnames";
+import { Form as FinalForm, FormSpy } from "react-final-form";
 
-import { useConfiguration } from '../../context/configurationContext';
+import { useConfiguration } from "../../context/configurationContext";
 
-import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
+import { FormattedMessage, injectIntl, intlShape } from "../../util/reactIntl";
 import {
   propTypes,
   DATE_TYPE_DATE,
@@ -15,18 +15,26 @@ import {
   LINE_ITEM_NIGHT,
   LINE_ITEM_HOUR,
   LISTING_UNIT_TYPES,
-} from '../../util/types';
-import { subtractTime, getStartOf, addTime, getDefaultTimeZoneOnBrowser } from '../../util/dates';
+} from "../../util/types";
+import {
+  subtractTime,
+  getStartOf,
+  addTime,
+  getDefaultTimeZoneOnBrowser,
+} from "../../util/dates";
 import {
   TX_TRANSITION_ACTOR_CUSTOMER,
   TX_TRANSITION_ACTOR_PROVIDER,
   resolveLatestProcessName,
   getProcess,
   isBookingProcess,
-} from '../../transactions/transaction';
+} from "../../transactions/transaction";
 
-import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
-import { isScrollingDisabled, manageDisableScrolling } from '../../ducks/ui.duck';
+import { getMarketplaceEntities } from "../../ducks/marketplaceData.duck";
+import {
+  isScrollingDisabled,
+  manageDisableScrolling,
+} from "../../ducks/ui.duck";
 import {
   Form,
   H2,
@@ -43,26 +51,30 @@ import {
   FieldDateRangeInput,
   FieldDateInput,
   Modal,
-} from '../../components';
-import { required, bookingDatesRequired, composeValidators } from '../../util/validators';
+} from "../../components";
+import {
+  required,
+  bookingDatesRequired,
+  composeValidators,
+} from "../../util/validators";
 
-import TopbarContainer from '../../containers/TopbarContainer/TopbarContainer';
-import FooterContainer from '../../containers/FooterContainer/FooterContainer';
-import NotFoundPage from '../../containers/NotFoundPage/NotFoundPage';
+import TopbarContainer from "../../containers/TopbarContainer/TopbarContainer";
+import FooterContainer from "../../containers/FooterContainer/FooterContainer";
+import NotFoundPage from "../../containers/NotFoundPage/NotFoundPage";
 
-import { stateDataShape, getStateData } from './InboxPage.stateData';
-import css from './InboxPage.module.css';
-import { fetchPerDayTransactions, searchTransactions } from './InboxPage.duck';
-import { useCallback } from 'react';
-import moment from 'moment';
-import { isEmpty } from 'lodash';
-import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
-import { parse } from 'query-string';
+import { stateDataShape, getStateData } from "./InboxPage.stateData";
+import css from "./InboxPage.module.css";
+import { fetchPerDayTransactions, searchTransactions } from "./InboxPage.duck";
+import { useCallback } from "react";
+import moment from "moment";
+import { isEmpty } from "lodash";
+import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
+import { parse } from "query-string";
 
 // Check if the transaction line-items use booking-related units
-const getUnitLineItem = lineItems => {
+const getUnitLineItem = (lineItems) => {
   const unitLineItem = lineItems?.find(
-    item => LISTING_UNIT_TYPES.includes(item.code) && !item.reversal
+    (item) => LISTING_UNIT_TYPES.includes(item.code) && !item.reversal
   );
   return unitLineItem;
 };
@@ -82,15 +94,19 @@ const bookingData = (tx, lineItemUnitType, timeZone) => {
   const isNight = lineItemUnitType === LINE_ITEM_NIGHT;
   const isHour = lineItemUnitType === LINE_ITEM_HOUR;
   const bookingEnd =
-    isNight || isHour ? bookingEndRaw : subtractTime(bookingEndRaw, 1, 'days', timeZone);
+    isNight || isHour
+      ? bookingEndRaw
+      : subtractTime(bookingEndRaw, 1, "days", timeZone);
 
   return { bookingStart, bookingEnd };
 };
 
-const BookingTimeInfoMaybe = props => {
+const BookingTimeInfoMaybe = (props) => {
   const { transaction, ...rest } = props;
 
-  const processName = resolveLatestProcessName(transaction?.attributes?.processName);
+  const processName = resolveLatestProcessName(
+    transaction?.attributes?.processName
+  );
   const process = getProcess(processName);
   const isInquiry = process.getState(transaction) === process.states.INQUIRY;
 
@@ -101,15 +117,21 @@ const BookingTimeInfoMaybe = props => {
   const hasLineItems = transaction?.attributes?.lineItems?.length > 0;
   const unitLineItem = hasLineItems
     ? transaction.attributes?.lineItems?.find(
-        item => LISTING_UNIT_TYPES.includes(item.code) && !item.reversal
+        (item) => LISTING_UNIT_TYPES.includes(item.code) && !item.reversal
       )
     : null;
 
   const lineItemUnitType = unitLineItem ? unitLineItem.code : null;
-  const dateType = lineItemUnitType === LINE_ITEM_HOUR ? DATE_TYPE_DATETIME : DATE_TYPE_DATE;
+  const dateType =
+    lineItemUnitType === LINE_ITEM_HOUR ? DATE_TYPE_DATETIME : DATE_TYPE_DATE;
 
-  const timeZone = transaction?.listing?.attributes?.availabilityPlan?.timezone || 'Etc/UTC';
-  const { bookingStart, bookingEnd } = bookingData(transaction, lineItemUnitType, timeZone);
+  const timeZone =
+    transaction?.listing?.attributes?.availabilityPlan?.timezone || "Etc/UTC";
+  const { bookingStart, bookingEnd } = bookingData(
+    transaction,
+    lineItemUnitType,
+    timeZone
+  );
 
   return (
     <TimeRange
@@ -126,8 +148,15 @@ BookingTimeInfoMaybe.propTypes = {
   transaction: propTypes.transaction.isRequired,
 };
 
-export const InboxItem = props => {
-  const { transactionRole, tx, intl, stateData, isBooking, stockType = 'multipleItems' } = props;
+export const InboxItem = (props) => {
+  const {
+    transactionRole,
+    tx,
+    intl,
+    stateData,
+    isBooking,
+    stockType = "multipleItems",
+  } = props;
 
   const { customer, provider, listing } = tx;
   const {
@@ -144,16 +173,22 @@ export const InboxItem = props => {
   const confirmationNumber = tx?.attributes?.protectedData?.confirmationNumber;
   const hasPricingData = lineItems.length > 0;
   const unitLineItem = getUnitLineItem(lineItems);
-  const quantity = hasPricingData && !isBooking ? unitLineItem.quantity.toString() : null;
-  const showStock = stockType === 'multipleItems' || (quantity && unitLineItem.quantity > 1);
+  const quantity =
+    hasPricingData && !isBooking ? unitLineItem.quantity.toString() : null;
+  const showStock =
+    stockType === "multipleItems" || (quantity && unitLineItem.quantity > 1);
 
   const otherUser = isCustomer ? provider : customer;
   const otherUserPartner =
-    otherUser?.attributes?.profile?.publicData?.userType === 'partner' ? true : false;
+    otherUser?.attributes?.profile?.publicData?.userType === "partner"
+      ? true
+      : false;
   const otherUserDisplayName = <UserDisplayName user={otherUser} intl={intl} />;
   const isOtherUserBanned = otherUser.attributes.banned;
 
-  const rowNotificationDot = isSaleNotification ? <div className={css.notificationDot} /> : null;
+  const rowNotificationDot = isSaleNotification ? (
+    <div className={css.notificationDot} />
+  ) : null;
 
   const linkClasses = classNames(css.itemLink, {
     [css.bannedUserLink]: isOtherUserBanned,
@@ -168,11 +203,14 @@ export const InboxItem = props => {
   return (
     <div className={css.item}>
       <div className={css.itemAvatar}>
-        <Avatar user={otherUser} disableProfileLink={!otherUserPartner && true} />
+        <Avatar
+          user={otherUser}
+          disableProfileLink={!otherUserPartner && true}
+        />
       </div>
       <NamedLink
         className={linkClasses}
-        name={isCustomer ? 'OrderDetailsPage' : 'SaleDetailsPage'}
+        name={isCustomer ? "OrderDetailsPage" : "SaleDetailsPage"}
         params={{ id: tx.id.uuid }}
       >
         <div className={css.rowNotificationDot}>{rowNotificationDot}</div>
@@ -205,17 +243,21 @@ export const InboxItem = props => {
 };
 
 InboxItem.propTypes = {
-  transactionRole: oneOf([TX_TRANSITION_ACTOR_CUSTOMER, TX_TRANSITION_ACTOR_PROVIDER]).isRequired,
+  transactionRole: oneOf([
+    TX_TRANSITION_ACTOR_CUSTOMER,
+    TX_TRANSITION_ACTOR_PROVIDER,
+  ]).isRequired,
   tx: propTypes.transaction.isRequired,
   intl: intlShape.isRequired,
   stateData: stateDataShape.isRequired,
 };
 
-const SearchForm = props => {
-  const { showFrom, intl, handleOnChange, onChangeKey, className, value } = props;
-  const [searchText, setSearchText] = useState(value || '');
+const SearchForm = (props) => {
+  const { showFrom, intl, handleOnChange, onChangeKey, className, value } =
+    props;
+  const [searchText, setSearchText] = useState(value || "");
 
-  const debounceCallback = func => {
+  const debounceCallback = (func) => {
     let timeoutId = null;
     return function delayedCallback(...args) {
       if (timeoutId) {
@@ -228,14 +270,17 @@ const SearchForm = props => {
     };
   };
 
-  const debounceHandleOnChange = useCallback(debounceCallback(handleOnChange), []);
+  const debounceHandleOnChange = useCallback(
+    debounceCallback(handleOnChange),
+    []
+  );
 
-  const onChangeText = e => {
+  const onChangeText = (e) => {
     const value = e.target.value;
     setSearchText(value);
-    debounceHandleOnChange(onChangeKey, value.replace(/[^a-zA-Z0-9\s]/g, ''));
+    debounceHandleOnChange(onChangeKey, value.replace(/[^a-zA-Z0-9\s]/g, ""));
   };
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
   };
 
@@ -247,14 +292,14 @@ const SearchForm = props => {
           value={searchText}
           onChange={onChangeText}
           id="seachtext"
-          placeholder={intl.formatMessage({ id: 'InboxPage.seachPlaceholder' })}
+          placeholder={intl.formatMessage({ id: "InboxPage.seachPlaceholder" })}
         />
       </form>
     </div>
   ) : null;
 };
 
-export const InboxPageComponent = props => {
+export const InboxPageComponent = (props) => {
   const config = useConfiguration();
   const {
     rootClassName,
@@ -277,24 +322,24 @@ export const InboxPageComponent = props => {
     onManageDisableScrolling,
     ...rest
   } = props;
-  const searchParams = parse(location?.search || '');
+  const searchParams = parse(location?.search || "");
 
   const [transactionSearchDetails, setTransactionSearchDetails] = useState({
-    userNameAndConfirmNumber: searchParams?.userNameAndConfirmNumber || '',
-    bookingStart: searchParams?.bookingStart || '',
+    userNameAndConfirmNumber: searchParams?.userNameAndConfirmNumber || "",
+    bookingStart: searchParams?.bookingStart || "",
   });
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const { tab } = params;
-  const validTab = tab === 'orders' || tab === 'sales';
+  const validTab = tab === "orders" || tab === "sales";
   const searchTransactionBy = (keyName, value) => {
-    setTransactionSearchDetails(transactionDetails => ({
+    setTransactionSearchDetails((transactionDetails) => ({
       ...transactionDetails,
       [keyName]: value,
     }));
   };
 
   useEffect(() => {
-    const type = tab === 'orders' ? 'customer' : 'provider';
+    const type = tab === "orders" ? "customer" : "provider";
     if (!isFirstLoad) {
       onSearchTransactions(
         transactionSearchDetails.userNameAndConfirmNumber,
@@ -303,7 +348,10 @@ export const InboxPageComponent = props => {
         type
       );
     }
-  }, [transactionSearchDetails.userNameAndConfirmNumber, transactionSearchDetails.bookingStart]);
+  }, [
+    transactionSearchDetails.userNameAndConfirmNumber,
+    transactionSearchDetails.bookingStart,
+  ]);
 
   useEffect(() => {
     setIsFirstLoad(false);
@@ -311,10 +359,10 @@ export const InboxPageComponent = props => {
 
   useEffect(() => {
     if (location) {
-      const searchParams = parse(location?.search || '');
+      const searchParams = parse(location?.search || "");
       setTransactionSearchDetails({
-        userNameAndConfirmNumber: searchParams?.userNameAndConfirmNumber || '',
-        bookingStart: searchParams?.bookingStart || '',
+        userNameAndConfirmNumber: searchParams?.userNameAndConfirmNumber || "",
+        bookingStart: searchParams?.bookingStart || "",
       });
     }
   }, [location]);
@@ -322,34 +370,40 @@ export const InboxPageComponent = props => {
     return <NotFoundPage />;
   }
 
-  const isOrders = tab === 'orders';
-  const hasNoResults = !fetchInProgress && transactions.length === 0 && !fetchOrdersOrSalesError;
-  const ordersTitle = intl.formatMessage({ id: 'InboxPage.ordersTitle' });
-  const salesTitle = intl.formatMessage({ id: 'InboxPage.salesTitle' });
+  const isOrders = tab === "orders";
+  const hasNoResults =
+    !fetchInProgress && transactions.length === 0 && !fetchOrdersOrSalesError;
+  const ordersTitle = intl.formatMessage({ id: "InboxPage.ordersTitle" });
+  const salesTitle = intl.formatMessage({ id: "InboxPage.salesTitle" });
   const title = isOrders ? ordersTitle : salesTitle;
   const searchParamsMaybe =
-    transactionSearchDetails.userNameAndConfirmNumber && transactionSearchDetails.bookingStart
+    transactionSearchDetails.userNameAndConfirmNumber &&
+    transactionSearchDetails.bookingStart
       ? {
-          userNameAndConfirmNumber: transactionSearchDetails.userNameAndConfirmNumber,
+          userNameAndConfirmNumber:
+            transactionSearchDetails.userNameAndConfirmNumber,
           bookingStart: transactionSearchDetails.booking,
         }
       : transactionSearchDetails.userNameAndConfirmNumber
       ? {
-          userNameAndConfirmNumber: transactionSearchDetails.userNameAndConfirmNumber,
+          userNameAndConfirmNumber:
+            transactionSearchDetails.userNameAndConfirmNumber,
         }
       : transactionSearchDetails.bookingStart
       ? { bookingStart: transactionSearchDetails.bookingStart }
       : {};
 
-  const pickType = lt => conf => conf.listingType === lt;
-  const findListingTypeConfig = publicData => {
+  const pickType = (lt) => (conf) => conf.listingType === lt;
+  const findListingTypeConfig = (publicData) => {
     const listingTypeConfigs = config.listing?.listingTypes;
     const { listingType } = publicData || {};
     const foundConfig = listingTypeConfigs?.find(pickType(listingType));
     return foundConfig;
   };
-  const toTxItem = tx => {
-    const transactionRole = isOrders ? TX_TRANSITION_ACTOR_CUSTOMER : TX_TRANSITION_ACTOR_PROVIDER;
+  const toTxItem = (tx) => {
+    const transactionRole = isOrders
+      ? TX_TRANSITION_ACTOR_CUSTOMER
+      : TX_TRANSITION_ACTOR_PROVIDER;
     let stateData = null;
     try {
       stateData = getStateData({ transaction: tx, transactionRole, intl });
@@ -360,7 +414,8 @@ export const InboxPageComponent = props => {
     const publicData = tx?.listing?.attributes?.publicData || {};
     const foundListingTypeConfig = findListingTypeConfig(publicData);
     const { transactionType, stockType } = foundListingTypeConfig || {};
-    const process = tx?.attributes?.processName || transactionType?.transactionType;
+    const process =
+      tx?.attributes?.processName || transactionType?.transactionType;
     const transactionProcess = resolveLatestProcessName(process);
     const isBooking = isBookingProcess(transactionProcess);
 
@@ -381,14 +436,21 @@ export const InboxPageComponent = props => {
 
   const hasOrderOrSaleTransactions = (tx, isOrdersTab, user) => {
     return isOrdersTab
-      ? user?.id && tx && tx.length > 0 && tx[0].customer.id.uuid === user?.id?.uuid
-      : user?.id && tx && tx.length > 0 && tx[0].provider.id.uuid === user?.id?.uuid;
+      ? user?.id &&
+          tx &&
+          tx.length > 0 &&
+          tx[0].customer.id.uuid === user?.id?.uuid
+      : user?.id &&
+          tx &&
+          tx.length > 0 &&
+          tx[0].provider.id.uuid === user?.id?.uuid;
   };
   const hasTransactions =
-    !fetchInProgress && hasOrderOrSaleTransactions(transactions, isOrders, currentUser);
+    !fetchInProgress &&
+    hasOrderOrSaleTransactions(transactions, isOrders, currentUser);
 
   const tabs =
-    currentUser?.attributes?.profile?.publicData?.userType === 'partner'
+    currentUser?.attributes?.profile?.publicData?.userType === "partner"
       ? [
           {
             text: (
@@ -401,8 +463,8 @@ export const InboxPageComponent = props => {
             ),
             selected: !isOrders,
             linkProps: {
-              name: 'InboxPage',
-              params: { tab: 'sales' },
+              name: "InboxPage",
+              params: { tab: "sales" },
             },
           },
         ]
@@ -415,26 +477,30 @@ export const InboxPageComponent = props => {
             ),
             selected: isOrders,
             linkProps: {
-              name: 'InboxPage',
-              params: { tab: 'orders' },
+              name: "InboxPage",
+              params: { tab: "orders" },
             },
           },
         ];
   const [modalOpen, SetModalOpen] = useState(false);
 
-  const handleSubmit = values => {};
+  const handleSubmit = (values) => {};
 
-  const loadTransactionOnMonthChange = day => {
+  const loadTransactionOnMonthChange = (day) => {
     const momentStartDay = moment(day);
     const momentEndDay = moment(day);
-    const startDay = momentStartDay.startOf('month').toISOString();
-    const endDay = momentEndDay.endOf('month').toISOString();
-    const type = tab === 'orders' ? 'customer' : 'provider';
+    const startDay = momentStartDay.startOf("month").toISOString();
+    const endDay = momentEndDay.endOf("month").toISOString();
+    const type = tab === "orders" ? "customer" : "provider";
     onfetchPerDayTransactions(startDay, endDay, type);
   };
 
   return (
-    <Page title={title} scrollingDisabled={scrollingDisabled} className={css.InboxPageWrap}>
+    <Page
+      title={title}
+      scrollingDisabled={scrollingDisabled}
+      className={css.InboxPageWrap}
+    >
       <LayoutSideNavigation
         sideNavClassName={css.navigation}
         topbar={
@@ -450,145 +516,168 @@ export const InboxPageComponent = props => {
             <H2 as="h1" className={css.title}>
               <FormattedMessage id="InboxPage.title" />
             </H2>
-            <TabNav rootClassName={css.tabs} tabRootClassName={css.tab} tabs={tabs} />
-            {currentUser && currentUser?.attributes?.profile?.publicData?.userType === 'partner' && (
-              <FinalForm
-                {...rest}
-                initialValues={{
-                  startDate: {
-                    date: moment(transactionSearchDetails.bookingStart)
-                      .tz(getDefaultTimeZoneOnBrowser())
-                      .toDate(),
-                  },
-                }}
-                handleDateOnChange={value =>
-                  setTransactionSearchDetails(details => ({
-                    ...details,
-                    bookingStart: value,
-                  }))
-                }
-                intl={intl}
-                onSubmit={handleSubmit}
-                isDateLoading={perDayTransactionFetchInProgress && isEmpty(perDayTransaction)}
-                perDayTransaction={perDayTransaction}
-                render={fieldRenderProps => {
-                  const {
-                    handleSubmit,
-                    values,
-                    handleDateOnChange,
-                    isDateLoading,
-                    perDayTransaction,
-                  } = fieldRenderProps;
-                  const classes = classNames(rootClassName || css.root, className);
+            <TabNav
+              rootClassName={css.tabs}
+              tabRootClassName={css.tab}
+              tabs={tabs}
+            />
+            {currentUser &&
+              currentUser?.attributes?.profile?.publicData?.userType ===
+                "partner" && (
+                <FinalForm
+                  {...rest}
+                  initialValues={{
+                    startDate: {
+                      date: moment(transactionSearchDetails.bookingStart)
+                        .tz(getDefaultTimeZoneOnBrowser())
+                        .toDate(),
+                    },
+                  }}
+                  handleDateOnChange={(value) =>
+                    setTransactionSearchDetails((details) => ({
+                      ...details,
+                      bookingStart: value,
+                    }))
+                  }
+                  intl={intl}
+                  onSubmit={handleSubmit}
+                  isDateLoading={
+                    perDayTransactionFetchInProgress &&
+                    isEmpty(perDayTransaction)
+                  }
+                  perDayTransaction={perDayTransaction}
+                  render={(fieldRenderProps) => {
+                    const {
+                      handleSubmit,
+                      values,
+                      handleDateOnChange,
+                      isDateLoading,
+                      perDayTransaction,
+                    } = fieldRenderProps;
+                    const classes = classNames(
+                      rootClassName || css.root,
+                      className
+                    );
 
-                  return (
-                    <Form
-                      onSubmit={handleSubmit}
-                      className={classNames(classes, css.FormWrap)}
-                      enforcePagePreloadFor="InboxPage"
-                    >
-                      <div className={css.DateMobWrap}>
-                        <button
-                          className={css.ChooseDateBtn}
-                          onClick={() => SetModalOpen(!modalOpen)}
-                        >
-                          View calendar
-                          <svg
-                            className={classes}
-                            width="8"
-                            height="5"
-                            xmlns="http://www.w3.org/2000/svg"
+                    return (
+                      <Form
+                        onSubmit={handleSubmit}
+                        className={classNames(classes, css.FormWrap)}
+                        enforcePagePreloadFor="InboxPage"
+                      >
+                        <div className={css.DateMobWrap}>
+                          <button
+                            className={css.ChooseDateBtn}
+                            onClick={() => SetModalOpen(!modalOpen)}
                           >
-                            <path
-                              d="M3.764 4.236c.131.13.341.13.472 0l2.666-2.667a.333.333 0 10-.471-.471L4 3.528l-2.43-2.43a.333.333 0 10-.471.471l2.665 2.667z"
-                              fill="#4A4A4A"
-                              stroke="#4A4A4A"
-                              fillRule="evenodd"
-                            />
-                          </svg>
-                        </button>
+                            View calendar
+                            <svg
+                              className={classes}
+                              width="8"
+                              height="5"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M3.764 4.236c.131.13.341.13.472 0l2.666-2.667a.333.333 0 10-.471-.471L4 3.528l-2.43-2.43a.333.333 0 10-.471.471l2.665 2.667z"
+                                fill="#4A4A4A"
+                                stroke="#4A4A4A"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </button>
 
-                        {modalOpen && (
-                          <div className={css.mobDateCalender}>
-                            {/* {isDateLoading ? (
+                          {modalOpen && (
+                            <div className={css.mobDateCalender}>
+                              {/* {isDateLoading ? (
                               <div className={css.dateLoader}>
                                 <IconSpinner className={css.icon} />
                               </div>
                             ) : ( */}
-                            <FieldDateInput
-                              dateClassName={css.inboxPageCalender}
-                              id="startDate"
-                              name="startDate"
-                              placeholderText={`Date`}
-                              isDayBlocked={day => {
-                                const formatedDate = moment(day).format('YYYY-MM-DD');
-                                const hasTransactionThatDay = !!perDayTransaction[formatedDate];
+                              <FieldDateInput
+                                dateClassName={css.inboxPageCalender}
+                                id="startDate"
+                                name="startDate"
+                                placeholderText={`Date`}
+                                isDayBlocked={(day) => {
+                                  const formatedDate =
+                                    moment(day).format("YYYY-MM-DD");
+                                  const hasTransactionThatDay =
+                                    !!perDayTransaction[formatedDate];
 
-                                return hasTransactionThatDay
-                                  ? moment().diff(day, 'day') > 0
-                                  : false;
-                              }}
-                              onChange={value => {
-                                handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
-                                SetModalOpen(false);
-                              }}
-                              keepOpenCalender={true}
-                              keepOpenOnDateSelect={true}
-                              firstDayOfWeek={0}
-                              weekDayFormat="ddd"
-                              onNextMonthClick={loadTransactionOnMonthChange}
-                              onPrevMonthClick={loadTransactionOnMonthChange}
-                              isDayHighlighted={day => {
-                                const formatedDate = moment(day).format('YYYY-MM-DD');
-                                console.log(575, formatedDate, perDayTransaction);
-                                return !!perDayTransaction[formatedDate];
-                              }}
-                              useMobileMargins
-                              enableOutsideDays={false}
-                            />
-                          </div>
-                        )}
-                      </div>
-                      <div className={css.DateFormWrap}>
-                        {/* {isDateLoading ? (
+                                  return hasTransactionThatDay
+                                    ? moment().diff(day, "day") > 0
+                                    : false;
+                                }}
+                                onChange={(value) => {
+                                  handleDateOnChange(
+                                    moment(value.date).format("YYYY-MM-DD")
+                                  );
+                                  SetModalOpen(false);
+                                }}
+                                keepOpenCalender={true}
+                                keepOpenOnDateSelect={true}
+                                firstDayOfWeek={0}
+                                weekDayFormat="ddd"
+                                onNextMonthClick={loadTransactionOnMonthChange}
+                                onPrevMonthClick={loadTransactionOnMonthChange}
+                                isDayHighlighted={(day) => {
+                                  const formatedDate =
+                                    moment(day).format("YYYY-MM-DD");
+                                  return !!perDayTransaction[formatedDate];
+                                }}
+                                useMobileMargins
+                                enableOutsideDays={false}
+                              />
+                            </div>
+                          )}
+                        </div>
+                        <div className={css.DateFormWrap}>
+                          {/* {isDateLoading ? (
                           <div className={css.dateLoader}>
                             <IconSpinner className={css.icon} />
                           </div>
                         ) : ( */}
-                        <FieldDateInput
-                          dateClassName={css.inboxPageCalender}
-                          id="startDate"
-                          name="startDate"
-                          placeholderText={`Date`}
-                          isDayBlocked={day => {
-                            const formatedDate = moment(day).format('YYYY-MM-DD');
-                            const hasTransactionThatDay = !!perDayTransaction[formatedDate];
+                          <FieldDateInput
+                            dateClassName={css.inboxPageCalender}
+                            id="startDate"
+                            name="startDate"
+                            placeholderText={`Date`}
+                            isDayBlocked={(day) => {
+                              const formatedDate =
+                                moment(day).format("YYYY-MM-DD");
+                              const hasTransactionThatDay =
+                                !!perDayTransaction[formatedDate];
 
-                            return hasTransactionThatDay ? moment().diff(day, 'day') > 0 : false;
-                          }}
-                          onChange={value => {
-                            handleDateOnChange(moment(value.date).format('YYYY-MM-DD'));
-                          }}
-                          keepOpenCalender={true}
-                          keepOpenOnDateSelect={true}
-                          firstDayOfWeek={0}
-                          weekDayFormat="ddd"
-                          onNextMonthClick={loadTransactionOnMonthChange}
-                          onPrevMonthClick={loadTransactionOnMonthChange}
-                          isDayHighlighted={day => {
-                            const formatedDate = moment(day).format('YYYY-MM-DD');
-                            return !!perDayTransaction[formatedDate];
-                          }}
-                          useMobileMargins
-                          enableOutsideDays={false}
-                        />
-                        {/* )} */}
-                      </div>
-                    </Form>
-                  );
-                }}
-              />
-            )}
+                              return hasTransactionThatDay
+                                ? moment().diff(day, "day") > 0
+                                : false;
+                            }}
+                            onChange={(value) => {
+                              handleDateOnChange(
+                                moment(value.date).format("YYYY-MM-DD")
+                              );
+                            }}
+                            keepOpenCalender={true}
+                            keepOpenOnDateSelect={true}
+                            firstDayOfWeek={0}
+                            weekDayFormat="ddd"
+                            onNextMonthClick={loadTransactionOnMonthChange}
+                            onPrevMonthClick={loadTransactionOnMonthChange}
+                            isDayHighlighted={(day) => {
+                              const formatedDate =
+                                moment(day).format("YYYY-MM-DD");
+                              return !!perDayTransaction[formatedDate];
+                            }}
+                            useMobileMargins
+                            enableOutsideDays={false}
+                          />
+                          {/* )} */}
+                        </div>
+                      </Form>
+                    );
+                  }}
+                />
+              )}
           </>
         }
         footer={<FooterContainer />}
@@ -607,7 +696,7 @@ export const InboxPageComponent = props => {
           showFrom={!isOrders}
           intl={intl}
           handleOnChange={searchTransactionBy}
-          onChangeKey={'userNameAndConfirmNumber'}
+          onChangeKey={"userNameAndConfirmNumber"}
           value={transactionSearchDetails.userNameAndConfirmNumber}
         />
         <ul className={css.itemList}>
@@ -621,7 +710,11 @@ export const InboxPageComponent = props => {
           {hasNoResults ? (
             <li key="noResults" className={css.noResults}>
               <FormattedMessage
-                id={isOrders ? 'InboxPage.noOrdersFound' : 'InboxPage.noSalesFound'}
+                id={
+                  isOrders
+                    ? "InboxPage.noOrdersFound"
+                    : "InboxPage.noSalesFound"
+                }
               />
             </li>
           ) : null}
@@ -754,7 +847,7 @@ InboxPageComponent.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const {
     fetchInProgress,
     fetchOrdersOrSalesError,
@@ -764,7 +857,10 @@ const mapStateToProps = state => {
     perDayTransactionError,
     perDayTransactionFetchInProgress,
   } = state.InboxPage;
-  const { currentUser, currentUserNotificationCount: providerNotificationCount } = state.user;
+  const {
+    currentUser,
+    currentUserNotificationCount: providerNotificationCount,
+  } = state.user;
   return {
     currentUser,
     fetchInProgress,
@@ -778,9 +874,21 @@ const mapStateToProps = state => {
     perDayTransactionFetchInProgress,
   };
 };
-const mapDispatchToProps = dispatch => ({
-  onSearchTransactions: (userNameAndConfirmNumber, bookingStart, bookingEnd, type) =>
-    dispatch(searchTransactions(userNameAndConfirmNumber, bookingStart, bookingEnd, type)),
+const mapDispatchToProps = (dispatch) => ({
+  onSearchTransactions: (
+    userNameAndConfirmNumber,
+    bookingStart,
+    bookingEnd,
+    type
+  ) =>
+    dispatch(
+      searchTransactions(
+        userNameAndConfirmNumber,
+        bookingStart,
+        bookingEnd,
+        type
+      )
+    ),
   onfetchPerDayTransactions: (bookingStart, bookingEnd, type) =>
     dispatch(fetchPerDayTransactions(bookingStart, bookingEnd, type)),
   onManageDisableScrolling: (componentId, disableScrolling) =>

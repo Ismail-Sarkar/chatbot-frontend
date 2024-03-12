@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { array, bool, func, number, object, string } from 'prop-types';
-import { compose } from 'redux';
-import { Form as FinalForm, FormSpy } from 'react-final-form';
-import classNames from 'classnames';
+import React, { useState, useEffect } from "react";
+import { array, bool, func, number, object, string } from "prop-types";
+import { compose } from "redux";
+import { Form as FinalForm, FormSpy } from "react-final-form";
+import classNames from "classnames";
 
-import { FormattedMessage, intlShape, injectIntl } from '../../../util/reactIntl';
-import { required, bookingDatesRequired, composeValidators } from '../../../util/validators';
-import * as validators from '../../../util/validators';
+import {
+  FormattedMessage,
+  intlShape,
+  injectIntl,
+} from "../../../util/reactIntl";
+import {
+  required,
+  bookingDatesRequired,
+  composeValidators,
+} from "../../../util/validators";
+import * as validators from "../../../util/validators";
 import {
   START_DATE,
   END_DATE,
@@ -20,9 +28,17 @@ import {
   monthIdString,
   initialVisibleMonth,
   stringifyDateToISO8601,
-} from '../../../util/dates';
-import { LINE_ITEM_DAY, LINE_ITEM_NIGHT, TIME_SLOT_TIME, propTypes } from '../../../util/types';
-import { ADVENTURELY_PROCESS_NAME, BOOKING_PROCESS_NAME } from '../../../transactions/transaction';
+} from "../../../util/dates";
+import {
+  LINE_ITEM_DAY,
+  LINE_ITEM_NIGHT,
+  TIME_SLOT_TIME,
+  propTypes,
+} from "../../../util/types";
+import {
+  ADVENTURELY_PROCESS_NAME,
+  BOOKING_PROCESS_NAME,
+} from "../../../transactions/transaction";
 
 import {
   Form,
@@ -32,33 +48,39 @@ import {
   H6,
   FieldTextInput,
   FieldDateInput,
-} from '../../../components';
+} from "../../../components";
 
-import EstimatedCustomerBreakdownMaybe from '../EstimatedCustomerBreakdownMaybe';
+import EstimatedCustomerBreakdownMaybe from "../EstimatedCustomerBreakdownMaybe";
 
-import css from './BookingDatesForm.module.css';
-import { SingleDatePicker } from 'react-dates';
-import MuiMultiSelect from '../../MuiMultiSelect/MuiMultiSelect';
-import moment from 'moment';
-import momentTz from 'moment-timezone';
-import { isArray } from 'lodash';
+import css from "./BookingDatesForm.module.css";
+import { SingleDatePicker } from "react-dates";
+import MuiMultiSelect from "../../MuiMultiSelect/MuiMultiSelect";
+import moment from "moment";
+import momentTz from "moment-timezone";
+import { isArray } from "lodash";
 
 const TODAY = new Date();
 
 const nextMonthFn = (currentMoment, timeZone, offset = 1) =>
-  getStartOf(currentMoment, 'month', timeZone, offset, 'months');
+  getStartOf(currentMoment, "month", timeZone, offset, "months");
 const prevMonthFn = (currentMoment, timeZone, offset = 1) =>
-  getStartOf(currentMoment, 'month', timeZone, -1 * offset, 'months');
+  getStartOf(currentMoment, "month", timeZone, -1 * offset, "months");
 const endOfRange = (date, dayCountAvailableForBooking, timeZone) =>
-  getStartOf(date, 'day', timeZone, dayCountAvailableForBooking - 1, 'days');
+  getStartOf(date, "day", timeZone, dayCountAvailableForBooking - 1, "days");
 
 /**
  * Return a boolean indicating if given date can be found in an array
  * of tile slots (start dates).
  */
 const timeSlotsContain = (timeSlots, date, timeZone) => {
-  const foundIndex = timeSlots.findIndex(slot =>
-    isInRange(date, slot.attributes.start, slot.attributes.end, 'hour', timeZone)
+  const foundIndex = timeSlots.findIndex((slot) =>
+    isInRange(
+      date,
+      slot.attributes.start,
+      slot.attributes.end,
+      "hour",
+      timeZone
+    )
   );
   return foundIndex > -1;
 };
@@ -77,15 +99,22 @@ const pickMonthlyTimeSlots = (monthlyTimeSlots, date, timeZone) => {
  * @param {Moment} endDate end date, exclusive
  * @param {String} timeZone time zone id
  */
-const firstBlockedBetween = (monthlyTimeSlots, startDate, endDate, timeZone) => {
-  const firstDate = getStartOf(startDate, 'day', timeZone, 1, 'days');
+const firstBlockedBetween = (
+  monthlyTimeSlots,
+  startDate,
+  endDate,
+  timeZone
+) => {
+  const firstDate = getStartOf(startDate, "day", timeZone, 1, "days");
   if (isSameDay(firstDate, endDate, timeZone)) {
     return null;
   }
 
   const timeSlots = pickMonthlyTimeSlots(monthlyTimeSlots, firstDate, timeZone);
   const contains = timeSlotsContain(timeSlots, firstDate, timeZone);
-  return contains ? firstBlockedBetween(monthlyTimeSlots, firstDate, endDate, timeZone) : firstDate;
+  return contains
+    ? firstBlockedBetween(monthlyTimeSlots, firstDate, endDate, timeZone)
+    : firstDate;
 };
 
 /**
@@ -98,12 +127,16 @@ const firstBlockedBetween = (monthlyTimeSlots, startDate, endDate, timeZone) => 
  * @param {String} timeZone time zone id
  */
 const lastBlockedBetween = (monthlyTimeSlots, startDate, endDate, timeZone) => {
-  const previousDate = getStartOf(endDate, 'day', timeZone, -1, 'days');
+  const previousDate = getStartOf(endDate, "day", timeZone, -1, "days");
   if (isSameDay(previousDate, startDate, timeZone)) {
     return null;
   }
 
-  const timeSlots = pickMonthlyTimeSlots(monthlyTimeSlots, previousDate, timeZone);
+  const timeSlots = pickMonthlyTimeSlots(
+    monthlyTimeSlots,
+    previousDate,
+    timeZone
+  );
   return timeSlotsContain(timeSlots, previousDate, timeZone)
     ? lastBlockedBetween(monthlyTimeSlots, startDate, previousDate, timeZone)
     : previousDate;
@@ -117,23 +150,32 @@ const lastBlockedBetween = (monthlyTimeSlots, startDate, endDate, timeZone) => {
  * @param {Moment} startDate start date, exclusive
  * @param {Moment} endDate end date, exclusive
  */
-const isBlockedBetween = (monthlyTimeSlots, timeZone) => (startDate, endDate) => {
-  const startInListingTZ = getStartOf(
-    timeOfDayFromLocalToTimeZone(startDate, timeZone),
-    'day',
-    timeZone
-  );
-  const endInListingTZ = getStartOf(
-    timeOfDayFromLocalToTimeZone(endDate, timeZone),
-    'day',
-    timeZone
-  );
-  return !!firstBlockedBetween(monthlyTimeSlots, startInListingTZ, endInListingTZ, timeZone);
-};
+const isBlockedBetween =
+  (monthlyTimeSlots, timeZone) => (startDate, endDate) => {
+    const startInListingTZ = getStartOf(
+      timeOfDayFromLocalToTimeZone(startDate, timeZone),
+      "day",
+      timeZone
+    );
+    const endInListingTZ = getStartOf(
+      timeOfDayFromLocalToTimeZone(endDate, timeZone),
+      "day",
+      timeZone
+    );
+    return !!firstBlockedBetween(
+      monthlyTimeSlots,
+      startInListingTZ,
+      endInListingTZ,
+      timeZone
+    );
+  };
 
 const isStartDateSelected = (timeSlots, startDate, endDate, focusedInput) => {
   return (
-    timeSlots && startDate && (!endDate || focusedInput === END_DATE) && focusedInput !== START_DATE
+    timeSlots &&
+    startDate &&
+    (!endDate || focusedInput === END_DATE) &&
+    focusedInput !== START_DATE
   );
 };
 
@@ -146,7 +188,7 @@ const endDateToPickerDate = (unitType, endDate, timeZone) => {
   } else if (isDaily) {
     // API end dates are exlusive, so we need to shift them with daily
     // booking.
-    return getStartOf(endDate, 'day', timeZone, -1, 'days');
+    return getStartOf(endDate, "day", timeZone, -1, "days");
   } else {
     return endDate;
   }
@@ -157,80 +199,117 @@ const endDateToPickerDate = (unitType, endDate, timeZone) => {
  * a react-dates DateRangePicker component.
  */
 
-const isOutsideRangeFn = (
-  monthlyTimeSlots,
-  startDate,
-  endDate,
-  lineItemUnitType,
-  dayCountAvailableForBooking,
-  timeZone
-) => focusedInput => {
-  const endOfAvailableRange = dayCountAvailableForBooking - 1;
-  const endOfAvailableRangeDate = getStartOf(TODAY, 'day', timeZone, endOfAvailableRange, 'days');
-  const outOfBookableDate = getStartOf(TODAY, 'day', timeZone, endOfAvailableRange + 1, 'days');
-  const startOfStartDay = getStartOf(startDate, 'day', timeZone);
+const isOutsideRangeFn =
+  (
+    monthlyTimeSlots,
+    startDate,
+    endDate,
+    lineItemUnitType,
+    dayCountAvailableForBooking,
+    timeZone
+  ) =>
+  (focusedInput) => {
+    const endOfAvailableRange = dayCountAvailableForBooking - 1;
+    const endOfAvailableRangeDate = getStartOf(
+      TODAY,
+      "day",
+      timeZone,
+      endOfAvailableRange,
+      "days"
+    );
+    const outOfBookableDate = getStartOf(
+      TODAY,
+      "day",
+      timeZone,
+      endOfAvailableRange + 1,
+      "days"
+    );
+    const startOfStartDay = getStartOf(startDate, "day", timeZone);
 
-  // start date selected, end date missing
-  const startDateSelected = isStartDateSelected(monthlyTimeSlots, startDate, endDate, focusedInput);
-  const endOfBookableRange = startDateSelected
-    ? firstBlockedBetween(monthlyTimeSlots, startDate, outOfBookableDate, timeZone)
-    : null;
+    // start date selected, end date missing
+    const startDateSelected = isStartDateSelected(
+      monthlyTimeSlots,
+      startDate,
+      endDate,
+      focusedInput
+    );
+    const endOfBookableRange = startDateSelected
+      ? firstBlockedBetween(
+          monthlyTimeSlots,
+          startDate,
+          outOfBookableDate,
+          timeZone
+        )
+      : null;
 
-  if (endOfBookableRange) {
-    // end the range so that the booking can end at latest on
-    // nightly booking: the day the next booking starts
-    // daily booking: the day before the next booking starts
-    return day => {
+    if (endOfBookableRange) {
+      // end the range so that the booking can end at latest on
+      // nightly booking: the day the next booking starts
+      // daily booking: the day before the next booking starts
+      return (day) => {
+        const timeOfDay = timeOfDayFromLocalToTimeZone(day, timeZone);
+        const dayInListingTZ = getStartOf(timeOfDay, "day", timeZone);
+        const lastDayToEndBooking = endDateToPickerDate(
+          lineItemUnitType,
+          endOfBookableRange,
+          timeZone
+        );
+        return (
+          !isDateSameOrAfter(dayInListingTZ, startOfStartDay) ||
+          !isDateSameOrAfter(lastDayToEndBooking, dayInListingTZ)
+        );
+      };
+    }
+
+    // end date selected, start date missing
+    // -> limit the earliest start date for the booking so that it
+    // needs to be after the previous booked date
+    const endDateSelected =
+      monthlyTimeSlots && endDate && !startDate && focusedInput !== END_DATE;
+    const previousBookedDate = endDateSelected
+      ? lastBlockedBetween(monthlyTimeSlots, TODAY, endDate, timeZone)
+      : null;
+
+    if (previousBookedDate) {
+      return (day) => {
+        const timeOfDay = timeOfDayFromLocalToTimeZone(day, timeZone);
+        const dayInListingTZ = getStartOf(timeOfDay, "day", timeZone);
+        const firstDayToStartBooking = getStartOf(
+          previousBookedDate,
+          "day",
+          timeZone,
+          1,
+          "days"
+        );
+        return (
+          !isDateSameOrAfter(dayInListingTZ, firstDayToStartBooking) ||
+          !isDateSameOrAfter(endOfAvailableRangeDate, dayInListingTZ)
+        );
+      };
+    }
+
+    // standard isOutsideRange function
+    return (day) => {
       const timeOfDay = timeOfDayFromLocalToTimeZone(day, timeZone);
-      const dayInListingTZ = getStartOf(timeOfDay, 'day', timeZone);
-      const lastDayToEndBooking = endDateToPickerDate(
-        lineItemUnitType,
-        endOfBookableRange,
-        timeZone
-      );
+      const dayInListingTZ = getStartOf(timeOfDay, "day", timeZone);
       return (
-        !isDateSameOrAfter(dayInListingTZ, startOfStartDay) ||
-        !isDateSameOrAfter(lastDayToEndBooking, dayInListingTZ)
-      );
-    };
-  }
-
-  // end date selected, start date missing
-  // -> limit the earliest start date for the booking so that it
-  // needs to be after the previous booked date
-  const endDateSelected = monthlyTimeSlots && endDate && !startDate && focusedInput !== END_DATE;
-  const previousBookedDate = endDateSelected
-    ? lastBlockedBetween(monthlyTimeSlots, TODAY, endDate, timeZone)
-    : null;
-
-  if (previousBookedDate) {
-    return day => {
-      const timeOfDay = timeOfDayFromLocalToTimeZone(day, timeZone);
-      const dayInListingTZ = getStartOf(timeOfDay, 'day', timeZone);
-      const firstDayToStartBooking = getStartOf(previousBookedDate, 'day', timeZone, 1, 'days');
-      return (
-        !isDateSameOrAfter(dayInListingTZ, firstDayToStartBooking) ||
+        !isDateSameOrAfter(dayInListingTZ, TODAY) ||
         !isDateSameOrAfter(endOfAvailableRangeDate, dayInListingTZ)
       );
     };
-  }
-
-  // standard isOutsideRange function
-  return day => {
-    const timeOfDay = timeOfDayFromLocalToTimeZone(day, timeZone);
-    const dayInListingTZ = getStartOf(timeOfDay, 'day', timeZone);
-    return (
-      !isDateSameOrAfter(dayInListingTZ, TODAY) ||
-      !isDateSameOrAfter(endOfAvailableRangeDate, dayInListingTZ)
-    );
   };
-};
 
 // Checks if time slot (propTypes.timeSlot) start time equals a day (moment)
 const timeSlotEqualsDay = (timeSlot, day, timeZone) => {
   const isTimeBased = timeSlot?.attributes?.type === TIME_SLOT_TIME;
   return isTimeBased
-    ? isInRange(day, timeSlot.attributes.start, timeSlot.attributes.end, undefined, timeZone)
+    ? isInRange(
+        day,
+        timeSlot.attributes.start,
+        timeSlot.attributes.end,
+        undefined,
+        timeZone
+      )
     : false;
 };
 
@@ -238,61 +317,90 @@ const timeSlotEqualsDay = (timeSlot, day, timeZone) => {
  * Returns an isDayBlocked function that can be passed to
  * a react-dates DateRangePicker component.
  */
-const isDayBlockedFn = (
-  monthlyTimeSlots,
-  startDate,
-  endDate,
-  unitType,
-  dayCountAvailableForBooking,
-  timeZone
-) => focusedInput => {
-  const endOfAvailableRange = dayCountAvailableForBooking - 1;
-  const outOfBookableDate = getStartOf(TODAY, 'day', timeZone, endOfAvailableRange + 1, 'days');
-  const timeSlotsOnSelectedMonth = pickMonthlyTimeSlots(monthlyTimeSlots, startDate, timeZone);
-
-  // Start date selected/focused, end date missing
-  const startDateSelected = isStartDateSelected(
-    timeSlotsOnSelectedMonth,
+const isDayBlockedFn =
+  (
+    monthlyTimeSlots,
     startDate,
     endDate,
-    focusedInput
-  );
+    unitType,
+    dayCountAvailableForBooking,
+    timeZone
+  ) =>
+  (focusedInput) => {
+    const endOfAvailableRange = dayCountAvailableForBooking - 1;
+    const outOfBookableDate = getStartOf(
+      TODAY,
+      "day",
+      timeZone,
+      endOfAvailableRange + 1,
+      "days"
+    );
+    const timeSlotsOnSelectedMonth = pickMonthlyTimeSlots(
+      monthlyTimeSlots,
+      startDate,
+      timeZone
+    );
 
-  // Find the end of bookable range after a start date
-  const endOfBookableRange = startDateSelected
-    ? firstBlockedBetween(monthlyTimeSlots, startDate, outOfBookableDate, timeZone)
-    : null;
+    // Start date selected/focused, end date missing
+    const startDateSelected = isStartDateSelected(
+      timeSlotsOnSelectedMonth,
+      startDate,
+      endDate,
+      focusedInput
+    );
 
-  // end date is focused but no dates are selected
-  const selectingEndDate =
-    timeSlotsOnSelectedMonth &&
-    !startDate &&
-    !endDate &&
-    focusedInput === END_DATE &&
-    unitType === LINE_ITEM_NIGHT;
-  if (selectingEndDate) {
-    // if end date is being selected first, block the day after a booked date
-    // (as a booking can end on the day the following booking starts)
-    return day => {
-      const timeOfDay = timeOfDayFromLocalToTimeZone(day, timeZone);
-      const dayInListingTZ = getStartOf(timeOfDay, 'day', timeZone);
-      const timeSlots = pickMonthlyTimeSlots(monthlyTimeSlots, dayInListingTZ, timeZone);
-      return !timeSlots.find(timeSlot => timeSlotEqualsDay(timeSlot, dayInListingTZ));
-    };
-  } else if (endOfBookableRange || !timeSlotsOnSelectedMonth) {
-    // a next bookable range is found or time slots are not provided
-    // -> booking range handles blocking dates
-    return () => false;
-  } else {
-    // otherwise return standard timeslots check
-    return day => {
-      const timeOfDay = timeOfDayFromLocalToTimeZone(day, timeZone);
-      const dayInListingTZ = getStartOf(timeOfDay, 'day', timeZone);
-      const timeSlots = pickMonthlyTimeSlots(monthlyTimeSlots, dayInListingTZ, timeZone);
-      return !timeSlots.find(timeSlot => timeSlotEqualsDay(timeSlot, dayInListingTZ));
-    };
-  }
-};
+    // Find the end of bookable range after a start date
+    const endOfBookableRange = startDateSelected
+      ? firstBlockedBetween(
+          monthlyTimeSlots,
+          startDate,
+          outOfBookableDate,
+          timeZone
+        )
+      : null;
+
+    // end date is focused but no dates are selected
+    const selectingEndDate =
+      timeSlotsOnSelectedMonth &&
+      !startDate &&
+      !endDate &&
+      focusedInput === END_DATE &&
+      unitType === LINE_ITEM_NIGHT;
+    if (selectingEndDate) {
+      // if end date is being selected first, block the day after a booked date
+      // (as a booking can end on the day the following booking starts)
+      return (day) => {
+        const timeOfDay = timeOfDayFromLocalToTimeZone(day, timeZone);
+        const dayInListingTZ = getStartOf(timeOfDay, "day", timeZone);
+        const timeSlots = pickMonthlyTimeSlots(
+          monthlyTimeSlots,
+          dayInListingTZ,
+          timeZone
+        );
+        return !timeSlots.find((timeSlot) =>
+          timeSlotEqualsDay(timeSlot, dayInListingTZ)
+        );
+      };
+    } else if (endOfBookableRange || !timeSlotsOnSelectedMonth) {
+      // a next bookable range is found or time slots are not provided
+      // -> booking range handles blocking dates
+      return () => false;
+    } else {
+      // otherwise return standard timeslots check
+      return (day) => {
+        const timeOfDay = timeOfDayFromLocalToTimeZone(day, timeZone);
+        const dayInListingTZ = getStartOf(timeOfDay, "day", timeZone);
+        const timeSlots = pickMonthlyTimeSlots(
+          monthlyTimeSlots,
+          dayInListingTZ,
+          timeZone
+        );
+        return !timeSlots.find((timeSlot) =>
+          timeSlotEqualsDay(timeSlot, dayInListingTZ)
+        );
+      };
+    }
+  };
 
 const fetchMonthData = (
   date,
@@ -301,9 +409,11 @@ const fetchMonthData = (
   timeZone,
   onFetchTimeSlots
 ) => {
-  const endOfRangeDate = endOfRange(TODAY, dayCountAvailableForBooking, timeZone);
-
-  // console.log('55555', endOfRangeDate, dayCountAvailableForBooking);
+  const endOfRangeDate = endOfRange(
+    TODAY,
+    dayCountAvailableForBooking,
+    timeZone
+  );
 
   // Don't fetch timeSlots for past months or too far in the future
   if (isInRange(date, TODAY, endOfRangeDate)) {
@@ -313,7 +423,7 @@ const fetchMonthData = (
     // Use endOfRangeDate, if the first day of the next month is too far in the future
     const nextMonthDate = nextMonthFn(date, timeZone);
     const end = isDateSameOrAfter(nextMonthDate, endOfRangeDate)
-      ? getStartOf(endOfRangeDate, 'day', timeZone)
+      ? getStartOf(endOfRangeDate, "day", timeZone)
       : nextMonthDate;
 
     // Fetch time slots for given time range
@@ -321,45 +431,46 @@ const fetchMonthData = (
   }
 };
 
-const handleMonthClick = (
-  currentMonth,
-  monthlyTimeSlots,
-  fetchMonthData,
-  dayCountAvailableForBooking,
-  timeZone,
-  listingId,
-  onFetchTimeSlots
-) => monthFn => {
-  // console.log('6666');
-  // Callback function after month has been updated.
-  // react-dates component has next and previous months ready (but inivisible).
-  // we try to populate those invisible months before user advances there.
-  fetchMonthData(
-    monthFn(currentMonth, timeZone, 2),
-    listingId,
+const handleMonthClick =
+  (
+    currentMonth,
+    monthlyTimeSlots,
+    fetchMonthData,
     dayCountAvailableForBooking,
     timeZone,
+    listingId,
     onFetchTimeSlots
-  );
-
-  // If previous fetch for month data failed, try again.
-  const monthId = monthIdString(currentMonth, timeZone);
-  const currentMonthData = monthlyTimeSlots[monthId];
-  if (currentMonthData && currentMonthData.fetchTimeSlotsError) {
+  ) =>
+  (monthFn) => {
+    // Callback function after month has been updated.
+    // react-dates component has next and previous months ready (but inivisible).
+    // we try to populate those invisible months before user advances there.
     fetchMonthData(
-      currentMonth,
+      monthFn(currentMonth, timeZone, 2),
       listingId,
       dayCountAvailableForBooking,
       timeZone,
       onFetchTimeSlots
     );
-  }
-};
+
+    // If previous fetch for month data failed, try again.
+    const monthId = monthIdString(currentMonth, timeZone);
+    const currentMonthData = monthlyTimeSlots[monthId];
+    if (currentMonthData && currentMonthData.fetchTimeSlotsError) {
+      fetchMonthData(
+        currentMonth,
+        listingId,
+        dayCountAvailableForBooking,
+        timeZone,
+        onFetchTimeSlots
+      );
+    }
+  };
 
 // In case start or end date for the booking is missing
 // focus on that input, otherwise continue with the
 // default handleSubmit function.
-const handleFormSubmit = (setFocusedInput, onSubmit) => e => {
+const handleFormSubmit = (setFocusedInput, onSubmit) => (e) => {
   const { startDate, endDate } = e.bookingDates || {};
   if (!startDate) {
     e.preventDefault();
@@ -375,7 +486,7 @@ const handleFormSubmit = (setFocusedInput, onSubmit) => e => {
 // Function that can be passed to nested components
 // so that they can notify this component when the
 // focused input changes.
-const handleFocusedInputChange = setFocusedInput => focusedInput => {
+const handleFocusedInputChange = (setFocusedInput) => (focusedInput) => {
   setFocusedInput(focusedInput);
 };
 
@@ -383,56 +494,58 @@ const handleFocusedInputChange = setFocusedInput => focusedInput => {
 // lineItems from this Template's backend for the EstimatedTransactionMaybe
 // In case you add more fields to the form, make sure you add
 // the values here to the orderData object.
-const handleFormSpyChange = (
-  listingId,
-  isOwnListing,
-  fetchLineItemsInProgress,
-  onFetchTransactionLineItems,
-  guestMaxForListing
-) => formValues => {
-  const { startDate, endDate } =
-    formValues.values && formValues.values.bookingDates ? formValues.values.bookingDates : {};
-  const { additionalGuest, extraPerk } = formValues.values || {};
+const handleFormSpyChange =
+  (
+    listingId,
+    isOwnListing,
+    fetchLineItemsInProgress,
+    onFetchTransactionLineItems,
+    guestMaxForListing
+  ) =>
+  (formValues) => {
+    const { startDate, endDate } =
+      formValues.values && formValues.values.bookingDates
+        ? formValues.values.bookingDates
+        : {};
+    const { additionalGuest, extraPerk } = formValues.values || {};
 
-  console.log(startDate, 232);
+    if (
+      startDate &&
+      endDate &&
+      // additionalGuest &&
+      // isArray(extraPerk) &&
+      // extraPerk.length &&
 
-  if (
-    startDate &&
-    endDate &&
-    // additionalGuest &&
-    // isArray(extraPerk) &&
-    // extraPerk.length &&
-
-    !fetchLineItemsInProgress
-  ) {
-    onFetchTransactionLineItems({
-      orderData: {
-        bookingStart: startDate,
-        bookingEnd: endDate,
-        additionalGuest:
-          additionalGuest > 0
-            ? parseInt(additionalGuest) <= parseInt(guestMaxForListing)
-              ? additionalGuest
-              : guestMaxForListing
-            : 0,
-        extraPerk,
-      },
-      listingId,
-      isOwnListing,
-    });
-  }
-};
+      !fetchLineItemsInProgress
+    ) {
+      onFetchTransactionLineItems({
+        orderData: {
+          bookingStart: startDate,
+          bookingEnd: endDate,
+          additionalGuest:
+            additionalGuest > 0
+              ? parseInt(additionalGuest) <= parseInt(guestMaxForListing)
+                ? additionalGuest
+                : guestMaxForListing
+              : 0,
+          extraPerk,
+        },
+        listingId,
+        isOwnListing,
+      });
+    }
+  };
 
 // IconArrowHead component might not be defined if exposed directly to the file.
 // This component is called before IconArrowHead component in components/index.js
-const PrevIcon = props => (
+const PrevIcon = (props) => (
   <IconArrowHead {...props} direction="left" rootClassName={css.arrowIcon} />
 );
-const NextIcon = props => (
+const NextIcon = (props) => (
   <IconArrowHead {...props} direction="right" rootClassName={css.arrowIcon} />
 );
 
-const Next = props => {
+const Next = (props) => {
   const { currentMonth, dayCountAvailableForBooking, timeZone } = props;
   const nextMonthDate = nextMonthFn(currentMonth, timeZone);
 
@@ -443,29 +556,26 @@ const Next = props => {
     <NextIcon />
   );
 };
-const Prev = props => {
+const Prev = (props) => {
   const { currentMonth, timeZone } = props;
   const prevMonthDate = prevMonthFn(currentMonth, timeZone);
-  const currentMonthDate = getStartOf(TODAY, 'month', timeZone);
+  const currentMonthDate = getStartOf(TODAY, "month", timeZone);
 
-  // console.log(
-  //   '7777',
-  //   prevMonthDate,
-  //   currentMonthDate,
-  //   isDateSameOrAfter(prevMonthDate, currentMonthDate)
-  // );
-
-  return isDateSameOrAfter(prevMonthDate, currentMonthDate) ? <PrevIcon /> : null;
+  return isDateSameOrAfter(prevMonthDate, currentMonthDate) ? (
+    <PrevIcon />
+  ) : null;
 };
 
-export const BookingDatesFormComponent = props => {
+export const BookingDatesFormComponent = (props) => {
   const [focusedInput, setFocusedInput] = useState(null);
-  const [currentMonth, setCurrentMonth] = useState(getStartOf(TODAY, 'month', props.timeZone));
+  const [currentMonth, setCurrentMonth] = useState(
+    getStartOf(TODAY, "month", props.timeZone)
+  );
   const [extraPerk, setExtraPerk] = useState([]);
 
   const { extraParkValues, guestMaxForListing } = props;
 
-  const handleSetExtraPerk = val => {
+  const handleSetExtraPerk = (val) => {
     setExtraPerk(val);
   };
 
@@ -516,14 +626,14 @@ export const BookingDatesFormComponent = props => {
 
   const { userType } = publicData || {};
 
-  const isPartner = userType === 'partner';
+  const isPartner = userType === "partner";
 
   return (
     <FinalForm
       {...rest}
       unitPrice={unitPrice}
       onSubmit={onFormSubmit}
-      render={fieldRenderProps => {
+      render={(fieldRenderProps) => {
         const {
           endDatePlaceholder,
           startDatePlaceholder,
@@ -541,14 +651,19 @@ export const BookingDatesFormComponent = props => {
           listingTimeZone,
         } = fieldRenderProps;
 
-        const { startDate, endDate } = values && values.bookingDates ? values.bookingDates : {};
+        const { startDate, endDate } =
+          values && values.bookingDates ? values.bookingDates : {};
         const startDateErrorMessage = intl.formatMessage({
-          id: 'FieldDateRangeInput.invalidStartDate',
+          id: "FieldDateRangeInput.invalidStartDate",
         });
         const endDateErrorMessage = intl.formatMessage({
-          id: 'FieldDateRangeInput.invalidEndDate',
+          id: "FieldDateRangeInput.invalidEndDate",
         });
-        const dateFormattingOptions = { month: 'short', day: 'numeric', weekday: 'short' };
+        const dateFormattingOptions = {
+          month: "short",
+          day: "numeric",
+          weekday: "short",
+        };
 
         // This is the place to collect breakdown estimation data.
         // Note: lineItems are calculated and fetched from this Template's backend
@@ -564,21 +679,27 @@ export const BookingDatesFormComponent = props => {
             : null;
 
         const showEstimatedBreakdown =
-          breakdownData && lineItems && !fetchLineItemsInProgress && !fetchLineItemsError;
+          breakdownData &&
+          lineItems &&
+          !fetchLineItemsInProgress &&
+          !fetchLineItemsError;
 
         const dateFormatOptions = {
-          weekday: 'short',
-          month: 'short',
-          day: 'numeric',
+          weekday: "short",
+          month: "short",
+          day: "numeric",
         };
 
-        const formatFieldDateInput = timeZone => v =>
-          v && v.date ? { date: timeOfDayFromTimeZoneToLocal(v.date, timeZone) } : { date: v };
+        const formatFieldDateInput = (timeZone) => (v) =>
+          v && v.date
+            ? { date: timeOfDayFromTimeZoneToLocal(v.date, timeZone) }
+            : { date: v };
 
-        const startOfToday = getStartOf(TODAY, 'day', timeZone);
-        const tomorrow = addTime(startOfToday, 1, 'days');
+        const startOfToday = getStartOf(TODAY, "day", timeZone);
+        const tomorrow = addTime(startOfToday, 1, "days");
         const startDatePlaceholderText =
-          startDatePlaceholder || intl.formatDate(startOfToday, dateFormatOptions);
+          startDatePlaceholder ||
+          intl.formatDate(startOfToday, dateFormatOptions);
         const endDatePlaceholderText =
           endDatePlaceholder || intl.formatDate(tomorrow, dateFormatOptions);
 
@@ -608,33 +729,42 @@ export const BookingDatesFormComponent = props => {
           timeZone
         );
 
-        const selectDateLabel = 'Select Date';
+        const selectDateLabel = "Select Date";
 
-        const onExceptionStartDateChange = (value, dayCountAvailableForBooking, props) => {
+        const onExceptionStartDateChange = (
+          value,
+          dayCountAvailableForBooking,
+          props
+        ) => {
           const { timeZone, intl, formApi } = props;
 
           if (!value || !value.date) {
             formApi.batch(() => {
-              formApi.change('exceptionStartTime', null);
-              formApi.change('exceptionEndDate', { date: null });
-              formApi.change('exceptionEndTime', null);
+              formApi.change("exceptionStartTime", null);
+              formApi.change("exceptionEndDate", { date: null });
+              formApi.change("exceptionEndTime", null);
             });
             return;
           }
 
           // This callback function is called from react-dates component.
           // It gets raw value as a param - browser's local time instead of time in listing's timezone.
-          const selectedStartDate = timeOfDayFromLocalToTimeZone(value.date, timeZone);
+          const selectedStartDate = timeOfDayFromLocalToTimeZone(
+            value.date,
+            timeZone
+          );
           const dayData =
-            dayCountAvailableForBooking[stringifyDateToISO8601(selectedStartDate, timeZone)];
+            dayCountAvailableForBooking[
+              stringifyDateToISO8601(selectedStartDate, timeZone)
+            ];
           const availableSlots = dayData.slots || [];
           const params = { intl, timeZone, availableSlots, selectedStartDate };
           const { startTime, endDate, endTime } = getAllTimeValues(params);
 
           formApi.batch(() => {
-            formApi.change('exceptionStartTime', startTime);
-            formApi.change('exceptionEndDate', { date: endDate });
-            formApi.change('exceptionEndTime', endTime);
+            formApi.change("exceptionStartTime", startTime);
+            formApi.change("exceptionEndDate", { date: endDate });
+            formApi.change("exceptionEndTime", endTime);
           });
         };
 
@@ -660,15 +790,13 @@ export const BookingDatesFormComponent = props => {
             //   ),
             // });
 
-            form.change('bookingDates', {
+            form.change("bookingDates", {
               startDate: getStartOf(
                 timeOfDayFromLocalToTimeZone(
-                  moment(value.date)
-                    .startOf('day')
-                    .toDate(),
+                  moment(value.date).startOf("day").toDate(),
                   timeZone
                 ),
-                'day',
+                "day",
                 timeZone
               ),
 
@@ -676,33 +804,41 @@ export const BookingDatesFormComponent = props => {
                 timeOfDayFromLocalToTimeZone(
                   moment(value.date)
                     .clone()
-                    .add(1, 'days')
-                    .startOf('day')
+                    .add(1, "days")
+                    .startOf("day")
                     .toDate(),
                   timeZone
                 ),
-                'day',
+                "day",
                 timeZone
               ),
             });
           });
         };
 
-        const handleAdditionalGuestChange = e => {
-          const updatedTargetValue = e.target.value.replace(/[^0-9\.]/, '');
-          if (updatedTargetValue === '') form.change('additionalGuest', undefined);
-          else form.change('additionalGuest', updatedTargetValue);
+        const handleAdditionalGuestChange = (e) => {
+          const updatedTargetValue = e.target.value.replace(/[^0-9\.]/, "");
+          if (updatedTargetValue === "")
+            form.change("additionalGuest", undefined);
+          else form.change("additionalGuest", updatedTargetValue);
         };
         const validateGuestInput = validators.validateGuestInput(
           guestMaxForListing,
           `*${guestMaxForListing} maximum ${
-            guestMaxForListing > 1 ? 'guests' : 'guest'
+            guestMaxForListing > 1 ? "guests" : "guest"
           } can be added`
         );
 
         return (
-          <Form onSubmit={handleSubmit} className={classes} enforcePagePreloadFor="CheckoutPage">
-            <FormSpy subscription={{ values: true }} onChange={onFormSpyChange} />
+          <Form
+            onSubmit={handleSubmit}
+            className={classes}
+            enforcePagePreloadFor="CheckoutPage"
+          >
+            <FormSpy
+              subscription={{ values: true }}
+              onChange={onFormSpyChange}
+            />
             <FieldDateInput
               name="selectedbookingDates"
               id="selectedbookingDates"
@@ -713,8 +849,11 @@ export const BookingDatesFormComponent = props => {
                 dateFormattingOptions
               )}
               label={selectDateLabel}
-              onChange={value => singleDateChange(value, form, props)}
-              initialVisibleMonth={initialVisibleMonth(startDate || startOfToday, timeZone)}
+              onChange={(value) => singleDateChange(value, form, props)}
+              initialVisibleMonth={initialVisibleMonth(
+                startDate || startOfToday,
+                timeZone
+              )}
               navNext={
                 <Next
                   currentMonth={currentMonth}
@@ -724,11 +863,15 @@ export const BookingDatesFormComponent = props => {
               }
               navPrev={<Prev currentMonth={currentMonth} timeZone={timeZone} />}
               onPrevMonthClick={() => {
-                setCurrentMonth(prevMonth => prevMonthFn(prevMonth, timeZone));
+                setCurrentMonth((prevMonth) =>
+                  prevMonthFn(prevMonth, timeZone)
+                );
                 onMonthClick(prevMonthFn);
               }}
               onNextMonthClick={() => {
-                setCurrentMonth(prevMonth => nextMonthFn(prevMonth, timeZone));
+                setCurrentMonth((prevMonth) =>
+                  nextMonthFn(prevMonth, timeZone)
+                );
                 onMonthClick(nextMonthFn);
               }}
               isDayBlocked={isDayBlocked()}
@@ -740,13 +883,13 @@ export const BookingDatesFormComponent = props => {
               <div className={css.muiselectcontainer}>
                 <MuiMultiSelect
                   value={extraPerk}
-                  setValue={val => {
+                  setValue={(val) => {
                     handleSetExtraPerk(val);
-                    form.change('extraPerk', val);
+                    form.change("extraPerk", val);
                   }}
                   datas={extraParkValues}
-                  placeholdertext={'Add extra perk'}
-                  label={'Add extra perks?'}
+                  placeholdertext={"Add extra perk"}
+                  label={"Add extra perks?"}
                 />
               </div>
             )}
@@ -759,7 +902,7 @@ export const BookingDatesFormComponent = props => {
               isDayBlocked={isDayBlocked}
               // isOutsideRange={isOutsideRange}
               label="Additional Guests?"
-              placeholder={'Enter additional guests'}
+              placeholder={"Enter additional guests"}
               onChange={handleAdditionalGuestChange}
               validate={validateGuestInput}
               // className={css.nameFields}
@@ -798,7 +941,10 @@ export const BookingDatesFormComponent = props => {
                   type="submit"
                   inProgress={fetchLineItemsInProgress}
                   disabled={
-                    parseInt(values?.additionalGuest) > parseInt(guestMaxForListing) || isOwnListing || Object.keys(values).length === 0
+                    parseInt(values?.additionalGuest) >
+                      parseInt(guestMaxForListing) ||
+                    isOwnListing ||
+                    Object.keys(values).length === 0
                   }
                 >
                   <FormattedMessage id="BookingDatesForm.requestToBook" />
@@ -809,8 +955,8 @@ export const BookingDatesFormComponent = props => {
               <FormattedMessage
                 id={
                   isOwnListing
-                    ? 'BookingDatesForm.ownListing'
-                    : 'BookingDatesForm.youWontBeChargedInfo'
+                    ? "BookingDatesForm.ownListing"
+                    : "BookingDatesForm.youWontBeChargedInfo"
                 }
               />
             </p>
@@ -859,6 +1005,6 @@ BookingDatesFormComponent.propTypes = {
 };
 
 const BookingDatesForm = compose(injectIntl)(BookingDatesFormComponent);
-BookingDatesForm.displayName = 'BookingDatesForm';
+BookingDatesForm.displayName = "BookingDatesForm";
 
 export default BookingDatesForm;

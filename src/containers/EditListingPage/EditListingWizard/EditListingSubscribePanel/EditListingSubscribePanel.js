@@ -1,20 +1,23 @@
-import React from 'react';
-import { bool, func, object, string } from 'prop-types';
-import classNames from 'classnames';
+import React from "react";
+import { bool, func, object, string } from "prop-types";
+import classNames from "classnames";
 
 // Import util modules
-import { FormattedMessage } from '../../../../util/reactIntl';
-import { EXTENDED_DATA_SCHEMA_TYPES, LISTING_STATE_DRAFT } from '../../../../util/types';
-import { isBookingProcessAlias } from '../../../../transactions/transaction';
+import { FormattedMessage } from "../../../../util/reactIntl";
+import {
+  EXTENDED_DATA_SCHEMA_TYPES,
+  LISTING_STATE_DRAFT,
+} from "../../../../util/types";
+import { isBookingProcessAlias } from "../../../../transactions/transaction";
 
 // Import shared components
-import { Button, H3, ListingLink } from '../../../../components';
+import { Button, H3, ListingLink } from "../../../../components";
 
 // Import modules from this directory
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from "./ErrorMessage";
 // import EditListingDetailsForm from './EditListingDetailsForm';
-import css from './EditListingSubscribePanel.module.css';
-import moment from 'moment';
+import css from "./EditListingSubscribePanel.module.css";
+import moment from "moment";
 
 /**
  * Get listing configuration. For existing listings, it is stored to publicData.
@@ -28,8 +31,13 @@ import moment from 'moment';
  * @param {Object} existingListingInfo
  * @returns an object containing mainly information that can be stored to publicData.
  */
-const getTransactionInfo = (listingTypes, existingListingInfo = {}, inlcudeLabel = false) => {
-  const { listingType, transactionProcessAlias, unitType } = existingListingInfo;
+const getTransactionInfo = (
+  listingTypes,
+  existingListingInfo = {},
+  inlcudeLabel = false
+) => {
+  const { listingType, transactionProcessAlias, unitType } =
+    existingListingInfo;
 
   if (listingType && transactionProcessAlias && unitType) {
     return { listingType, transactionProcessAlias, unitType };
@@ -58,12 +66,17 @@ const getTransactionInfo = (listingTypes, existingListingInfo = {}, inlcudeLabel
  * @param {Object} publicData JSON-like data stored to listing entity.
  * @returns object literal with to keys: { hasExistingListingType, existingListingType }
  */
-const hasSetListingType = publicData => {
+const hasSetListingType = (publicData) => {
   const { listingType, transactionProcessAlias, unitType } = publicData;
-  const existingListingType = { listingType, transactionProcessAlias, unitType };
+  const existingListingType = {
+    listingType,
+    transactionProcessAlias,
+    unitType,
+  };
 
   return {
-    hasExistingListingType: !!listingType && !!transactionProcessAlias && !!unitType,
+    hasExistingListingType:
+      !!listingType && !!transactionProcessAlias && !!unitType,
     existingListingType,
   };
 };
@@ -84,16 +97,27 @@ const hasSetListingType = publicData => {
  * @param {Object} listingFieldConfigs an extended data configurtions for listing fields.
  * @returns Array of picked extended data fields from submitted data.
  */
-const pickListingFieldsData = (data, targetScope, targetListingType, listingFieldConfigs) => {
+const pickListingFieldsData = (
+  data,
+  targetScope,
+  targetListingType,
+  listingFieldConfigs
+) => {
   return listingFieldConfigs.reduce((fields, field) => {
-    const { key, includeForListingTypes, scope = 'public', schemaType } = field || {};
-    const namespacePrefix = scope === 'public' ? `pub_` : `priv_`;
+    const {
+      key,
+      includeForListingTypes,
+      scope = "public",
+      schemaType,
+    } = field || {};
+    const namespacePrefix = scope === "public" ? `pub_` : `priv_`;
     const namespacedKey = `${namespacePrefix}${key}`;
 
     const isKnownSchemaType = EXTENDED_DATA_SCHEMA_TYPES.includes(schemaType);
     const isTargetScope = scope === targetScope;
     const isTargetListingType =
-      includeForListingTypes == null || includeForListingTypes.includes(targetListingType);
+      includeForListingTypes == null ||
+      includeForListingTypes.includes(targetListingType);
 
     if (isKnownSchemaType && isTargetScope && isTargetListingType) {
       const fieldValue = data[namespacedKey] || null;
@@ -126,14 +150,20 @@ const initialValuesForListingFields = (
   listingFieldConfigs
 ) => {
   return listingFieldConfigs.reduce((fields, field) => {
-    const { key, includeForListingTypes, scope = 'public', schemaType } = field || {};
-    const namespacePrefix = scope === 'public' ? `pub_` : `priv_`;
+    const {
+      key,
+      includeForListingTypes,
+      scope = "public",
+      schemaType,
+    } = field || {};
+    const namespacePrefix = scope === "public" ? `pub_` : `priv_`;
     const namespacedKey = `${namespacePrefix}${key}`;
 
     const isKnownSchemaType = EXTENDED_DATA_SCHEMA_TYPES.includes(schemaType);
     const isTargetScope = scope === targetScope;
     const isTargetListingType =
-      includeForListingTypes == null || includeForListingTypes.includes(targetListingType);
+      includeForListingTypes == null ||
+      includeForListingTypes.includes(targetListingType);
 
     if (isKnownSchemaType && isTargetScope && isTargetListingType) {
       const fieldValue = data[key] || null;
@@ -150,13 +180,13 @@ const initialValuesForListingFields = (
  * @param {string} processAlias selected for this listing
  * @returns availabilityPlan without any seats available for the listing
  */
-const setNoAvailabilityForUnbookableListings = processAlias => {
+const setNoAvailabilityForUnbookableListings = (processAlias) => {
   return isBookingProcessAlias(processAlias)
     ? {}
     : {
         availabilityPlan: {
-          type: 'availability-plan/time',
-          timezone: 'Etc/UTC',
+          type: "availability-plan/time",
+          timezone: "Etc/UTC",
           entries: [
             // Note: "no entries" is the same as seats=0 for every entry.
             // { dayOfWeek: 'mon', startTime: '00:00', endTime: '00:00', seats: 0 },
@@ -183,8 +213,14 @@ const setNoAvailabilityForUnbookableListings = processAlias => {
  * @param {object} listingFieldsConfig those extended data fields that are part of configurations
  * @returns initialValues object for the form
  */
-const getInitialValues = (props, existingListingType, listingTypes, listingFieldsConfig) => {
-  const { description, title, publicData, privateData } = props?.listing?.attributes || {};
+const getInitialValues = (
+  props,
+  existingListingType,
+  listingTypes,
+  listingFieldsConfig
+) => {
+  const { description, title, publicData, privateData } =
+    props?.listing?.attributes || {};
   const { listingType } = publicData;
 
   // Initial values for the form
@@ -193,12 +229,22 @@ const getInitialValues = (props, existingListingType, listingTypes, listingField
     description,
     // Transaction type info: listingType, transactionProcessAlias, unitType
     ...getTransactionInfo(listingTypes, existingListingType),
-    ...initialValuesForListingFields(publicData, 'public', listingType, listingFieldsConfig),
-    ...initialValuesForListingFields(privateData, 'private', listingType, listingFieldsConfig),
+    ...initialValuesForListingFields(
+      publicData,
+      "public",
+      listingType,
+      listingFieldsConfig
+    ),
+    ...initialValuesForListingFields(
+      privateData,
+      "private",
+      listingType,
+      listingFieldsConfig
+    ),
   };
 };
 
-const EditListingSubscribePanel = props => {
+const EditListingSubscribePanel = (props) => {
   const {
     className,
     rootClassName,
@@ -221,12 +267,15 @@ const EditListingSubscribePanel = props => {
   const listingTypes = config.listing.listingTypes;
   const listingFieldsConfig = config.listing.listingFields;
 
-  const { hasExistingListingType, existingListingType } = hasSetListingType(publicData);
+  const { hasExistingListingType, existingListingType } =
+    hasSetListingType(publicData);
   const hasValidExistingListingType =
     hasExistingListingType &&
-    !!listingTypes.find(conf => {
-      const listinTypesMatch = conf.listingType === existingListingType.listingType;
-      const unitTypesMatch = conf.transactionType?.unitType === existingListingType.unitType;
+    !!listingTypes.find((conf) => {
+      const listinTypesMatch =
+        conf.listingType === existingListingType.listingType;
+      const unitTypesMatch =
+        conf.transactionType?.unitType === existingListingType.unitType;
       return listinTypesMatch && unitTypesMatch;
     });
 
@@ -240,29 +289,37 @@ const EditListingSubscribePanel = props => {
   const noListingTypesSet = listingTypes?.length === 0;
   const hasListingTypesSet = listingTypes?.length > 0;
   const canShowEditListingDetailsForm =
-    hasListingTypesSet && (!hasExistingListingType || hasValidExistingListingType);
+    hasListingTypesSet &&
+    (!hasExistingListingType || hasValidExistingListingType);
 
   //   console.log(
   //     2222,
   //     currentUser?.attributes.profile.privateData.subscriptionDetails?.subscriptionStatus
   //   );
   const canSubscribe =
-    typeof currentUser?.attributes.profile.protectedData.subscriptionDetails !== 'undefined'
-      ? (currentUser?.attributes.profile.protectedData.subscriptionStatus !== 'active' ||
-          !currentUser?.attributes.profile.protectedData.isSubscriptionCancelled) &&
+    typeof currentUser?.attributes.profile.protectedData.subscriptionDetails !==
+    "undefined"
+      ? (currentUser?.attributes.profile.protectedData.subscriptionStatus !==
+          "active" ||
+          !currentUser?.attributes.profile.protectedData
+            .isSubscriptionCancelled) &&
         !(
           moment(new Date()).isBetween(
-            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
-            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
-            'day'
+            currentUser?.attributes.profile.protectedData.subscriptionDetails
+              .subscriptionStart,
+            currentUser?.attributes.profile.protectedData.subscriptionDetails
+              .subscriptionEnd,
+            "day"
           ) ||
           moment(new Date()).isSame(
-            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionStart,
-            'day'
+            currentUser?.attributes.profile.protectedData.subscriptionDetails
+              .subscriptionStart,
+            "day"
           ) ||
           moment(new Date()).isSame(
-            currentUser?.attributes.profile.protectedData.subscriptionDetails.subscriptionEnd,
-            'day'
+            currentUser?.attributes.profile.protectedData.subscriptionDetails
+              .subscriptionEnd,
+            "day"
           )
         )
       : true;
@@ -270,10 +327,12 @@ const EditListingSubscribePanel = props => {
 
   const handleSubscribe = () => {
     if (currentUser) {
-      const stripeSubscriptionUrl = `https://buy.stripe.com/test_5kA3gg8iQ57A0WA000?client_reference_id=${currentUser?.id?.uuid}`;
-      // const stripeSubscriptionUrl = `https://buy.stripe.com/test_7sI1882Yw0Rk8p24gh?client_reference_id=${currentUser?.id?.uuid}`;
+      const stripeSubscriptionUrl =
+        process.env.REACT_APP_ENV === "development"
+          ? `https://buy.stripe.com/test_5kA3gg8iQ57A0WA000?client_reference_id=${currentUser?.id?.uuid}`
+          : `https://buy.stripe.com/8wMaFy58QbNzczS001?client_reference_id=${currentUser?.id?.uuid}`;
 
-      if (canSubscribe && process.env.REACT_APP_ENV === 'development') {
+      if (canSubscribe) {
         window.location.href = stripeSubscriptionUrl;
       }
     }
@@ -282,47 +341,54 @@ const EditListingSubscribePanel = props => {
   return (
     <div className={classes}>
       <H3 as="h1" className={css.Title}>
-        {// isPublished ? (
-        // <FormattedMessage
-        //   id="EditListingSubscribePanel.title"
-        //   values={{ listingTitle: <ListingLink listing={listing} />, lineBreak: <br /> }}
-        // />
+        {
+          // isPublished ? (
+          // <FormattedMessage
+          //   id="EditListingSubscribePanel.title"
+          //   values={{ listingTitle: <ListingLink listing={listing} />, lineBreak: <br /> }}
+          // />
+          // ) :
+          !canSubscribe ? (
+            <FormattedMessage
+              id="EditListingSubscribePanel.title"
+              values={{
+                listingTitle: <ListingLink listing={listing} />,
+                lineBreak: <br />,
+              }}
+            />
+          ) : (
+            <FormattedMessage
+              id="EditListingSubscribePanel.createSubscriptionTitle"
+              values={{ lineBreak: <br /> }}
+            />
+          )
+        }
+      </H3>
+      {
+        // isPublished ? (
+        // <p>
+        //   <FormattedMessage
+        //     id="EditListingSubscribePanel.subscribedtitle"
+        //     values={{ lineBreak: <br /> }}
+        //   />
+        // </p>
         // ) :
         !canSubscribe ? (
-          <FormattedMessage
-            id="EditListingSubscribePanel.title"
-            values={{ listingTitle: <ListingLink listing={listing} />, lineBreak: <br /> }}
-          />
+          <p>
+            <FormattedMessage
+              id="EditListingSubscribePanel.subscribedtitle"
+              values={{ lineBreak: <br /> }}
+            />
+          </p>
         ) : (
-          <FormattedMessage
-            id="EditListingSubscribePanel.createSubscriptionTitle"
-            values={{ lineBreak: <br /> }}
-          />
-        )}
-      </H3>
-      {// isPublished ? (
-      // <p>
-      //   <FormattedMessage
-      //     id="EditListingSubscribePanel.subscribedtitle"
-      //     values={{ lineBreak: <br /> }}
-      //   />
-      // </p>
-      // ) :
-      !canSubscribe ? (
-        <p>
-          <FormattedMessage
-            id="EditListingSubscribePanel.subscribedtitle"
-            values={{ lineBreak: <br /> }}
-          />
-        </p>
-      ) : (
-        <p>
-          <FormattedMessage
-            id="EditListingSubscribePanel.createSubscriptionDescription"
-            values={{ lineBreak: <br /> }}
-          />
-        </p>
-      )}
+          <p>
+            <FormattedMessage
+              id="EditListingSubscribePanel.createSubscriptionDescription"
+              values={{ lineBreak: <br /> }}
+            />
+          </p>
+        )
+      }
 
       {canSubscribe && (
         <Button
