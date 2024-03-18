@@ -49,11 +49,18 @@ module.exports = (req, res) => {
       const providerId = provider.id.uuid;
       const customerId = customer.id.uuid;
       const offset = moment.tz.zone(timeZone).utcOffset();
-      // bookingStart = bodyParams.params.bookingStart;
-      bookingStart = moment(bodyParams.params.bookingStart)
-        .subtract(offset, 'minutes')
-        .toISOString();
+      bookingStart = bodyParams.params.bookingStart;
+      // bookingStart = moment(bodyParams.params.bookingStart)
+      //   .subtract(offset, 'minutes')
+      //   .toISOString();
 
+      console.log(
+        bookingStart,
+        moment(bodyParams.params.bookingStart)
+          .subtract(offset, 'minutes')
+          .toISOString(),
+        'first'
+      );
       const providerCommission =
         commissionAsset?.type === 'jsonAsset'
           ? commissionAsset.attributes.data.providerCommission

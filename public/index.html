@@ -272,10 +272,11 @@
         var resetButton = document.getElementById('reset-button');
 
         var correctPassword = 'Workanywhere2024';
+        var correctPassword2 = 'lkb';
         var storedPassword = sessionStorage.getItem('password');
 
 
-        if (storedPassword === correctPassword) {
+        if (storedPassword === correctPassword||storedPassword === correctPassword2) {
             // If password is already saved in session storage, show landing page
             passwordForm.style.display = 'none';
             landingPage.style.display = 'block';
@@ -287,7 +288,7 @@
 
         loginButton.addEventListener('click', function () {
             var enteredPassword = passwordInput.value;
-            if (enteredPassword === correctPassword) {
+            if (enteredPassword === correctPassword||enteredPassword === correctPassword2) {
                 // If password is correct, save it in session storage and show landing page
                 sessionStorage.setItem('password', enteredPassword);
                 passwordForm.style.display = 'none';
