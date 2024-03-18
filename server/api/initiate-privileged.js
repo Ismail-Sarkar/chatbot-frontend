@@ -54,13 +54,13 @@ module.exports = (req, res) => {
       //   .subtract(offset, 'minutes')
       //   .toISOString();
 
-      console.log(
-        bookingStart,
-        moment(bodyParams.params.bookingStart)
-          .subtract(offset, 'minutes')
-          .toISOString(),
-        'first'
-      );
+      // console.log(
+      //   bookingStart,
+      //   moment(bodyParams.params.bookingStart)
+      //     .subtract(offset, 'minutes')
+      //     .toISOString(),
+      //   'first'
+      // );
       const providerCommission =
         commissionAsset?.type === 'jsonAsset'
           ? commissionAsset.attributes.data.providerCommission
