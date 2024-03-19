@@ -93,6 +93,9 @@
   & > label {
     margin-top: 0 !important;
   }
+  @media(max-width:575px){
+    margin-bottom: 10px;
+  }
 }
 .perkNameExample {
   font-size: 13px;
@@ -124,5 +127,9 @@
     max-width: 470px;
     font-size: 18px;
     line-height: 25px;
+    @media(max-width:575px){
+      font-size: 16px;
+      line-height: 26px;
+    }
   /* font-size: 13px; */
 }

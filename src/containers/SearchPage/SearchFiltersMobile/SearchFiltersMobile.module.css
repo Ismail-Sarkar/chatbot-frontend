@@ -10,8 +10,8 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  @media(max-width:575px){
-    padding:15px;
+  @media (max-width: 575px) {
+    padding: 15px;
   }
 }
 
@@ -31,7 +31,7 @@
 
 .buttons {
   display: flex;
-  @media(max-width:767px){
+  @media (max-width: 767px) {
     justify-content: center;
   }
 }
@@ -56,15 +56,20 @@
   width: 100%;
   padding: 94px 0;
   margin: 0 24px;
-  @media(max-width:575px){
-    padding: 65px 0;
-    margin: 0 15px;
+  @media (max-width: 575px) {
+    padding: 65px 15px;
+    margin: 0;
   }
 }
 
 .modalHeadingWrapper {
   padding-bottom: 31px;
   border-bottom: 1px solid var(--colorGrey100);
+  @media(max-width:767px){
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
 }
 
 .modalHeading {
@@ -92,6 +97,9 @@
   &:hover {
     color: var(--colorGrey700);
   }
+  @media(max-width:575px){
+    float:inherit;
+  }
 }
 
 .filtersWrapper {
@@ -99,8 +107,8 @@
    * under the mobile safari bottom bar or the "Show results"
    * button bar */
   padding-bottom: 220px;
-  @media(max-width:575px){
-    padding-bottom:120px;
+  @media (max-width: 575px) {
+    padding-bottom: 120px;
   }
 }
 
@@ -122,12 +130,23 @@
   display: inline-block;
   border-radius: 3px;
 }
-.SearchMobile{
-  & > div{
-    & > div{
-      & > button{
+.SearchMobile {
+  & > div {
+    & > div {
+      & > button {
+        @media (max-width: 767px) {
+          position: fixed;
+          background-color: #fff;
+          width: 100%;
+          box-shadow: 0 -2px 9px 0 rgba(0, 0, 0, 0.1);
+          display: flex;
+          justify-content: flex-end;
+          align-items: flex-start;
+        }
+      }
+      & > div{
         @media(max-width:767px){
-          position:absolute;
+          padding-top:30px;
         }
       }
     }
