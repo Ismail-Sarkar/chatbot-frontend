@@ -43,7 +43,6 @@ const transactionSearch = async (req, res) => {
     const isCustomer = type === 'customer';
 
     const { bookingStart, userNameAndConfirmNumber, bookingEnd, page, perPage } = req.query;
-    console.log(bookingStart);
 
     if (!bookingStart && !userNameAndConfirmNumber && !bookingEnd) {
       return res.status(400).send('Invalid details.');

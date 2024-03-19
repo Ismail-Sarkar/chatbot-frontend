@@ -106,7 +106,7 @@ module.exports.searchTransactionsBy = async (
     ? {
         $or: [
           { transactionConfirmNumber: userNameAndConfirmNumber },
-          { 'user.userName': { $regex: userNameAndConfirmNumber } },
+          { 'user.userName': { $regex: new RegExp(userNameAndConfirmNumber, 'i') } },
         ],
       }
     : {};
