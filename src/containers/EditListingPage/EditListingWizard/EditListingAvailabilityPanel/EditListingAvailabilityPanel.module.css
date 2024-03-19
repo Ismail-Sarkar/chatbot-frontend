@@ -44,6 +44,11 @@
   @media (--viewportMedium) {
     padding: 5px 0 3px 0;
   }
+  @media(max-width:575px){
+    text-align: left;
+    font-size: 14px;
+    line-height: 20px;
+  }
 }
 
 .addExceptionButton {
