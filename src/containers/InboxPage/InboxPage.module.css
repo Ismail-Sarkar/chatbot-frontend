@@ -158,11 +158,11 @@
 .noResults {
   margin-left: 24px;
   margin-right: 24px;
-  margin-top: 1px;
+  margin-top: 70px;
   text-align: center;
 
   @media (--viewportLarge) {
-    margin-top: 25px;
+    /* margin-top: 25px; */
   }
   @media (max-width: 767px) {
     margin: 0;
@@ -490,7 +490,7 @@
 
   & :global(.SingleDatePicker_picker) {
     width: 314px !important;
-    top: 80px !important;
+    top: 40px !important;
     @media (max-width: 1023px) {
       top: 130px !important;
     }
@@ -499,6 +499,13 @@
     } */
     @media (max-width: 767px) {
       top: 114px !important;
+    }
+    & > div{
+      & > div{
+        & > div{
+          /* height:calc(100vh - 262px); */
+        }
+      }
     }
   }
 
