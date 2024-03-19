@@ -132,6 +132,10 @@
 }
 .SearchMobile {
   & > div {
+    @media(max-width:575px){
+      display:inherit !important;
+      min-height:auto !important;
+    }
     & > div {
       & > button {
         @media (max-width: 767px) {
