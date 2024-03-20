@@ -245,6 +245,27 @@
    :on :transition/expire,
    :to :actor.role/customer,
    :template :booking-expired-request}
+
+{:name :notification/booking-canceled-by-provider,
+   :on :transition/cancel-provider,
+   :to :actor.role/customer,
+   :template :booking-canceled-customer}
+
+   {:name :notification/booking-canceled-by-customer,
+   :on :transition/cancel-customer,
+   :to :actor.role/provider,
+   :template :booking-canceled-provider}
+
+   {:name :notification/booking-canceled-by-operator-to-customer,
+   :on :transition/cancel,
+   :to :actor.role/customer,
+   :template :booking-canceled-by-operator-customer}
+
+   {:name :notification/booking-canceled-by-operator-to-provider,
+   :on :transition/cancel,
+   :to :actor.role/provider,
+   :template :booking-canceled-by-operator-provider}
+
   ;; {:name :notification/booking-money-paid,
   ;;  :on :transition/complete,
   ;;  :to :actor.role/provider,

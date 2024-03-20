@@ -1,0 +1,1 @@
+{{transaction.customer.display-name}} has canceled booking for {{transaction.listing.title}}
