@@ -117,6 +117,7 @@
     & a {
       width: 340px;
       text-align: right;
+      background-position: 336px !important;
       & > span {
         padding-right: 22px;
       }
