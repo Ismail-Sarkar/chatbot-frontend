@@ -8,7 +8,11 @@ import { apiBaseUrl } from '../../util/api';
 import axios from 'axios';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import moment from 'moment';
-import { getDefaultTimeZoneOnBrowser } from '../../util/dates';
+import {
+  getDefaultTimeZoneOnBrowser,
+  getStartOf,
+  timeOfDayFromLocalToTimeZone,
+} from '../../util/dates';
 
 const { UUID } = sdkTypes;
 
@@ -257,14 +261,14 @@ export const fetchPerDayTransactions = (bookingStart, bookingEnd, type) => (
       const { data } = resp.data;
       const perDayTransaction = {};
       for (let d of data) {
-        // const formatedDate = moment(d.bookingStartDate)
-        //   // .tz(d.timeZone)
-        //   // .tz(d.timeZone)
-        //   .format('YYYY-MM-DD');
-
         const formatedDate = moment(d.bookingStartDate)
-          .toISOString()
-          .split('T')[0];
+          // .tz(d.timeZone)
+          // .tz(d.timeZone)
+          .format('YYYY-MM-DD');
+
+        // const formatedDate = moment(d.bookingStartDate)
+        //   .toISOString()
+        //   .split('T')[0];
 
         if (perDayTransaction[formatedDate] === undefined) {
           perDayTransaction[formatedDate] = 0;

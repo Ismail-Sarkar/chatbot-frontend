@@ -121,7 +121,7 @@ module.exports.searchTransactionsBy = async (
     bookingStart &&
     moment(bookingStart)
       .startOf('day')
-      .subtract(offset, 'minutes')
+      // .subtract(offset, 'minutes')
       .toDate();
 
   const bookingRangeEndDate =
@@ -134,27 +134,27 @@ module.exports.searchTransactionsBy = async (
   const bookingStartDate =
     bookingStart &&
     moment(bookingStart)
-      .subtract(offset, 'minutes')
+      // .subtract(offset, 'minutes')
       .toDate();
 
   const bookingStartDateEnd =
     bookingStart &&
     moment(bookingStart)
       .add(1, 'day')
-      .subtract(offset + 1, 'minutes')
+      .subtract(1, 'minutes')
       .toDate();
 
   const bookingEndDate =
     bookingEnd &&
     moment(bookingEnd)
-      .subtract(offset + 1, 'minute')
+      .subtract(1, 'minute')
       .toDate();
 
   const bookingEndDateStart =
     bookingEnd &&
     moment(bookingEnd)
       .subtract(1, 'day')
-      .subtract(offset, 'minutes')
+      // .subtract(offset, 'minutes')
       .toDate();
 
   const bookingStartQuery =
