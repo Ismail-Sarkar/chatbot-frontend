@@ -7,7 +7,7 @@ exports.createSubscriptionofUser = async (req, res) => {
   try {
     const { data } = req.body;
 
-    // console.log('WebHook status: Hitted', req.body);
+    console.log('WebHook status: Hitted create', req.body);
     if (data) {
       if (
         data.object.client_reference_id &&
