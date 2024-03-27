@@ -16,6 +16,8 @@ exports.createSubscriptionofUser = async (req, res) => {
       ) {
         try {
           const subscription = await stripe.subscriptions.retrieve(data.object.subscription);
+
+          const totalAmountPaid = data.objec.amount_total;
           console.log('Subscription Details:', subscription);
           console.log('Subscription Items:', subscription.items.data);
           if (subscription) {
@@ -65,14 +67,16 @@ exports.createSubscriptionofUser = async (req, res) => {
                   discountedPercent: subscription.discount?.coupon?.percent_off
                     ? subscription.discount?.coupon?.percent_off
                     : 0,
-                  discountAmount: subscription.discount?.coupon?.percent_off
-                    ? (subscriptionType.recurring * subscription.discount.coupon?.percent_off) / 100
-                    : 0,
-                  discountedAmount: subscription.discount?.coupon?.percent_off
-                    ? subscriptionType.recurring -
-                      (subscriptionType.recurring * subscription.discount?.coupon?.percent_off) /
-                        100
-                    : subscriptionType.recurring,
+                  discountAmount: subscriptionType.recurring - totalAmountPaid,
+                  // subscription.discount?.coupon?.percent_off
+                  //   ? (subscriptionType.recurring * subscription.discount.coupon?.percent_off) / 100
+                  //   : 0,
+                  discountedAmount: totalAmountPaid,
+                  // subscription.discount?.coupon?.percent_off
+                  //   ? subscriptionType.recurring -
+                  //     (subscriptionType.recurring * subscription.discount?.coupon?.percent_off) /
+                  //       100
+                  //   : subscriptionType.recurring,
                   totalAmount: subscriptionType.recurring,
                 },
                 subscriptionId: data.object.subscription,
