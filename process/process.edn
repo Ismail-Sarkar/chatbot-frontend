@@ -149,7 +149,8 @@
   {:name :transition/cancel,
    :actor :actor.role/operator,
    :actions
-   [{:name :action/calculate-full-refund}
+   [
+    ;; {:name :action/calculate-full-refund}
     ;; {:name :action/stripe-refund-payment}
     {:name :action/cancel-booking}],
    :from :state/accepted,
@@ -229,6 +230,12 @@
    :on :transition/confirm-payment-for-automatic-accept,
    :to :actor.role/provider,
    :template :booking-automatic-accepted-request}
+
+  {:name :notification/booking-automatic-accepted-request-to-customer,
+   :on :transition/confirm-payment-for-automatic-accept,
+   :to :actor.role/customer,
+   :template :booking-accepted-request}
+
   {:name :notification/booking-declined-request,
    :on :transition/decline,
    :to :actor.role/customer,
