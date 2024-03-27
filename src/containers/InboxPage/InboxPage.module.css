@@ -330,6 +330,9 @@
     margin-top: 0;
     margin-bottom: 0;
   }
+  @media(max-width:480px){
+    font-size:13px;
+  }
 }
 .itemTitle {
   composes: marketplaceTinyFontStyles from global;
@@ -338,6 +341,9 @@
 
   margin-top: 0;
   margin-bottom: 0;
+  @media(max-width:480px){
+    font-size:13px;
+  }
 }
 
 .itemDetails {
@@ -389,6 +395,11 @@
 
 .stateName {
   /* This class is empty on purpose, it is used below for banned users */
+  @media(max-width:767px){
+    position: absolute;
+    top: 10px;
+    right: 0;
+  }
 }
 
 .accepted {
@@ -398,6 +409,7 @@
 .stateActionNeeded {
   font-weight: var(--fontWeightMedium);
   color: var(--colorAttention);
+
 }
 
 .stateNoActionNeeded {
@@ -473,6 +485,9 @@
     @media (max-width: 767px) {
       margin-left: 0;
     }
+    @media (max-width: 480px) {
+      font-size: 13px;
+    }
   }
   @media (max-width: 767px) {
     flex-direction: column;
@@ -542,6 +557,10 @@
   & :global(.CalendarMonth_caption) {
     color: var(--color-black);
     font-weight: 200 !important;
+    @media(max-width:480px){
+      font-size: 18px;
+     line-height: 26px;
+    }
   }
   & :global(.CalendarMonthGrid) {
     @media (max-width: 1023px) {
@@ -650,6 +669,13 @@
 
 .searchForm {
   margin-bottom: 16px;
+  & > form{
+    & > input{
+      @media(max-width:480px){
+        font-size:14px;
+      }
+    }
+  }
 }
 .InboxPageWrap {
   & > div {
