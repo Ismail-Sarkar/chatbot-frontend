@@ -141,8 +141,7 @@ function StripeSubscriptionSuccessPanel(props) {
                   {formatMoney(
                     intl,
                     new Money(
-                      currentUser?.attributes?.profile?.protectedData?.subscriptionDetails
-                        ?.discountedAmount || 7200,
+                      currentUser?.attributes?.profile?.protectedData?.subscriptionDetails?.discountedAmount,
                       CURRENCY
                     )
                   )}{' '}

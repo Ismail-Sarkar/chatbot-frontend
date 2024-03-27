@@ -18,8 +18,8 @@ exports.createSubscriptionofUser = async (req, res) => {
           const subscription = await stripe.subscriptions.retrieve(data.object.subscription);
 
           const totalAmountPaid = data.object.amount_total;
-          console.log('Subscription Details:', subscription);
-          console.log('Subscription Items:', subscription.items.data);
+          // console.log('Subscription Details:', subscription);
+          // console.log('Subscription Items:', subscription.items.data);
           if (subscription) {
             // Extract the required information from the subscription object
             const status = subscription.status;
