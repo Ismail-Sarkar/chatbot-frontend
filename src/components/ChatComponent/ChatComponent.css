@@ -1,0 +1,131 @@
+/* chatWindow.css */
+
+.chat-container {
+  position: fixed;
+  bottom: 20px;
+  right: 5px;
+  width: 300px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  transform: translateY(100%);
+  opacity: 0;
+  min-height: 343px;
+}
+
+.chat-container.open {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.chat-head {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-head-title {
+  font-weight: var(--fontWeightMedium);
+  font-size: 14px;
+  line-height: 16px;
+  padding: 3px 0 3px 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.chat-body {
+  padding: 10px;
+}
+
+.chat-window {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  min-height: 200px;
+  max-height: 200px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+
+  & > li {
+    line-height: 1px;
+    padding: 5px 0 1px 0;
+  }
+}
+
+.chat-window::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+/* Track (the area behind the scrollbar) */
+.chat-window::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle (the draggable part of the scrollbar) */
+.chat-window::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+.chat-window::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.chat-card {
+  padding: 0px 10px;
+  border-radius: 5px;
+  /* margin-bottom: 5px; */
+  & p {
+    margin: 5px 0;
+  }
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+.send-btn-ctn {
+  display: flex;
+  align-items: center;
+}
+
+.hover:hover {
+  cursor: pointer;
+}
+
+.send-btn-ctn .hover {
+  padding: 8px;
+  background-color: #007bff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.send-btn-ctn .hover svg {
+  color: #fff;
+  margin-right: 2px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.msgCont {
+  margin-top: 5px;
+  margin-bottom: 7px;
+}

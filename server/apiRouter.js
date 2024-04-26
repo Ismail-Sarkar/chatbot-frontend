@@ -36,6 +36,8 @@ const { cronScheduler, cronTimers } = require('./api-util/cronSchedular');
 const { userupdationScript } = require('./api/userupdationScript');
 const { listeners } = require('./eventListeners');
 
+const agentRouter = require('./agentRouter.js');
+
 const router = express.Router();
 
 const fetchCur = async () => {
@@ -143,5 +145,7 @@ router.use('/currency', currencyExchangeCode);
 
 //uniqe id
 router.get('/uniqueId', getUniqueId);
+
+router.use('/chat', agentRouter);
 
 module.exports = router;
