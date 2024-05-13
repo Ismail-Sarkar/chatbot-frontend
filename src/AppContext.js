@@ -16,13 +16,15 @@ export const AppProvider = ({ children }) => {
     axios
       .post(
         `${apiBaseUrl()}/api/chat/text-input`,
-        { message: message || 'Hi' },
+        { message: message || 'Hi', clientId, context },
         { withCredentials: true }
       )
       .then(res => {
-        console.log('565', res.data);
+        // console.log('565', res.data);
         setAgentMessages(prevMessages => [...prevMessages, res.data.data[0].queryResult]);
         setIsLoadingChatMessages(false);
+        setClientId(res.data.clientId);
+        setContext(res.data.data[0].queryResult.outputContexts);
       })
       .catch(e => {
         setIsLoadingChatMessages(false);
@@ -43,6 +45,9 @@ export const AppProvider = ({ children }) => {
     initialState.isLoadingChatMessages
   );
   const [agentMessages, setAgentMessages] = React.useState(initialState.agentMessages);
+
+  const [clientId, setClientId] = React.useState(null);
+  const [context, setContext] = React.useState([]);
 
   const closeChatWindow = () => {
     setChatWindowOpen(false);
