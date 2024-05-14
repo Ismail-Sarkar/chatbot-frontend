@@ -6,6 +6,8 @@ const { v4: uuid } = require('uuid');
 const Path = require('path');
 const { default: axios } = require('axios');
 
+const CHATBOT_BACKEND_URI = process.env.CHATBOT_BACKEND_URI || 'http://localhost:8000/dialog-flow';
+
 const router = express.Router();
 
 const sessionClient = new Dialogflow.SessionsClient({
@@ -52,16 +54,30 @@ router.post('/text-input', async (req, res) => {
 
     const intentName = responses[0]?.queryResult?.intent?.displayName || null;
 
+    const outputContexts = responses[0]?.queryResult.outputContexts;
+
     // console.log(responses, responses[0]?.queryResult, 'response from agent');
 
-    if (intentName === 'show.transaction') {
-      console.log('first', intentName);
+    if (intentName === 'show.transaction' || intentName === 'show.more.orders') {
+      console.log('first', outputContexts);
+
       try {
         const webhookServerResponse = await axios.post(
-          'http://localhost:8000/dialog-flow',
+          CHATBOT_BACKEND_URI,
           {
             queryResult: {
-              intent: { displayName: 'show.transaction' },
+              intent: {
+                displayName:
+                  intentName === 'show.transaction'
+                    ? 'show.transaction.custom'
+                    : 'show.more.orders.custom',
+              },
+              context: outputContexts,
+              outputContexts,
+              // outputContexts: {
+              //   ...outputContexts,
+              //   parameters: { ...outputContexts.parameters?.fields },
+              // },
             },
           },
           {
@@ -72,7 +88,7 @@ router.post('/text-input', async (req, res) => {
           }
         );
 
-        // console.log(webhookServerResponse, 876);
+        console.log(webhookServerResponse.data, 876);
         return res.status(200).json({
           data: [{ queryResult: webhookServerResponse.data }],
           clientId: sessionPath.split('/').pop(),

@@ -5,7 +5,7 @@ const Card = ({ data }) => {
   return (
     <div className={css.card}>
       {data.map((item, index) => {
-        console.log('item', item.card);
+        // console.log('item', item.card);
         return (
           <div className={css.cardItem} key={index}>
             <img src={item.card?.imageUri} alt={item.card?.title} className={css.cardImage} />

@@ -10,7 +10,6 @@ export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }) => {
   const handleConversation = message => {
-    console.log('executting');
     setIsLoadingChatMessages(true);
     setAgentMessages(prevMessages => [...prevMessages, { userMessage: message }]);
     axios
@@ -48,6 +47,7 @@ export const AppProvider = ({ children }) => {
 
   const [clientId, setClientId] = React.useState(null);
   const [context, setContext] = React.useState([]);
+  console.log('context', context);
 
   const closeChatWindow = () => {
     setChatWindowOpen(false);
