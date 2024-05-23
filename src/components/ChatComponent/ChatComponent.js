@@ -3,7 +3,7 @@ import { FiSend, FiX } from 'react-icons/fi';
 import { toJS } from 'mobx';
 import { useAppContext } from '../../AppContext.js';
 import './ChatComponent.css';
-import { isEmpty } from 'lodash';
+import { isArray, isEmpty } from 'lodash';
 import Card from './CardViewer/CardViewer.js';
 
 const center = {
@@ -66,34 +66,62 @@ const ChatComponent = props => {
       </div>
       <div className="chat-body">
         <ul className="chat-window" ref={chatWindowRef}>
-          {data.map(({ fulfillmentText, userMessage, fulfillmentMessages }, index) => (
-            <li key={index}>
-              {userMessage && (
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <p className={'msgCont'} style={{ opacity: 0 }}>
-                    {' '}
-                    .{' '}
-                  </p>
-                  <div className="chat-card" style={{ background: '#77cbfc', color: 'white' }}>
-                    <p>{userMessage}</p>
-                  </div>
-                </div>
-              )}
-              {fulfillmentText && (
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <div className="chat-card">
-                    <p>{fulfillmentText}</p>
-                  </div>
-                  <p style={{ opacity: 0 }}> . </p>
-                </div>
-              )}
-              {!isEmpty(fulfillmentMessages) && !fulfillmentText && (
-                <Card data={fulfillmentMessages} />
-              )
-              // fulfillmentMessages.map((data, i) => <Card data={data} index={i} />)
-              }
-            </li>
-          ))}
+          {data.map(
+            ({ fulfillmentText, userMessage, fulfillmentMessages, webhookPayload }, index) => {
+              const suggestedActionValues =
+                webhookPayload?.fields?.suggestedActions?.listValue?.values;
+
+              return (
+                <li key={index}>
+                  {console.log(webhookPayload, suggestedActionValues)}
+                  {userMessage && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <p className={'msgCont'} style={{ opacity: 0 }}>
+                        {' '}
+                        .{' '}
+                      </p>
+                      <div className="chat-card" style={{ background: '#77cbfc', color: 'white' }}>
+                        <p>{userMessage}</p>
+                      </div>
+                    </div>
+                  )}
+                  {fulfillmentText && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <div className="chat-card">
+                        <p>{fulfillmentText}</p>
+                      </div>
+                      <p style={{ opacity: 0 }}> . </p>
+                    </div>
+                  )}
+                  {!isEmpty(fulfillmentMessages) && !fulfillmentText && (
+                    <Card data={fulfillmentMessages} />
+                  )
+                  // fulfillmentMessages.map((data, i) => <Card data={data} index={i} />)
+                  }
+
+                  {console.log(
+                    666,
+                    suggestedActionValues,
+                    !isEmpty(suggestedActionValues) &&
+                      isArray(suggestedActionValues) &&
+                      suggestedActionValues.map(
+                        ({ structValue: { fields } }) => fields.label.stringValue
+                      )
+                  )}
+
+                  {!isEmpty(suggestedActionValues) &&
+                    isArray(suggestedActionValues) &&
+                    suggestedActionValues.map(({ structValue: { fields } }) =>
+                      fields.type.stringValue === 'button' ? (
+                        <div className="button-container">
+                          <button className={'actionButton'}>{fields.label.stringValue}</button>
+                        </div>
+                      ) : null
+                    )}
+                </li>
+              );
+            }
+          )}
         </ul>
         <hr style={{ background: '#fff' }} />
         <form onSubmit={handleSendMessage} className="input-container">

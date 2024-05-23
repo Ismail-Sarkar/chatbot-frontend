@@ -19,7 +19,7 @@ const Card = ({ data }) => {
                 dangerouslySetInnerHTML={{ __html: item.card?.subtitle }}
               />
             </div>
-            <a href={item.card?.buttons[0].postback} className={css.cardButton}>
+            <a href={item.card?.buttons[0].postback} target="_blank" className={css.cardButton}>
               {item.card?.buttons[0].text}
             </a>
           </div>

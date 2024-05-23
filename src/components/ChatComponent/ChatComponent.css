@@ -129,3 +129,36 @@
   margin-top: 5px;
   margin-bottom: 7px;
 }
+
+.actionButton {
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 20px;
+  padding: 9px 13px;
+  margin: 0px;
+  box-sizing: border-box;
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  transition: background-color 50ms ease-in-out 0s, border-color 100ms ease-in-out 0s;
+  white-space: normal;
+  text-align: left;
+}
+
+.button-container {
+  margin: 8px 8px 0px 0px;
+  display: block;
+  unicode-bidi: isolate;
+  /* flex: 1 1 0px;
+  overflow: hidden;
+  min-height: 0px;
+  background: rgb(255, 255, 255);
+  color: rgba(0, 0, 0, 0.85);
+  position: relative;
+  min-width: 320px;
+  direction: ltr;
+  transform: translateY(16px);
+  animation: 400ms ease-out 150ms 1 normal forwards running cxARAE; */
+}

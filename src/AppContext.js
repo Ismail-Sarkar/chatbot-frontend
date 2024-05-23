@@ -19,7 +19,7 @@ export const AppProvider = ({ children }) => {
         { withCredentials: true }
       )
       .then(res => {
-        // console.log('565', res.data);
+        console.log('565', res.data);
         setAgentMessages(prevMessages => [...prevMessages, res.data.data[0].queryResult]);
         setIsLoadingChatMessages(false);
         setClientId(res.data.clientId);
@@ -47,7 +47,6 @@ export const AppProvider = ({ children }) => {
 
   const [clientId, setClientId] = React.useState(null);
   const [context, setContext] = React.useState([]);
-  console.log('context', context);
 
   const closeChatWindow = () => {
     setChatWindowOpen(false);
