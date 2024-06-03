@@ -1,6 +1,8 @@
 import React from 'react';
 import css from './CardViewer.module.css';
 
+import { ImNewTab } from 'react-icons/im';
+
 const Card = ({ data }) => {
   return (
     <div className={css.card}>
@@ -20,7 +22,10 @@ const Card = ({ data }) => {
               />
             </div>
             <a href={item.card?.buttons[0].postback} target="_blank" className={css.cardButton}>
-              {item.card?.buttons[0].text}
+              <div className={css.btnTxt}>
+                {item.card?.buttons[0].text}
+                <ImNewTab size="12" />
+              </div>
             </a>
           </div>
         );

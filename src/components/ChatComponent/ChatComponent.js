@@ -5,11 +5,23 @@ import { useAppContext } from '../../AppContext.js';
 import './ChatComponent.css';
 import { isArray, isEmpty } from 'lodash';
 import Card from './CardViewer/CardViewer.js';
+import Avatar from './Avatar/Avatar.js';
+import classNames from 'classnames';
 
 const center = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+};
+
+const getStringValue = val => val.stringValue;
+
+const getActionData = fields => {
+  const label = getStringValue(fields.label);
+  const actionText = getStringValue(fields.actionText);
+  const type = getStringValue(fields.type);
+
+  return { label, actionText, type };
 };
 
 const ChatComponent = props => {
@@ -23,6 +35,10 @@ const ChatComponent = props => {
 
   const [message, setMessage] = useState('');
   const chatWindowRef = useRef(null);
+
+  const [letter, setLetter] = useState('B');
+
+  const [botName, setBotName] = useState('Bitcanny AI Support');
 
   // Function to scroll to the bottom of the chat window
   const scrollToBottom = () => {
@@ -39,7 +55,7 @@ const ChatComponent = props => {
   // Send initial conversation message when component mounts
   useEffect(() => {
     handleConversation();
-    return () => handleConversation();
+    // return () => handleConversation();
   }, []);
 
   // Function to handle sending a message
@@ -51,6 +67,13 @@ const ChatComponent = props => {
     }
   };
 
+  const handleActionButtonClick = action => {
+    if (action && typeof action === 'string' && action.trim() !== '') {
+      handleConversation(action);
+      setMessage('');
+    }
+  };
+
   // Convert agent messages to plain JavaScript array
   const data = toJS(agentMessages);
 
@@ -58,7 +81,10 @@ const ChatComponent = props => {
     <div className={`chat-container ${isChatWindowOpen ? 'open' : ''}`}>
       <div className="chat-head">
         <div style={{ ...center }}>
-          <div className="chat-head-title"> Bot {isLoadingChatMessages && 'is typing ...'} </div>
+          <div className="chat-head-title">
+            {' '}
+            {botName} {isLoadingChatMessages && 'is typing ...'}{' '}
+          </div>
         </div>
         <div style={{ ...center }} className="hover">
           <FiX onClick={_ => closeChatWindow()} />
@@ -66,6 +92,13 @@ const ChatComponent = props => {
       </div>
       <div className="chat-body">
         <ul className="chat-window" ref={chatWindowRef}>
+          <div className="avatarContainer">
+            <Avatar letter={letter} />
+            <div className="text">
+              <div className="botTitle">Bitcanny AI Support</div>
+              <div className="botSubTitle">Ready to help!</div>
+            </div>
+          </div>
           {data.map(
             ({ fulfillmentText, userMessage, fulfillmentMessages, webhookPayload }, index) => {
               const suggestedActionValues =
@@ -73,24 +106,19 @@ const ChatComponent = props => {
 
               return (
                 <li key={index}>
-                  {console.log(webhookPayload, suggestedActionValues)}
                   {userMessage && (
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <p className={'msgCont'} style={{ opacity: 0 }}>
-                        {' '}
-                        .{' '}
-                      </p>
-                      <div className="chat-card" style={{ background: '#77cbfc', color: 'white' }}>
-                        <p>{userMessage}</p>
+                    <div style={{ display: 'flex', justifyContent: 'end' }}>
+                      <div className={classNames('chat-card', 'userMessage')}>
+                        <div className="userMsg">{userMessage}</div>
                       </div>
                     </div>
                   )}
                   {fulfillmentText && (
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <div className="chat-card">
-                        <p>{fulfillmentText}</p>
+                        {/* <p>{fulfillmentText}</p> */}
+                        <div className="botReply">{fulfillmentText}</div>
                       </div>
-                      <p style={{ opacity: 0 }}> . </p>
                     </div>
                   )}
                   {!isEmpty(fulfillmentMessages) && !fulfillmentText && (
@@ -99,28 +127,31 @@ const ChatComponent = props => {
                   // fulfillmentMessages.map((data, i) => <Card data={data} index={i} />)
                   }
 
-                  {console.log(
-                    666,
-                    suggestedActionValues,
-                    !isEmpty(suggestedActionValues) &&
-                      isArray(suggestedActionValues) &&
-                      suggestedActionValues.map(
-                        ({ structValue: { fields } }) => fields.label.stringValue
-                      )
-                  )}
-
                   {!isEmpty(suggestedActionValues) &&
                     isArray(suggestedActionValues) &&
-                    suggestedActionValues.map(({ structValue: { fields } }) =>
-                      fields.type.stringValue === 'button' ? (
+                    suggestedActionValues.map(({ structValue: { fields } }) => {
+                      const { label, type, actionText } = getActionData(fields) || {};
+                      return type === 'button' ? (
                         <div className="button-container">
-                          <button className={'actionButton'}>{fields.label.stringValue}</button>
+                          <button
+                            className={'actionButton'}
+                            onClick={() => handleActionButtonClick(actionText)}
+                          >
+                            {label}
+                          </button>
                         </div>
-                      ) : null
-                    )}
+                      ) : null;
+                    })}
                 </li>
               );
             }
+          )}
+          {isLoadingChatMessages && (
+            <div className="typing-indicator">
+              <span className="dot"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
+            </div>
           )}
         </ul>
         <hr style={{ background: '#fff' }} />

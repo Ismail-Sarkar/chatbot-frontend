@@ -58,8 +58,12 @@ router.post('/text-input', async (req, res) => {
 
     // console.log(responses, responses[0]?.queryResult, 'response from agent');
 
-    if (intentName === 'show.transaction' || intentName === 'show.more.orders') {
-      console.log('first', outputContexts);
+    if (
+      intentName === 'show.transaction' ||
+      intentName === 'show.more.orders' ||
+      intentName === 'show.prev.orders'
+    ) {
+      // console.log('first', outputContexts);
 
       try {
         const webhookServerResponse = await axios.post(
@@ -70,7 +74,9 @@ router.post('/text-input', async (req, res) => {
                 displayName:
                   intentName === 'show.transaction'
                     ? 'show.transaction.custom'
-                    : 'show.more.orders.custom',
+                    : intentName === 'show.more.orders'
+                    ? 'show.more.orders.custom'
+                    : 'show.prev.orders.custom',
               },
               context: outputContexts,
               outputContexts,
@@ -88,17 +94,18 @@ router.post('/text-input', async (req, res) => {
           }
         );
 
-        console.log(webhookServerResponse.data, 876);
+        // console.log(webhookServerResponse.data, 876);
         return res.status(200).json({
           data: [{ queryResult: webhookServerResponse.data }],
           clientId: sessionPath.split('/').pop(),
         });
       } catch (err) {
-        console.log(err);
+        console.error();
+        err;
       }
     } else res.status(200).json({ data: responses, clientId: sessionPath.split('/').pop() });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(422).send({ e });
   }
 });

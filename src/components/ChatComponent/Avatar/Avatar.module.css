@@ -1,0 +1,15 @@
+.avatar {
+  background-color: var(--marketplaceColor);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarLetter {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+}
