@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
-const Dialogflow = require('@google-cloud/dialogflow');
+const Dialogflow = require('@google-cloud/dialogflow').v2beta1;
 const { v4: uuid } = require('uuid');
 const Path = require('path');
 const { default: axios } = require('axios');
@@ -14,13 +14,18 @@ const sessionClient = new Dialogflow.SessionsClient({
   keyFilename: Path.join(__dirname, '../key.json'),
 });
 
+// const KNOWLEDGE_BASE_ID = process.env.KNOWLEDGE_BASE_ID || 'MjkyMDUxOTc2MjA0MTYzNDgxNw';
+const KNOWLEDGE_BASE_ID = process.env.KNOWLEDGE_BASE_ID || 'MTc2OTIyMzQxODA4NDAxMjg1MTM';
+const PROJECT_ID = process.env.PROJECT_ID || 'bit-bot-yinn';
 const sessions = {};
 
 router.post('/text-input', async (req, res) => {
   const { clientId, message, context } = req.body;
 
   let sessionPath = (clientId && sessions[clientId]) || null;
-  console.log('sessionpath', sessionPath, clientId, sessions);
+
+  const knowledgeBasePath = 'projects/' + PROJECT_ID + '/knowledgeBases/' + KNOWLEDGE_BASE_ID + '';
+  console.log('sessionpath', sessionPath, clientId, sessions, knowledgeBasePath);
 
   if (!sessionPath) {
     // If not, create a new session
@@ -41,6 +46,9 @@ router.post('/text-input', async (req, res) => {
         text: message,
         languageCode: 'en-us', // needs to be dynamic
       },
+    },
+    queryParams: {
+      knowledgeBaseNames: [knowledgeBasePath],
     },
 
     contexts: context,
