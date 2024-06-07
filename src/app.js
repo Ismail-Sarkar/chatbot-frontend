@@ -246,12 +246,14 @@ export const ServerApp = props => {
         textComponent="span"
       >
         <Provider store={store}>
-          <HelmetProvider context={helmetContext}>
-            <IncludeScripts config={appConfig} />
-            <StaticRouter location={url} context={context}>
-              <Routes />
-            </StaticRouter>
-          </HelmetProvider>
+          <AppProvider>
+            <HelmetProvider context={helmetContext}>
+              <IncludeScripts config={appConfig} />
+              <StaticRouter location={url} context={context}>
+                <Routes />
+              </StaticRouter>
+            </HelmetProvider>
+          </AppProvider>
         </Provider>
       </IntlProvider>
     </Configurations>

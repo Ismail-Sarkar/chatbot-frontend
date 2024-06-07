@@ -127,7 +127,7 @@
     "test": "NODE_ICU_DATA=node_modules/full-icu sharetribe-scripts test",
     "test-ci": "yarn run test-server --runInBand && sharetribe-scripts test --runInBand",
     "eject": "sharetribe-scripts eject",
-    "start": "node --icu-data-dir=node_modules/full-icu server/index.js",
+    "start": "export NODE_ENV=production && node --icu-data-dir=node_modules/full-icu server/index.js",
     "dev-server": "cross-env-shell NODE_ENV=development PORT=4000 REACT_APP_MARKETPLACE_ROOT_URL=http://localhost:4000 \"yarn run build&&nodemon --watch server server/index.js\"",
     "test-server": "jest ./server/**/*.test.js",
     "heroku-postbuild": "yarn run build",
