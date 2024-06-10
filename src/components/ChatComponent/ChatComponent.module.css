@@ -178,8 +178,11 @@
   color: rgba(0, 0, 0, 0.85);
   cursor: pointer;
   transition: background-color 50ms ease-in-out 0s, border-color 100ms ease-in-out 0s;
-  white-space: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   text-align: left;
+  max-width: 360px;
 }
 
 .actionButton:hover {
