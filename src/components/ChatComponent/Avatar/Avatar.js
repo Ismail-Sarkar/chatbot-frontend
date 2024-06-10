@@ -1,10 +1,13 @@
 import React from 'react';
 import css from './Avatar.module.css';
 
-const Avatar = ({ letter }) => {
+const Avatar = ({ letter, avatarWrapper, avatarLetter }) => {
+  const avatarWrapeprClass = avatarWrapper || css.avatar;
+  const avatarLetterClass = avatarLetter || css.avatarLetter;
+
   return (
-    <div className={css.avatar}>
-      <span className={css.avatarLetter}>{letter}</span>
+    <div className={avatarWrapeprClass}>
+      <span className={avatarLetterClass}>{letter}</span>
     </div>
   );
 };

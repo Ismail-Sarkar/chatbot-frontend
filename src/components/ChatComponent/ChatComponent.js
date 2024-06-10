@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { FiSend, FiX } from 'react-icons/fi';
 import { toJS } from 'mobx';
 import { useAppContext } from '../../AppContext.js';
-import './ChatComponent.css';
 import { isArray, isEmpty } from 'lodash';
 import Card from './CardViewer/CardViewer.js';
 import Avatar from './Avatar/Avatar.js';
 import classNames from 'classnames';
+
+import css from './ChatComponent.module.css';
 
 const center = {
   display: 'flex',
@@ -78,25 +79,31 @@ const ChatComponent = props => {
   const data = toJS(agentMessages);
 
   return (
-    <div className={`chat-container ${isChatWindowOpen ? 'open' : ''}`}>
-      <div className="chat-head">
+    <div className={classNames(css.chatContainer, isChatWindowOpen && css.open)}>
+      <div className={css.chatHead}>
         <div style={{ ...center }}>
-          <div className="chat-head-title">
-            {' '}
+          <Avatar
+            letter={letter}
+            avatarWrapper={css.avatarWrapper}
+            avatarLetter={css.avatarLetter}
+          />
+          <div className={css.chatHeadTitle}>
             {botName} {isLoadingChatMessages && 'is typing ...'}{' '}
           </div>
         </div>
-        <div style={{ ...center }} className="hover">
-          <FiX onClick={_ => closeChatWindow()} />
+        <div style={{ ...center }} className={css.hover}>
+          <FiX onClick={_ => closeChatWindow()} size={'30'} />
         </div>
       </div>
-      <div className="chat-body">
-        <ul className="chat-window" ref={chatWindowRef}>
-          <div className="avatarContainer">
-            <Avatar letter={letter} />
-            <div className="text">
-              <div className="botTitle">Bitcanny AI Support</div>
-              <div className="botSubTitle">Ready to help!</div>
+      <div className={css.chatBody}>
+        <ul className={css.chatWindow} ref={chatWindowRef}>
+          <div className={css.avatarContainer}>
+            <div className={css.avatarContainer}>
+              <Avatar letter={letter} />
+            </div>
+            <div className={css.text}>
+              <div className={css.botTitle}>Bitcanny AI Support</div>
+              <div className={css.botSubTitle}>Ready to help!</div>
             </div>
           </div>
           {data.map(
@@ -108,16 +115,16 @@ const ChatComponent = props => {
                 <li key={index}>
                   {userMessage && (
                     <div style={{ display: 'flex', justifyContent: 'end' }}>
-                      <div className={classNames('chat-card', 'userMessage')}>
-                        <div className="userMsg">{userMessage}</div>
+                      <div className={classNames(css.chatCard, css.userMessage)}>
+                        <div className={css.userMsg}>{userMessage}</div>
                       </div>
                     </div>
                   )}
                   {fulfillmentText && (
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <div className="chat-card">
+                      <div className={css.chatCard}>
                         {/* <p>{fulfillmentText}</p> */}
-                        <div className="botReply">{fulfillmentText}</div>
+                        <div className={css.botReply}>{fulfillmentText}</div>
                       </div>
                     </div>
                   )}
@@ -132,9 +139,9 @@ const ChatComponent = props => {
                     suggestedActionValues.map(({ structValue: { fields } }) => {
                       const { label, type, actionText } = getActionData(fields) || {};
                       return type === 'button' ? (
-                        <div className="button-container">
+                        <div className={css.buttonContainer}>
                           <button
-                            className={'actionButton'}
+                            className={css.actionButton}
                             onClick={() => handleActionButtonClick(actionText)}
                           >
                             {label}
@@ -147,24 +154,24 @@ const ChatComponent = props => {
             }
           )}
           {isLoadingChatMessages && (
-            <div className="typing-indicator">
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
+            <div className={css.typingIndicator}>
+              <span className={css.dot}></span>
+              <span className={css.dot}></span>
+              <span className={css.dot}></span>
             </div>
           )}
         </ul>
         <hr style={{ background: '#fff' }} />
-        <form onSubmit={handleSendMessage} className="input-container">
+        <form onSubmit={handleSendMessage} className={css.inputContainer}>
           <input
-            className="input"
+            className={css.input}
             type="text"
             onChange={e => setMessage(e.target.value)}
             value={message}
             placeholder="Begin a conversation with our agent"
           />
-          <div className="send-btn-ctn">
-            <div className="hover" onClick={handleSendMessage}>
+          <div className={css.sendBtnCtn}>
+            <div className={css.hover} onClick={handleSendMessage}>
               <FiSend style={{ transform: 'rotate(50deg)' }} />
             </div>
           </div>
