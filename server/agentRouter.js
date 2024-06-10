@@ -3,20 +3,36 @@ require('dotenv').config();
 const express = require('express');
 const Dialogflow = require('@google-cloud/dialogflow').v2beta1;
 const { v4: uuid } = require('uuid');
-const Path = require('path');
 const { default: axios } = require('axios');
-
-const CHATBOT_BACKEND_URI = process.env.CHATBOT_BACKEND_URI || 'http://localhost:8000/dialog-flow';
 
 const router = express.Router();
 
+const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
+const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
+const PROJECT_ID = process.env.PROJECT_ID;
+const CHATBOT_BACKEND_URI = process.env.CHATBOT_BACKEND_URI;
+
+const LANGUAGE_CODE = process.env.LANGUAGE_CODE;
+
+console.log(
+  GOOGLE_CLIENT_EMAIL,
+  GOOGLE_PRIVATE_KEY,
+  PROJECT_ID,
+  CHATBOT_BACKEND_URI,
+  LANGUAGE_CODE
+);
+
+const credentials = {
+  client_email: GOOGLE_CLIENT_EMAIL,
+  private_key: GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+};
+
 const sessionClient = new Dialogflow.SessionsClient({
-  keyFilename: Path.join(__dirname, '../key.json'),
+  credentials,
+  projectId: PROJECT_ID,
 });
 
-// const KNOWLEDGE_BASE_ID = process.env.KNOWLEDGE_BASE_ID || 'MjkyMDUxOTc2MjA0MTYzNDgxNw';
-const KNOWLEDGE_BASE_ID = process.env.KNOWLEDGE_BASE_ID || 'MTc2OTIyMzQxODA4NDAxMjg1MTM';
-const PROJECT_ID = process.env.PROJECT_ID || 'bit-bot-yinn';
+const KNOWLEDGE_BASE_ID = process.env.KNOWLEDGE_BASE_ID;
 const sessions = {};
 
 router.post('/text-input', async (req, res) => {
@@ -25,17 +41,14 @@ router.post('/text-input', async (req, res) => {
   let sessionPath = (clientId && sessions[clientId]) || null;
 
   const knowledgeBasePath = 'projects/' + PROJECT_ID + '/knowledgeBases/' + KNOWLEDGE_BASE_ID + '';
-  console.log('sessionpath', sessionPath, clientId, sessions, knowledgeBasePath);
 
   if (!sessionPath) {
     // If not, create a new session
-    sessionPath = sessionClient.projectAgentSessionPath('bit-bot-yinn', uuid());
+    sessionPath = sessionClient.projectAgentSessionPath(PROJECT_ID, uuid());
 
     // Store the session ID
     sessions[sessionPath.split('/').pop()] = sessionPath;
   }
-
-  // Create a new session
 
   // The dialogflow request object
   const request = {
@@ -44,7 +57,7 @@ router.post('/text-input', async (req, res) => {
       text: {
         // The query to send to the dialogflow agent
         text: message,
-        languageCode: 'en-us', // needs to be dynamic
+        languageCode: LANGUAGE_CODE,
       },
     },
     queryParams: {
