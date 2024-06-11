@@ -14,14 +14,6 @@ const CHATBOT_BACKEND_URI = process.env.CHATBOT_BACKEND_URI;
 
 const LANGUAGE_CODE = process.env.LANGUAGE_CODE;
 
-console.log(
-  GOOGLE_CLIENT_EMAIL,
-  GOOGLE_PRIVATE_KEY,
-  PROJECT_ID,
-  CHATBOT_BACKEND_URI,
-  LANGUAGE_CODE
-);
-
 const credentials = {
   client_email: GOOGLE_CLIENT_EMAIL,
   private_key: GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
@@ -121,8 +113,8 @@ router.post('/text-input', async (req, res) => {
           clientId: sessionPath.split('/').pop(),
         });
       } catch (err) {
-        console.error();
-        err;
+        console.log(err);
+        res.status(500).send({ err });
       }
     } else res.status(200).json({ data: responses, clientId: sessionPath.split('/').pop() });
   } catch (e) {
