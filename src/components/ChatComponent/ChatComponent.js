@@ -15,14 +15,16 @@ const center = {
   alignItems: 'center',
 };
 
-const getStringValue = val => val.stringValue;
+const getStringValue = val => val && val.stringValue;
 
 const getActionData = fields => {
-  const label = getStringValue(fields.label);
-  const actionText = getStringValue(fields.actionText);
-  const type = getStringValue(fields.type);
+  const label = fields.label && getStringValue(fields.label);
+  const actionText = fields.actionText && getStringValue(fields.actionText);
+  const type = fields.type && getStringValue(fields.type);
+  const action = fields.action && getStringValue(fields.action);
+  const redirectTo = fields.redirectTo && getStringValue(fields.redirectTo);
 
-  return { label, actionText, type };
+  return { label, actionText, type, action, redirectTo };
 };
 
 const ChatComponent = props => {
@@ -123,7 +125,11 @@ const ChatComponent = props => {
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <div className={css.chatCard}>
                         {/* <p>{fulfillmentText}</p> */}
-                        <div className={css.botReply}>{fulfillmentText}</div>
+                        {/* <div className={css.botReply}>{fulfillmentText}</div> */}
+                        <div
+                          className={css.botReply}
+                          dangerouslySetInnerHTML={{ __html: fulfillmentText }}
+                        />
                       </div>
                     </div>
                   )}
@@ -136,12 +142,18 @@ const ChatComponent = props => {
                   {!isEmpty(suggestedActionValues) &&
                     isArray(suggestedActionValues) &&
                     suggestedActionValues.map(({ structValue: { fields } }) => {
-                      const { label, type, actionText } = getActionData(fields) || {};
+                      const { label, type, actionText, action, redirectTo } =
+                        getActionData(fields) || {};
+                      console.log(actionText, action, redirectTo);
                       return type === 'button' ? (
                         <div className={css.buttonContainer}>
                           <button
                             className={css.actionButton}
-                            onClick={() => handleActionButtonClick(actionText)}
+                            onClick={() =>
+                              action === 'redirect'
+                                ? window.open(redirectTo, '_blank')
+                                : handleActionButtonClick(actionText)
+                            }
                           >
                             {label}
                           </button>
