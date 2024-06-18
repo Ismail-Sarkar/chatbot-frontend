@@ -11,8 +11,6 @@ import { propTypes } from '../../util/types';
 import FallbackPage from './FallbackPage';
 import { ASSET_NAME } from './LandingPage.duck';
 import { withRouter } from 'react-router-dom';
-import ChatComponent from '../../components/ChatComponent/ChatComponent';
-import Chat from '../../components/ChatComponent/Chat/Chat';
 
 const PageBuilder = loadable(() =>
   import(/* webpackChunkName: "PageBuilder" */ '../PageBuilder/PageBuilder')
@@ -30,8 +28,6 @@ export const LandingPageComponent = props => {
         fallbackPage={<FallbackPage error={error} />}
         history={history}
       />
-      {/* <ChatComponent /> */}
-      <Chat />
     </>
   );
 };

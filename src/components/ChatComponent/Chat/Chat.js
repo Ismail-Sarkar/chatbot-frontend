@@ -1,20 +1,27 @@
 // Chat.js
 
-import React, { useState } from 'react';
-import './Chat.css';
+import React, { useEffect, useState } from 'react';
+import css from './Chat.module.css';
 import ChatComponent from '../ChatComponent';
 import ChatIcon from '../ChatIcon/ChatIcon';
 import { useAppContext } from '../../../AppContext';
+import classNames from 'classnames';
 
 const Chat = () => {
-  const { openChatWindow, isChatWindowOpen } = useAppContext();
+  const { openChatWindow, isChatWindowOpen, handleConversation } = useAppContext();
+
+  useEffect(() => {
+    handleConversation();
+  }, []);
 
   return (
     <>
-      <ChatIcon onClick={openChatWindow} />
-      <div className={`chat-wrapper ${isChatWindowOpen ? 'open' : ''}`}>
-        <ChatComponent closeChatWindow={openChatWindow} />
-      </div>
+      {!isChatWindowOpen && <ChatIcon onClick={openChatWindow} />}
+      {isChatWindowOpen && (
+        <div className={classNames(css.chatWrapper, { [css.open]: isChatWindowOpen })}>
+          <ChatComponent closeChatWindow={openChatWindow} />
+        </div>
+      )}
     </>
   );
 };

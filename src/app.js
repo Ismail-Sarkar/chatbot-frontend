@@ -35,6 +35,7 @@ import Routes from './routing/Routes';
 // Sharetribe Web Template uses English translations as default translations.
 import defaultMessages from './translations/en.json';
 import { AppProvider } from './AppContext';
+import Chat from './components/ChatComponent/Chat/Chat';
 
 // If you want to change the language of default (fallback) translations,
 // change the imports to match the wanted locale:
@@ -199,24 +200,25 @@ export const ClientApp = props => {
   const logLoadDataCalls = appSettings?.env !== 'test';
 
   return (
-    <Configurations appConfig={appConfig}>
-      <IntlProvider
-        locale={appConfig.localization.locale}
-        messages={{ ...localeMessages, ...hostedTranslations }}
-        textComponent="span"
-      >
-        <Provider store={store}>
-          <AppProvider>
+    <AppProvider>
+      <Configurations appConfig={appConfig}>
+        <IntlProvider
+          locale={appConfig.localization.locale}
+          messages={{ ...localeMessages, ...hostedTranslations }}
+          textComponent="span"
+        >
+          <Provider store={store}>
             <HelmetProvider>
               <IncludeScripts config={appConfig} />
               <BrowserRouter>
                 <Routes logLoadDataCalls={logLoadDataCalls} />
+                <Chat />
               </BrowserRouter>
             </HelmetProvider>
-          </AppProvider>
-        </Provider>
-      </IntlProvider>
-    </Configurations>
+          </Provider>
+        </IntlProvider>
+      </Configurations>
+    </AppProvider>
   );
 };
 
@@ -239,6 +241,7 @@ export const ServerApp = props => {
   }
 
   return (
+    // <AppProvider>
     <Configurations appConfig={appConfig}>
       <IntlProvider
         locale={appConfig.localization.locale}
@@ -246,17 +249,17 @@ export const ServerApp = props => {
         textComponent="span"
       >
         <Provider store={store}>
-          <AppProvider>
-            <HelmetProvider context={helmetContext}>
-              <IncludeScripts config={appConfig} />
-              <StaticRouter location={url} context={context}>
-                <Routes />
-              </StaticRouter>
-            </HelmetProvider>
-          </AppProvider>
+          <HelmetProvider context={helmetContext}>
+            <IncludeScripts config={appConfig} />
+            <StaticRouter location={url} context={context}>
+              <Routes />
+            </StaticRouter>
+          </HelmetProvider>
         </Provider>
       </IntlProvider>
     </Configurations>
+    // <Chat />
+    // {/* </AppProvider> */}
   );
 };
 

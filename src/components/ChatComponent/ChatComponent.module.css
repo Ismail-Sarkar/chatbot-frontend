@@ -117,9 +117,15 @@
 .userMessage {
   background: #77cbfc;
   color: white;
-  padding: 20px 14px;
+  padding: 12px 14px;
   margin: 5px;
   border-radius: 20px;
+  font-weight: normal;
+  line-height: 1.25;
+  font-size: 1rem;
+  word-break: break-word;
+  white-space: pre-wrap;
+  box-sizing: border-box;
 }
 
 .inputContainer {

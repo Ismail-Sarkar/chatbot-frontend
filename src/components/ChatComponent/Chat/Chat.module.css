@@ -1,14 +1,15 @@
-/* Chat.css */
-
-.chat-wrapper {
+.chatWrapper {
+  z-index: 999;
   position: fixed;
   bottom: 0;
   right: 20px;
   width: 300px;
   transition: transform 0.3s ease;
   transform: translateY(100%);
+  display: none;
 }
 
-.chat-wrapper.open {
+.chatWrapper.open {
   transform: translateY(0);
+  display: block;
 }

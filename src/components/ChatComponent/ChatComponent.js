@@ -40,6 +40,7 @@ const ChatComponent = props => {
   const [letter, setLetter] = useState('B');
 
   const [botName, setBotName] = useState('Bitcanny AI Support');
+  const effectHook = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
   // Function to scroll to the bottom of the chat window
   const scrollToBottom = () => {
@@ -49,15 +50,13 @@ const ChatComponent = props => {
   };
 
   // Scroll to bottom when agent messages change
-  useLayoutEffect(() => {
-    scrollToBottom();
+  effectHook(() => {
+    if (typeof window !== 'undefined') {
+      scrollToBottom();
+    }
   }, [agentMessages]);
 
   // Send initial conversation message when component mounts
-  useEffect(() => {
-    handleConversation();
-    // return () => handleConversation();
-  }, []);
 
   // Function to handle sending a message
   const handleSendMessage = e => {
