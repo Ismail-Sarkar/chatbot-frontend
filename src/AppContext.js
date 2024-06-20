@@ -47,6 +47,7 @@ export const AppProvider = ({ children }) => {
 
   const [clientId, setClientId] = React.useState(null);
   const [context, setContext] = React.useState([]);
+  const [fullScreen, setFullScreen] = React.useState(false);
 
   const closeChatWindow = () => {
     setChatWindowOpen(false);
@@ -54,6 +55,10 @@ export const AppProvider = ({ children }) => {
 
   const openChatWindow = () => {
     setChatWindowOpen(true);
+  };
+
+  const toggleFullScreen = () => {
+    setFullScreen(!fullScreen);
   };
 
   return (
@@ -65,6 +70,8 @@ export const AppProvider = ({ children }) => {
         handleConversation,
         closeChatWindow,
         openChatWindow,
+        toggleFullScreen,
+        isFullScreen: fullScreen,
       }}
     >
       {children}

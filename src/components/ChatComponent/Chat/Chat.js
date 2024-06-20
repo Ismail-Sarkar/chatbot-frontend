@@ -8,7 +8,7 @@ import { useAppContext } from '../../../AppContext';
 import classNames from 'classnames';
 
 const Chat = () => {
-  const { openChatWindow, isChatWindowOpen, handleConversation } = useAppContext();
+  const { openChatWindow, isChatWindowOpen, handleConversation, isFullScreen } = useAppContext();
 
   useEffect(() => {
     handleConversation();
@@ -18,7 +18,13 @@ const Chat = () => {
     <>
       {!isChatWindowOpen && <ChatIcon onClick={openChatWindow} />}
       {isChatWindowOpen && (
-        <div className={classNames(css.chatWrapper, { [css.open]: isChatWindowOpen })}>
+        <div
+          className={classNames(
+            css.chatWrapper,
+            { [css.open]: isChatWindowOpen },
+            { [css.fullScreenView]: isFullScreen }
+          )}
+        >
           <ChatComponent closeChatWindow={openChatWindow} />
         </div>
       )}

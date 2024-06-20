@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { FiSend, FiX } from 'react-icons/fi';
+import { FiMaximize2, FiMinimize2, FiSend, FiX } from 'react-icons/fi';
 import { toJS } from 'mobx';
 import { useAppContext } from '../../AppContext.js';
 import { isArray, isEmpty } from 'lodash';
@@ -29,6 +29,8 @@ const getActionData = fields => {
 
 const ChatComponent = props => {
   const {
+    toggleFullScreen,
+    isFullScreen,
     closeChatWindow,
     isChatWindowOpen,
     handleConversation,
@@ -80,7 +82,13 @@ const ChatComponent = props => {
   const data = toJS(agentMessages);
 
   return (
-    <div className={classNames(css.chatContainer, isChatWindowOpen && css.open)}>
+    <div
+      className={classNames(
+        css.chatContainer,
+        isChatWindowOpen && css.open,
+        isFullScreen && css.fullScreenView
+      )}
+    >
       <div className={css.chatHead}>
         <div style={{ ...center }}>
           <Avatar
@@ -93,11 +101,22 @@ const ChatComponent = props => {
           </div>
         </div>
         <div style={{ ...center }} className={css.hover}>
+          <div className={css.fullScreenIconContainer}>
+            {isFullScreen ? (
+              <FiMinimize2 onClick={_ => toggleFullScreen()} size={'20'} />
+            ) : (
+              <FiMaximize2 onClick={_ => toggleFullScreen()} size={'20'} />
+            )}
+          </div>
+
           <FiX onClick={_ => closeChatWindow()} size={'30'} />
         </div>
       </div>
       <div className={css.chatBody}>
-        <ul className={css.chatWindow} ref={chatWindowRef}>
+        <ul
+          className={classNames(css.chatWindow, isFullScreen && css.fullScreenWindow)}
+          ref={chatWindowRef}
+        >
           <div className={css.avatarContainer}>
             <div className={css.avatarContainer}>
               <Avatar letter={letter} />
@@ -144,7 +163,6 @@ const ChatComponent = props => {
                     suggestedActionValues.map(({ structValue: { fields } }) => {
                       const { label, type, actionText, action, redirectTo } =
                         getActionData(fields) || {};
-                      console.log(actionText, action, redirectTo);
                       return type === 'button' ? (
                         <div className={css.buttonContainer}>
                           <button
