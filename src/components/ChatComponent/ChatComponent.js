@@ -27,6 +27,27 @@ const getActionData = fields => {
   return { label, actionText, type, action, redirectTo };
 };
 
+const faqSuggestion = [
+  {
+    type: 'button',
+    label: 'FAQ',
+    actionText: 'FAQ',
+  },
+  {
+    type: 'button',
+    label: 'Go to home',
+    actionText: 'Go to home',
+  },
+];
+
+const fallbackSuggestion = [
+  {
+    type: 'button',
+    label: 'Go to home',
+    actionText: 'Go to home',
+  },
+];
+
 const ChatComponent = props => {
   const {
     toggleFullScreen,
@@ -36,6 +57,7 @@ const ChatComponent = props => {
     handleConversation,
     agentMessages,
     isLoadingChatMessages,
+    intentName,
   } = useAppContext();
 
   const [message, setMessage] = useState('');
@@ -45,6 +67,10 @@ const ChatComponent = props => {
 
   const [botName, setBotName] = useState('Bitcanny AI Support');
   const effectHook = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
+  const isKnowledgeBase = intentName.includes('Knowledge.KnowledgeBase');
+
+  const isFallbackIntent = intentName === 'Default Fallback Intent';
 
   // Function to scroll to the bottom of the chat window
   const scrollToBottom = () => {
@@ -160,11 +186,11 @@ const ChatComponent = props => {
 
                   {!isEmpty(suggestedActionValues) &&
                     isArray(suggestedActionValues) &&
-                    suggestedActionValues.map(({ structValue: { fields } }) => {
+                    suggestedActionValues.map(({ structValue: { fields } }, index) => {
                       const { label, type, actionText, action, redirectTo } =
                         getActionData(fields) || {};
                       return type === 'button' ? (
-                        <div className={css.buttonContainer}>
+                        <div className={css.buttonContainer} key={index}>
                           <button
                             className={css.actionButton}
                             onClick={() =>
@@ -178,6 +204,48 @@ const ChatComponent = props => {
                         </div>
                       ) : null;
                     })}
+
+                  {isEmpty(suggestedActionValues) &&
+                    !userMessage &&
+                    isKnowledgeBase &&
+                    faqSuggestion.map(({ label, type, actionText, action, redirectTo }, index) => {
+                      return type === 'button' ? (
+                        <div className={css.buttonContainer} key={index}>
+                          <button
+                            className={css.actionButton}
+                            onClick={() =>
+                              action === 'redirect'
+                                ? window.open(redirectTo, '_blank')
+                                : handleActionButtonClick(actionText)
+                            }
+                          >
+                            {label}
+                          </button>
+                        </div>
+                      ) : null;
+                    })}
+
+                  {isEmpty(suggestedActionValues) &&
+                    !userMessage &&
+                    isFallbackIntent &&
+                    fallbackSuggestion.map(
+                      ({ label, type, actionText, action, redirectTo }, index) => {
+                        return type === 'button' ? (
+                          <div className={css.buttonContainer} key={index}>
+                            <button
+                              className={css.actionButton}
+                              onClick={() =>
+                                action === 'redirect'
+                                  ? window.open(redirectTo, '_blank')
+                                  : handleActionButtonClick(actionText)
+                              }
+                            >
+                              {label}
+                            </button>
+                          </div>
+                        ) : null;
+                      }
+                    )}
                 </li>
               );
             }

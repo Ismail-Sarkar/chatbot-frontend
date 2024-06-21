@@ -32,12 +32,13 @@
 }
 
 .fullScreenView {
-  width: 97vw !important;
+  width: 100vw !important;
   height: 100vh !important;
-  top: 2px !important;
-  bottom: 2px !important;
-  right: 10px !important;
-  left: 10px;
+  top: 0px !important;
+  bottom: 0px !important;
+  right: 0px !important;
+  left: 0px;
+  padding: 2px 10px !important;
 }
 
 .chatContainer.open {

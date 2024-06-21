@@ -10,16 +10,15 @@ const Card = ({ data }) => {
         // console.log('item', item.card);
         return (
           <div className={css.cardItem} key={index}>
-            <img src={item.card?.imageUri} alt={item.card?.title} className={css.cardImage} />
-            <div className={css.cardOverlay}>
-              <div className={css.cardTitle}>{item.card?.title}</div>
-              {/* <div className={css.cardSubtitle}>
-                dangerouslySetInnerHTML={{ __html: item.card?.subtitle }}
-              </div> */}
-              <div
-                className={css.cardSubtitle}
-                dangerouslySetInnerHTML={{ __html: item.card?.subtitle }}
-              />
+            <div className={css.titleWrapper}>
+              <img src={item.card?.imageUri} alt={item.card?.title} className={css.cardImage} />
+              <div className={css.cardOverlay}>
+                <div className={css.cardTitle}>{item.card?.title}</div>
+                <div
+                  className={css.cardSubtitle}
+                  dangerouslySetInnerHTML={{ __html: item.card?.subtitle }}
+                />
+              </div>
             </div>
             <a href={item.card?.buttons[0].postback} target="_blank" className={css.cardButton}>
               <div className={css.btnTxt}>

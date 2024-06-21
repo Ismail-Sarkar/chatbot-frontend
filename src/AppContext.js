@@ -19,10 +19,10 @@ export const AppProvider = ({ children }) => {
         { withCredentials: true }
       )
       .then(res => {
-        console.log('565', res.data);
         setAgentMessages(prevMessages => [...prevMessages, res.data.data[0].queryResult]);
         setIsLoadingChatMessages(false);
         setClientId(res.data.clientId);
+        setIntentName(res.data.intent);
         setContext(res.data.data[0].queryResult.outputContexts);
       })
       .catch(e => {
@@ -48,6 +48,7 @@ export const AppProvider = ({ children }) => {
   const [clientId, setClientId] = React.useState(null);
   const [context, setContext] = React.useState([]);
   const [fullScreen, setFullScreen] = React.useState(false);
+  const [intentName, setIntentName] = React.useState('');
 
   const closeChatWindow = () => {
     setChatWindowOpen(false);
@@ -72,6 +73,7 @@ export const AppProvider = ({ children }) => {
         openChatWindow,
         toggleFullScreen,
         isFullScreen: fullScreen,
+        intentName,
       }}
     >
       {children}

@@ -70,14 +70,11 @@ router.post('/text-input', async (req, res) => {
     const outputContexts = responses[0]?.queryResult.outputContexts;
 
     // console.log(responses, responses[0]?.queryResult, 'response from agent');
-
     if (
       intentName === 'show.transaction' ||
       intentName === 'show.more.orders' ||
       intentName === 'show.prev.orders'
     ) {
-      // console.log('first', outputContexts);
-
       try {
         const webhookServerResponse = await axios.post(
           CHATBOT_BACKEND_URI,
@@ -111,12 +108,16 @@ router.post('/text-input', async (req, res) => {
         return res.status(200).json({
           data: [{ queryResult: webhookServerResponse.data }],
           clientId: sessionPath.split('/').pop(),
+          intent: intentName,
         });
       } catch (err) {
         console.log(err);
         res.status(500).send({ err });
       }
-    } else res.status(200).json({ data: responses, clientId: sessionPath.split('/').pop() });
+    } else
+      res
+        .status(200)
+        .json({ data: responses, clientId: sessionPath.split('/').pop(), intent: intentName });
   } catch (e) {
     console.error(e);
     res.status(422).send({ e });

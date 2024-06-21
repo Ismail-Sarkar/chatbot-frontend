@@ -6,20 +6,21 @@
 }
 
 .cardItem {
-  position: relative;
-  width: 220px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   margin: 10px;
 }
 
 .cardImage {
-  width: 100%;
-  height: auto;
+  width: 320px;
+  height: 180px;
   border-radius: 5px;
 }
 
 .cardOverlay {
   position: absolute;
-  bottom: 47px;
+  bottom: 0;
   left: 0;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.7);
@@ -73,4 +74,8 @@
   & svg {
     margin-left: 5px;
   }
+}
+
+.titleWrapper {
+  position: relative;
 }
